@@ -5,6 +5,7 @@ using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
 using static EmergencyCallouts.Essential.Helper;
+using static EmergencyCallouts.Essential.Inventory;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
@@ -339,10 +340,10 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPosition();
                 Game.LogTrivial("[TRACE] Emergency Callouts: Retrieved ped position");
 
-                Suspect.GiveRandomAR(-1, true);
+                Suspect.GiveRandomWeapon(WeaponType.AssaultRifle, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Added random assault rifle to Suspect inventory");
 
-                Suspect2.GiveRandomHandgun(-1, true);
+                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Added random handgun to Suspect2 inventory");
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
@@ -422,10 +423,10 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPosition();
                 Game.LogTrivial("[TRACE] Emergency Callouts: Retrieved ped position");
 
-                Suspect.GiveRandomSMG(-1, true);
+                Suspect.GiveRandomWeapon(WeaponType.SubmachingeGun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random submachine gun to Suspect inventory");
 
-                Suspect2.GiveRandomHandgun(-1, true);
+                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random handgun to Suspect2 inventory");
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
@@ -468,10 +469,10 @@ namespace EmergencyCallouts.Callouts
                 RetrieveDrugDealPosition();
                 Game.LogTrivial("[TRACE] Emergency Callouts: Retrieved drug deal position");
 
-                Suspect.GiveRandomHandgun(-1, true);
+                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random handgun to Suspect inventory");
 
-                Suspect2.GiveRandomHandgun(-1, true);
+                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random handgun to Suspect2 inventory");
 
                 Suspect.WarpIntoVehicle(SuspectVehicle, -1);
@@ -673,7 +674,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[TRACE] Emergency Callouts: Set ped resistance to 100%");
 
                 // Give random shotgun
-                Suspect.GiveRandomShotgun(-1, true);
+                Suspect.GiveRandomWeapon(Inventory.WeaponType.Shotgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random shotgun to Suspect inventory");
 
                 // Change Suspect health

@@ -682,6 +682,155 @@ namespace EmergencyCallouts.Essential
 
     internal static class Inventory
     {
+        internal enum WeaponType
+        {
+            Melee,
+            Handgun,
+            SubmachingeGun,
+            AssaultRifle,
+            Shotgun,
+            MachineGun,
+            SniperRifle,
+        }
+
+        internal static void GiveRandomWeapon(this Ped ped, Enum weaponType, short ammoCount, bool equipNow)
+        {
+            #region Melee
+            if (weaponType.ToString() == WeaponType.Melee.ToString())
+            {
+                string[] meleeWeapons =
+                {
+                    "WEAPON_DAGGER",
+                    "WEAPON_BAT",
+                    "WEAPON_BOTTLE",
+                    "WEAPON_CROWBAR",
+                    "WEAPON_UNARMED",
+                    "WEAPON_FLASHLIGHT",
+                    "WEAPON_GOLFCLUB",
+                    "WEAPON_HAMMER",
+                    "WEAPON_HATCHET",
+                    "WEAPON_KNUCKLE",
+                    "WEAPON_KNIFE",
+                    "WEAPON_MACHETE",
+                    "WEAPON_SWITCHBLADE",
+                    "WEAPON_NIGHTSTICK",
+                    "WEAPON_WRENCH",
+                    "WEAPON_BATTLEAXE",
+                    "WEAPON_POOLCUE",
+                };
+
+                int num = random.Next(meleeWeapons.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+
+            #region Handgun
+            if (weaponType.ToString() == WeaponType.Handgun.ToString())
+            {
+                string[] handguns =
+                {
+                    "WEAPON_PISTOL",
+                    "WEAPON_COMBATPISTOL",
+                    "WEAPON_PISTOL50",
+                    "WEAPON_VINTAGEPISTOL",
+                    "WEAPON_SNSPISTOL",
+                    "WEAPON_HEAVYPISTOL",
+                    "WEAPON_CERAMICPISTOL",
+                };
+
+                int num = random.Next(handguns.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
+            }
+            #endregion
+
+            #region Submachine Gun
+            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            {
+                string[] submachineGuns =
+                {
+                    "WEAPON_MICROSMG",
+                    "WEAPON_SMG",
+                    "WEAPON_ASSAULTSMG",
+                    "WEAPON_MINISMG"
+                };
+
+                int num = random.Next(submachineGuns.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+
+            #region Assault Rifle
+            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            {
+                string[] rifles =
+                {
+                    "WEAPON_CARBINERIFLE",
+                    "WEAPON_ASSAULTRIFLE",
+                    "WEAPON_ADVANCEDRIFLE",
+                    "WEAPON_SPECIALCARBINE",
+                    "WEAPON_BULLPUPRIFLE",
+                };
+
+                int num = random.Next(rifles.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+
+            #region Shotgun
+            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            {
+                string[] shotguns =
+                {
+                    "WEAPON_PUMPSHOTGUN",
+                    "WEAPON_SAWNOFFSHOTGUN",
+                    "WEAPON_BULLPUPSHOTGUN",
+                    "WEAPON_HEAVYSHOTGUN",
+                    "WEAPON_DBSHOTGUN",
+                    "WEAPON_COMBATSHOTGUN"
+                };
+
+                int num = random.Next(shotguns.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+
+            #region MachineGun
+            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            {
+                string[] machineGuns =
+                {
+                    "WEAPON_MG",
+                    "WEAPON_COMBATMG",
+                    "WEAPON_GUSENBERG"
+                };
+
+                int num = random.Next(machineGuns.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+
+            #region Sniper Rifles
+            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            {
+                string[] sniperRifles =
+                {
+                    "WEAPON_SNIPERRIFLE",
+                    "WEAPON_HEAVYSNIPER",
+                    "WEAPON_MARKSMANRIFLE"
+                };
+
+                int num = random.Next(sniperRifles.Length);
+                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
+
+            }
+            #endregion
+        }
+
         #region ClearInventory
         internal static void ClearInventory(this Ped ped)
         {
@@ -690,103 +839,83 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region GiveRandomHandgun
-        internal static void GiveRandomHandgun(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] hanguns =
-            {
-                "WEAPON_PISTOL",
-                "WEAPON_COMBATPISTOL",
-                "WEAPON_PISTOL50",
-                "WEAPON_VINTAGEPISTOL",
-                "WEAPON_SNSPISTOL",
-                "WEAPON_HEAVYPISTOL",
-                "WEAPON_CERAMICPISTOL",
-            };
+        //internal static void GiveRandomHandgun(this Ped ped, short ammoCount, bool equipNow)
+        //{
 
-            int num = random.Next(hanguns.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(hanguns[num], ammoCount, equipNow); }
-        }
+
+        //}
         #endregion
 
         #region GiveRandomSMG
-        internal static void GiveRandomSMG(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] smgs =
-            {
-                "WEAPON_MICROSMG",
-                "WEAPON_SMG",
-                "WEAPON_ASSAULTSMG",
-                "WEAPON_MINISMG"
-            };
+        //internal static void GiveRandomSMG(this Ped ped, short ammoCount, bool equipNow)
+        //{
+        //    string[] smgs =
+        //    {
+        //    };
 
-            int num = random.Next(smgs.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(smgs[num], ammoCount, equipNow); }
-        }
+        //    int num = random.Next(smgs.Length);
+        //    if (ped.Exists()) { ped.Inventory.GiveNewWeapon(smgs[num], ammoCount, equipNow); }
+        //}
         #endregion
 
         #region GiveRandomShotgun
-        internal static void GiveRandomShotgun(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] shotguns =
-            {
-                "WEAPON_PUMPSHOTGUN",
-                "WEAPON_SAWNOFFSHOTGUN",
-                "WEAPON_BULLPUPSHOTGUN",
-                "WEAPON_HEAVYSHOTGUN",
-                "WEAPON_DBSHOTGUN",
-                "WEAPON_COMBATSHOTGUN"
-            };
+        //internal static void GiveRandomShotgun(this Ped ped, short ammoCount, bool equipNow)
+        //{
+        //    string[] shotguns =
+        //    {
+        //        "WEAPON_PUMPSHOTGUN",
+        //        "WEAPON_SAWNOFFSHOTGUN",
+        //        "WEAPON_BULLPUPSHOTGUN",
+        //        "WEAPON_HEAVYSHOTGUN",
+        //        "WEAPON_DBSHOTGUN",
+        //        "WEAPON_COMBATSHOTGUN"
+        //    };
 
-            int num = random.Next(shotguns.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
-        }
+        //    int num = random.Next(shotguns.Length);
+        //    if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
+        //}
         #endregion
 
         #region GiveRandomAR
-        internal static void GiveRandomAR(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] rifles =
-            {
-                "WEAPON_CARBINERIFLE",
-                "WEAPON_ASSAULTRIFLE",
-                "WEAPON_ADVANCEDRIFLE",
-                "WEAPON_SPECIALCARBINE",
-                "WEAPON_BULLPUPRIFLE",
-            };
+        //internal static void GiveRandomAR(this Ped ped, short ammoCount, bool equipNow)
+        //{
+        //    string[] rifles =
+        //    {
+        //    };
 
-            int num = random.Next(rifles.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
-        }
+        //    int num = random.Next(rifles.Length);
+        //    if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
+        //}
         #endregion
 
         #region GiveRandomMG
-        internal static void GiveRandomMG(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] mgs =
-            {
-                "WEAPON_MG",
-                "WEAPON_COMBATMG",
-                "WEAPON_GUSENBERG"
-            };
+        //internal static void GiveRandomMG(this Ped ped, short ammoCount, bool equipNow)
+        //{
+        //    string[] mgs =
+        //    {
+        //        "WEAPON_MG",
+        //        "WEAPON_COMBATMG",
+        //        "WEAPON_GUSENBERG"
+        //    };
 
-            int num = random.Next(mgs.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(mgs[num], ammoCount, equipNow); }
-        }
+        //    int num = random.Next(mgs.Length);
+        //    if (ped.Exists()) { ped.Inventory.GiveNewWeapon(mgs[num], ammoCount, equipNow); }
+        //}
         #endregion
 
         #region GiveRandomSniperRifle
-        internal static void GiveRandomSniperRifle(this Ped ped, short ammoCount, bool equipNow)
-        {
-            string[] smgs =
-            {
-                "WEAPON_SNIPERRIFLE",
-                "WEAPON_HEAVYSNIPER",
-                "WEAPON_MARKSMANRIFLE"
-            };
+        //internal static void GiveRandomSniperRifle(this Ped ped, short ammoCount, bool equipNow)
+        //{
+        //    string[] smgs =
+        //    {
+        //        "WEAPON_SNIPERRIFLE",
+        //        "WEAPON_HEAVYSNIPER",
+        //        "WEAPON_MARKSMANRIFLE"
+        //    };
 
-            int num = random.Next(smgs.Length);
-            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(smgs[num], ammoCount, equipNow); }
-        }
+        //    int num = random.Next(smgs.Length);
+        //    if (ped.Exists()) { ped.Inventory.GiveNewWeapon(smgs[num], ammoCount, equipNow); }
+        //}
         #endregion
     }
 

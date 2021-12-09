@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
 using static EmergencyCallouts.Essential.Helper;
+using static EmergencyCallouts.Essential.Inventory;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
@@ -410,8 +411,8 @@ namespace EmergencyCallouts.Callouts
                 Victim.Health = 130;
 
                 // Give Random Handgun
-                Inventory.GiveRandomHandgun(Suspect, -1, true);
-                Game.LogTrivial($"[TRACE] Emergency Callouts: Assigned ({Suspect.Inventory.EquippedWeapon}) to Suspect inventory");
+                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Game.LogTrivial($"[TRACE] Emergency Callouts: Assigned random handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -495,7 +496,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[TRACE] Emergency Callouts: Changed Suspect position");
 
                 // Give Random Handgun
-                Suspect.GiveRandomHandgun(-1, true);
+                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial($"[TRACE] Emergency Callouts: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
@@ -546,7 +547,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[TRACE] Emergency Callouts: Changed Suspect position");
 
                 // Give Random Handgun
-                Suspect.GiveRandomHandgun(-1, true);
+                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
                 Game.LogTrivial($"[TRACE] Emergency Callouts: Assigned ({Suspect.Inventory.EquippedWeapon}) to Suspect inventory");
 
                 // Aim at Victim
