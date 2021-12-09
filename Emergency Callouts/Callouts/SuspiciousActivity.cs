@@ -558,14 +558,14 @@ namespace EmergencyCallouts.Callouts
                 #region Dialogue
                 string[] dialogue =
                 {
-                    $"~b~{Settings.Callsign}~s~: Hello, what are you doing here?",
+                    "~b~You~s~: Hello, what are you doing here?",
                     "~y~Suspect~s~: Hey officer, I'm about to pick up some packages from the store, they told me to wait behind.",
-                    $"~b~{Settings.Callsign}~s~: Okay, do you have a receipt to prove that?",
+                    "~b~You~s~: Okay, do you have a receipt to prove that?",
                     "~y~Suspect~s~: Yes I do, here you go",
-                    $"~b~{Settings.Callsign}~s~: Looks legit.",
+                    "~b~You~s~: Looks legit.",
                     "~g~Person~s~: Well that's because it is.",
-                    $"~b~{Settings.Callsign}~s~: I can see that.",
-                    $"~b~{Settings.Callsign}~s~: Well, I better get going!",
+                    "~b~You~s~: I can see that.",
+                    "~b~You~s~: Well, I better get going!",
                     "~g~Person~s~: Goodbye."
                 };
 

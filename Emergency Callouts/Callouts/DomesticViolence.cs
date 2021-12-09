@@ -271,11 +271,11 @@ namespace EmergencyCallouts.Callouts
             #region Dialogue
             string[] dialogue =
             {
-                $"~b~{Settings.Callsign}~s~: M'am, are you injured?",
+                "~b~You~s~: M'am, are you injured?",
                 "~g~Victim~s~: Yes, I'm hurt alot.",
-                $"~b~{Settings.Callsign}~s~: Okay, I'm gonna get some ambulances over here for you two, hang tight.",
+                "~b~You~s~: Okay, I'm gonna get some ambulances over here for you two, hang tight.",
                 "~g~Victim~s~: Okay, I'm pretty sure i'm gonna go unconscious...",
-                $"~b~{Settings.Callsign}~s~: Try to relax, positive thoughts only okay?",
+                "~b~You~s~: Try to relax, positive thoughts only okay?",
                 "~g~Victim~s~: Okay, I can do th..."
             };
 
