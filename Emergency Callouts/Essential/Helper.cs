@@ -351,8 +351,7 @@ namespace EmergencyCallouts.Essential
                 {
                     if (ped.IsCuffed)
                     {
-                        Functions.StopCurrentCallout();
-                        Play.CodeFourAudio();
+                        Display.EndCallout();
                     }
                     else if (ped.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
@@ -635,54 +634,6 @@ namespace EmergencyCallouts.Essential
         }
     }
 
-    internal static class Color
-    {
-        #region Colors
-        internal enum Colors
-        {
-            Red,
-            Yellow,
-            Blue,
-            Orange,
-            Green,
-            Purple,
-        }
-
-        internal static void SetColor(this Blip blip, Enum color)
-        {
-            if (color.ToString() == Colors.Red.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
-            }
-
-            if (color.ToString() == Colors.Yellow.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
-            }
-
-            if (color.ToString() == Colors.Blue.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
-            }
-
-            if (color.ToString() == Colors.Orange.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
-            }
-
-            if (color.ToString() == Colors.Green.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
-            }
-
-            if (color.ToString() == Colors.Purple.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
-            }
-        }
-        #endregion
-    }
-
     internal static class Inventory
     {
         #region GiveRandomWeapon
@@ -833,6 +784,54 @@ namespace EmergencyCallouts.Essential
 
             }
             #endregion
+        }
+        #endregion
+    }
+
+    internal static class Color
+    {
+        #region Colors
+        internal enum Colors
+        {
+            Red,
+            Yellow,
+            Blue,
+            Orange,
+            Green,
+            Purple,
+        }
+
+        internal static void SetColor(this Blip blip, Enum color)
+        {
+            if (color.ToString() == Colors.Red.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
+            }
+
+            if (color.ToString() == Colors.Yellow.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
+            }
+
+            if (color.ToString() == Colors.Blue.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
+            }
+
+            if (color.ToString() == Colors.Orange.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
+            }
+
+            if (color.ToString() == Colors.Green.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
+            }
+
+            if (color.ToString() == Colors.Purple.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
+            }
         }
         #endregion
     }
