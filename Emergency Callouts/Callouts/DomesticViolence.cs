@@ -276,7 +276,7 @@ namespace EmergencyCallouts.Callouts
                 "~b~You~s~: M'am, are you injured?",
                 "~g~Victim~s~: Yes, I'm hurt alot.",
                 "~b~You~s~: Okay, I'm gonna get some ambulances over here for you two, hang tight.",
-                "~g~Victim~s~: Okay, I'm pretty sure i'm gonna go unconscious...",
+                "~g~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
                 "~b~You~s~: Try to relax, positive thoughts only okay?",
                 "~g~Victim~s~: Okay, I can do th..."
             };
