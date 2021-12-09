@@ -305,21 +305,18 @@ namespace EmergencyCallouts.Callouts
 
                             line++;
 
-                            if (Victim.IsDead && Victim.Exists())
+                            if (FileExists.UltimateBackup(false) == true)
                             {
-                                if (FileExists.UltimateBackup(false) == true)
-                                {
-                                    UltimateBackup.API.Functions.callAmbulance();
-                                    UltimateBackup.API.Functions.callAmbulance();
-                                }
-                                else
-                                {
-                                    Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
-                                    Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
-                                }
-
-                                Game.LogTrivial("[TRACE] Emergency Callouts: Requested 2 ambulances");
+                                UltimateBackup.API.Functions.callAmbulance();
+                                UltimateBackup.API.Functions.callAmbulance();
                             }
+                            else
+                            {
+                                Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
+                                Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
+                            }
+
+                            Game.LogTrivial("[TRACE] Emergency Callouts: Requested 2 ambulances");
 
                             if (line == 6)
                             {
