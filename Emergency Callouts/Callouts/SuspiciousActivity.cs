@@ -424,7 +424,7 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPosition();
                 Game.LogTrivial("[TRACE] Emergency Callouts: Retrieved ped position");
 
-                Suspect.GiveRandomWeapon(WeaponType.SubmachingeGun, -1, true);
+                Suspect.GiveRandomWeapon(WeaponType.SubmachineGun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random submachine gun to Suspect inventory");
 
                 Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
@@ -675,7 +675,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[TRACE] Emergency Callouts: Set ped resistance to 100%");
 
                 // Give random shotgun
-                Suspect.GiveRandomWeapon(Inventory.WeaponType.Shotgun, -1, true);
+                Suspect.GiveRandomWeapon(WeaponType.Shotgun, -1, true);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Assigned random shotgun to Suspect inventory");
 
                 // Change Suspect health

@@ -690,7 +690,7 @@ namespace EmergencyCallouts.Essential
         {
             Melee,
             Handgun,
-            SubmachingeGun,
+            SubmachineGun,
             AssaultRifle,
             Shotgun,
             MachineGun,
@@ -749,7 +749,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region Submachine Gun
-            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            if (weaponType.ToString() == WeaponType.SubmachineGun.ToString())
             {
                 string[] submachineGuns =
                 {
@@ -766,7 +766,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region Assault Rifle
-            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            if (weaponType.ToString() == WeaponType.AssaultRifle.ToString())
             {
                 string[] rifles =
                 {
@@ -784,7 +784,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region Shotgun
-            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            if (weaponType.ToString() == WeaponType.Shotgun.ToString())
             {
                 string[] shotguns =
                 {
@@ -803,7 +803,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region MachineGun
-            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            if (weaponType.ToString() == WeaponType.MachineGun.ToString())
             {
                 string[] machineGuns =
                 {
@@ -819,7 +819,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region Sniper Rifles
-            if (weaponType.ToString() == WeaponType.SubmachingeGun.ToString())
+            if (weaponType.ToString() == WeaponType.SniperRifle.ToString())
             {
                 string[] sniperRifles =
                 {
