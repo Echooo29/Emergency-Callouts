@@ -305,19 +305,6 @@ namespace EmergencyCallouts.Callouts
 
                             line++;
 
-                            if (FileExists.UltimateBackup(false) == true)
-                            {
-                                UltimateBackup.API.Functions.callAmbulance();
-                                UltimateBackup.API.Functions.callAmbulance();
-                            }
-                            else
-                            {
-                                Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
-                                Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
-                            }
-
-                            Game.LogTrivial("[TRACE] Emergency Callouts: Requested 2 ambulances");
-
                             if (line == 6)
                             {
                                 GameFiber.Sleep(1000);
@@ -331,6 +318,18 @@ namespace EmergencyCallouts.Callouts
                                 Play.CodeFourAudio();
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Played code four audio");
 
+                                if (FileExists.UltimateBackup(false) == true)
+                                {
+                                    UltimateBackup.API.Functions.callAmbulance();
+                                    UltimateBackup.API.Functions.callAmbulance();
+                                }
+                                else
+                                {
+                                    Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
+                                    Functions.RequestBackup(MainPlayer.Position, LSPD_First_Response.EBackupResponseType.Code3, LSPD_First_Response.EBackupUnitType.Ambulance);
+                                }
+
+                                Game.LogTrivial("[TRACE] Emergency Callouts: Requested 2 ambulances");
                                 break;
                             }
                             GameFiber.Sleep(500);
