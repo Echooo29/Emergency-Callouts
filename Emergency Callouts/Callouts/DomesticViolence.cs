@@ -107,7 +107,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = Settings.DomesticViolenceName;
 
-            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
+            Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
