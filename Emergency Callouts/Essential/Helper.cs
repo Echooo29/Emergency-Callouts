@@ -237,7 +237,7 @@ namespace EmergencyCallouts.Essential
                 if (Game.IsKeyDown(Settings.EndKey))
                 {
                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 3f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                    Game.DisplayNotification($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
+                    Game.DisplaySubtitle($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
                     GameFiber.Sleep(2000);
                     Play.CodeFourAudio();
                     GameFiber.Sleep(2700);
@@ -537,7 +537,7 @@ namespace EmergencyCallouts.Essential
                 {
                     WebClient hitUpdater = new WebClient();
                     hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[INFO] Emergency Callouts: Sent an error hit to a remote counter");
+                    Game.LogTrivial("[INFO] Emergency Callouts: Sent hit to the remote error counter");
                 }
                 catch (WebException webEx)
                 {
