@@ -274,7 +274,7 @@ namespace EmergencyCallouts.Callouts
             {
                 "~b~You~s~: M'am, are you injured?",
                 "~g~Victim~s~: Yes, I'm hurt alot.",
-                "~b~You~s~: Okay, I'm gonna get some ambulances over here for you two, hang tight.",
+                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?.",
                 "~g~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
                 "~b~You~s~: Try to relax, positive thoughts only okay?",
                 "~g~Victim~s~: Okay, I can do th..."
@@ -306,18 +306,18 @@ namespace EmergencyCallouts.Callouts
 
                             line++;
 
-                            if (line == 6)
+                            if (line == dialogue.Length)
                             {
                                 GameFiber.Sleep(500);
                                 Entity.Kill(Victim);
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Killed Victim");
-                            }
 
-                            if (line == dialogue.Length)
-                            {
+                                GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
-                            }
+                                Game.LogTrivial("[TRACE] Emergency Callouts: Hid Subtitle");
 
+                                Game.LogTrivial("[TRACE] Emergency Callouts: Dialogue Ended");
+                            }
                             GameFiber.Sleep(500);
                         }
                         else
