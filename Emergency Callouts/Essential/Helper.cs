@@ -835,13 +835,6 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
         #endregion
-
-        #region ClearInventory
-        internal static void ClearInventory(this Ped ped)
-        {
-            if (ped.Exists()) { ped.Inventory.Weapons.Clear(); }
-        }
-        #endregion
     }
 
     internal static class ExtensionMethods
