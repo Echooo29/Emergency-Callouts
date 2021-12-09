@@ -308,9 +308,14 @@ namespace EmergencyCallouts.Callouts
 
                             if (line == 6)
                             {
-                                GameFiber.Sleep(750);
+                                GameFiber.Sleep(500);
                                 Entity.Kill(Victim);
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Killed Victim");
+                            }
+
+                            if (line == dialogue.Length)
+                            {
+                                Display.HideSubtitle();
                             }
 
                             GameFiber.Sleep(500);
