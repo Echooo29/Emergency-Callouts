@@ -28,11 +28,11 @@ namespace EmergencyCallouts
 
         // Callout Details
         internal static string CalloutDetailsSubtitle = "Callout Details";
-        internal static string PublicIntoxicationDetails = "Civilians are worried about a person under the influence.";
-        internal static string TrespassingDetails = "A civilian spotted a person sneaking around private property.";
-        internal static string DomesticViolenceDetails = "A 911 Call was quickly made saying she is scared her husband is going to kill her.";
-        internal static string BurglaryDetails = "A person has seen someone lockpicking a door for a few minutes now.";
-        internal static string SuspiciousActivityDetails = "A person spotted quite unusual behavior in a concealed location.";
+        internal static string PublicIntoxicationDetails = "There are multiple reports of a person under the influence of alcohol.";
+        internal static string TrespassingDetails = "Someone reported a person trespassing on private property.";
+        internal static string DomesticViolenceDetails = "A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.";
+        internal static string BurglaryDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
+        internal static string SuspiciousActivityDetails = "Multiple civilians called about a person handling guns in the trunk of their car.";
 
         // AttachMessage
         internal static string AttachMessageSubtitle = "Unit Attached";
