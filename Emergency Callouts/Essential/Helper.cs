@@ -196,28 +196,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region ArrestLine
-            internal static void ArrestLine()
-            {
-                if (Settings.DisplayArrestLine == true)
-                {
-                    string[] lines = { "I need to pee, please hurry up.", "What exactly am I under arrest for?",
-                                    "Why did I do this...", "I'd like to speak to my lawyer ASAP.", "Even god can't help you when I'm out of these cuffs!", "Remember my name...",
-                                    "Do I get to sit with the prostitutes?", "How long is the ride to the station?", "I'm not answering any questions.", "I can't go to those cells! I'm germophopic!",
-                                    "Where can I get those handcuffs?", "Do you have these cuffs in pink?", "I bet you got some of these cuffs at home.", "Do you even know who I am?"};
-
-                    int num = random.Next(lines.Length);
-
-                    Game.DisplaySubtitle("~r~Arrestee~s~: " + lines[num]);
-                    Game.LogTrivial("[TRACE] Emergency Callouts: Displayed ArrestLine");
-                }
-                else
-                {
-                    Game.LogTrivial("[INFO] Emergency Callouts: DisplayArrestLine is False; won't display arrest line");
-                }
-            }
-            #endregion
-
             #region AttachMessage
             internal static void AttachMessage()
             {

@@ -52,7 +52,6 @@ namespace EmergencyCallouts
 
         // Other
         internal static bool PlayPursuitAudio = true;
-        internal static bool DisplayArrestLine = true;
         internal static string EndCalloutRequest = "Dispatch, no further assistance is needed.";
         internal static string SubtitleColor = "b";
 
@@ -110,7 +109,6 @@ namespace EmergencyCallouts
 
             // Other
             PlayPursuitAudio = iniFile.ReadBoolean("Other", "PlayPursuitAudio", PlayPursuitAudio);
-            DisplayArrestLine = iniFile.ReadBoolean("Other", "DisplayArrestLine", DisplayArrestLine);
             EndCalloutRequest = iniFile.ReadString("Other", "EndCalloutRequest", EndCalloutRequest);
             SubtitleColor = iniFile.ReadString("Other", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 

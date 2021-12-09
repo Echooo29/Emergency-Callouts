@@ -21,7 +21,6 @@ namespace EmergencyCallouts.Callouts
         bool FoundPed;
         bool FoundPed2;
         bool PedDetained;
-        bool PedArrested;
         bool DialogueStarted;
 
         // Main
@@ -807,18 +806,6 @@ namespace EmergencyCallouts.Callouts
                     // Delete SuspectBlip
                     Entity.Delete(SuspectBlip);
                     Game.LogTrivial("[TRACE] Emergency Callouts: Deleted SuspectBlip");
-                }
-                #endregion
-
-                #region OnPedArrested
-                if (PedArrested == false && Suspect.IsCuffed && Suspect.Exists())
-                {
-                    // Set PedArrested
-                    PedArrested = true;
-                    Game.LogTrivial("[TRACE] Emergency Callouts: Suspect arrested");
-
-                    // Display ArrestLine
-                    Display.ArrestLine();
                 }
                 #endregion
 
