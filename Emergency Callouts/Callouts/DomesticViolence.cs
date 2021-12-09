@@ -297,9 +297,6 @@ namespace EmergencyCallouts.Callouts
                             Victim.Tasks.Clear();
                             Game.LogTrivial("[TRACE] Emergency Callouts: Cleared Victim tasks");
 
-                            MainPlayer.Tasks.AchieveHeading(Victim.Heading - 180).WaitForCompletion();
-                            Game.LogTrivial("[TRACE] Emergency Callouts: Player achieved Victim heading");
-
                             Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Victim achieved player heading");
 
