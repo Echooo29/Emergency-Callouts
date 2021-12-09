@@ -537,7 +537,7 @@ namespace EmergencyCallouts.Essential
                 {
                     WebClient hitUpdater = new WebClient();
                     hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[INFO] Emergency Callouts: Sent an error hit to a remote counter");
+                    Game.LogTrivial("[INFO] Emergency Callouts: Sent hit to the remote error counter");
                 }
                 catch (WebException webEx)
                 {
