@@ -45,16 +45,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LSPD First Response">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2022\References\LSPD First Response.dll</HintPath>
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\LSPD First Response.dll</HintPath>
     </Reference>
     <Reference Include="RAGENativeUI">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2022\References\RAGENativeUI.dll</HintPath>
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RAGENativeUI.dll</HintPath>
     </Reference>
     <Reference Include="RagePluginHookSDK">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2022\References\RagePluginHookSDK.dll</HintPath>
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RagePluginHookSDK.dll</HintPath>
     </Reference>
     <Reference Include="StopThePed">
-      <HintPath>..\..\..\..\Documents\Visual Studio 2022\References\StopThePed.dll</HintPath>
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\StopThePed.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
