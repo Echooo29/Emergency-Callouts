@@ -281,27 +281,6 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void WalkToPlayer()
-        {
-            #region WalkToPlayer
-            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 2f, MainPlayer.Heading - 180, 0f, 0);
-
-            GameFiber.StartNew(delegate
-            {
-                while (CalloutActive)
-                {
-                    GameFiber.Yield();
-
-                    if (Suspect.Position.DistanceTo(MainPlayer.Position.Around(5f)) < 5f)
-                    {
-                        Suspect.Tasks.Clear();
-                        break;
-                    }
-                }
-            });
-            #endregion
-        }
-
         private void Scenario1() // Unnoticed
         {
             #region Scenario 1
@@ -386,7 +365,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            WalkToPlayer();
                             Game.LogTrivial("[TRACE] Emergency Callouts: Assigned Suspect to put hands up");
 
                             break;
