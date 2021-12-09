@@ -3,6 +3,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
@@ -76,7 +77,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -153,7 +154,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                         {
                             // SuspectBlip Color Change
-                            SuspectBlip.Color = Colors.Red;
+                            SuspectBlip.SetColor(Colors.Red);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to red");
 
                             // Start Fight
@@ -191,7 +192,7 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[TRACE] Emergency Callouts: Forcefully killed ped");
 
                             // Change Blip Color
-                            if (SuspectBlip.Exists()) { SuspectBlip.Color = Colors.Green; }
+                            SuspectBlip.SetColor(Colors.Green);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to green");
                             
                             // Display Unconsious Message
@@ -242,7 +243,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                         {
                             // Change Blip Color
-                            SuspectBlip.Color = Colors.Red;
+                            SuspectBlip.SetColor(Colors.Red);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to red");
 
                             // Start Fight
@@ -289,7 +290,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Suspect.Position.Around(10f, 30f), 85f);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
                 }
@@ -385,7 +386,7 @@ namespace EmergencyCallouts.Callouts
                     Entity.Delete(SearchArea);
 
                     SearchArea = new Blip(Suspect.Position.Around(15f, Settings.SearchAreaSize), Settings.SearchAreaSize);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
 

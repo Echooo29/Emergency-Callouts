@@ -7,6 +7,7 @@ using Rage;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
@@ -146,7 +147,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Red;
+                SuspectBlip.SetColor(Colors.Red);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -531,7 +532,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
                 }

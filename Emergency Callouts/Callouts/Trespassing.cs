@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
@@ -258,7 +259,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -370,7 +371,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -385,7 +386,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -400,7 +401,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -577,7 +578,7 @@ namespace EmergencyCallouts.Callouts
                 int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Created SuspectBlip");
@@ -637,7 +638,7 @@ namespace EmergencyCallouts.Callouts
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
                                     Game.LogTrivial("[TRACE] Emergency Callouts: Assigned MainPlayer to play animation");
 
-                                    SuspectBlip.Color = Colors.Green;
+                                    SuspectBlip.SetColor(Colors.Green);
                                     Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to green");
                                 }
 
@@ -723,7 +724,7 @@ namespace EmergencyCallouts.Callouts
                 RetrieveWeldingPosition();
 
                 // Change SuspectBlip color
-                SuspectBlip.Color = Colors.Red;
+                SuspectBlip.SetColor(Colors.Red);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to red");
 
                 // Guard
@@ -738,7 +739,7 @@ namespace EmergencyCallouts.Callouts
 
                 // GuardBlip
                 GuardBlip = Guard.AttachBlip();
-                GuardBlip.Color = Colors.Blue;
+                GuardBlip.SetColor(Colors.Blue);
                 GuardBlip.ScaleForPed();
                 Entity.Disable(GuardBlip);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Created GuardBlip");
@@ -800,7 +801,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
                 }

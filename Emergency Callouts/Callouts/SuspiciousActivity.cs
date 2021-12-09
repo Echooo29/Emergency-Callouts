@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using static EmergencyCallouts.Essential.Inventory;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -148,7 +149,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial($"[TRACE] Emergency Callouts: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Yellow;
+                SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -158,7 +159,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial($"[TRACE] Emergency Callouts: Created Suspect2 ({Suspect2.Model.Name}) at " + Suspect2.Position);
 
                 Suspect2Blip = Suspect2.AttachBlip();
-                Suspect2Blip.Color = Colors.Yellow;
+                Suspect2Blip.SetColor(Colors.Yellow);
                 Suspect2Blip.ScaleForPed();
                 Entity.Disable(Suspect2Blip);
 
@@ -621,7 +622,7 @@ namespace EmergencyCallouts.Callouts
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
                                     Game.LogTrivial("[TRACE] Emergency Callouts: Assigned MainPlayer to play animation");
 
-                                    SuspectBlip.Color = Colors.Green;
+                                    SuspectBlip.SetColor(Colors.Green);
                                     Game.LogTrivial("[TRACE] Emergency Callouts: Changed SuspectBlip color to green");
                                 }
 
@@ -691,8 +692,8 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && OnScene == true)
                         {
                             // Change SuspectBlip Color
-                            SuspectBlip.Color = Colors.Red;
-                            Suspect2Blip.Color = Colors.Red;
+                            SuspectBlip.SetColor(Colors.Red);
+                            Suspect2Blip.SetColor(Colors.Red);
 
                             // Start fight
                             Suspect.Tasks.FightAgainst(Suspect2);
@@ -750,7 +751,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
                 }

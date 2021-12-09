@@ -3,6 +3,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using static EmergencyCallouts.Essential.Inventory;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -145,7 +146,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.Color = Colors.Red;
+                SuspectBlip.SetColor(Colors.Red);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
@@ -157,7 +158,7 @@ namespace EmergencyCallouts.Callouts
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
-                VictimBlip.Color = Colors.Green;
+                VictimBlip.SetColor(Colors.Green);
                 VictimBlip.ScaleForPed();
                 Entity.Disable(VictimBlip);
 
@@ -594,7 +595,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
-                    SearchArea.Color = Colors.Yellow;
+                    SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[TRACE] Emergency Callouts: Created SearchArea");
                 }

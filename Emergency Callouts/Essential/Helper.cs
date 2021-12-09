@@ -633,51 +633,54 @@ namespace EmergencyCallouts.Essential
 
             #endregion
         }
+    }
 
-        internal static class Colors
+    internal static class Color
+    {
+        #region Colors
+        internal enum Colors
         {
-            #region Red
-            /// <summary>
-            /// Criminals, Deadly, Safety Hazard.
-            /// </summary>
-            public static Color Red = Color.FromArgb(224, 50, 50);
-            #endregion
-
-            #region Yellow
-            /// <summary>
-            /// Routes, Areas, Suspects.
-            /// </summary>
-            public static Color Yellow = Color.FromArgb(240, 200, 80);
-            #endregion
-
-            #region Blue
-            /// <summary>
-            /// Law Enforcement, Security.
-            /// </summary>
-            public static Color Blue = Color.FromArgb(93, 182, 229);
-            #endregion
-
-            #region Orange
-            /// <summary>
-            /// Caution
-            /// </summary>
-            public static Color Orange = Color.FromArgb(234, 142, 80);
-            #endregion
-
-            #region Green
-            /// <summary>
-            /// Civilians
-            /// </summary>
-            public static Color Green = Color.FromArgb(114, 204, 114);
-            #endregion
-
-            #region Purple
-            /// <summary>
-            /// Animals, obstacles.
-            /// </summary>
-            public static Color Purple = Color.FromArgb(171, 60, 230);
-            #endregion
+            Red,
+            Yellow,
+            Blue,
+            Orange,
+            Green,
+            Purple,
         }
+
+        internal static void SetColor(this Blip blip, Enum color)
+        {
+            if (color.ToString() == Colors.Red.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
+            }
+
+            if (color.ToString() == Colors.Yellow.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
+            }
+
+            if (color.ToString() == Colors.Blue.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
+            }
+
+            if (color.ToString() == Colors.Orange.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
+            }
+
+            if (color.ToString() == Colors.Green.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
+            }
+
+            if (color.ToString() == Colors.Purple.ToString())
+            {
+                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
+            }
+        }
+        #endregion
     }
 
     internal static class Inventory
