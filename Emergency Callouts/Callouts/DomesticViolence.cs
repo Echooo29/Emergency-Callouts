@@ -309,7 +309,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (line == 6)
                             {
-                                GameFiber.Sleep(1000);
+                                GameFiber.Sleep(750);
                                 Entity.Kill(Victim);
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Killed Victim");
                             }

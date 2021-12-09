@@ -222,16 +222,16 @@ namespace EmergencyCallouts.Callouts
                 switch (ScenarioNumber)
                 {
                     case 1:
-                        Scenario5();
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario5();
+                        Scenario2();
                         break;
                     case 3:
-                        Scenario5();
+                        Scenario3();
                         break;
                     case 4:
-                        Scenario5();
+                        Scenario4();
                         break;
                     case 5:
                         Scenario5();
