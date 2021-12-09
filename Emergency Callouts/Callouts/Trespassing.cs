@@ -734,6 +734,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[INFO] Emergency Callouts: Guard model: " + Guard.Model.Name);
                 Game.LogTrivial("[INFO] Emergency Callouts: Guard position: " + Guard.Position);
 
+                // Kill Guard
                 Entity.Kill(Guard);
                 Game.LogTrivial("[TRACE] Emergency Callouts: Killed Guard");
 
@@ -751,12 +752,16 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f)
+                        if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f && Guard.Exists())
                         {
                             // Enable SuspectBlip
                             Entity.Enable(GuardBlip);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Enabled GuardBlip");
 
+                            // Delete SearchArea
+                            Entity.Delete(SearchArea);
+                            Game.LogTrivial("[TRACE] Emergency Callouts: Deleted SearchArea");
+                            
                             Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
                             break;
                         }
