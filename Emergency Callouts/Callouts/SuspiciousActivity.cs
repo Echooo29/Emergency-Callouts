@@ -359,7 +359,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 25f && OnScene == true)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && OnScene == true)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Suspect2.Tasks.ClearImmediately();
@@ -442,7 +442,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 25f && OnScene == true)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && OnScene == true)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Game.LogTrivial("[TRACE] Emergency Callouts: Assigned Suspect to fight player");
@@ -544,7 +544,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[TRACE] Emergency Callouts: Deleted Suspect2Vehicle");
 
                 // Clear Suspect Inventory
-                Suspect.ClearInventory();
+                Suspect.Inventory.Weapons.Clear();
                 Game.LogTrivial("[TRACE] Emergency Callouts: Cleared Suspect inventory");
 
                 // Suspect Position & Heading
