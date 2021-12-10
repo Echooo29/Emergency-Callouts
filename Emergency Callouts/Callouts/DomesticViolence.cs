@@ -2,6 +2,7 @@
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using RAGENativeUI;
 using System;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
@@ -157,7 +158,7 @@ namespace EmergencyCallouts.Callouts
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
-                VictimBlip.SetColor(Colors.Green);
+                VictimBlip.SetColor(Colors.Orange);
                 VictimBlip.ScaleForPed();
                 Entity.Disable(VictimBlip);
 
@@ -324,7 +325,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (DialogueStarted == false)
                             {
-                                Game.DisplayHelp($"Press ~y~{Settings.TalkKey}~s~ to talk to the ~g~victim~s~.");
+                                Game.DisplayHelp($"Press {Settings.TalkKey.GetInstructionalId()} to talk to the ~o~Victim~s~.");
                             }
                         }
                     }

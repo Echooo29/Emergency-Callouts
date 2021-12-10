@@ -3,6 +3,7 @@ using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using RAGENativeUI;
 using System;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
@@ -558,13 +559,13 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogue =
                 {
                     "~y~Person~s~: Can I help you sir? I'm in charge of the place here.",
-                    $"~b~{Settings.Callsign}~s~: Yes, we're looking for a person matching your description, do you have anything to prove that you work here?",
+                    $"~b~You~s~: Yes, we're looking for a person matching your description, do you have anything to prove that you work here?",
                     "~y~Person~s~: Yes ofcourse, here it is.",
-                    $"~b~{Settings.Callsign}~s~: Okay, looks fine to me, when did you last come here?",
+                    $"~b~You~s~: Okay, looks fine to me, when did you last come here?",
                     "~g~Person~s~: A few minutes ago, when my shift started.",
-                    $"~b~{Settings.Callsign}~s~: Then the caller must've made a mistake.",
+                    $"~b~You~s~: Then the caller must've made a mistake.",
                     "~g~Person~s~: Well, I'm glad he called, we actually have alot of kids sneaking around here.",
-                    $"~b~{Settings.Callsign}~s~: Okay, well, I'm going back out on patrol, see you later!",
+                    $"~b~You~s~: Okay, well, I'm going back out on patrol, see you later!",
                     "~g~Person~s~: Goodbye!",
                 };
 
@@ -644,8 +645,6 @@ namespace EmergencyCallouts.Callouts
                                 if (line == dialogue.Length)
                                 {
                                     GameFiber.Sleep(3000);
-                                    Play.CodeFourAudio();
-                                    Game.LogTrivial("[TRACE] Emergency Callouts: Played code four audio");
 
                                     End();
                                     break;
@@ -656,7 +655,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.TalkKey}~s~ to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"Press {Settings.TalkKey.GetInstructionalId()} to talk to the ~y~suspect~s~.");
                                 }
                             }
                         }
