@@ -9,6 +9,7 @@ using Rage.Native;
 using static EmergencyCallouts.Essential.Helper;
 using System.Media;
 using System.Net;
+using RAGENativeUI;
 
 namespace EmergencyCallouts.Essential
 {
@@ -236,13 +237,19 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Settings.EndKey))
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 3f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                    Game.DisplaySubtitle($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
-                    GameFiber.Sleep(2000);
-                    Play.CodeFourAudio();
-                    GameFiber.Sleep(2700);
-                    Functions.StopCurrentCallout();
+                    Game.DisplayHelp($"Press {Settings.EndKey.GetInstructionalId()} to confirm ending of the callout.\nPress Press {Keys.N.GetInstructionalId()} to cancel.");
                     GameFiber.Sleep(500);
+
+                    if (Game.IsKeyDown(Settings.EndKey))
+                    {
+                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 3f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                        Game.DisplaySubtitle($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
+                        GameFiber.Sleep(2000);
+                        Play.CodeFourAudio();
+                        GameFiber.Sleep(2700);
+                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(500);
+                    }
                 }
             }
             #endregion
