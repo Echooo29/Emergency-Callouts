@@ -22,7 +22,6 @@ namespace EmergencyCallouts.Callouts
         bool OnScene;
         bool PedFound;
         bool PedDetained;
-        bool FirstTime = true;
 
         // Main
         #region Positions
@@ -108,7 +107,7 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Settings.BurglaryName;
+            CalloutMessage = "Burglary";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -134,7 +133,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AttachMessage();
 
                 // Callout Details
-                Display.CalloutDetails(Settings.BurglaryDetails);
+                Display.CalloutDetails("A person has been seen looking through windows, caller states he's now lockpicking a door.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);

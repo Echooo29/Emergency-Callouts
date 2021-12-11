@@ -22,7 +22,6 @@ namespace EmergencyCallouts.Callouts
         bool FoundPed2;
         bool PedDetained;
         bool DialogueStarted;
-        bool FirstTime = true;
 
         // Main
         #region Positions
@@ -112,7 +111,7 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Settings.SuspiciousActivityName;
+            CalloutMessage = "Suspicious Activity";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -138,7 +137,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AttachMessage();
 
                 // Callout Details
-                Display.CalloutDetails(Settings.SuspiciousActivityDetails);
+                Display.CalloutDetails("Multiple civilians called about a person handling guns in the trunk of their car.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -581,7 +580,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            if (Game.IsKeyDown(Settings.TalkKey))
+                            if (Game.IsKeyDown(Settings.Talk))
                             {
                                 DialogueStarted = true;
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Dialogue Started");
@@ -641,7 +640,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.TalkKey}~s~ to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"Press ~y~{Settings.Talk}~s~ to talk to the ~y~suspect~s~.");
                                 }
                             }
                         }

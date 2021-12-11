@@ -10,7 +10,7 @@ namespace EmergencyCallouts
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
-            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=20730&textOnly=1"); // API Check learned from SEbi3
+            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=20730&textOnly=1");
             string OnlineVersion = null;
 
             try

@@ -190,31 +190,24 @@ namespace EmergencyCallouts.Essential
 
         internal static class Display
         {
-            #region HideSubtitle
-            internal static void HideSubtitle()
-            {
-                Game.DisplaySubtitle("");
-            }
-            #endregion
-
             #region AttachMessage
             internal static void AttachMessage()
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, Settings.DispatchName, $"~{Settings.SubtitleColor}~" + Settings.AttachMessageSubtitle, Settings.AttachMessageText);
+                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
             }
             #endregion
 
             #region DetachMessage
             internal static void DetachMessage()
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, Settings.DispatchName, $"~{Settings.SubtitleColor}~" + Settings.DetachMessageSubtitle, Settings.DetachMessageText);
+                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
             }
             #endregion
 
             #region CalloutDetails
             internal static void CalloutDetails(string details)
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, Settings.DispatchName, $"~{Settings.SubtitleColor}~" + Settings.CalloutDetailsSubtitle, details);
+                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "Callout Details", details);
             }
             #endregion
 
@@ -229,6 +222,13 @@ namespace EmergencyCallouts.Essential
             internal static void HintEndCallout()
             {
                 Game.DisplayHelp("Press ~y~End~s~ to end the callout.", 20000);
+            }
+            #endregion
+
+            #region HideSubtitle
+            internal static void HideSubtitle()
+            {
+                Game.DisplaySubtitle("");
             }
             #endregion
         }
@@ -303,12 +303,12 @@ namespace EmergencyCallouts.Essential
             #region EndKeyDown
             internal static void EndKeyDown()
             {
-                if (Game.IsKeyDown(Settings.EndCalloutKey))
+                if (Game.IsKeyDown(Settings.EndCallout))
                 {
                     GameFiber.Sleep(500);
                     Game.DisplayHelp("Start Countdown");
 
-                    if (Game.IsKeyDown(Settings.EndCalloutKey))
+                    if (Game.IsKeyDown(Settings.EndCallout))
                     {
                         Game.DisplayHelp("Ends Callout");
                     }

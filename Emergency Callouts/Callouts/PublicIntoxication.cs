@@ -19,7 +19,6 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool NeedsRefreshing;
-        bool FirstTime = true;
 
         Ped Suspect;
 
@@ -34,7 +33,7 @@ namespace EmergencyCallouts.Callouts
             AddMinimumDistanceCheck(Settings.SearchAreaSize / 2.5f, CalloutPosition);
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Settings.PublicIntoxicationName;
+            CalloutMessage = "Public Intoxication";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_DISTURBING_THE_PEACE_01 IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
@@ -60,7 +59,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AttachMessage();
 
                 // Callout Details
-                Display.CalloutDetails(Settings.PublicIntoxicationDetails);
+                Display.CalloutDetails("There are multiple reports of a person under the influence of alcohol.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(CalloutPosition);

@@ -21,7 +21,6 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
-        bool FirstTime = true;
 
         // Main
         #region Positions
@@ -222,7 +221,7 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Settings.TrespassingName;
+            CalloutMessage = "Trespassing";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -248,7 +247,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AttachMessage();
 
                 // Callout Details
-                Display.CalloutDetails(Settings.TrespassingDetails);
+                Display.CalloutDetails("Someone reported a person trespassing on private property.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -599,7 +598,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            if (Game.IsKeyDown(Settings.TalkKey))
+                            if (Game.IsKeyDown(Settings.Talk))
                             {
                                 DialogueStarted = true;
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Dialogue Started");
@@ -656,7 +655,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press {Settings.TalkKey.GetInstructionalId()} to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"Press {Settings.Talk.GetInstructionalId()} to talk to the ~y~suspect~s~.");
                                 }
                             }
                         }

@@ -22,7 +22,6 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool DialogueStarted;
-        bool FirstTime = true;
 
         // Main
         #region Positions
@@ -108,7 +107,7 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Settings.DomesticViolenceName;
+            CalloutMessage = "Domestic Violence";
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
@@ -134,7 +133,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AttachMessage();
 
                 // Callout Details
-                Display.CalloutDetails(Settings.DomesticViolenceDetails);
+                Display.CalloutDetails("A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -292,7 +291,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
                     {
-                        if (Game.IsKeyDown(Settings.TalkKey))
+                        if (Game.IsKeyDown(Settings.Talk))
                         {
                             DialogueStarted = true;
                             Game.LogTrivial("[TRACE] Emergency Callouts: Dialogue Started");
@@ -326,7 +325,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (DialogueStarted == false)
                             {
-                                Game.DisplayHelp($"Press {Settings.TalkKey.GetInstructionalId()} to talk to the ~o~Victim~s~.");
+                                Game.DisplayHelp($"Press {Settings.Talk.GetInstructionalId()} to talk to the ~o~Victim~s~.");
                             }
                         }
                     }
