@@ -329,23 +329,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region NaturalEnding
-            internal static void NaturalEnding(Ped ped)
-            {
-                if (ped.Exists())
-                {
-                    if (ped.IsCuffed)
-                    {
-                        Display.EndCallout();
-                    }
-                    else if (ped.IsDead && MainPlayer.IsInAnyPoliceVehicle)
-                    {
-                        Display.HintEndCallout();
-                    }
-                }
-            }
-            #endregion
-
             #region PreventDistanceCrash
             internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool OnScene, bool PedFound)
             {
