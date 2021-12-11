@@ -231,28 +231,6 @@ namespace EmergencyCallouts.Essential
                 Game.DisplayHelp("Press ~y~End~s~ to end the callout.", 20000);
             }
             #endregion
-
-            #region EndCallout
-            internal static void EndCallout()
-            {
-                if (Game.IsKeyDown(Settings.EndCalloutKey))
-                {
-                    Game.DisplayHelp($"Press {Settings.EndCalloutKey.GetInstructionalId()} to confirm ending of the callout.\nPress Press {Keys.N.GetInstructionalId()} to cancel.");
-                    GameFiber.Sleep(500);
-
-                    if (Game.IsKeyDown(Settings.EndCalloutKey))
-                    {
-                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 3f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                        Game.DisplaySubtitle($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
-                        GameFiber.Sleep(2000);
-                        Play.CodeFourAudio();
-                        GameFiber.Sleep(2700);
-                        Functions.StopCurrentCallout();
-                        GameFiber.Sleep(500);
-                    }
-                }
-            }
-            #endregion
         }
 
         internal static class Vehicles
