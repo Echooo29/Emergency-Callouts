@@ -47,8 +47,9 @@ namespace EmergencyCallouts
         internal static string NotificationIconName = "web_lossantospolicedept";
 
         // Keys
+        internal static Keys ToggleMenuKey = Keys.Delete;
         internal static Keys TalkKey = Keys.Y;
-        internal static Keys EndKey = Keys.End;
+        internal static Keys EndCalloutKey = Keys.End;
 
         // Other
         internal static bool PlayPursuitAudio = true;
@@ -104,8 +105,9 @@ namespace EmergencyCallouts
             NotificationIconName = iniFile.ReadString("Notifications", "NotificationIconName", NotificationIconName);
 
             // Keys
+            ToggleMenuKey = iniFile.ReadEnum("Keys", "ToggleMenuKey", Keys.Delete);
             TalkKey = iniFile.ReadEnum("Keys", "TalkKey", Keys.Y);
-            EndKey = iniFile.ReadEnum("Keys", "EndKey", Keys.End);
+            EndCalloutKey = iniFile.ReadEnum("Keys", "EndCalloutKey", Keys.End);
 
             // Other
             PlayPursuitAudio = iniFile.ReadBoolean("Other", "PlayPursuitAudio", PlayPursuitAudio);

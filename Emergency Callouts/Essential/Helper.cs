@@ -235,12 +235,12 @@ namespace EmergencyCallouts.Essential
             #region EndCallout
             internal static void EndCallout()
             {
-                if (Game.IsKeyDown(Settings.EndKey))
+                if (Game.IsKeyDown(Settings.EndCalloutKey))
                 {
-                    Game.DisplayHelp($"Press {Settings.EndKey.GetInstructionalId()} to confirm ending of the callout.\nPress Press {Keys.N.GetInstructionalId()} to cancel.");
+                    Game.DisplayHelp($"Press {Settings.EndCalloutKey.GetInstructionalId()} to confirm ending of the callout.\nPress Press {Keys.N.GetInstructionalId()} to cancel.");
                     GameFiber.Sleep(500);
 
-                    if (Game.IsKeyDown(Settings.EndKey))
+                    if (Game.IsKeyDown(Settings.EndCalloutKey))
                     {
                         MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 3f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                         Game.DisplaySubtitle($"~b~{Settings.Callsign}~s~: {Settings.EndCalloutRequest}");
@@ -325,7 +325,7 @@ namespace EmergencyCallouts.Essential
             #region EndKeyDown
             internal static void EndKeyDown()
             {
-                if (Game.IsKeyDown(Settings.EndKey)) { Display.EndCallout(); }
+                if (Game.IsKeyDown(Settings.EndCalloutKey)) { Display.EndCallout(); }
             }
             #endregion
 
@@ -416,8 +416,8 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region RemoteState
-            internal static void RemoteState()
+            #region RemoteStates
+            internal static void RemoteStates()
             {
                 try
                 {
