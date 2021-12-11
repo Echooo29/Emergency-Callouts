@@ -303,7 +303,17 @@ namespace EmergencyCallouts.Essential
             #region EndKeyDown
             internal static void EndKeyDown()
             {
-                if (Game.IsKeyDown(Settings.EndCalloutKey)) { Display.EndCallout(); }
+                if (Game.IsKeyDown(Settings.EndCalloutKey))
+                {
+                    GameFiber.Sleep(500);
+                    Game.DisplayHelp("Start Countdown");
+
+                    if (Game.IsKeyDown(Settings.EndCalloutKey))
+                    {
+                        Game.DisplayHelp("Ends Callout");
+                    }
+
+                }
             }
             #endregion
 

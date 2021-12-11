@@ -22,6 +22,7 @@ namespace EmergencyCallouts.Callouts
         bool FoundPed2;
         bool PedDetained;
         bool DialogueStarted;
+        bool FirstTime = true;
 
         // Main
         #region Positions

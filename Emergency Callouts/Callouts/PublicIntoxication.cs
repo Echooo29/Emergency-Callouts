@@ -19,6 +19,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool NeedsRefreshing;
+        bool FirstTime = true;
 
         Ped Suspect;
 
@@ -266,7 +267,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Check.EndKeyDown();
-                Check.NaturalEnding(Suspect);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect);
 

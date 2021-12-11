@@ -21,6 +21,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
+        bool FirstTime = true;
 
         // Main
         #region Positions
@@ -779,7 +780,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Check.EndKeyDown();
-                Check.NaturalEnding(Suspect);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect);
                 Check.PreventResponderCrash(Guard);
