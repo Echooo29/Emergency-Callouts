@@ -18,16 +18,11 @@ namespace EmergencyCallouts
         internal static int CalloutDistance = 1000;
 
         // Notifications
-        internal static string NotificationIconDictionary = "web_lossantospolicedept";
-        internal static string NotificationIconName = "web_lossantospolicedept";
+        internal static string SubtitleColor = "Blue";
 
         // Keys
         internal static Keys ToggleMenu = Keys.Delete;
         internal static Keys Talk = Keys.Y;
-
-        // Other
-        internal static bool PlayPursuitAudio = true;
-        internal static string SubtitleColor = "b";
 
         internal static void Initialize()
         {
@@ -49,16 +44,11 @@ namespace EmergencyCallouts
             CalloutDistance = iniFile.ReadInt32("Callout Measurements", "CalloutDistance", CalloutDistance);
 
             // Notifications
-            NotificationIconDictionary = iniFile.ReadString("Notifications", "NotificationIconDictionary", NotificationIconDictionary);
-            NotificationIconName = iniFile.ReadString("Notifications", "NotificationIconName", NotificationIconName);
+            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
             ToggleMenu = iniFile.ReadEnum("Keybindings", "ToggleMenu", Keys.Delete);
             Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
-
-            // Other
-            PlayPursuitAudio = iniFile.ReadBoolean("Other", "PlayPursuitAudio", PlayPursuitAudio);
-            SubtitleColor = iniFile.ReadString("Other", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             Game.LogTrivial("[TRACE] Emergency Callouts: Loaded settings.");
         }

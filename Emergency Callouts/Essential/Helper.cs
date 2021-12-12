@@ -219,21 +219,21 @@ namespace EmergencyCallouts.Essential
             #region AttachMessage
             internal static void AttachMessage()
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
             }
             #endregion
 
             #region DetachMessage
             internal static void DetachMessage()
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
             }
             #endregion
 
             #region CalloutDetails
             internal static void CalloutDetails(string details)
             {
-                Game.DisplayNotification(Settings.NotificationIconDictionary, Settings.NotificationIconName, "Dispatch", $"~{Settings.SubtitleColor}~" + "Callout Details", details);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "Callout Details", details);
             }
             #endregion
 
@@ -309,10 +309,7 @@ namespace EmergencyCallouts.Essential
             #region PursuitAudio
             internal static void PursuitAudio()
             {
-                if (Settings.PlayPursuitAudio == true)
-                {
-                    Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
-                }
+                Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
             }
             #endregion
 
