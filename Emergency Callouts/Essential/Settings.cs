@@ -22,7 +22,6 @@ namespace EmergencyCallouts
         internal static string SubtitleColor = "Blue";
 
         // Keys
-        internal static Keys ToggleMenu = Keys.Delete;
         internal static Keys Talk = Keys.Y;
 
         internal static void Initialize()
@@ -49,7 +48,6 @@ namespace EmergencyCallouts
             SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
-            ToggleMenu = iniFile.ReadEnum("Keybindings", "ToggleMenu", Keys.Delete);
             Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
 
             Game.LogTrivial("[Emergency Callouts]: Loaded settings.");
