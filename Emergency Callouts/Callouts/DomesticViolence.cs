@@ -291,13 +291,13 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
                     {
+                        Victim.Tasks.Clear();
+                        Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
+
                         if (Game.IsKeyDown(Settings.Talk))
                         {
                             DialogueStarted = true;
                             Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
-
-                            Victim.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
 
                             Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                             Game.LogTrivial("[Emergency Callouts]: Victim achieved player heading");
@@ -311,11 +311,9 @@ namespace EmergencyCallouts.Callouts
                             {
                                 GameFiber.Sleep(500);
                                 Entity.Kill(Victim);
-                                Game.LogTrivial("[Emergency Callouts]: Killed Victim");
 
                                 GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
-                                Game.LogTrivial("[Emergency Callouts]: Hid Subtitle");
 
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                             }

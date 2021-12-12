@@ -598,13 +598,13 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
+                            Suspect.Tasks.Clear();
+                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
+
                             if (Game.IsKeyDown(Settings.Talk))
                             {
                                 DialogueStarted = true;
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
-
-                                Suspect.Tasks.Clear();
-                                Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
 
                                 Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                                 Game.LogTrivial("[Emergency Callouts]: Suspect achieved player heading");
