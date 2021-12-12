@@ -557,7 +557,7 @@ namespace EmergencyCallouts.Callouts
 
                 string[] dialogue =
                 {
-                    "~y~Person~s~: Can I help you sir? I'm in charge of the place here.",
+                    "~y~Person~s~: Can I help you sir? I'm the person in charge.",
                     $"~b~You~s~: Yes, we're looking for a person matching your description, do you have anything to prove that you work here?",
                     "~y~Person~s~: Yes ofcourse, here it is.",
                     $"~b~You~s~: Okay, looks fine to me, when did you last come here?",
