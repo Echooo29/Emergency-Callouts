@@ -26,7 +26,7 @@ namespace EmergencyCallouts
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[TRACE] Emergency Callouts: Loading settings.");
+            Game.LogTrivial("[Emergency Callouts]: Loading settings.");
 
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
@@ -50,7 +50,7 @@ namespace EmergencyCallouts
             ToggleMenu = iniFile.ReadEnum("Keybindings", "ToggleMenu", Keys.Delete);
             Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
 
-            Game.LogTrivial("[TRACE] Emergency Callouts: Loaded settings.");
+            Game.LogTrivial("[Emergency Callouts]: Loaded settings.");
         }
     }
 }
