@@ -130,10 +130,7 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
 
                 // Attach Message
-                Display.AttachMessage();
-
-                // Callout Details
-                Display.CalloutDetails("A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.");
+                Display.AttachMessage("A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);

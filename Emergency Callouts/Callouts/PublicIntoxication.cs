@@ -56,10 +56,7 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
 
                 // Attach Message
-                Display.AttachMessage();
-
-                // Callout Details
-                Display.CalloutDetails("There are multiple reports of a person under the influence of alcohol.");
+                Display.AttachMessage("There are multiple reports of a person under the influence of alcohol.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(CalloutPosition);

@@ -217,9 +217,9 @@ namespace EmergencyCallouts.Essential
         internal static class Display
         {
             #region AttachMessage
-            internal static void AttachMessage()
+            internal static void AttachMessage(string details)
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Attached {Settings.Callsign}", details);
             }
             #endregion
 
@@ -227,13 +227,6 @@ namespace EmergencyCallouts.Essential
             internal static void DetachMessage()
             {
                 Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
-            }
-            #endregion
-
-            #region CalloutDetails
-            internal static void CalloutDetails(string details)
-            {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "Callout Details", details);
             }
             #endregion
 

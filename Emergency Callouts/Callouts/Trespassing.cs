@@ -244,10 +244,7 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
 
                 // Attach Message
-                Display.AttachMessage();
-
-                // Callout Details
-                Display.CalloutDetails("Someone reported a person trespassing on private property.");
+                Display.AttachMessage("Someone reported a person trespassing on private property.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);

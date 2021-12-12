@@ -130,10 +130,7 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
 
                 // Attach Message
-                Display.AttachMessage();
-
-                // Callout Details
-                Display.CalloutDetails("A person has been seen looking through windows, caller states he's now lockpicking a door.");
+                Display.AttachMessage("A person has been seen looking through windows, caller states he's now lockpicking a door.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);

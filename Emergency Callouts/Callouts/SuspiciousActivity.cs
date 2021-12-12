@@ -134,10 +134,7 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
 
                 // Attach Message
-                Display.AttachMessage();
-
-                // Callout Details
-                Display.CalloutDetails("Multiple civilians called about a person handling guns in the trunk of their car.");
+                Display.AttachMessage("Multiple civilians called about a person handling guns in the trunk of their car.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
