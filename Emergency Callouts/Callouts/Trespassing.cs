@@ -606,7 +606,7 @@ namespace EmergencyCallouts.Callouts
                                 Suspect.Tasks.Clear();
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Cleared Suspect tasks");
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180).WaitForCompletion();
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                                 Game.LogTrivial("[TRACE] Emergency Callouts: Suspect achieved player heading");
 
                                 Game.DisplaySubtitle(dialogue[line], 99999);
