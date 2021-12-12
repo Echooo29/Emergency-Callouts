@@ -534,7 +534,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned ({Suspect.Inventory.EquippedWeapon}) to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);

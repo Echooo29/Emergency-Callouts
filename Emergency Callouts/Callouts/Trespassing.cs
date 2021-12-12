@@ -585,7 +585,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Inspect animation
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts: Assigned Suspect to play animation");
+                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
                 Game.LogTrivial("[Emergency Callouts]: Set ped cant be arrested by player (Suspect)");
@@ -679,7 +679,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Suspect Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_PETROLCAN", -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned ({Suspect.Inventory.EquippedWeapon}) to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned (WEAPON_PETROLCAN) to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {

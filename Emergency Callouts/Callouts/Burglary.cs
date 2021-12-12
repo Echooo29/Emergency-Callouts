@@ -390,7 +390,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned ({Suspect.Inventory.EquippedWeapon}) to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned (WEAPON_CROWBAR) to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
