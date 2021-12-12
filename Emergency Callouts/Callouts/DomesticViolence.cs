@@ -288,11 +288,11 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
                     {
-                        Victim.Tasks.Clear();
-                        Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
-
                         if (Game.IsKeyDown(Settings.Talk))
                         {
+                            Victim.Tasks.Clear();
+                            Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
+
                             DialogueStarted = true;
                             Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
 

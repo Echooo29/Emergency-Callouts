@@ -596,11 +596,11 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
-
                             if (Game.IsKeyDown(Settings.Talk))
                             {
+                                Suspect.Tasks.Clear();
+                                Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
+
                                 DialogueStarted = true;
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
 
