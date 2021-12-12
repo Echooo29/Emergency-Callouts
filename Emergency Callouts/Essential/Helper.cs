@@ -226,7 +226,7 @@ namespace EmergencyCallouts.Essential
             #region DetachMessage
             internal static void DetachMessage()
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + "", "");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Detached {Settings.Callsign}", "Situation is under control.");
             }
             #endregion
 
@@ -247,7 +247,7 @@ namespace EmergencyCallouts.Essential
             #region HideSubtitle
             internal static void HideSubtitle()
             {
-                Game.DisplaySubtitle("");
+                Game.DisplaySubtitle(string.Empty);
             }
             #endregion
         }
@@ -321,8 +321,8 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                    Game.DisplayNotification("~b~You~s~: Dispatch, remove me from this call");
+                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                    Game.DisplayNotification("~b~You~s~: Dispatch, Call is code 4.");
                     GameFiber.Sleep(2000);
                     Play.CodeFourAudio();
                     GameFiber.Sleep(2700);
