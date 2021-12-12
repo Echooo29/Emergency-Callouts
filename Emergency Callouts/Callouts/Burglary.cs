@@ -483,7 +483,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Check.EndKeyDown(CalloutMessage);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
-                Check.PreventResponderCrash(Suspect);
+                Check.PreventResponderCrash(Suspect, CalloutMessage);
 
                 #region OnPlayerArrival
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && OnScene == false)

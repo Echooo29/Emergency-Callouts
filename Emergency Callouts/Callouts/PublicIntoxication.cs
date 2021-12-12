@@ -264,7 +264,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Check.EndKeyDown(CalloutMessage);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
-                Check.PreventResponderCrash(Suspect);
+                Check.PreventResponderCrash(Suspect, CalloutMessage);
 
                 #region OnPlayerArrival
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < 15f && OnScene == false)
