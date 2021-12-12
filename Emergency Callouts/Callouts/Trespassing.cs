@@ -644,7 +644,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(3000);
 
-                                    End();
+                                    Handle.CalloutEnding(CalloutMessage);
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -776,7 +776,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown();
+                Check.EndKeyDown(CalloutMessage);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect);
                 Check.PreventResponderCrash(Guard);

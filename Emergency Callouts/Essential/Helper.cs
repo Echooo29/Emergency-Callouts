@@ -212,6 +212,19 @@ namespace EmergencyCallouts.Essential
                 });
             }
             #endregion
+
+            #region CalloutEnding
+            internal static void CalloutEnding(string calloutMessage)
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                Game.DisplayNotification($"~b~You~s~: Dispatch, {calloutMessage} call is code 4.");
+                GameFiber.Sleep(2000);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                Functions.StopCurrentCallout();
+                GameFiber.Sleep(500);
+            }
+            #endregion
         }
 
         internal static class Display
@@ -317,17 +330,11 @@ namespace EmergencyCallouts.Essential
         internal static class Check
         {
             #region EndKeyDown
-            internal static void EndKeyDown()
+            internal static void EndKeyDown(string calloutMessage)
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                    Game.DisplayNotification("~b~You~s~: Dispatch, Call is code 4.");
-                    GameFiber.Sleep(2000);
-                    Play.CodeFourAudio();
-                    GameFiber.Sleep(2700);
-                    Functions.StopCurrentCallout();
-                    GameFiber.Sleep(500);
+                    Handle.CalloutEnding(calloutMessage);
                 }
             }
             #endregion
@@ -345,7 +352,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region PreventResponderCrash
-            internal static void PreventResponderCrash(Ped ped)
+            internal static void PreventResponderCrash(Ped ped, string calloutMessage)
             {
                 if (ped.Exists()) 
                 {
@@ -355,18 +362,15 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                Handle.CalloutEnding(calloutMessage);
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                Handle.CalloutEnding(calloutMessage);
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // First Responder
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                Handle.CalloutEnding(calloutMessage);
                             }
                         }
                     }

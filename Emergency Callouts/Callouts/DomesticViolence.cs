@@ -570,7 +570,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown();
+                Check.EndKeyDown(CalloutMessage);
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventParamedicCrash(Suspect, Victim);
 
