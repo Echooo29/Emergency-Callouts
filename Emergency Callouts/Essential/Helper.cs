@@ -176,7 +176,7 @@ namespace EmergencyCallouts.Essential
                     "a_f_y_soucent_03", "a_f_m_soucentmc_01", "u_f_y_spyactress", "s_f_m_sweatshop_01", "s_f_y_sweatshop_01",
                     "ig_tanisha", "a_f_y_tennis_01", "ig_tonya", "a_f_y_tourist_01", "a_f_y_tourist_02",
                     "g_f_y_vagos_01", "a_f_y_vinewood_01", "a_f_y_vinewood_02", "a_f_y_vinewood_03",
-                    "a_f_y_vinewood_04", "u_m_m_willyfist", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
+                    "a_f_y_vinewood_04", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
                     "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", "ig_isldj_04_d_01",
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
