@@ -319,6 +319,8 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
+                Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
+
                 // Enabling Route
                 Entity.EnableRoute(EntranceBlip);
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
@@ -569,7 +571,6 @@ namespace EmergencyCallouts.Callouts
                 int line = 0;
                 int num = random.Next(RailyardManagerPositions.Length);
 
-                // Random date generator (maxValue must be 1 higher than the number you'd want)
                 int day = random.Next(1, 31);
                 int month = random.Next(1, 13);
                 int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
@@ -627,7 +628,7 @@ namespace EmergencyCallouts.Callouts
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", "~y~Trevor Philips", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
 
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed Manager credentials");
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed ped credentials");
                                 }
 
                                 if (line == 4)
@@ -652,7 +653,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press {Settings.Talk.GetInstructionalId()} to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~y~suspect~s~.");
                                 }
                             }
                         }
@@ -779,7 +780,6 @@ namespace EmergencyCallouts.Callouts
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect);
                 Check.PreventResponderCrash(Guard);
-                Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
 
                 #region OnPlayerArrival
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && OnScene == false)

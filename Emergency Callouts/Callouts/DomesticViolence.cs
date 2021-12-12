@@ -320,7 +320,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (DialogueStarted == false)
                             {
-                                Game.DisplayHelp($"Press {Settings.Talk.GetInstructionalId()} to talk to the ~o~Victim~s~.");
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~Victim~s~.");
                             }
                         }
                     }
