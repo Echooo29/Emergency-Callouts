@@ -262,7 +262,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
-
+               
                 CalloutHandler();
             }
             catch (Exception e)
@@ -782,6 +782,7 @@ namespace EmergencyCallouts.Callouts
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect);
                 Check.PreventResponderCrash(Guard);
+                Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
 
                 #region OnPlayerArrival
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && OnScene == false)

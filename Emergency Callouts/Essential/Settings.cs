@@ -24,7 +24,6 @@ namespace EmergencyCallouts
         // Keys
         internal static Keys ToggleMenu = Keys.Delete;
         internal static Keys Talk = Keys.Y;
-        internal static Keys EndCallout = Keys.End;
 
         // Other
         internal static bool PlayPursuitAudio = true;
@@ -56,7 +55,6 @@ namespace EmergencyCallouts
             // Keybindings
             ToggleMenu = iniFile.ReadEnum("Keybindings", "ToggleMenu", Keys.Delete);
             Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
-            EndCallout = iniFile.ReadEnum("Keybindings", "EndCallout", Keys.End);
 
             // Other
             PlayPursuitAudio = iniFile.ReadBoolean("Other", "PlayPursuitAudio", PlayPursuitAudio);

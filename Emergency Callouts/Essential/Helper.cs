@@ -10,6 +10,7 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Media;
 using System.Net;
 using RAGENativeUI;
+using static EmergencyCallouts.Essential.Color;
 
 namespace EmergencyCallouts.Essential
 {
@@ -188,6 +189,31 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
+        internal static class Handle
+        {
+            #region DecreaseSearchArea
+            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
+            {
+                GameFiber.StartNew(delegate
+                {
+                    for (int sec = seconds; sec > 0; sec--)
+                    {
+                        if (seconds == 1)
+                        {
+                            Entity.Delete(SearchArea);
+                            // Create SearchArea
+                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
+                            SearchArea.SetColor(Colors.Yellow);
+                            SearchArea.Alpha = 0.5f;
+                            Game.LogTrivial("[TRACE] Emergency Callouts: Decreased SearchArea size");
+                        }
+                        GameFiber.Sleep(1000);
+                    }
+                });
+            }
+            #endregion
+        }
+
         internal static class Display
         {
             #region AttachMessage
@@ -303,16 +329,15 @@ namespace EmergencyCallouts.Essential
             #region EndKeyDown
             internal static void EndKeyDown()
             {
-                if (Game.IsKeyDown(Settings.EndCallout))
+                if (Game.IsKeyDown(Keys.End))
                 {
+                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                    Game.DisplayNotification("~b~You~s~: Dispatch, remove me from this call");
+                    GameFiber.Sleep(2000);
+                    Play.CodeFourAudio();
+                    GameFiber.Sleep(2700);
+                    Functions.StopCurrentCallout();
                     GameFiber.Sleep(500);
-                    Game.DisplayHelp("Start Countdown");
-
-                    if (Game.IsKeyDown(Settings.EndCallout))
-                    {
-                        Game.DisplayHelp("Ends Callout");
-                    }
-
                 }
             }
             #endregion
