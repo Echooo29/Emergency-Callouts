@@ -340,9 +340,9 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region PreventDistanceCrash
-            internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool OnScene, bool PedFound)
+            internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool PlayerArrived, bool PedFound)
             {
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > 400f && OnScene == true && PedFound == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > 400f && PlayerArrived == true && PedFound == true)
                 {
                     Game.LogTrivial("[Emergency Callouts]: Too far from callout position, ending callout to prevent crash");
                     Functions.StopCurrentCallout();
