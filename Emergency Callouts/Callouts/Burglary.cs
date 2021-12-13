@@ -490,7 +490,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set OnScene
                     OnScene = true;
-                    Game.LogTrivial("[Emergency Callouts]: Entered scene");
+                    Game.LogTrivial("[Emergency Callouts]: User entered scene");
 
                     // Display Arriving Subtitle
                     Display.ArriveSubtitle("Find", "burglar", 'r');
@@ -520,7 +520,6 @@ namespace EmergencyCallouts.Callouts
 
                     // Hide Subtitle
                     Display.HideSubtitle();
-                    Game.LogTrivial("[Emergency Callouts]: Hid subtitle");
 
                     // Enable SuspectBlip
                     Entity.Enable(SuspectBlip);
@@ -550,23 +549,20 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set OnScene
                     OnScene = false;
-                    Game.LogTrivial("[Emergency Callouts]: Left scene");
 
                     // Disable SuspectBlip
                     Entity.Disable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Disabled SuspectBlip");
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
-                    Game.LogTrivial("[Emergency Callouts]: Created EntranceBlip");
 
                     // Enable Route
                     Entity.EnableRoute(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+
+                    Game.LogTrivial("[Emergency Callouts]: User left callout position");
                 }
                 #endregion
             }
