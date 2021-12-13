@@ -322,7 +322,7 @@ namespace EmergencyCallouts.Essential
             #region CodeFourAudio
             internal static void CodeFourAudio()
             {
-                Functions.PlayScannerAudio("REPORT_RESPONSE_COPY CODE_FOUR NO_UNITS_REQUIRED");
+                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
             }
             #endregion
         }

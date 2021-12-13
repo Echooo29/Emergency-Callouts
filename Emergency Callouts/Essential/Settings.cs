@@ -19,10 +19,11 @@ namespace EmergencyCallouts
 
         // Notifications
         internal static string Callsign = "1-LINCOLN-18";
-        internal static string SubtitleColor = "Blue";
+        internal static string SubtitleColor = "Yellow";
 
         // Keys
-        internal static Keys Talk = Keys.Y;
+        internal static Keys TalkKey = Keys.Y;
+        internal static Keys EndCalloutKey = Keys.End;
 
         internal static void Initialize()
         {
@@ -45,10 +46,11 @@ namespace EmergencyCallouts
 
             // Notifications
             Callsign = iniFile.ReadString("Notifications", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
+            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor;
 
             // Keybindings
-            Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
+            TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
+            EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             Game.LogTrivial("[Emergency Callouts]: Loaded settings.");
         }
