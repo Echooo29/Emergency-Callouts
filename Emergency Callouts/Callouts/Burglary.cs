@@ -546,7 +546,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region OnPlayerLeave
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && OnScene == true)
                 {
                     // Set OnScene
                     OnScene = false;
