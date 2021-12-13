@@ -723,9 +723,10 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown();
-                Check.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Check.PreventParamedicCrash(Suspect, Suspect2);
+                Handle.EndKeyDown();
+                Handle.NaturalEnding(Suspect);
+                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventParamedicCrash(Suspect, Suspect2);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
@@ -766,7 +767,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial("[Emergency Callouts]: Player found Suspect");
                 }
 
                 if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && Ped2Found == false && PlayerArrived == true && Suspect2.Exists())
@@ -783,7 +784,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped2");
+                    Game.LogTrivial("[Emergency Callouts]: Player found Suspect2");
                 }
                 #endregion
 
@@ -792,11 +793,11 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
 
                     // Delete SuspectBlip
                     Entity.Delete(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+
+                    Game.LogTrivial("[Emergency Callouts]: Player detained suspect");
                 }
                 #endregion
 

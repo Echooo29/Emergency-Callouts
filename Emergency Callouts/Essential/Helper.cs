@@ -325,7 +325,7 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
-        internal static class Check
+        internal static class Handle
         {
             #region EndKeyDown
             internal static void EndKeyDown()

@@ -570,9 +570,9 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown();
-                Check.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Check.PreventParamedicCrash(Suspect, Victim);
+                Handle.EndKeyDown();
+                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventParamedicCrash(Suspect, Victim);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)

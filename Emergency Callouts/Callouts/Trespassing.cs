@@ -776,10 +776,10 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown();
-                Check.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Check.PreventResponderCrash(Suspect);
-                Check.PreventResponderCrash(Guard);
+                Handle.EndKeyDown();
+                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventResponderCrash(Suspect);
+                Handle.PreventResponderCrash(Guard);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
