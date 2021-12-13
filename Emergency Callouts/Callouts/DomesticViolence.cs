@@ -598,42 +598,39 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
-                #region OnPedFound
+                #region PedFound
                 if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
-                    Game.LogTrivial("[Emergency Callouts]: Found Suspect");
 
                     // Hide Subtitle
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
                     Entity.Enable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled SuspectBlip");
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+
+                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
                 }
 
                 if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && Ped2Found == false && PlayerArrived == true && Victim.Exists())
                 {
-                    // Set PedFound
+                    // Set Ped2Found
                     Ped2Found = true;
-                    Game.LogTrivial("[Emergency Callouts]: Found Victim");
 
                     // Hide Subtitle
                     Display.HideSubtitle();
-                    Game.LogTrivial("[Emergency Callouts]: Hid subtitle");
 
-                    // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled VictimBlip");
+                    // Enable VictimBlip
+                    Entity.Enable(VictimBlip);
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+
+                    Game.LogTrivial("[Emergency Callouts]: Player found ped2");
                 }
                 #endregion
 
