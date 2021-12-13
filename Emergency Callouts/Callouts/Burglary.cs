@@ -528,7 +528,7 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
-                #region OnPedDetained
+                #region PedDetained
                 if (Suspect.IsDetained() == true && PedDetained == false && Suspect.Exists())
                 {
                     // Set PedDetained
@@ -541,7 +541,7 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
-                #region OnPlayerLeave
+                #region PlayerLeft
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
                 {
                     // Set PlayerArrived
