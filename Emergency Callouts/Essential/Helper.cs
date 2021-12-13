@@ -187,44 +187,6 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
-        internal static class Handle
-        {
-            #region DecreaseSearchArea
-            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
-            {
-                GameFiber.StartNew(delegate
-                {
-                    for (int sec = seconds; sec > 0; sec--)
-                    {
-                        if (seconds == 1)
-                        {
-                            Entity.Delete(SearchArea);
-                            // Create SearchArea
-                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                            SearchArea.SetColor(Color.Colors.Yellow);
-                            SearchArea.Alpha = 0.5f;
-                            Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
-                        }
-                        GameFiber.Sleep(1000);
-                    }
-                });
-            }
-            #endregion
-
-            #region CalloutEnding
-            internal static void CalloutEnding()
-            {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
-                GameFiber.Sleep(2000);
-                Play.CodeFourAudio();
-                GameFiber.Sleep(2700);
-                Functions.StopCurrentCallout();
-                GameFiber.Sleep(500);
-            }
-            #endregion
-        }
-
         internal static class Display
         {
             #region AttachMessage
@@ -327,12 +289,25 @@ namespace EmergencyCallouts.Essential
 
         internal static class Handle
         {
-            #region EndKeyDown
-            internal static void EndKeyDown()
+            #region ManualEnding
+            internal static void ManualEnding()
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    Handle.CalloutEnding();
+                    CalloutEnding();
+                }
+            }
+            #endregion
+
+            #region AutomaticEnding
+            internal static void AutomaticEnding(Ped suspect)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsCuffed || (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle))
+                    {
+                        Functions.StopCurrentCallout();
+                    }
                 }
             }
             #endregion
@@ -349,8 +324,8 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region PreventResponderCrash
-            internal static void PreventResponderCrash(Ped ped)
+            #region PreventFirstResponderCrash
+            internal static void PreventFirstResponderCrash(Ped ped)
             {
                 if (ped.Exists()) 
                 {
@@ -360,43 +335,40 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Handle.CalloutEnding();
+                                CalloutEnding();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Handle.CalloutEnding();
+                                CalloutEnding();
                             }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // First Responder
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                Handle.CalloutEnding();
+                                CalloutEnding();
                             }
                         }
                     }
                 }
             }
 
-            internal static void PreventParamedicCrash(Ped ped, Ped ped2)
+            internal static void PreventFirstResponderCrash(Ped ped, Ped ped2)
             {
                 if (ped.Exists() && ped2.Exists())
                 {
-                    foreach (Ped FR in World.GetAllPeds())
+                    foreach (Ped FirstResponder in World.GetAllPeds())
                     {
-                        if (FR.Position.DistanceTo(ped.Position) < 5f || FR.Position.DistanceTo(ped2.Position) < 5f)
+                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f || FirstResponder.Position.DistanceTo(ped2.Position) < 5f)
                         {
-                            if (FR.Model.Name.ToLower() == "s_m_m_paramedic_01")
+                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
-                            else if (FR.Model.Name.ToLower() == "s_m_m_doctor_01")
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
-                            else if (FR.Model.Name.ToLower() == "s_m_y_fireman_01")
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
                         }
                     }
@@ -500,6 +472,41 @@ namespace EmergencyCallouts.Essential
                     DOMRemoteState = true;
                     SUSRemoteState = true;
                 }
+            }
+            #endregion
+
+            #region DecreaseSearchArea
+            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
+            {
+                GameFiber.StartNew(delegate
+                {
+                    for (int sec = seconds; sec > 0; sec--)
+                    {
+                        if (seconds == 1)
+                        {
+                            Entity.Delete(SearchArea);
+                            // Create SearchArea
+                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
+                            SearchArea.SetColor(Color.Colors.Yellow);
+                            SearchArea.Alpha = 0.5f;
+                            Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
+                        }
+                        GameFiber.Sleep(1000);
+                    }
+                });
+            }
+            #endregion
+
+            #region CalloutEnding
+            internal static void CalloutEnding()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
+                GameFiber.Sleep(2000);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                Functions.StopCurrentCallout();
+                GameFiber.Sleep(500);
             }
             #endregion
         }

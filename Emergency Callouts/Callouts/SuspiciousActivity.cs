@@ -723,10 +723,10 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Handle.EndKeyDown();
-                Handle.NaturalEnding(Suspect);
+                Handle.ManualEnding();
+                Handle.AutomaticEnding(Suspect);
+                Handle.PreventFirstResponderCrash(Suspect, Suspect2);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventParamedicCrash(Suspect, Suspect2);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
@@ -753,39 +753,39 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
-                {
-                    // Set PedFound
-                    PedFound = true;
+                //if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                //{
+                //    // Set PedFound
+                //    PedFound = true;
 
-                    // Hide Subtitle
-                    Display.HideSubtitle();
+                //    // Hide Subtitle
+                //    Display.HideSubtitle();
 
-                    // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
+                //    // Enable SuspectBlip
+                //    Entity.Enable(SuspectBlip);
 
-                    // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                //    // Delete SearchArea
+                //    Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found Suspect");
-                }
+                //    Game.LogTrivial("[Emergency Callouts]: Player found Suspect");
+                //}
 
-                if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && Ped2Found == false && PlayerArrived == true && Suspect2.Exists())
-                {
-                    // Set PedFound
-                    Ped2Found = true;
+                //if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && Ped2Found == false && PlayerArrived == true && Suspect2.Exists())
+                //{
+                //    // Set PedFound
+                //    Ped2Found = true;
 
-                    // Hide Subtitle
-                    Display.HideSubtitle();
+                //    // Hide Subtitle
+                //    Display.HideSubtitle();
 
-                    // Enable SuspectBlip
-                    Entity.Enable(Suspect2Blip);
+                //    // Enable SuspectBlip
+                //    Entity.Enable(Suspect2Blip);
 
-                    // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                //    // Delete SearchArea
+                //    Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found Suspect2");
-                }
+                //    Game.LogTrivial("[Emergency Callouts]: Player found Suspect2");
+                //}
                 #endregion
 
                 #region PedDetained
