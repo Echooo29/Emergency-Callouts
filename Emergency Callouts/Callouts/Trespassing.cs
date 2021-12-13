@@ -778,8 +778,8 @@ namespace EmergencyCallouts.Callouts
             {
                 Check.EndKeyDown();
                 Check.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Check.PreventResponderCrash(Suspect, CalloutMessage);
-                Check.PreventResponderCrash(Guard, CalloutMessage);
+                Check.PreventResponderCrash(Suspect);
+                Check.PreventResponderCrash(Guard);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)

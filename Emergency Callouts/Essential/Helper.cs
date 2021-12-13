@@ -9,7 +9,6 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Media;
 using System.Net;
 using RAGENativeUI;
-using static EmergencyCallouts.Essential.Helper.Color;
 
 namespace EmergencyCallouts.Essential
 {
@@ -202,7 +201,7 @@ namespace EmergencyCallouts.Essential
                             Entity.Delete(SearchArea);
                             // Create SearchArea
                             SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                            SearchArea.SetColor(Colors.Yellow);
+                            SearchArea.SetColor(Color.Colors.Yellow);
                             SearchArea.Alpha = 0.5f;
                             Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
                         }
@@ -351,7 +350,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region PreventResponderCrash
-            internal static void PreventResponderCrash(Ped ped, string calloutMessage)
+            internal static void PreventResponderCrash(Ped ped)
             {
                 if (ped.Exists()) 
                 {
