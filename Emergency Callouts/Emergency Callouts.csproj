@@ -83,9 +83,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
     <None Include="Other\Emergency Callouts.ini" />
   </ItemGroup>
   <ItemGroup>

@@ -46,7 +46,7 @@ namespace EmergencyCallouts
 
             // Notifications
             Callsign = iniFile.ReadString("Notifications", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor;
+            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor);
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);

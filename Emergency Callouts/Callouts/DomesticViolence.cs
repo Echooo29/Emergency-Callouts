@@ -288,7 +288,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
                     {
-                        if (Game.IsKeyDown(Settings.Talk))
+                        if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             Victim.Tasks.Clear();
                             Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
@@ -570,7 +570,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
+                Check.EndKeyDown();
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventParamedicCrash(Suspect, Victim);
 

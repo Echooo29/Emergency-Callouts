@@ -596,7 +596,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            if (Game.IsKeyDown(Settings.Talk))
+                            if (Game.IsKeyDown(Settings.TalkKey))
                             {
                                 Suspect.Tasks.Clear();
                                 Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
@@ -644,7 +644,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(3000);
 
-                                    Handle.CalloutEnding(CalloutMessage);
+                                    Handle.CalloutEnding();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -776,7 +776,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
+                Check.EndKeyDown();
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect, CalloutMessage);
                 Check.PreventResponderCrash(Guard, CalloutMessage);

@@ -577,7 +577,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            if (Game.IsKeyDown(Settings.Talk))
+                            if (Game.IsKeyDown(Settings.TalkKey))
                             {
                                 DialogueStarted = true;
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
@@ -637,7 +637,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.Talk}~s~ to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"Press ~y~{Settings.TalkKey}~s~ to talk to the ~y~suspect~s~.");
                                 }
                             }
                         }
@@ -723,7 +723,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
+                Check.EndKeyDown();
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, FoundPed);
                 Check.PreventParamedicCrash(Suspect, Suspect2);
 

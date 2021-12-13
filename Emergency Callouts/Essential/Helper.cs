@@ -214,10 +214,10 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region CalloutEnding
-            internal static void CalloutEnding(string calloutMessage)
+            internal static void CalloutEnding()
             {
                 MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                Game.DisplayNotification($"~b~You~s~: Dispatch, {calloutMessage} call is code 4.");
+                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
                 GameFiber.Sleep(2000);
                 Play.CodeFourAudio();
                 GameFiber.Sleep(2700);
@@ -330,11 +330,11 @@ namespace EmergencyCallouts.Essential
         internal static class Check
         {
             #region EndKeyDown
-            internal static void EndKeyDown(string calloutMessage)
+            internal static void EndKeyDown()
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    Handle.CalloutEnding(calloutMessage);
+                    Handle.CalloutEnding();
                 }
             }
             #endregion
@@ -362,15 +362,15 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                Handle.CalloutEnding();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                Handle.CalloutEnding();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // First Responder
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                Handle.CalloutEnding();
                             }
                         }
                     }

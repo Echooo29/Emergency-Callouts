@@ -262,7 +262,7 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
+                Check.EndKeyDown();
                 Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
                 Check.PreventResponderCrash(Suspect, CalloutMessage);
 
