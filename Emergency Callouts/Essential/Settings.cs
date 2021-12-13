@@ -20,8 +20,6 @@ namespace EmergencyCallouts
         // Customization
         internal static string Callsign = "1-LINCOLN-18";
         internal static string SubtitleColor = "Yellow";
-        internal static string RouteColor = "Yellow";
-        internal static string SearchAreaColor = "Yellow";
 
         // Keys
         internal static Keys TalkKey = Keys.Y;
@@ -48,9 +46,7 @@ namespace EmergencyCallouts
 
             // Customization
             Callsign = iniFile.ReadString("Customization", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor);
-            RouteColor = iniFile.ReadString("Customization", "RouteColor", RouteColor);
-            SearchAreaColor = iniFile.ReadString("Customization", "SearchAreaColor", SearchAreaColor);
+            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor.Substring(0, 1));
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);

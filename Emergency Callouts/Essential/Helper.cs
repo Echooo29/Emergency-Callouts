@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Rage;
@@ -10,7 +9,7 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Media;
 using System.Net;
 using RAGENativeUI;
-using static EmergencyCallouts.Essential.Color;
+using static EmergencyCallouts.Essential.Helper.Color;
 
 namespace EmergencyCallouts.Essential
 {
