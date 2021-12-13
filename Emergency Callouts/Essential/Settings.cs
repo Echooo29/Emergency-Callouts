@@ -6,20 +6,22 @@ namespace EmergencyCallouts
 {
     internal static class Settings
     {
-        // Callout Toggling
+        // Callouts
         internal static bool PublicIntoxication = true;
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
         internal static bool Burglary = true;
         internal static bool SuspiciousActivity = true;
 
-        // Callout Measurements
+        // Measurements
         internal static int SearchAreaSize = 60;
         internal static int CalloutDistance = 1000;
 
-        // Notifications
+        // Customization
         internal static string Callsign = "1-LINCOLN-18";
         internal static string SubtitleColor = "Yellow";
+        internal static string RouteColor = "Yellow";
+        internal static string SearchAreaColor = "Yellow";
 
         // Keys
         internal static Keys TalkKey = Keys.Y;
@@ -34,19 +36,21 @@ namespace EmergencyCallouts
             iniFile.Create();
 
             // Callout Toggling
-            PublicIntoxication = iniFile.ReadBoolean("Callout Toggling", "PublicIntoxication", PublicIntoxication);
-            Trespassing = iniFile.ReadBoolean("Callout Toggling", "Trespassing", Trespassing);
-            DomesticViolence = iniFile.ReadBoolean("Callout Toggling", "DomesticViolence", DomesticViolence);
-            Burglary = iniFile.ReadBoolean("Callout Toggling", "Burglary", Burglary);
-            SuspiciousActivity = iniFile.ReadBoolean("Callout Toggling", "SuspiciousActivity", SuspiciousActivity);
+            PublicIntoxication = iniFile.ReadBoolean("Callouts", "PublicIntoxication", PublicIntoxication);
+            Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
+            DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
+            Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
+            SuspiciousActivity = iniFile.ReadBoolean("Callouts", "SuspiciousActivity", SuspiciousActivity);
 
             // Callout Measurements
-            SearchAreaSize = iniFile.ReadInt32("Callout Measurements", "SearchAreaSize", SearchAreaSize);
-            CalloutDistance = iniFile.ReadInt32("Callout Measurements", "CalloutDistance", CalloutDistance);
+            SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
+            CalloutDistance = iniFile.ReadInt32("Measurements", "CalloutDistance", CalloutDistance);
 
-            // Notifications
-            Callsign = iniFile.ReadString("Notifications", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor);
+            // Customization
+            Callsign = iniFile.ReadString("Customization", "Callsign", Callsign);
+            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor);
+            RouteColor = iniFile.ReadString("Customization", "RouteColor", RouteColor);
+            SearchAreaColor = iniFile.ReadString("Customization", "SearchAreaColor", SearchAreaColor);
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
