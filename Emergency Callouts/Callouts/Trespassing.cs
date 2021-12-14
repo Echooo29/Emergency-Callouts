@@ -14,8 +14,6 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Trespassing", CalloutProbability.Medium)]
     public class Trespassing : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
         bool PlayerArrived;
         bool PedFound;
@@ -222,6 +220,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Trespassing";
+            CalloutDetails = "Someone reported a person trespassing on private property.";
+            CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -241,10 +241,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("Someone reported a person trespassing on private property.");
+                Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -300,7 +300,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -337,21 +337,21 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int RailyardHidingSpotNum = random.Next(RailyardHidingPositions.Length);
+                int RailyardHidingSpotNum = new Random().Next(RailyardHidingPositions.Length);
                 Suspect.Position = RailyardHidingPositions[RailyardHidingSpotNum];
                 Suspect.Heading = RailyardHidingPositionsHeadings[RailyardHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int ScrapyardHidingSpotNum = random.Next(ScrapyardHidingPositions.Length);
+                int ScrapyardHidingSpotNum = new Random().Next(ScrapyardHidingPositions.Length);
                 Suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
                 Suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int AirstripHidingSpotNum = random.Next(AirstripHidingPositions.Length);
+                int AirstripHidingSpotNum = new Random().Next(AirstripHidingPositions.Length);
                 Suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
                 Suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -374,7 +374,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
-                int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = RailyardManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -389,7 +389,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
-                int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ScrapyardManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -404,7 +404,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.ScaleForPed();
                 Entity.Disable(SuspectBlip);
 
-                int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
                 Suspect.Heading = AirstripManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -417,19 +417,19 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int FirePositionNum = random.Next(RailyardFirePositions.Length);
+                int FirePositionNum = new Random().Next(RailyardFirePositions.Length);
                 Suspect.Position = RailyardFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int FirePositionNum = random.Next(ScrapyardFirePositions.Length);
+                int FirePositionNum = new Random().Next(ScrapyardFirePositions.Length);
                 Suspect.Position = ScrapyardFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int FirePositionNum = random.Next(AirstripFirePositions.Length);
+                int FirePositionNum = new Random().Next(AirstripFirePositions.Length);
                 Suspect.Position = AirstripFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
@@ -441,19 +441,19 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int WeldingPositionNum = random.Next(RailyardWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(RailyardWeldingPositions.Length);
                 Suspect.Position = RailyardWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = RailyardWeldingHeadings[WeldingPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int WeldingPositionNum = random.Next(ScrapyardWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(ScrapyardWeldingPositions.Length);
                 Suspect.Position = ScrapyardWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = ScrapyardWeldingHeadings[WeldingPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int WeldingPositionNum = random.Next(AirstripWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(AirstripWeldingPositions.Length);
                 Suspect.Position = AirstripWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = AirstripWeldingHeadings[WeldingPositionNum];
             }
@@ -569,11 +569,11 @@ namespace EmergencyCallouts.Callouts
                 };
 
                 int line = 0;
-                int num = random.Next(RailyardManagerPositions.Length);
+                int num = new Random().Next(RailyardManagerPositions.Length);
 
-                int day = random.Next(1, 31);
-                int month = random.Next(1, 13);
-                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
+                int day = new Random().Next(1, 31);
+                int month = new Random().Next(1, 13);
+                int year = new Random().Next(DateTime.Now.Year, DateTime.Now.Year + 7);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
@@ -880,7 +880,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

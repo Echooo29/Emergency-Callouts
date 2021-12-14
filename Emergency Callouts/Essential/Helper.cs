@@ -156,7 +156,7 @@ namespace EmergencyCallouts.Essential
                     "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", "ig_lazlow",
                 };
 
-                int num = random.Next(maleModels.Length);
+                int num = new Random().Next(maleModels.Length);
 
                 return maleModels[num];
             }
@@ -188,7 +188,7 @@ namespace EmergencyCallouts.Essential
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
 
-                int num = random.Next(femaleModels.Length);
+                int num = new Random().Next(femaleModels.Length);
 
                 return femaleModels[num];
 
@@ -248,7 +248,7 @@ namespace EmergencyCallouts.Essential
                     "REBEL", "SCHWARZER", "CARBONIZZARE", "SULTAN", "EXEMPLAR", "MASSACRO", "PRAIRIE", "ASTEROPE", "WASHINGTON", "XLS", "REBLA",
                 };
 
-                int num = random.Next(vehicles.Length);
+                int num = new Random().Next(vehicles.Length);
                 return vehicles[num];
             }
             #endregion
@@ -263,7 +263,7 @@ namespace EmergencyCallouts.Essential
                     "SANCTUS", "SOVEREIGN", "THRUST", "VADER", "VINDICATOR", "WOLFSBANE", "ZOMBIEA", "ZOMBIEB", "SANCHEZ2", "DEFILER"
                 };
 
-                int num = random.Next(motorcycles.Length);
+                int num = new Random().Next(motorcycles.Length);
                 return motorcycles[num];
             }
             #endregion
@@ -273,7 +273,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vans = { "SPEEDO", "BURRITO", "RUMPO", "RUMPO2", "RUMPO3", "BURRITO2", "BURRITO3", "BURRITO4", "PONY2", "SPEEDO4", "YOUGA" };
 
-                int num = random.Next(vans.Length);
+                int num = new Random().Next(vans.Length);
                 return vans[num];
             }
             #endregion
@@ -509,7 +509,7 @@ namespace EmergencyCallouts.Essential
             #region CalloutEnding
             internal static void CalloutEnding()
             {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("new Random()@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                 Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
                 GameFiber.Sleep(2000);
                 Play.CodeFourAudio();
@@ -663,7 +663,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_POOLCUE",
                 };
 
-                int num = random.Next(meleeWeapons.Length);
+                int num = new Random().Next(meleeWeapons.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
 
             }
@@ -683,7 +683,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_CERAMICPISTOL",
                 };
 
-                int num = random.Next(handguns.Length);
+                int num = new Random().Next(handguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
             }
             #endregion
@@ -699,7 +699,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MINISMG"
                 };
 
-                int num = random.Next(submachineGuns.Length);
+                int num = new Random().Next(submachineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
 
             }
@@ -717,7 +717,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_BULLPUPRIFLE",
                 };
 
-                int num = random.Next(rifles.Length);
+                int num = new Random().Next(rifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
 
             }
@@ -736,7 +736,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_COMBATSHOTGUN"
                 };
 
-                int num = random.Next(shotguns.Length);
+                int num = new Random().Next(shotguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
 
             }
@@ -752,7 +752,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_GUSENBERG"
                 };
 
-                int num = random.Next(machineGuns.Length);
+                int num = new Random().Next(machineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
 
             }
@@ -768,7 +768,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MARKSMANRIFLE"
                 };
 
-                int num = random.Next(sniperRifles.Length);
+                int num = new Random().Next(sniperRifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
 
             }

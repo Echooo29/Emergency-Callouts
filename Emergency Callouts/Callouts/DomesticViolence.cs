@@ -14,8 +14,6 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Domestic Violence", CalloutProbability.Medium)]
     public class DomesticViolence : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
         bool PlayerArrived;
         bool PedFound;
@@ -108,6 +106,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
+            CalloutDetails = "A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.";
+            CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
@@ -127,10 +127,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.");
+                Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -160,7 +160,7 @@ namespace EmergencyCallouts.Callouts
                 Entity.Disable(VictimBlip);
 
                 // 50% Drunk Chance
-                int num = random.Next(2);
+                int num = new Random().Next(2);
                 if (num == 1)
                 {
                     Suspect.SetIntoxicated();
@@ -207,7 +207,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -242,7 +242,7 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
             {
-                int num = random.Next(VinewoodHillsFightPositions.Length);
+                int num = new Random().Next(VinewoodHillsFightPositions.Length);
                 
                 Victim.Position = VinewoodHillsFightPositions[num];
                 Victim.Heading = VinewoodHillsFightHeadings[num];
@@ -250,14 +250,14 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[1]) // Davis
             {
-                int num = random.Next(DavisFightPositions.Length);
+                int num = new Random().Next(DavisFightPositions.Length);
                 Victim.Position = DavisFightPositions[num];
                 Victim.Heading = DavisFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Sandy Shores
             {
-                int num = random.Next(SandyShoresFightPositions.Length);
+                int num = new Random().Next(SandyShoresFightPositions.Length);
                 Victim.Position = SandyShoresFightPositions[num];
                 Victim.Heading = SandyShoresFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
@@ -393,7 +393,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -478,7 +478,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -529,7 +529,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -690,7 +690,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

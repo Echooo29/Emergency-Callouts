@@ -16,8 +16,6 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Burglary", CalloutProbability.Medium)]
     public class Burglary : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
         bool PlayerArrived;
         bool PedFound;
@@ -108,6 +106,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Burglary";
+            CalloutDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
+            CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -127,10 +127,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("A person has been seen looking through windows, caller states he's now lockpicking a door.");
+                Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -189,7 +189,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -225,19 +225,19 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
-                int num = random.Next(MirrorParkBreakInPositions.Length);
+                int num = new Random().Next(MirrorParkBreakInPositions.Length);
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
-                int num = random.Next(LaPuertaBreakInPositions.Length);
+                int num = new Random().Next(LaPuertaBreakInPositions.Length);
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
             {
-                int num = random.Next(GrapeseedBreakInPositions.Length);
+                int num = new Random().Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
             }
@@ -583,7 +583,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

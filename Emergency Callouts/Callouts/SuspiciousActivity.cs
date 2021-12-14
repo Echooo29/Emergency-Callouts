@@ -14,8 +14,6 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Suspicious Activity", CalloutProbability.Medium)]
     public class SuspiciousActivity : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
         bool PlayerArrived;
         bool PedFound;
@@ -112,7 +110,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Suspicious Activity";
-
+            CalloutDetails = "Multiple civilians called about a person handling guns in the trunk of their car.";
+            CalloutScenario = GetRandomScenarioNumber(5);
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
@@ -131,10 +130,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("Multiple civilians called about a person handling guns in the trunk of their car.");
+                Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -215,7 +214,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -338,10 +337,10 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
                 Suspect.GiveRandomWeapon(WeaponType.AssaultRifle, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added random assault rifle to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts]: Added new Random() assault rifle to Suspect inventory");
 
                 Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added random handgun to Suspect2 inventory");
+                Game.LogTrivial("[Emergency Callouts]: Added new Random() handgun to Suspect2 inventory");
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
                 Game.LogTrivial("[Emergency Callouts]: Suspect playing animation");
@@ -421,10 +420,10 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
                 Suspect.GiveRandomWeapon(WeaponType.SubmachineGun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Assigned random submachine gun to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts]: Assigned new Random() submachine gun to Suspect inventory");
 
                 Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Assigned random handgun to Suspect2 inventory");
+                Game.LogTrivial("[Emergency Callouts]: Assigned new Random() handgun to Suspect2 inventory");
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
                 Game.LogTrivial("Emergency Callouts: Suspect playing animation");
@@ -467,10 +466,10 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[Emergency Callouts]: Retrieved drug deal position");
 
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
 
                 Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Assigned random handgun to Suspect2 inventory");
+                Game.LogTrivial("[Emergency Callouts]: Assigned new Random() handgun to Suspect2 inventory");
 
                 Suspect.WarpIntoVehicle(SuspectVehicle, -1);
                 Game.LogTrivial("[Emergency Callouts]: Warped Suspect into SuspectVehicle");
@@ -670,9 +669,9 @@ namespace EmergencyCallouts.Callouts
                 Functions.SetPedResistanceChance(Suspect, 100f);
                 Game.LogTrivial("[Emergency Callouts]: Set ped resistance to 100%");
 
-                // Give random shotgun
+                // Give new Random() shotgun
                 Suspect.GiveRandomWeapon(WeaponType.Shotgun, -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Assigned random shotgun to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts]: Assigned new Random() shotgun to Suspect inventory");
 
                 // Change Suspect health
                 Suspect2.Health = 110;
@@ -846,7 +845,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }
