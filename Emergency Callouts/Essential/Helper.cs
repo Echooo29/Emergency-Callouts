@@ -178,6 +178,13 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region DetailsReminder
+            internal static void DetailsReminder(string details)
+            {
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Call Details", details);
+            }
+            #endregion
+
             #region DetachMessage
             internal static void DetachMessage()
             {

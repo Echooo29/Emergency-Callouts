@@ -68,9 +68,16 @@ namespace EmergencyCallouts.Callouts
         {
             base.Process();
 
+            Handle.ManualEnding();
+            Handle.AutomaticEnding(Suspect);
+            Handle.PreventFirstResponderCrash(Suspect);
+            Handle.PreventDistanceCrash(CalloutPosition, OnScene, NearPed);
+
             #region On Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
+                Display.DetailsReminder(CalloutDetails);
+
                 // Remove EntranceBlip
                 EntranceBlip.Remove();
 
