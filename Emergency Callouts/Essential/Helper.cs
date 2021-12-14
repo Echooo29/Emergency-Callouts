@@ -288,7 +288,7 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed || (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle))
                     {
-                        Functions.StopCurrentCallout();
+                        CalloutEnding();
                     }
                 }
             }
@@ -528,70 +528,6 @@ namespace EmergencyCallouts.Essential
                     Game.LogTrivial("[Emergency Callouts]: " + webEx.Message);
                 }
             }
-            #endregion
-        }
-
-        internal static class FileExists
-        {
-            #region EmergencyCalloutsINI
-            public static bool EmergencyCalloutsINI()
-            {
-                if (File.Exists(Project.SettingsPath))
-                {
-                    Game.LogTrivial("[Emergency Callouts]: Found 'Emergency Callouts.ini'");
-                    return true;
-                }
-                else
-                {
-                    Game.LogTrivial("[Emergency Callouts]: Did not find 'Emergency Callouts.ini', set defaults");
-                    return false;
-                }
-            }
-            #endregion
-
-            #region StopThePed
-            public static bool StopThePed(bool log)
-            {
-                if (File.Exists("Plugins/LSPDFR/StopThePed.dll"))
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Found 'StopThePed.dll'");
-                    }
-                    return true;
-                }
-                else
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Did not find 'StopThePed.dll'");
-                    }
-                    return false;
-                }
-            }
-            #endregion
-
-            #region UltimateBackup
-            public static bool UltimateBackup(bool log)
-            {
-                if (File.Exists("Plugins/LSPDFR/UltimateBackup.dll"))
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Found 'UltimateBackup.dll'");
-                    }
-                    return true;
-                }
-                else
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Did not find 'UltimateBackup.dll'");
-                    }
-                    return false;
-                }
-            }
-
             #endregion
         }
     }
@@ -869,11 +805,6 @@ namespace EmergencyCallouts.Essential
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
             animSet.LoadAndWait();
             ped.MovementAnimationSet = animSet;
-
-            if (FileExists.StopThePed(false))
-            {
-                StopThePed.API.Functions.setPedAlcoholOverLimit(ped, true);
-            }
         }
         #endregion
 
@@ -887,7 +818,7 @@ namespace EmergencyCallouts.Essential
         #region IsPedDetained
         internal static bool IsPedDetained(this Ped ped)
         {
-            if ((Functions.IsPedStoppedByPlayer(ped) || (StopThePed.API.Functions.isPedStopped(ped)) && FileExists.StopThePed(false)) && ped.Exists())
+            if (Functions.IsPedStoppedByPlayer(ped) && ped.Exists())
             {
                 return true;
             }
