@@ -788,7 +788,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;

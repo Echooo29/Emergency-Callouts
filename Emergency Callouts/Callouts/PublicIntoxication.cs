@@ -23,7 +23,7 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around(100f, Settings.CalloutDistance));
+            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100, Settings.CalloutDistance));
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
@@ -114,7 +114,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
 
             #region Ped Detained
-            if (Suspect.IsDetained() && !PedDetained)
+            if (Suspect.IsPedDetained() && !PedDetained)
             {
                 // Remove SuspectBlip
                 SuspectBlip.Remove();

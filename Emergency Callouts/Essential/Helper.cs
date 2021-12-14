@@ -884,8 +884,8 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region IsDetained
-        internal static bool IsDetained(this Ped ped)
+        #region IsPedDetained
+        internal static bool IsPedDetained(this Ped ped)
         {
             if ((Functions.IsPedStoppedByPlayer(ped) || (StopThePed.API.Functions.isPedStopped(ped)) && FileExists.StopThePed(false)) && ped.Exists())
             {
