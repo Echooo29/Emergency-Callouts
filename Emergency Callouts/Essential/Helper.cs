@@ -10,6 +10,7 @@ using System.Media;
 using System.Net;
 using RAGENativeUI;
 using static EmergencyCallouts.Essential.Color;
+using LSPD_First_Response.Engine.Scripting.Entities;
 
 namespace EmergencyCallouts.Essential
 {
@@ -169,6 +170,15 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
+        internal enum DescriptionCategories
+        {
+            Civilian,
+            Suspect,
+            Victim,
+            Officer,
+            Vehicle,
+        }
+
         internal static class Display
         {
             #region AttachMessage
@@ -178,25 +188,11 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region PedInformation
-            internal static void PedInformation(Ped Suspect, string typePed)
+            #region PedDescription
+            internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
             {
-                string gender = string.Empty;
-                string armed = string.Empty;
-
-                if (Suspect.IsMale)
-                {
-                    gender = "~b~Male";
-                }
-                else gender = "~p~Female";
-
-                if (Suspect.Inventory.EquippedWeapon != "WEAPON_UNARMED")
-                {
-                    armed = "~r~yes";
-                }
-                else armed = "~g~no";
-
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{typePed} Details", $"Gender: {gender}\nArmed: {armed}");
+                Persona SuspectPersona = Persona.FromExistingPed(Suspect);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~b~{SuspectPersona.Gender}");
             }
             #endregion
 

@@ -23,13 +23,13 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100, Settings.CalloutDistance));
+            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around(1000f));
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
-            AddMinimumDistanceCheck(30f, CalloutPosition);
+            //AddMinimumDistanceCheck(30f, CalloutPosition);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
@@ -60,7 +60,8 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Disable();
 
             Suspect.Tasks.Wander();
-            
+            Display.PedDescription(Suspect, DescriptionCategories.Suspect);
+
             return base.OnCalloutAccepted();
         }
 
@@ -76,7 +77,7 @@ namespace EmergencyCallouts.Callouts
             #region On Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
-                Display.PedInformation(Suspect, "Suspect");
+                Display.PedDescription(Suspect, DescriptionCategories.Suspect);
 
                 // Remove EntranceBlip
                 EntranceBlip.Remove();
