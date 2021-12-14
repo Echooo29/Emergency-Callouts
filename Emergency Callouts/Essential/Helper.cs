@@ -33,7 +33,7 @@ namespace EmergencyCallouts.Essential
         #region SettingsPath
         internal static string SettingsPath
         {
-            get { return "Plugins/LSPDFR/Emergency Callouts.ini"; }
+            get { return "Plugins/LSPDFR/Emergency Callouts - Police.ini"; }
         }
         #endregion
     }
