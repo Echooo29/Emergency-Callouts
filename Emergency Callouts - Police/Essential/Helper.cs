@@ -58,6 +58,7 @@ namespace EmergencyCallouts.Essential
 
         }
         #endregion
+
         internal static class Entity
         {
             #region  Dismiss

@@ -600,7 +600,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
@@ -614,10 +614,10 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial("[Emergency Callouts]: Player found suspect");
                 }
 
-                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && Ped2Found == false && PlayerArrived == true && Victim.Exists())
+                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
                 {
                     // Set Ped2Found
                     Ped2Found = true;
@@ -631,7 +631,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped2");
+                    Game.LogTrivial("[Emergency Callouts]: Player found victim");
                 }
                 #endregion
 
