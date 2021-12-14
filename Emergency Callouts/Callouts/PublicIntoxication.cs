@@ -38,7 +38,7 @@ namespace EmergencyCallouts.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Functions.PlayScannerAudio("PED_RESPONDING");
+            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
             base.OnCalloutNotAccepted();
         }
 
