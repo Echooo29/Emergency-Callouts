@@ -134,7 +134,7 @@ namespace EmergencyCallouts.Callouts
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
-                Game.LogTrivial("Emergency Callouts: Created EntranceBlip");
+                Game.LogTrivial("[Emergency Callouts]: Created EntranceBlip");
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
