@@ -298,7 +298,11 @@ namespace EmergencyCallouts.Essential
             {
                 if (suspect.Exists())
                 {
-                    if (suspect.IsCuffed || (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle))
+                    if (suspect.IsCuffed)
+                    {
+                        CalloutEnding();
+                    }
+                    else if (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
                         CalloutEnding();
                     }
