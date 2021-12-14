@@ -9,6 +9,7 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Media;
 using System.Net;
 using RAGENativeUI;
+using static EmergencyCallouts.Essential.Color;
 
 namespace EmergencyCallouts.Essential
 {
@@ -58,6 +59,36 @@ namespace EmergencyCallouts.Essential
         #endregion
         internal static class Entity
         {
+            #region  Dismiss
+            internal static void Dismiss(Ped ped)
+            {
+                if (ped.Exists()) { ped.Dismiss(); }
+            }
+            internal static void Dismiss(Vehicle vehicle)
+            {
+                if (vehicle.Exists()) { vehicle.Dismiss(); }
+            }
+            #endregion
+
+            #region Delete
+            internal static void Delete(Blip blip)
+            {
+                if (blip.Exists()) { blip.Delete(); }
+            }
+            internal static void Delete(Ped ped)
+            {
+                if (ped.Exists()) { ped.Delete(); }
+            }
+            internal static void Delete(Vehicle vehicle)
+            {
+                if (vehicle.Exists()) { vehicle.Delete(); }
+            }
+            internal static void Delete(Rage.Object Object)
+            {
+                if (Object.Exists()) { Object.Delete(); }
+            }
+            #endregion
+
             #region Kill
             internal static void Kill(Ped ped)
             {
@@ -143,14 +174,14 @@ namespace EmergencyCallouts.Essential
             #region AttachMessage
             internal static void AttachMessage(string details)
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Attached {Settings.Callsign}", details);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Attached {Settings.Callsign}", details);
             }
             #endregion
 
             #region DetachMessage
             internal static void DetachMessage()
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Detached {Settings.Callsign}", "Situation is under control.");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Detached {Settings.Callsign}", "Situation is under control.");
             }
             #endregion
 
@@ -774,17 +805,6 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region  Dismiss
-        internal static void Dismiss(Ped ped)
-        {
-            if (ped.Exists()) { ped.Dismiss(); }
-        }
-        internal static void Dismiss(Vehicle vehicle)
-        {
-            if (vehicle.Exists()) { vehicle.Dismiss(); }
-        }
-        #endregion
-
         #region Remove
         internal static void Remove(this Blip blip)
         {
@@ -803,7 +823,6 @@ namespace EmergencyCallouts.Essential
             if (Object.Exists()) { Object.Delete(); }
         }
         #endregion
-
 
         #region EnableRoute
         internal static void EnableRoute(this Blip blip)

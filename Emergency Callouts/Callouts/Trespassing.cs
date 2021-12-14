@@ -258,7 +258,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
                
                 CalloutHandler();
             }
@@ -322,7 +322,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
 
                 // Enabling Route
-                Entity.EnableRoute(EntranceBlip);
+                EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
             }
             catch (Exception e)
@@ -372,7 +372,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
                 int ManagerPositionNum = new Random().Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
@@ -387,7 +387,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
                 int ManagerPositionNum = new Random().Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
@@ -402,7 +402,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
                 int ManagerPositionNum = new Random().Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
@@ -578,7 +578,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
                 Game.LogTrivial("[Emergency Callouts]: Created SuspectBlip");
 
                 // Inspect animation
@@ -738,7 +738,7 @@ namespace EmergencyCallouts.Callouts
                 GuardBlip = Guard.AttachBlip();
                 GuardBlip.SetColor(Colors.Blue);
                 GuardBlip.ScaleForPed();
-                Entity.Disable(GuardBlip);
+                GuardBlip.Disable();
                 Game.LogTrivial("[Emergency Callouts]: Created GuardBlip");
 
 
@@ -751,7 +751,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f && Guard.Exists())
                         {
                             // Enable SuspectBlip
-                            Entity.Enable(GuardBlip);
+                            GuardBlip.Enable();
                             Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
                             // Delete SearchArea
@@ -788,10 +788,10 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Display.ArriveSubtitle("Find", "trespasser", 'r');
+                    Game.DisplaySubtitle("Find the ~y~trespasser~s~ in the ~y~area~s~.");
 
                     // Disable route
-                    Entity.DisableRoute(EntranceBlip);
+                    EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
                     Entity.Delete(EntranceBlip);
@@ -815,7 +815,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
+                    SuspectBlip.Enable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
@@ -844,7 +844,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    Entity.Disable(SuspectBlip);
+                    SuspectBlip.Disable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
@@ -853,7 +853,7 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip = new Blip(Entrance);
 
                     // Enable Route
-                    Entity.EnableRoute(EntranceBlip);
+                    EntranceBlip.EnableRoute();
 
                     Game.LogTrivial("[Emergency Callouts]: Player left callout position");
                 }

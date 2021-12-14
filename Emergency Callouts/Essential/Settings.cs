@@ -46,7 +46,7 @@ namespace EmergencyCallouts
 
             // Customization
             Callsign = iniFile.ReadString("Customization", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor.Substring(0, 1).ToLower());
+            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);

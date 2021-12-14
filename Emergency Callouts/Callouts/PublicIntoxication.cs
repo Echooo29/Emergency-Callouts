@@ -13,7 +13,7 @@ namespace EmergencyCallouts.Callouts
     {
         bool OnScene;
         bool NearPed;
-        bool DetainedPed;
+        bool PedDetained;
         bool NeedsRefreshing;
 
         Ped Suspect;
@@ -44,6 +44,8 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnCalloutAccepted()
         {
+            Display.AttachMessage(CalloutDetails);
+
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();
 
@@ -66,7 +68,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.Process();
 
-            #region OnPlayerArrival
+            #region On Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
                 // Remove EntranceBlip
@@ -80,7 +82,7 @@ namespace EmergencyCallouts.Callouts
                 // Display Subtitle
                 Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.");
 
-                Game.LogTrivial("[Emergency Callouts]: Arrived on scene");
+                Game.LogTrivial("[Emergency Callouts]: On scene");
 
                 OnScene = true;
             }
@@ -104,17 +106,19 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
 
-            #region DetainedPed
-            if (Suspect.IsDetained() && !DetainedPed)
+            #region Ped Detained
+            if (Suspect.IsDetained() && !PedDetained)
             {
                 // Remove SuspectBlip
                 SuspectBlip.Remove();
 
-                DetainedPed = true;
+                Game.LogTrivial("[Emergency Callouts]: Detained Suspect");
+
+                PedDetained = true;
             }
             #endregion
 
-            #region OnPlayerLeave
+            #region Left Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene)
             {
                 // Set OnScene
@@ -132,7 +136,7 @@ namespace EmergencyCallouts.Callouts
                 // Enable Route
                 EntranceBlip.EnableRoute();
 
-                Game.LogTrivial("[Emergency Callouts]: Player left scene");
+                Game.LogTrivial("[Emergency Callouts]: Left scene");
             }
             #endregion
 
@@ -167,6 +171,15 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
+            Entity.Dismiss(Suspect);
+            Entity.Delete(SuspectBlip);
+            Entity.Delete(SearchArea);
+            Entity.Delete(EntranceBlip);
+
+            Display.HideSubtitle();
+            Display.DetachMessage();
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

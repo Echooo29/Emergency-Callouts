@@ -145,7 +145,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Red);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
                 CalloutHandler();
             }
@@ -209,7 +209,7 @@ namespace EmergencyCallouts.Callouts
                 }
 
                 // Enabling Route
-                Entity.EnableRoute(EntranceBlip);
+                EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
             }
@@ -493,10 +493,10 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Display.ArriveSubtitle("Find", "burglar", 'r');
+                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.");
 
                     // Disable route
-                    Entity.DisableRoute(EntranceBlip);
+                    EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
                     Entity.Delete(EntranceBlip);
@@ -520,7 +520,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
+                    SuspectBlip.Enable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
@@ -549,7 +549,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    Entity.Disable(SuspectBlip);
+                    SuspectBlip.Disable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
@@ -558,7 +558,7 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip = new Blip(Entrance);
 
                     // Enable Route
-                    Entity.EnableRoute(EntranceBlip);
+                    EntranceBlip.EnableRoute();
 
                     Game.LogTrivial("[Emergency Callouts]: Player left callout position");
                 }
