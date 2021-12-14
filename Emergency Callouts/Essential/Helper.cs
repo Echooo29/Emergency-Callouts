@@ -650,7 +650,6 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_CROWBAR",
                     "WEAPON_UNARMED",
                     "WEAPON_FLASHLIGHT",
-                    "WEAPON_GOLFCLUB",
                     "WEAPON_HAMMER",
                     "WEAPON_HATCHET",
                     "WEAPON_KNUCKLE",
@@ -660,7 +659,6 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_NIGHTSTICK",
                     "WEAPON_WRENCH",
                     "WEAPON_BATTLEAXE",
-                    "WEAPON_POOLCUE",
                 };
 
                 int num = new Random().Next(meleeWeapons.Length);
