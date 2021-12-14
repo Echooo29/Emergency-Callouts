@@ -192,7 +192,7 @@ namespace EmergencyCallouts.Essential
             internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
             {
                 Persona SuspectPersona = Persona.FromExistingPed(Suspect);
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~b~{SuspectPersona.Gender}");
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~g~{SuspectPersona.Gender}");
             }
             #endregion
 
