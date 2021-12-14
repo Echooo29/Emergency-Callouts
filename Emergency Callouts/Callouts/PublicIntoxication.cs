@@ -72,11 +72,11 @@ namespace EmergencyCallouts.Callouts
             Handle.AutomaticEnding(Suspect);
             Handle.PreventFirstResponderCrash(Suspect);
             Handle.PreventDistanceCrash(CalloutPosition, OnScene, NearPed);
-
+            
             #region On Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
-                Display.DetailsReminder(CalloutDetails);
+                Display.PedInformation(Suspect, "Suspect");
 
                 // Remove EntranceBlip
                 EntranceBlip.Remove();

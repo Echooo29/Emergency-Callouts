@@ -178,10 +178,25 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region DetailsReminder
-            internal static void DetailsReminder(string details)
+            #region PedInformation
+            internal static void PedInformation(Ped Suspect, string typePed)
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Call Details", details);
+                string gender = string.Empty;
+                string armed = string.Empty;
+
+                if (Suspect.IsMale)
+                {
+                    gender = "~b~Male";
+                }
+                else gender = "~p~Female";
+
+                if (Suspect.Inventory.EquippedWeapon != "WEAPON_UNARMED")
+                {
+                    armed = "~r~yes";
+                }
+                else armed = "~g~no";
+
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{typePed} Details", $"Gender: {gender}\nArmed: {armed}");
             }
             #endregion
 
