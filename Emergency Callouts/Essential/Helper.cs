@@ -58,50 +58,6 @@ namespace EmergencyCallouts.Essential
         #endregion
         internal static class Entity
         {
-            #region  Dismiss
-            internal static void Dismiss(Ped ped)
-            {
-                if (ped.Exists()) { ped.Dismiss(); }
-            }
-            internal static void Dismiss(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Dismiss(); }
-            }
-            #endregion
-
-            #region Delete
-            internal static void Delete(Blip blip)
-            {
-                if (blip.Exists()) { blip.Delete(); }
-            }
-            internal static void Delete(Ped ped)
-            {
-                if (ped.Exists()) { ped.Delete(); }
-            }
-            internal static void Delete(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Delete(); }
-            }
-            internal static void Delete(Rage.Object Object)
-            {
-                if (Object.Exists()) { Object.Delete(); }
-            }
-            #endregion
-
-            #region Enable
-            internal static void Enable(Blip blip)
-            {
-                if (blip.Exists()) { blip.Alpha = 1f; }
-            }
-            #endregion
-
-            #region Disable
-            internal static void Disable(Blip blip)
-            {
-                if (blip.Exists()) { blip.Alpha = 0f; }
-            }
-            #endregion
-
             #region Kill
             internal static void Kill(Ped ped)
             {
@@ -113,20 +69,6 @@ namespace EmergencyCallouts.Essential
             internal static void Resurrect(Ped ped)
             {
                 if (ped.Exists() && ped.IsDead) { ped.Resurrect(); }
-            }
-            #endregion
-
-            #region EnableRoute
-            internal static void EnableRoute(Blip blip)
-            {
-                if (blip.Exists()) { blip.IsRouteEnabled = true; }
-            }
-            #endregion
-
-            #region DisableRoute
-            internal static void DisableRoute(Blip blip)
-            {
-                if (blip.Exists()) { blip.DisableRoute(); }
             }
             #endregion
 
@@ -209,13 +151,6 @@ namespace EmergencyCallouts.Essential
             internal static void DetachMessage()
             {
                 Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Detached {Settings.Callsign}", "Situation is under control.");
-            }
-            #endregion
-
-            #region ArriveSubtitle
-            internal static void ArriveSubtitle(string action, string name, char color)
-            {
-                Game.DisplaySubtitle($"{action} the ~{color}~{name}~s~ in the ~y~area~s~.", 10000);
             }
             #endregion
 
@@ -825,6 +760,65 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
+        #region Enable
+        internal static void Enable(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Alpha = 1f; }
+        }
+        #endregion
+
+        #region Disable
+        internal static void Disable(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Alpha = 0f; }
+        }
+        #endregion
+
+        #region  Dismiss
+        internal static void Dismiss(Ped ped)
+        {
+            if (ped.Exists()) { ped.Dismiss(); }
+        }
+        internal static void Dismiss(Vehicle vehicle)
+        {
+            if (vehicle.Exists()) { vehicle.Dismiss(); }
+        }
+        #endregion
+
+        #region Remove
+        internal static void Remove(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Delete(); }
+        }
+        internal static void Remove(this Ped ped)
+        {
+            if (ped.Exists()) { ped.Delete(); }
+        }
+        internal static void Remove(this Vehicle vehicle)
+        {
+            if (vehicle.Exists()) { vehicle.Delete(); }
+        }
+        internal static void Remove(this Rage.Object Object)
+        {
+            if (Object.Exists()) { Object.Delete(); }
+        }
+        #endregion
+
+
+        #region EnableRoute
+        internal static void EnableRoute(this Blip blip)
+        {
+            if (blip.Exists()) { blip.IsRouteEnabled = true; }
+        }
+        #endregion
+
+        #region DisableRoute
+        internal static void DisableRoute(this Blip blip)
+        {
+            if (blip.Exists()) { blip.DisableRoute(); }
+        }
+        #endregion
+
         #region SetDefaults
         /// <summary>
         /// Sets ped persistency and blocks permanent events.
@@ -867,7 +861,7 @@ namespace EmergencyCallouts.Essential
         #region IsDetained
         internal static bool IsDetained(this Ped ped)
         {
-            if ((Functions.IsPedStoppedByPlayer(ped) || StopThePed.API.Functions.isPedStopped(ped)) && FileExists.StopThePed(false) == true && ped.Exists())
+            if ((Functions.IsPedStoppedByPlayer(ped) || (StopThePed.API.Functions.isPedStopped(ped)) && FileExists.StopThePed(false)) && ped.Exists())
             {
                 return true;
             }
