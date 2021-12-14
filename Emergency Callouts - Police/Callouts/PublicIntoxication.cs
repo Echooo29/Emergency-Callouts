@@ -148,7 +148,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
 
-            #region RefreshSearchArea
+            #region Refresh Search Area
             if (!NearPed)
             {
                 if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
@@ -171,7 +171,7 @@ namespace EmergencyCallouts.Callouts
                 SearchArea.Alpha = 0.5f;
                 Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
 
-                Functions.PlayScannerAudioUsingPosition("SUSPECT IN_OR_ON_POSITION", Suspect.Position);
+                Functions.PlayScannerAudioUsingPosition("SUSPECT_LAST_SEEN IN_OR_ON_POSITION", Suspect.Position);
             }
             #endregion
         }
