@@ -498,7 +498,7 @@ namespace EmergencyCallouts.Essential
             #region CalloutEnding
             internal static void CalloutEnding()
             {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("new Random()@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests@"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                 Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
                 GameFiber.Sleep(2000);
                 Play.CodeFourAudio();

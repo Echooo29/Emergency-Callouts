@@ -392,7 +392,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -477,7 +477,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -528,7 +528,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
