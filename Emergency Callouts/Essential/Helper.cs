@@ -38,7 +38,6 @@ namespace EmergencyCallouts.Essential
 
     internal static class Helper
     {
-        internal static Random random = new Random();
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
 
         internal static bool PUBRemoteState;
@@ -47,6 +46,16 @@ namespace EmergencyCallouts.Essential
         internal static bool DOMRemoteState;
         internal static bool SUSRemoteState;
 
+        internal static string CalloutDetails { get; set; }
+        internal static int CalloutScenario { get; set; }
+
+        #region GetRandomScenarioNumber
+        internal static int GetRandomScenarioNumber(int totalScenarios)
+        {
+            return new Random().Next(1, totalScenarios + 1);
+
+        }
+        #endregion
         internal static class Entity
         {
             #region  Dismiss

@@ -12,8 +12,6 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Public Intoxication", CalloutProbability.Medium)]
     public class PublicIntoxication : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
         bool PlayerArrived;
         bool PedFound;
@@ -34,8 +32,10 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Public Intoxication";
+            CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
+            CalloutScenario = GetRandomScenarioNumber(5);
 
-            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_DISTURBING_THE_PEACE_01 IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
+            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
@@ -53,10 +53,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("There are multiple reports of a person under the influence of alcohol.");
+                Display.AttachMessage("");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(CalloutPosition);
@@ -97,7 +97,7 @@ namespace EmergencyCallouts.Callouts
                 CalloutActive = true;
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
