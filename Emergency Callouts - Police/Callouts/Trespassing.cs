@@ -654,8 +654,8 @@ namespace EmergencyCallouts.Callouts
                                 if (line == dialogue.Length)
                                 {
                                     GameFiber.Sleep(3000);
-
-                                    Handle.CalloutEnding();
+                                    Functions.StopCurrentCallout();
+                                    //Handle.CalloutEnding();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
