@@ -25,12 +25,9 @@ namespace EmergencyCallouts
             if (OnDuty)
             {
                 Settings.Initialize();
-                Check.RemoteStates();
+                Handle.RemoteStates();
                 RegisterCallouts();
                 UpdateChecker.UpdateAvailable();
-                FileExists.EmergencyCalloutsINI();
-                FileExists.StopThePed(true);
-                FileExists.UltimateBackup(true);
             }
         }
 

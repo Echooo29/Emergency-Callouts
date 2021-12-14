@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Rage;
@@ -11,6 +10,7 @@ using System.Media;
 using System.Net;
 using RAGENativeUI;
 using static EmergencyCallouts.Essential.Color;
+using LSPD_First_Response.Engine.Scripting.Entities;
 
 namespace EmergencyCallouts.Essential
 {
@@ -33,14 +33,13 @@ namespace EmergencyCallouts.Essential
         #region SettingsPath
         internal static string SettingsPath
         {
-            get { return "Plugins/LSPDFR/Emergency Callouts.ini"; }
+            get { return "Plugins/LSPDFR/Emergency Callouts - Police.ini"; }
         }
         #endregion
     }
 
     internal static class Helper
     {
-        internal static Random random = new Random();
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
 
         internal static bool PUBRemoteState;
@@ -49,6 +48,16 @@ namespace EmergencyCallouts.Essential
         internal static bool DOMRemoteState;
         internal static bool SUSRemoteState;
 
+        internal static string CalloutDetails { get; set; }
+        internal static int CalloutScenario { get; set; }
+
+        #region GetRandomScenarioNumber
+        internal static int GetRandomScenarioNumber(int totalScenarios)
+        {
+            return new Random().Next(1, totalScenarios + 1);
+
+        }
+        #endregion
         internal static class Entity
         {
             #region  Dismiss
@@ -81,20 +90,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region Enable
-            internal static void Enable(Blip blip)
-            {
-                if (blip.Exists()) { blip.Alpha = 1f; }
-            }
-            #endregion
-
-            #region Disable
-            internal static void Disable(Blip blip)
-            {
-                if (blip.Exists()) { blip.Alpha = 0f; }
-            }
-            #endregion
-
             #region Kill
             internal static void Kill(Ped ped)
             {
@@ -106,20 +101,6 @@ namespace EmergencyCallouts.Essential
             internal static void Resurrect(Ped ped)
             {
                 if (ped.Exists() && ped.IsDead) { ped.Resurrect(); }
-            }
-            #endregion
-
-            #region EnableRoute
-            internal static void EnableRoute(Blip blip)
-            {
-                if (blip.Exists()) { blip.IsRouteEnabled = true; }
-            }
-            #endregion
-
-            #region DisableRoute
-            internal static void DisableRoute(Blip blip)
-            {
-                if (blip.Exists()) { blip.DisableRoute(); }
             }
             #endregion
 
@@ -149,7 +130,7 @@ namespace EmergencyCallouts.Essential
                     "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", "ig_lazlow",
                 };
 
-                int num = random.Next(maleModels.Length);
+                int num = new Random().Next(maleModels.Length);
 
                 return maleModels[num];
             }
@@ -181,7 +162,7 @@ namespace EmergencyCallouts.Essential
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
 
-                int num = random.Next(femaleModels.Length);
+                int num = new Random().Next(femaleModels.Length);
 
                 return femaleModels[num];
 
@@ -189,42 +170,13 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
-        internal static class Handle
+        internal enum DescriptionCategories
         {
-            #region DecreaseSearchArea
-            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
-            {
-                GameFiber.StartNew(delegate
-                {
-                    for (int sec = seconds; sec > 0; sec--)
-                    {
-                        if (seconds == 1)
-                        {
-                            Entity.Delete(SearchArea);
-                            // Create SearchArea
-                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                            SearchArea.SetColor(Colors.Yellow);
-                            SearchArea.Alpha = 0.5f;
-                            Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
-                        }
-                        GameFiber.Sleep(1000);
-                    }
-                });
-            }
-            #endregion
-
-            #region CalloutEnding
-            internal static void CalloutEnding(string calloutMessage)
-            {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                Game.DisplayNotification($"~b~You~s~: Dispatch, {calloutMessage} call is code 4.");
-                GameFiber.Sleep(2000);
-                Play.CodeFourAudio();
-                GameFiber.Sleep(2700);
-                Functions.StopCurrentCallout();
-                GameFiber.Sleep(500);
-            }
-            #endregion
+            Civilian,
+            Suspect,
+            Victim,
+            Officer,
+            Vehicle,
         }
 
         internal static class Display
@@ -232,21 +184,22 @@ namespace EmergencyCallouts.Essential
             #region AttachMessage
             internal static void AttachMessage(string details)
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Attached {Settings.Callsign}", details);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Attached {Settings.Callsign}", details);
+            }
+            #endregion
+
+            #region PedDescription
+            internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
+            {
+                Persona SuspectPersona = Persona.FromExistingPed(Suspect);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~g~{SuspectPersona.Gender}~s~\nAge Group: ~p~{SuspectPersona.ModelAge}~s~");
             }
             #endregion
 
             #region DetachMessage
             internal static void DetachMessage()
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~" + $"Detached {Settings.Callsign}", "Situation is under control.");
-            }
-            #endregion
-
-            #region ArriveSubtitle
-            internal static void ArriveSubtitle(string action, string name, char color)
-            {
-                Game.DisplaySubtitle($"{action} the ~{color}~{name}~s~ in the ~y~area~s~.", 10000);
+                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Detached {Settings.Callsign}", "Situation is under control.");
             }
             #endregion
 
@@ -279,7 +232,7 @@ namespace EmergencyCallouts.Essential
                     "REBEL", "SCHWARZER", "CARBONIZZARE", "SULTAN", "EXEMPLAR", "MASSACRO", "PRAIRIE", "ASTEROPE", "WASHINGTON", "XLS", "REBLA",
                 };
 
-                int num = random.Next(vehicles.Length);
+                int num = new Random().Next(vehicles.Length);
                 return vehicles[num];
             }
             #endregion
@@ -294,7 +247,7 @@ namespace EmergencyCallouts.Essential
                     "SANCTUS", "SOVEREIGN", "THRUST", "VADER", "VINDICATOR", "WOLFSBANE", "ZOMBIEA", "ZOMBIEB", "SANCHEZ2", "DEFILER"
                 };
 
-                int num = random.Next(motorcycles.Length);
+                int num = new Random().Next(motorcycles.Length);
                 return motorcycles[num];
             }
             #endregion
@@ -304,7 +257,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vans = { "SPEEDO", "BURRITO", "RUMPO", "RUMPO2", "RUMPO3", "BURRITO2", "BURRITO3", "BURRITO4", "PONY2", "SPEEDO4", "YOUGA" };
 
-                int num = random.Next(vans.Length);
+                int num = new Random().Next(vans.Length);
                 return vans[num];
             }
             #endregion
@@ -322,27 +275,40 @@ namespace EmergencyCallouts.Essential
             #region CodeFourAudio
             internal static void CodeFourAudio()
             {
-                Functions.PlayScannerAudio("REPORT_RESPONSE_COPY CODE_FOUR NO_UNITS_REQUIRED");
+                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
             }
             #endregion
         }
 
-        internal static class Check
+        internal static class Handle
         {
-            #region EndKeyDown
-            internal static void EndKeyDown(string calloutMessage)
+            #region ManualEnding
+            internal static void ManualEnding()
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    Handle.CalloutEnding(calloutMessage);
+                    CalloutEnding();
+                }
+            }
+            #endregion
+
+            #region AutomaticEnding
+            internal static void AutomaticEnding(Ped suspect)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsCuffed || (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle))
+                    {
+                        CalloutEnding();
+                    }
                 }
             }
             #endregion
 
             #region PreventDistanceCrash
-            internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool OnScene, bool PedFound)
+            internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool PlayerArrived, bool PedFound)
             {
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > 400f && OnScene == true && PedFound == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > 400f && PlayerArrived == true && PedFound == true)
                 {
                     Game.LogTrivial("[Emergency Callouts]: Too far from callout position, ending callout to prevent crash");
                     Functions.StopCurrentCallout();
@@ -351,8 +317,8 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region PreventResponderCrash
-            internal static void PreventResponderCrash(Ped ped, string calloutMessage)
+            #region PreventFirstResponderCrash
+            internal static void PreventFirstResponderCrash(Ped ped)
             {
                 if (ped.Exists()) 
                 {
@@ -362,43 +328,40 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                CalloutEnding();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                CalloutEnding();
                             }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // First Responder
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                Handle.CalloutEnding(calloutMessage);
+                                CalloutEnding();
                             }
                         }
                     }
                 }
             }
 
-            internal static void PreventParamedicCrash(Ped ped, Ped ped2)
+            internal static void PreventFirstResponderCrash(Ped ped, Ped ped2)
             {
                 if (ped.Exists() && ped2.Exists())
                 {
-                    foreach (Ped FR in World.GetAllPeds())
+                    foreach (Ped FirstResponder in World.GetAllPeds())
                     {
-                        if (FR.Position.DistanceTo(ped.Position) < 5f || FR.Position.DistanceTo(ped2.Position) < 5f)
+                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f || FirstResponder.Position.DistanceTo(ped2.Position) < 5f)
                         {
-                            if (FR.Model.Name.ToLower() == "s_m_m_paramedic_01")
+                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
-                            else if (FR.Model.Name.ToLower() == "s_m_m_doctor_01")
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
-                            else if (FR.Model.Name.ToLower() == "s_m_y_fireman_01")
+                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                Functions.StopCurrentCallout();
-                                Play.CodeFourAudio();
+                                CalloutEnding();
                             }
                         }
                     }
@@ -504,6 +467,41 @@ namespace EmergencyCallouts.Essential
                 }
             }
             #endregion
+
+            #region DecreaseSearchArea
+            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
+            {
+                GameFiber.StartNew(delegate
+                {
+                    for (int sec = seconds; sec > 0; sec--)
+                    {
+                        if (seconds == 1)
+                        {
+                            Entity.Delete(SearchArea);
+                            // Create SearchArea
+                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
+                            SearchArea.SetColor(Color.Colors.Yellow);
+                            SearchArea.Alpha = 0.5f;
+                            Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
+                        }
+                        GameFiber.Sleep(1000);
+                    }
+                });
+            }
+            #endregion
+
+            #region CalloutEnding
+            internal static void CalloutEnding()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("new Random()@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
+                GameFiber.Sleep(2000);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                Functions.StopCurrentCallout();
+                GameFiber.Sleep(500);
+            }
+            #endregion
         }
 
         internal class Log
@@ -543,70 +541,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
         }
-
-        internal static class FileExists
-        {
-            #region EmergencyCalloutsINI
-            public static bool EmergencyCalloutsINI()
-            {
-                if (File.Exists(Project.SettingsPath))
-                {
-                    Game.LogTrivial("[Emergency Callouts]: Found 'Emergency Callouts.ini'");
-                    return true;
-                }
-                else
-                {
-                    Game.LogTrivial("[Emergency Callouts]: Did not find 'Emergency Callouts.ini', set defaults");
-                    return false;
-                }
-            }
-            #endregion
-
-            #region StopThePed
-            public static bool StopThePed(bool log)
-            {
-                if (File.Exists("Plugins/LSPDFR/StopThePed.dll"))
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Found 'StopThePed.dll'");
-                    }
-                    return true;
-                }
-                else
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Did not find 'StopThePed.dll'");
-                    }
-                    return false;
-                }
-            }
-            #endregion
-
-            #region UltimateBackup
-            public static bool UltimateBackup(bool log)
-            {
-                if (File.Exists("Plugins/LSPDFR/UltimateBackup.dll"))
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Found 'UltimateBackup.dll'");
-                    }
-                    return true;
-                }
-                else
-                {
-                    if (log == true)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: Did not find 'UltimateBackup.dll'");
-                    }
-                    return false;
-                }
-            }
-
-            #endregion
-        }
     }
 
     internal static class Inventory
@@ -636,7 +570,6 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_CROWBAR",
                     "WEAPON_UNARMED",
                     "WEAPON_FLASHLIGHT",
-                    "WEAPON_GOLFCLUB",
                     "WEAPON_HAMMER",
                     "WEAPON_HATCHET",
                     "WEAPON_KNUCKLE",
@@ -646,10 +579,9 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_NIGHTSTICK",
                     "WEAPON_WRENCH",
                     "WEAPON_BATTLEAXE",
-                    "WEAPON_POOLCUE",
                 };
 
-                int num = random.Next(meleeWeapons.Length);
+                int num = new Random().Next(meleeWeapons.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
 
             }
@@ -669,7 +601,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_CERAMICPISTOL",
                 };
 
-                int num = random.Next(handguns.Length);
+                int num = new Random().Next(handguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
             }
             #endregion
@@ -685,7 +617,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MINISMG"
                 };
 
-                int num = random.Next(submachineGuns.Length);
+                int num = new Random().Next(submachineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
 
             }
@@ -703,7 +635,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_BULLPUPRIFLE",
                 };
 
-                int num = random.Next(rifles.Length);
+                int num = new Random().Next(rifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
 
             }
@@ -722,7 +654,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_COMBATSHOTGUN"
                 };
 
-                int num = random.Next(shotguns.Length);
+                int num = new Random().Next(shotguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
 
             }
@@ -738,7 +670,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_GUSENBERG"
                 };
 
-                int num = random.Next(machineGuns.Length);
+                int num = new Random().Next(machineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
 
             }
@@ -754,7 +686,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MARKSMANRIFLE"
                 };
 
-                int num = random.Next(sniperRifles.Length);
+                int num = new Random().Next(sniperRifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
 
             }
@@ -813,6 +745,53 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
+        #region Enable
+        internal static void Enable(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Alpha = 1f; }
+        }
+        #endregion
+
+        #region Disable
+        internal static void Disable(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Alpha = 0f; }
+        }
+        #endregion
+
+        #region Remove
+        internal static void Remove(this Blip blip)
+        {
+            if (blip.Exists()) { blip.Delete(); }
+        }
+        internal static void Remove(this Ped ped)
+        {
+            if (ped.Exists()) { ped.Delete(); }
+        }
+        internal static void Remove(this Vehicle vehicle)
+        {
+            if (vehicle.Exists()) { vehicle.Delete(); }
+        }
+        internal static void Remove(this Rage.Object Object)
+        {
+            if (Object.Exists()) { Object.Delete(); }
+        }
+        #endregion
+
+        #region EnableRoute
+        internal static void EnableRoute(this Blip blip)
+        {
+            if (blip.Exists()) { blip.IsRouteEnabled = true; }
+        }
+        #endregion
+
+        #region DisableRoute
+        internal static void DisableRoute(this Blip blip)
+        {
+            if (blip.Exists()) { blip.DisableRoute(); }
+        }
+        #endregion
+
         #region SetDefaults
         /// <summary>
         /// Sets ped persistency and blocks permanent events.
@@ -837,11 +816,6 @@ namespace EmergencyCallouts.Essential
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
             animSet.LoadAndWait();
             ped.MovementAnimationSet = animSet;
-
-            if (FileExists.StopThePed(false))
-            {
-                StopThePed.API.Functions.setPedAlcoholOverLimit(ped, true);
-            }
         }
         #endregion
 
@@ -852,10 +826,10 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region IsDetained
-        internal static bool IsDetained(this Ped ped)
+        #region IsPedDetained
+        internal static bool IsPedDetained(this Ped ped)
         {
-            if ((Functions.IsPedStoppedByPlayer(ped) || StopThePed.API.Functions.isPedStopped(ped)) && FileExists.StopThePed(false) == true && ped.Exists())
+            if (Functions.IsPedStoppedByPlayer(ped) && ped.Exists())
             {
                 return true;
             }

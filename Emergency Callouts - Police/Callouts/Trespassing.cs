@@ -14,10 +14,8 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Trespassing", CalloutProbability.Medium)]
     public class Trespassing : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
-        bool OnScene;
+        bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
@@ -222,6 +220,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Trespassing";
+            CalloutDetails = "Someone reported a person trespassing on private property.";
+            CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -241,10 +241,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Attach Message
-                Display.AttachMessage("Someone reported a person trespassing on private property.");
+                Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -258,7 +258,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
                
                 CalloutHandler();
             }
@@ -300,7 +300,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -322,7 +322,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
 
                 // Enabling Route
-                Entity.EnableRoute(EntranceBlip);
+                EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
             }
             catch (Exception e)
@@ -337,21 +337,21 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int RailyardHidingSpotNum = random.Next(RailyardHidingPositions.Length);
+                int RailyardHidingSpotNum = new Random().Next(RailyardHidingPositions.Length);
                 Suspect.Position = RailyardHidingPositions[RailyardHidingSpotNum];
                 Suspect.Heading = RailyardHidingPositionsHeadings[RailyardHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int ScrapyardHidingSpotNum = random.Next(ScrapyardHidingPositions.Length);
+                int ScrapyardHidingSpotNum = new Random().Next(ScrapyardHidingPositions.Length);
                 Suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
                 Suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int AirstripHidingSpotNum = random.Next(AirstripHidingPositions.Length);
+                int AirstripHidingSpotNum = new Random().Next(AirstripHidingPositions.Length);
                 Suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
                 Suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -372,9 +372,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
-                int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = RailyardManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -387,9 +387,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
-                int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ScrapyardManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -402,9 +402,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
 
-                int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
+                int ManagerPositionNum = new Random().Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
                 Suspect.Heading = AirstripManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
@@ -417,19 +417,19 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int FirePositionNum = random.Next(RailyardFirePositions.Length);
+                int FirePositionNum = new Random().Next(RailyardFirePositions.Length);
                 Suspect.Position = RailyardFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int FirePositionNum = random.Next(ScrapyardFirePositions.Length);
+                int FirePositionNum = new Random().Next(ScrapyardFirePositions.Length);
                 Suspect.Position = ScrapyardFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int FirePositionNum = random.Next(AirstripFirePositions.Length);
+                int FirePositionNum = new Random().Next(AirstripFirePositions.Length);
                 Suspect.Position = AirstripFirePositions[FirePositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
@@ -441,19 +441,19 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int WeldingPositionNum = random.Next(RailyardWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(RailyardWeldingPositions.Length);
                 Suspect.Position = RailyardWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = RailyardWeldingHeadings[WeldingPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int WeldingPositionNum = random.Next(ScrapyardWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(ScrapyardWeldingPositions.Length);
                 Suspect.Position = ScrapyardWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = ScrapyardWeldingHeadings[WeldingPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int WeldingPositionNum = random.Next(AirstripWeldingPositions.Length);
+                int WeldingPositionNum = new Random().Next(AirstripWeldingPositions.Length);
                 Suspect.Position = AirstripWeldingPositions[WeldingPositionNum];
                 Suspect.Heading = AirstripWeldingHeadings[WeldingPositionNum];
             }
@@ -569,16 +569,16 @@ namespace EmergencyCallouts.Callouts
                 };
 
                 int line = 0;
-                int num = random.Next(RailyardManagerPositions.Length);
+                int num = new Random().Next(RailyardManagerPositions.Length);
 
-                int day = random.Next(1, 31);
-                int month = random.Next(1, 13);
-                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
+                int day = new Random().Next(1, 31);
+                int month = new Random().Next(1, 13);
+                int year = new Random().Next(DateTime.Now.Year, DateTime.Now.Year + 7);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.Disable();
                 Game.LogTrivial("[Emergency Callouts]: Created SuspectBlip");
 
                 // Inspect animation
@@ -596,7 +596,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
-                            if (Game.IsKeyDown(Settings.Talk))
+                            if (Game.IsKeyDown(Settings.TalkKey))
                             {
                                 Suspect.Tasks.Clear();
                                 Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
@@ -644,7 +644,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(3000);
 
-                                    Handle.CalloutEnding(CalloutMessage);
+                                    Handle.CalloutEnding();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -738,7 +738,7 @@ namespace EmergencyCallouts.Callouts
                 GuardBlip = Guard.AttachBlip();
                 GuardBlip.SetColor(Colors.Blue);
                 GuardBlip.ScaleForPed();
-                Entity.Disable(GuardBlip);
+                GuardBlip.Disable();
                 Game.LogTrivial("[Emergency Callouts]: Created GuardBlip");
 
 
@@ -751,7 +751,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f && Guard.Exists())
                         {
                             // Enable SuspectBlip
-                            Entity.Enable(GuardBlip);
+                            GuardBlip.Enable();
                             Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
                             // Delete SearchArea
@@ -776,60 +776,56 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
-                Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
-                Check.PreventResponderCrash(Suspect, CalloutMessage);
-                Check.PreventResponderCrash(Guard, CalloutMessage);
+                Handle.ManualEnding();
+                Handle.AutomaticEnding(Suspect);
+                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventFirstResponderCrash(Suspect, Guard);
 
-                #region OnPlayerArrival
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && OnScene == false)
+                #region PlayerArrived
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
                 {
-                    // Set OnScene
-                    OnScene = true;
-                    Game.LogTrivial("[Emergency Callouts]: Entered scene");
+                    // Set PlayerArrived
+                    PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Display.ArriveSubtitle("Find", "trespasser", 'r');
+                    Game.DisplaySubtitle("Find the ~y~trespasser~s~ in the ~y~area~s~.");
 
                     // Disable route
-                    Entity.DisableRoute(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Disabled route");
+                    EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
                     Entity.Delete(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted EntranceBlip");
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
-                    Game.LogTrivial("[Emergency Callouts]: Created SearchArea");
+
+                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
                 }
                 #endregion
 
-                #region OnPedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && OnScene == true && Suspect.Exists())
+                #region PedFound
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
-                    Game.LogTrivial("[Emergency Callouts]: Found Suspect");
 
                     // Hide Subtitle
                     Display.HideSubtitle();
-                    Game.LogTrivial("[Emergency Callouts]: Hid subtitle");
 
                     // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled SuspectBlip");
+                    SuspectBlip.Enable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+
+                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
                 }
                 #endregion
 
-                #region OnPedDetained
-                if (Suspect.IsDetained() == true && PedDetained == false && Suspect.Exists())
+                #region PedDetained
+                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -841,28 +837,25 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
-                #region OnPlayerLeave
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene == true)
+                #region PlayerLeft
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
                 {
-                    // Set OnScene
-                    OnScene = false;
-                    Game.LogTrivial("[Emergency Callouts]: Left scene");
+                    // Set PlayerArrived
+                    PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    Entity.Disable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Disabled SuspectBlip");
+                    SuspectBlip.Disable();
 
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
-                    Game.LogTrivial("[Emergency Callouts]: Created EntranceBlip");
 
                     // Enable Route
-                    Entity.EnableRoute(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+                    EntranceBlip.EnableRoute();
+
+                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
                 }
                 #endregion
             }
@@ -887,7 +880,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Log.CalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }
