@@ -199,7 +199,7 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        Ped Suspect;
+        static Ped Suspect;
         Ped Guard;
 
         Blip SuspectBlip;
@@ -616,30 +616,29 @@ namespace EmergencyCallouts.Callouts
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
                                     Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
+                                    Persona SuspectPersona = Persona.FromExistingPed(Suspect);
+
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
                                         Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", "~y~Richard Lukens", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
-                                        Persona RichardPersona = Persona.FromExistingPed(Suspect);
-                                        RichardPersona.Forename = "Richard";
-                                        RichardPersona.Surname = "Lukens";
+                                        SuspectPersona.Forename = "Richard";
+                                        SuspectPersona.Surname = "Lukens";
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
                                         Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", "~y~Jimmy MacMillan", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
-                                        Persona JimmyPersona = Persona.FromExistingPed(Suspect);
-                                        JimmyPersona.Forename = "Jimmy";
-                                        JimmyPersona.Surname = "MacMillan";
+                                        SuspectPersona.Forename = "Jimmy";
+                                        SuspectPersona.Surname = "MacMillan";
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
                                     {
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", "~y~Trevor Philips", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
-                                        Persona TrevorPersona = Persona.FromExistingPed(Suspect);
-                                        TrevorPersona.Forename = "Trevor";
-                                        TrevorPersona.Surname = "Philips";
-                                        TrevorPersona.Wanted = true;
+                                        SuspectPersona.Forename = "Trevor";
+                                        SuspectPersona.Surname = "Philips";
+                                        SuspectPersona.Wanted = true;
                                     }
 
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed ped credentials");
+                                    Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
                                 }
 
                                 if (line == 4)
