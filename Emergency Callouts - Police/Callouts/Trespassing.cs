@@ -494,7 +494,7 @@ namespace EmergencyCallouts.Callouts
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                             Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
 
-                            Functions.AddPedContraband(Suspect, LSPD_First_Response.Engine.Scripting.Entities.ContrabandType.Weapon, "Crowbar");
+                            Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Crowbar");
                             Game.LogTrivial("[Emergency Callouts]: Added \"WEAPON_CROWBAR\" to Suspect contraband");
 
                             Play.PursuitAudio();
@@ -620,22 +620,22 @@ namespace EmergencyCallouts.Callouts
 
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", "~y~Richard Lukens", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                         SuspectPersona.Forename = "Richard";
                                         SuspectPersona.Surname = "Lukens";
+                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", "~y~Jimmy MacMillan", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                         SuspectPersona.Forename = "Jimmy";
                                         SuspectPersona.Surname = "MacMillan";
+                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", "~y~Trevor Philips", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                         SuspectPersona.Forename = "Trevor";
                                         SuspectPersona.Surname = "Philips";
                                         SuspectPersona.Wanted = true;
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
 
                                     Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
@@ -644,7 +644,7 @@ namespace EmergencyCallouts.Callouts
                                 if (line == 4)
                                 {
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    Game.LogTrivial("[Emergency Callouts]: Assigned MainPlayer to play animation");
+                                    Game.LogTrivial($"[Emergency Callouts]: Assigned {PlayerPersona.FullName} to play animation");
 
                                     SuspectBlip.SetColor(Colors.Green);
                                     Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to green");
@@ -811,7 +811,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
@@ -830,7 +830,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
                 #endregion
 
@@ -839,7 +839,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
                     Entity.Delete(SuspectBlip);
@@ -865,7 +865,7 @@ namespace EmergencyCallouts.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }

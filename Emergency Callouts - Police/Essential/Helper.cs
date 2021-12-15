@@ -41,6 +41,7 @@ namespace EmergencyCallouts.Essential
     internal static class Helper
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
+        internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
 
         internal static bool PUBRemoteState;
         internal static bool TRERemoteState;

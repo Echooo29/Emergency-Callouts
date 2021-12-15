@@ -90,7 +90,7 @@ namespace EmergencyCallouts.Callouts
                 // Display Subtitle
                 Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.", 10000);
 
-                Game.LogTrivial("[Emergency Callouts]: On scene");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
                 OnScene = true;
             }
@@ -108,7 +108,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SearchArea
                 SearchArea.Remove();
 
-                Game.LogTrivial("[Emergency Callouts]: Near Suspect");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
 
                 NearPed = true;
             }
@@ -120,7 +120,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SuspectBlip
                 SuspectBlip.Remove();
 
-                Game.LogTrivial("[Emergency Callouts]: Detained Suspect");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                 PedDetained = true;
             }
@@ -144,7 +144,7 @@ namespace EmergencyCallouts.Callouts
                 // Enable Route
                 EntranceBlip.EnableRoute();
 
-                Game.LogTrivial("[Emergency Callouts]: Left scene");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
             }
             #endregion
 

@@ -397,7 +397,7 @@ namespace EmergencyCallouts.Callouts
                         if (PedFound == true)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight player");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             break;
                         }
                     }
@@ -457,7 +457,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Set Pursuit Active
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for " + PlayerPersona.FullName);
 
                             // Play pursuit audio
                             Play.PursuitAudio();
@@ -505,7 +505,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
@@ -524,7 +524,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     Entity.Delete(SearchArea);
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
                 #endregion
 
@@ -533,7 +533,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
                     Entity.Delete(SuspectBlip);
@@ -559,7 +559,7 @@ namespace EmergencyCallouts.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }
