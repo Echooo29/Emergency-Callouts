@@ -2,6 +2,7 @@
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using System;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -15,6 +16,7 @@ namespace EmergencyCallouts.Callouts
         bool NearPed;
         bool PedDetained;
         bool NeedsRefreshing;
+        bool CalloutActive;
 
         Ped Suspect;
         Blip EntranceBlip;
@@ -62,7 +64,151 @@ namespace EmergencyCallouts.Callouts
             Suspect.Tasks.Wander();
             Display.PedDescription(Suspect, DescriptionCategories.Suspect);
 
+            CalloutHandler();
+
             return base.OnCalloutAccepted();
+        }
+
+        private void CalloutHandler()
+        {
+            try
+            {
+                CalloutActive = true;
+                switch (CalloutScenario)
+                {
+                    case 1:
+                        Scenario1();
+                        break;
+                    case 2:
+                        Scenario2();
+                        break;
+                    case 3:
+                        Scenario3();
+                        break;
+                    case 4:
+                        Scenario4();
+                        break;
+                    case 5:
+                        Scenario5();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "CalloutHandler", e);
+            }
+        }
+
+        private void Scenario1()
+        {
+            #region Default
+            try
+            {
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "Scenario1", e);
+            }
+            #endregion
+        }
+
+        private void Scenario2()
+        {
+            #region Hostile
+            try
+            {
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
+                        {
+                            Suspect.Tasks.FightAgainst(MainPlayer);
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
+
+                            break;
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "Scenario2", e);
+            }
+            #endregion
+        }
+
+        private void Scenario3()
+        {
+            #region Bottle
+            try
+            {
+                Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
+                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "Scenario3", e);
+            }
+            #endregion
+        }
+
+        private void Scenario4()
+        {
+            #region Bottle & Hostile
+            try
+            {
+                Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
+                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
+
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
+                    {
+                        Suspect.Tasks.FightAgainst(MainPlayer);
+                        Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "Scenario4", e);
+            }
+            #endregion
+        }
+
+        private void Scenario5()
+        {
+            #region Passout
+            try
+            {
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
+                        {
+                            Entity.Kill(Suspect);
+                            Game.LogTrivial("[Emergency Callouts]: Killed Suspect");
+
+                            break;
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.CalloutException(this, "Scenario5", e);
+            }
+            #endregion
         }
 
         public override void Process()
@@ -179,6 +325,8 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
+            CalloutActive = false;
 
             Entity.Dismiss(Suspect);
             Entity.Delete(SuspectBlip);
