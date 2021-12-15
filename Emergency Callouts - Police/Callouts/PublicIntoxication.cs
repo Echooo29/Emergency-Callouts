@@ -54,7 +54,7 @@ namespace EmergencyCallouts.Callouts
             Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-            Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+            Game.LogTrivial($"[Emergency Callouts - Police]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColor(Colors.Yellow);
@@ -126,7 +126,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
+                            Game.LogTrivial("[Emergency Callouts - Police]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -146,7 +146,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts - Police]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
             }
             catch (Exception e)
             {
@@ -161,7 +161,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
+                Game.LogTrivial("[Emergency Callouts - Police]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
 
                 while (CalloutActive)
                 {
@@ -170,7 +170,7 @@ namespace EmergencyCallouts.Callouts
                     if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                     {
                         Suspect.Tasks.FightAgainst(MainPlayer);
-                        Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
+                        Game.LogTrivial("[Emergency Callouts - Police]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                         break;
                     }
@@ -197,7 +197,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
                         {
                             Entity.Kill(Suspect);
-                            Game.LogTrivial("[Emergency Callouts]: Killed Suspect");
+                            Game.LogTrivial("[Emergency Callouts - Police]: Killed Suspect");
 
                             break;
                         }
@@ -236,7 +236,7 @@ namespace EmergencyCallouts.Callouts
                 // Display Subtitle
                 Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.", 10000);
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
+                Game.LogTrivial($"[Emergency Callouts - Police]: {PlayerPersona.FullName} has arrived on scene");
 
                 OnScene = true;
             }
@@ -254,7 +254,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SearchArea
                 SearchArea.Remove();
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
+                Game.LogTrivial($"[Emergency Callouts - Police]: {PlayerPersona.FullName} has found the suspect");
 
                 NearPed = true;
             }
@@ -266,7 +266,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SuspectBlip
                 SuspectBlip.Remove();
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
+                Game.LogTrivial($"[Emergency Callouts - Police]: {PlayerPersona.FullName} has detained the suspect");
 
                 PedDetained = true;
             }
@@ -290,7 +290,7 @@ namespace EmergencyCallouts.Callouts
                 // Enable Route
                 EntranceBlip.EnableRoute();
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
+                Game.LogTrivial($"[Emergency Callouts - Police]: {PlayerPersona.FullName} has left the scene");
             }
             #endregion
 
@@ -315,7 +315,7 @@ namespace EmergencyCallouts.Callouts
                 SearchArea = new Blip(Suspect.Position.Around(10f, 30f), Settings.SearchAreaSize);
                 SearchArea.SetColor(Colors.Yellow);
                 SearchArea.Alpha = 0.5f;
-                Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
+                Game.LogTrivial("[Emergency Callouts - Police]: Refreshed SearchArea");
 
                 Functions.PlayScannerAudioUsingPosition("SUSPECT_LAST_SEEN IN_OR_ON_POSITION", Suspect.Position);
             }

@@ -12,12 +12,12 @@ namespace EmergencyCallouts
         {
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
 
-            Game.LogTrivial("[Emergency Callouts]: Successfully Loaded v" + Project.LocalVersion);
+            Game.LogTrivial("[Emergency Callouts - Police]: Successfully Loaded v" + Project.LocalVersion);
         }
 
         public override void Finally()
         {
-            Game.LogTrivial("[Emergency Callouts]: Successfully Unloaded");
+            Game.LogTrivial("[Emergency Callouts - Police]: Successfully Unloaded");
         }
 
         private static void OnOnDutyStateChangedHandler(bool OnDuty)
