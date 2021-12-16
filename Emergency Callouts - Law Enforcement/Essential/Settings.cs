@@ -1,8 +1,8 @@
-﻿using EmergencyCallouts.Essential;
+﻿using EmergencyCalloutsLE.Essential;
 using Rage;
 using System.Windows.Forms;
 
-namespace EmergencyCallouts
+namespace EmergencyCalloutsLE
 {
     internal static class Settings
     {
@@ -27,7 +27,7 @@ namespace EmergencyCallouts
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts - Police]: Loading settings.");
+            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Loading settings.");
 
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
@@ -52,7 +52,7 @@ namespace EmergencyCallouts
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
-            Game.LogTrivial("[Emergency Callouts - Police]: Loaded settings.");
+            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Loaded settings.");
         }
     }
 }

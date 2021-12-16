@@ -5,14 +5,14 @@ using Rage;
 using LSPD_First_Response.Mod.API;
 using System.IO;
 using Rage.Native;
-using static EmergencyCallouts.Essential.Helper;
+using static EmergencyCalloutsLE.Essential.Helper;
 using System.Media;
 using System.Net;
 using RAGENativeUI;
-using static EmergencyCallouts.Essential.Color;
+using static EmergencyCalloutsLE.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
 
-namespace EmergencyCallouts.Essential
+namespace EmergencyCalloutsLE.Essential
 {
     internal static class Project
     {
@@ -316,7 +316,7 @@ namespace EmergencyCallouts.Essential
             {
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) > 400f && PlayerArrived == true && PedFound == true)
                 {
-                    Game.LogTrivial("[Emergency Callouts - Police]: Too far from callout position, ending callout to prevent crash");
+                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Too far from callout position, ending callout to prevent crash");
                     Functions.StopCurrentCallout();
                     Play.CodeFourAudio();
                 }
@@ -384,19 +384,19 @@ namespace EmergencyCallouts.Essential
 
                     string states = client.DownloadString("https://pastebin.com/raw/hS4WP9w6");
 
-                    Game.LogTrivial("[Emergency Callouts - Police]: Downloaded remote callout states");
+                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Downloaded remote callout states");
 
                     // Public Intoxication
                     #region StateCheck
                     if (states.Contains("PUB"))
                     {
                         PUBRemoteState = true;
-                        Game.LogTrivial("[Emergency Callouts - Police]: PUBRemoteState = true");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: PUBRemoteState = true");
                     }
                     else
                     {
                         PUBRemoteState = false;
-                        Game.LogTrivial("[Emergency Callouts - Police]: PUBRemoteState = false");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: PUBRemoteState = false");
                         Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Public Intoxication", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
                     }
                     #endregion
@@ -406,12 +406,12 @@ namespace EmergencyCallouts.Essential
                     if (states.Contains("BUR"))
                     {
                         BURRemoteState = true;
-                        Game.LogTrivial("[Emergency Callouts - Police]: BURRemoteState = true");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: BURRemoteState = true");
                     }
                     else
                     {
                         BURRemoteState = false;
-                        Game.LogTrivial("[Emergency Callouts - Police]: BURRemoteState = false");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: BURRemoteState = false");
                         Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Burglary In Progress", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
                     }
                     #endregion
@@ -421,12 +421,12 @@ namespace EmergencyCallouts.Essential
                     if (states.Contains("TRE"))
                     {
                         TRERemoteState = true;
-                        Game.LogTrivial("[Emergency Callouts - Police]: TRERemoteState = true");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: TRERemoteState = true");
                     }
                     else
                     {
                         TRERemoteState = false;
-                        Game.LogTrivial("[Emergency Callouts - Police]: TRERemoteState = false");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: TRERemoteState = false");
                         Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Trespassing", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
                     }
                     #endregion
@@ -436,12 +436,12 @@ namespace EmergencyCallouts.Essential
                     if (states.Contains("DOM"))
                     {
                         DOMRemoteState = true;
-                        Game.LogTrivial("[Emergency Callouts - Police]: DOMRemoteState = true");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: DOMRemoteState = true");
                     }
                     else
                     {
                         DOMRemoteState = false;
-                        Game.LogTrivial("[Emergency Callouts - Police]: DOMRemoteState = false");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: DOMRemoteState = false");
                         Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Domestic Violence", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
                     }
                     #endregion
@@ -451,19 +451,19 @@ namespace EmergencyCallouts.Essential
                     if (states.Contains("SUS"))
                     {
                         SUSRemoteState = true;
-                        Game.LogTrivial("[Emergency Callouts - Police]: SUSRemoteState = true");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: SUSRemoteState = true");
                     }
                     else
                     {
                         SUSRemoteState = false;
-                        Game.LogTrivial("[Emergency Callouts - Police]: SUSRemoteState = false");
+                        Game.LogTrivial("[Emergency Callouts - Law Enforcement]: SUSRemoteState = false");
                         Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Suspicious Activity", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
                     }
                     #endregion
                 }
                 catch (WebException)
                 {
-                    Game.LogTrivial("[Emergency Callouts - Police]: Could not check online callout states, callout states are set to true");
+                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Could not check online callout states, callout states are set to true");
 
                     PUBRemoteState = true;
                     BURRemoteState = true;
@@ -488,7 +488,7 @@ namespace EmergencyCallouts.Essential
                             SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
                             SearchArea.SetColor(Color.Colors.Yellow);
                             SearchArea.Alpha = 0.5f;
-                            Game.LogTrivial("[Emergency Callouts - Police]: Decreased SearchArea size");
+                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Decreased SearchArea size");
                         }
                         GameFiber.Sleep(1000);
                     }
@@ -515,22 +515,22 @@ namespace EmergencyCallouts.Essential
             #region CalloutAccepted
             internal static void CalloutAccepted(string CalloutMessage, int ScenarioNumber)
             {
-                Game.LogTrivial($"[Emergency Callouts - Police]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
             }
             #endregion
 
             #region CalloutEnded
             internal static void CalloutEnded(string CalloutMessage, int ScenarioNumber)
             {
-                Game.LogTrivial($"[Emergency Callouts - Police]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
             }
             #endregion
 
             #region CalloutException
             internal static void CalloutException(object o, string method, Exception e)
             {
-                Game.LogTrivial($"[Emergency Callouts - Police]: {e.Message} At {o.GetType().Name}.{method}()");
-                Game.LogTrivial($"[Emergency Callouts - Police]: Using version {Project.LocalVersion}");
+                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {e.Message} At {o.GetType().Name}.{method}()");
+                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Using version {Project.LocalVersion}");
 
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
 
@@ -538,11 +538,11 @@ namespace EmergencyCallouts.Essential
                 {
                     WebClient hitUpdater = new WebClient();
                     hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts - Police]: Sent hit to the remote error counter");
+                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Sent hit to the remote error counter");
                 }
                 catch (WebException webEx)
                 {
-                    Game.LogTrivial("[Emergency Callouts - Police]: " + webEx.Message);
+                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: " + webEx.Message);
                 }
             }
             #endregion

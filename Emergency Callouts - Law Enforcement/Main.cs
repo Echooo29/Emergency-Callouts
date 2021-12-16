@@ -1,10 +1,10 @@
-﻿using EmergencyCallouts.Essential;
+﻿using EmergencyCalloutsLE.Essential;
 using LSPD_First_Response.Mod.API;
 using Rage;
 using System.Net;
-using static EmergencyCallouts.Essential.Helper;
+using static EmergencyCalloutsLE.Essential.Helper;
 
-namespace EmergencyCallouts
+namespace EmergencyCalloutsLE
 {
     public class Main : Plugin
     {
@@ -12,12 +12,12 @@ namespace EmergencyCallouts
         {
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
 
-            Game.LogTrivial("[Emergency Callouts - Police]: Successfully Loaded v" + Project.LocalVersion);
+            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Successfully Loaded v" + Project.LocalVersion);
         }
 
         public override void Finally()
         {
-            Game.LogTrivial("[Emergency Callouts - Police]: Successfully Unloaded");
+            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Successfully Unloaded");
         }
 
         private static void OnOnDutyStateChangedHandler(bool OnDuty)
