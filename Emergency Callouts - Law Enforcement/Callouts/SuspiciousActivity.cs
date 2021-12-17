@@ -755,39 +755,39 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PedFound
-                //if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
-                //{
-                //    // Set PedFound
-                //    PedFound = true;
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                {
+                    // Set PedFound
+                    PedFound = true;
 
-                //    // Hide Subtitle
-                //    Display.HideSubtitle();
+                    // Hide Subtitle
+                    Display.HideSubtitle();
 
-                //    // Enable SuspectBlip
-                //    Entity.Enable(SuspectBlip);
+                    // Enable SuspectBlip
+                    SuspectBlip.Enable();
 
-                //    // Delete SearchArea
-                //    if (SearchArea.Exists()) { SearchArea.Delete(); }
+                    // Delete SearchArea
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                //    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the suspect");
-                //}
+                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the suspect");
+                }
 
-                //if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && Ped2Found == false && PlayerArrived == true && Suspect2.Exists())
-                //{
-                //    // Set PedFound
-                //    Ped2Found = true;
+                if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && Ped2Found == false && PlayerArrived == true && Suspect2.Exists())
+                {
+                    // Set PedFound
+                    Ped2Found = true;
 
-                //    // Hide Subtitle
-                //    Display.HideSubtitle();
+                    // Hide Subtitle
+                    Display.HideSubtitle();
 
-                //    // Enable SuspectBlip
-                //    Entity.Enable(Suspect2Blip);
+                    // Enable Suspect2Blip
+                    Suspect2Blip.Enable();
 
-                //    // Delete SearchArea
-                //    if (SearchArea.Exists()) { SearchArea.Delete(); }
+                    // Delete SearchArea
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                //    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the second suspect");
-                //}
+                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the second suspect");
+                }
                 #endregion
 
                 #region PedDetained
