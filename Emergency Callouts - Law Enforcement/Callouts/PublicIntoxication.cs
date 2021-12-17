@@ -307,7 +307,7 @@ namespace EmergencyCalloutsLE.Callouts
                 }
             }
 
-            if (Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing == true)
+            if (Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
             {
                 CalloutPosition = Suspect.Position;
                 SearchArea.Remove();

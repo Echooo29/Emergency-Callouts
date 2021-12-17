@@ -308,7 +308,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -357,7 +357,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
                         
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
@@ -394,7 +394,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to fight " + PlayerPersona.FullName);
@@ -486,7 +486,7 @@ namespace EmergencyCalloutsLE.Callouts
                 Handle.PreventFirstResponderCrash(Suspect);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
@@ -510,7 +510,7 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
@@ -529,7 +529,7 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -542,7 +542,7 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;

@@ -355,7 +355,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
@@ -400,7 +400,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PlayerArrived == true)
+                        if (PlayerArrived)
                         {
                             // Husband Fighting Wife
                             Suspect.Tasks.FightAgainst(Victim);
@@ -575,7 +575,7 @@ namespace EmergencyCalloutsLE.Callouts
                 Handle.PreventFirstResponderCrash(Suspect, Victim);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
@@ -635,7 +635,7 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -648,7 +648,7 @@ namespace EmergencyCalloutsLE.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;

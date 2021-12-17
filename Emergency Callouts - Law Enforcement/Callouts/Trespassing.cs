@@ -480,7 +480,7 @@ namespace EmergencyCalloutsLE.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
@@ -526,7 +526,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
@@ -695,7 +695,7 @@ namespace EmergencyCalloutsLE.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
