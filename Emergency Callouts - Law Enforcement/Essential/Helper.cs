@@ -62,50 +62,6 @@ namespace EmergencyCalloutsLE.Essential
 
         internal static class Entity
         {
-            #region  Dismiss
-            internal static void Dismiss(Ped ped)
-            {
-                if (ped.Exists()) { ped.Dismiss(); }
-            }
-            internal static void Dismiss(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Dismiss(); }
-            }
-            #endregion
-
-            #region Delete
-            internal static void Delete(Blip blip)
-            {
-                if (blip.Exists()) { blip.Delete(); }
-            }
-            internal static void Delete(Ped ped)
-            {
-                if (ped.Exists()) { ped.Delete(); }
-            }
-            internal static void Delete(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Delete(); }
-            }
-            internal static void Delete(Rage.Object Object)
-            {
-                if (Object.Exists()) { Object.Delete(); }
-            }
-            #endregion
-
-            #region Kill
-            internal static void Kill(Ped ped)
-            {
-                if (ped.Exists()) { ped.Kill(); }
-            }
-            #endregion
-
-            #region Resurrect
-            internal static void Resurrect(Ped ped)
-            {
-                if (ped.Exists() && ped.IsDead) { ped.Resurrect(); }
-            }
-            #endregion
-
             #region GetRandomMaleModel
             internal static string GetRandomMaleModel()
             {
@@ -483,7 +439,7 @@ namespace EmergencyCalloutsLE.Essential
                     {
                         if (seconds == 1)
                         {
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             // Create SearchArea
                             SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
                             SearchArea.SetColor(Color.Colors.Yellow);

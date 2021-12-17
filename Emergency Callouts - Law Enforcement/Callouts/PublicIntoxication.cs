@@ -196,7 +196,7 @@ namespace EmergencyCalloutsLE.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
                         {
-                            Entity.Kill(Suspect);
+                            if (Suspect.Exists()) { Suspect.Kill(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Killed Suspect");
 
                             break;
@@ -328,10 +328,10 @@ namespace EmergencyCalloutsLE.Callouts
 
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();

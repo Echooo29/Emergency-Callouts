@@ -363,7 +363,7 @@ namespace EmergencyCalloutsLE.Callouts
         private void RetrieveManagerPosition()
         {
             #region Positions
-            Entity.Delete(Suspect);
+            if (Suspect.Exists()) { Suspect.Delete(); }
 
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
@@ -482,7 +482,7 @@ namespace EmergencyCalloutsLE.Callouts
                         GameFiber.Yield();
                         if (PedFound == true)
                         {
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
 
                             LHandle pursuit = Functions.CreatePursuit();
@@ -741,7 +741,7 @@ namespace EmergencyCalloutsLE.Callouts
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Guard position: " + Guard.Position);
 
                 // Kill Guard
-                Entity.Kill(Guard);
+                if (Guard.Exists()) { Guard.Kill(); }
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Killed Guard");
 
                 // GuardBlip
@@ -765,7 +765,7 @@ namespace EmergencyCalloutsLE.Callouts
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Enabled GuardBlip");
 
                             // Delete SearchArea
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SearchArea");
                             
                             Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
@@ -804,7 +804,7 @@ namespace EmergencyCalloutsLE.Callouts
                     EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
@@ -828,7 +828,7 @@ namespace EmergencyCalloutsLE.Callouts
                     SuspectBlip.Enable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the suspect");
                 }
@@ -842,7 +842,7 @@ namespace EmergencyCalloutsLE.Callouts
                     Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                     Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
                 }
                 #endregion
@@ -857,7 +857,7 @@ namespace EmergencyCalloutsLE.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
@@ -881,12 +881,12 @@ namespace EmergencyCalloutsLE.Callouts
             base.End();
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Dismiss(Guard);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(GuardBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (Guard.Exists()) { Guard.Dismiss(); }
+            if (GuardBlip.Exists()) { GuardBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();

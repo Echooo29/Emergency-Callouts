@@ -385,13 +385,13 @@ namespace EmergencyCalloutsLE.Callouts
 
                         if ((Suspect.IsDead || Suspect.IsCuffed) && Suspect.Exists())
                         {
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
 
-                            Entity.Delete(Suspect2Blip);
+                            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted Suspect2Blip");
 
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SearchArea");
 
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
@@ -486,13 +486,13 @@ namespace EmergencyCalloutsLE.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived == true)
                         {
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
 
-                            Entity.Delete(Suspect2Blip);
+                            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted Suspect2Blip");
 
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             Game.LogTrivial("Emergency Callouts: Deleted SearchArea");
 
                             pursuit = Functions.CreatePursuit();
@@ -532,11 +532,13 @@ namespace EmergencyCalloutsLE.Callouts
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Retrieved ped position");
 
                 // Delete Suspect2, Suspect2Blip, SuspectVehicle.
-                Entity.Delete(Suspect2);
+                if (Suspect2.Exists()) { Suspect2.Delete(); }
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted Suspect2");
-                Entity.Delete(Suspect2Blip);
+
+                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted Suspect2Blip");
-                Entity.Delete(Suspect2Vehicle);
+
+                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
                 Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted Suspect2Vehicle");
 
                 // Clear Suspect Inventory
@@ -741,7 +743,7 @@ namespace EmergencyCalloutsLE.Callouts
                     EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
@@ -765,7 +767,7 @@ namespace EmergencyCalloutsLE.Callouts
                 //    Entity.Enable(SuspectBlip);
 
                 //    // Delete SearchArea
-                //    Entity.Delete(SearchArea);
+                //    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                 //    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the suspect");
                 //}
@@ -782,7 +784,7 @@ namespace EmergencyCalloutsLE.Callouts
                 //    Entity.Enable(Suspect2Blip);
 
                 //    // Delete SearchArea
-                //    Entity.Delete(SearchArea);
+                //    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                 //    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the second suspect");
                 //}
@@ -795,7 +797,7 @@ namespace EmergencyCalloutsLE.Callouts
                     PedDetained = true;
 
                     // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
 
                     Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has detained the suspect");
                 }
@@ -811,7 +813,7 @@ namespace EmergencyCalloutsLE.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
@@ -835,14 +837,14 @@ namespace EmergencyCalloutsLE.Callouts
             base.End();
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Dismiss(Suspect2);
-            Entity.Dismiss(SuspectVehicle);
-            Entity.Dismiss(Suspect2Vehicle);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(Suspect2Blip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (Suspect2.Exists()) { Suspect2.Dismiss(); }
+            if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
+            if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();
