@@ -242,16 +242,16 @@ namespace EmergencyCallouts.Essential
         internal static class Handle
         {
             #region CalloutEnding
-            internal static void CalloutEnding()
-            {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests@"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
-                GameFiber.Sleep(2000);
-                Play.CodeFourAudio();
-                GameFiber.Sleep(2700);
-                Functions.StopCurrentCallout();
-                GameFiber.Sleep(500);
-            }
+            //internal static void CalloutEnding()
+            //{
+            //    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+            //    Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
+            //    GameFiber.Sleep(2000);
+            //    Play.CodeFourAudio();
+            //    GameFiber.Sleep(2700);
+            //    Functions.StopCurrentCallout();
+            //    GameFiber.Sleep(500);
+            //}
             #endregion
 
             #region ManualEnding
@@ -259,7 +259,8 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    CalloutEnding();
+                    Play.CodeFourAudio();
+                    Functions.StopCurrentCallout();
                 }
             }
             #endregion
@@ -271,11 +272,13 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed)
                     {
-                        CalloutEnding();
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
                     }
-                    else if (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle)
+                    else if (suspect.IsDead)
                     {
-                        CalloutEnding();
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
                     }
                 }
             }

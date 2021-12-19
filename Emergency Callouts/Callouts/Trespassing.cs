@@ -28,9 +28,10 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(512f, -610.72f, 24.43f),   // La Mesa Railyard
-            new Vector3(-1106.7f, -1975.5f, 0f),   // LSIA Scrapyard
-            new Vector3(2165.78f, 4758.762f, 42f), // McKenzie Airstrip 
+            new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
+            new Vector3(-1106.7f, -1975.5f, 24.562f),   // LSIA Scrapyard
+            new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
+            new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
         };
         #endregion
 
@@ -76,7 +77,7 @@ namespace EmergencyCallouts.Callouts
             112f // Crates
         };
 
-        readonly Vector3[] RailyardFirePositions =
+        readonly Vector3[] RailyardArsonPositions =
         {
             new Vector3(485f, -636.5899f, 25.02777f), // Alley
             new Vector3(522.1501f, -592.4759f, 25f),  // Power Unit
@@ -84,15 +85,8 @@ namespace EmergencyCallouts.Callouts
             new Vector3(493f, -573.0732f, 24.59121f)  // Building 2
         };
 
-        readonly Vector3[] RailyardWeldingPositions =
-        {
-            new Vector3(491.9123f, -554.114f, 24.7505f), // Container
-        };
-
-        readonly float[] RailyardWeldingHeadings =
-        {
-            212f,
-        };
+        readonly Vector3 RailyardWeldingPosition = new Vector3(491.9123f, -554.114f, 24.7505f); // Container
+        readonly float RailyardWeldingHeading = 212f;
         #endregion
 
         // LSC Scrapyard
@@ -129,22 +123,15 @@ namespace EmergencyCallouts.Callouts
             262f,
         };
 
-        readonly Vector3[] ScrapyardFirePositions =
+        readonly Vector3[] ScrapyardArsonPositions =
         {
             new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
             new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
             new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
         };
 
-        readonly Vector3[] ScrapyardWeldingPositions =
-        {
-            new Vector3(), //
-        };
-
-        readonly float[] ScrapyardWeldingHeadings =
-        {
-            0f,
-        };
+        readonly Vector3 ScrapyardWeldingPosition = new Vector3();
+        readonly float ScrapyardWeldingHeading = 0f;
         #endregion
 
         // McKenzie Airstrip
@@ -181,22 +168,60 @@ namespace EmergencyCallouts.Callouts
             317f,
         };
 
-        readonly Vector3[] AirstripFirePositions =
+        readonly Vector3[] AirstripArsonPositions =
         {
             new Vector3(2144.962f, 4776.65f, 40.97034f), // Pile of Boxes
             new Vector3(2108.356f, 4762.68f, 41.04375f), // Gas Tank
             new Vector3(2125.861f, 4774.83f, 40.97033f), // Pile of Boxes 2
         };
 
-        readonly Vector3[] AirstripWeldingPositions =
+        readonly Vector3 AirstripWeldingPosition = new Vector3();
+        readonly float AirstripWeldingHeading = 0f;
+        #endregion
+
+        // Joshua Road Loading Dock
+        #region Positions
+        readonly Vector3[] LoadingDockHidingPositions =
         {
-            new Vector3(), //
+            new Vector3(216.5567f, 2808.267f, 45.65519f), // Pile Of Pallets
+            new Vector3(223.5032f, 2802.028f, 45.65519f), // Containers
+            new Vector3(167.6332f, 2736.069f, 43.37733f), // Containers 2
+            new Vector3(193.4705f, 2766.353f, 43.42632f), // Truck
+            new Vector3(163.1098f, 2770.249f, 45.69321f), // Red Container
         };
 
-        readonly float[] AirstripWeldingHeadings =
+        readonly float[] LoadingDockHidingHeadings =
         {
-            0f,
+            182.41f,
+            43.53f,
+            7.96f,
+            183.06f,
+            9.44f,
         };
+
+        readonly Vector3[] LoadingDockManagerPositions =
+        {
+            new Vector3(221.0605f, 2774.253f, 45.65525f), // Barrels
+            new Vector3(221.58971f, 2734.374f, 42.9960f), // Plyboards
+            new Vector3(219.1572f, 2806.581f, 45.65519f), // Barrels 2
+        };
+
+        readonly float[] LoadingDockManagerHeadings =
+        {
+            148.58f,
+            214.67f,
+            36.07f,
+        };
+
+        readonly Vector3[] LoadingDockArsonPositions =
+        {
+            new Vector3(202.8873f, 2776.132f, 45.65527f), // Plyboards
+            new Vector3(164.554f, 2777.1820f, 45.70289f), // Storage Tank
+            new Vector3(197.8674f, 2803.913f, 45.65517f), // Generator
+        };
+
+        readonly Vector3 LoadingDockWeldingPosition = new Vector3(221.1813f, 2746.937f, 43.3394f);
+        readonly float LoadingDockWeldingHeading = 268.66f;
         #endregion
 
         static Ped Suspect;
@@ -278,7 +303,7 @@ namespace EmergencyCallouts.Callouts
             {
                 CalloutActive = true;
 
-                // Positioning
+                // Main Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                 {
@@ -296,6 +321,12 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
+                    EntranceBlip.Position = Entrance;
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+                {
+                    Center = new Vector3(195.43f, 2786.759f, 45.65519f);
+                    Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
                     EntranceBlip.Position = Entrance;
                 }
                 #endregion
@@ -357,6 +388,13 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+            {
+                int AirstripHidingSpotNum = random.Next(LoadingDockHidingPositions.Length);
+                Suspect.Position = LoadingDockHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = LoadingDockHidingHeadings[AirstripHidingSpotNum];
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+            }
             #endregion
         }
 
@@ -410,6 +448,21 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Heading = AirstripManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+            {
+                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect.SetDefaults();
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.ScaleForPed();
+                SuspectBlip.Disable();
+
+                int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
+                Suspect.Position = LoadingDockManagerPositions[ManagerPositionNum];
+                Suspect.Heading = LoadingDockManagerHeadings[ManagerPositionNum];
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+            }
             #endregion
         }
 
@@ -418,20 +471,26 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int FirePositionNum = random.Next(RailyardFirePositions.Length);
-                Suspect.Position = RailyardFirePositions[FirePositionNum];
+                int ArsonPositionNum = random.Next(RailyardArsonPositions.Length);
+                Suspect.Position = RailyardArsonPositions[ArsonPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int FirePositionNum = random.Next(ScrapyardFirePositions.Length);
-                Suspect.Position = ScrapyardFirePositions[FirePositionNum];
+                int ArsonPositionNum = random.Next(ScrapyardArsonPositions.Length);
+                Suspect.Position = ScrapyardArsonPositions[ArsonPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int FirePositionNum = random.Next(AirstripFirePositions.Length);
-                Suspect.Position = AirstripFirePositions[FirePositionNum];
+                int ArsonPositionNum = random.Next(AirstripArsonPositions.Length);
+                Suspect.Position = AirstripArsonPositions[ArsonPositionNum];
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+            {
+                int ArsonPositionNum = random.Next(LoadingDockArsonPositions.Length);
+                Suspect.Position = LoadingDockArsonPositions[ArsonPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             #endregion
@@ -442,22 +501,25 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int WeldingPositionNum = random.Next(RailyardWeldingPositions.Length);
-                Suspect.Position = RailyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = RailyardWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = RailyardWeldingPosition;
+                Suspect.Heading = RailyardWeldingHeading;
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int WeldingPositionNum = random.Next(ScrapyardWeldingPositions.Length);
-                Suspect.Position = ScrapyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = ScrapyardWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = ScrapyardWeldingPosition;
+                Suspect.Heading = ScrapyardWeldingHeading;
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
-                int WeldingPositionNum = random.Next(AirstripWeldingPositions.Length);
-                Suspect.Position = AirstripWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = AirstripWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = AirstripWeldingPosition;
+                Suspect.Heading = AirstripWeldingHeading;
             }
+            else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+            {
+                Suspect.Position = LoadingDockWeldingPosition;
+                Suspect.Heading = LoadingDockWeldingHeading;
+            }
+
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             
             Rage.Object entity = new Rage.Object("prop_weld_torch", Suspect.Position);
