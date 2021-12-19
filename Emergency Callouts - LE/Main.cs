@@ -1,7 +1,6 @@
 ﻿using EmergencyCalloutsLE.Essential;
 using LSPD_First_Response.Mod.API;
 using Rage;
-using System.Net;
 using static EmergencyCalloutsLE.Essential.Helper;
 
 namespace EmergencyCalloutsLE

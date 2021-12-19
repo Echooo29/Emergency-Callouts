@@ -251,7 +251,7 @@ namespace EmergencyCalloutsLE.Callouts
                     Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+                else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
