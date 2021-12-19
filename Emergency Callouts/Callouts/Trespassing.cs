@@ -699,6 +699,10 @@ namespace EmergencyCallouts.Callouts
                                         SuspectPersona.Wanted = true;
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
+                                    else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
+                                    {
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Sandy Shores \n~c~Valid until {month}/{day}/{year}");
+                                    }
 
                                     Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
                                 }

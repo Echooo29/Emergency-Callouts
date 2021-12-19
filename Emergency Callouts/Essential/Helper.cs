@@ -307,15 +307,18 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                         }
                     }
@@ -332,15 +335,18 @@ namespace EmergencyCallouts.Essential
                         {
                             if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                             else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
                             {
-                                CalloutEnding();
+                                Play.CodeFourAudio();
+                                Functions.StopCurrentCallout();
                             }
                         }
                     }
