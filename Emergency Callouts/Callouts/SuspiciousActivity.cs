@@ -21,13 +21,11 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
 
-        // Main
-        #region Positions
-
         Vector3 Entrance;
         Vector3 Center;
 
-        // CalloutPositions (Entrance)
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
             new Vector3(167.0673f, -1247.618f, 29.19848f),  // Strawberry

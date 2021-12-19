@@ -21,11 +21,11 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
 
-        // Main
-        #region Positions
         Vector3 Entrance;
         Vector3 Center;
 
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
             new Vector3(512f, -610.72f, 24.43f),   // La Mesa Railyard

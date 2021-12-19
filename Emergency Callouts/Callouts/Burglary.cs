@@ -17,20 +17,19 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
 
-        // Main
-        #region Positions
         Vector3 Entrance;
         Vector3 Center;
-
-        // CalloutPositions (Entrance)
+        
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(916.261f, -623.7192f, 58.05202f),   // Mirror Park
-            new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
+            new Vector3(916.261f, -623.7192f, 58.052020f),  // Mirror Park
+            new Vector3(-663.6192f, -1358.232f, 10.4971f),  // La Puerta
             new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
-            new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
-            new Vector3(),   // Harmony
-            new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
+            new Vector3(2652.853f, 4308.485f, 44.393880f),  // Grapeseed
+            new Vector3(1207.165f, 2694.605f, 37.823690f),  // Harmony
+            new Vector3(194.8364f, 6576.915f, 31.820280f),  // Paleto Bay
         };
         #endregion
 

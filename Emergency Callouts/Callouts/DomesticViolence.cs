@@ -147,7 +147,7 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims ~y~he's hurting her~s~, shortly after she ~y~hung up abrubtly~s~.";
+            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's getting assaulted by him every hour.";
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
