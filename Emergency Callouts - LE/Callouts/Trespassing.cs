@@ -1,4 +1,4 @@
-﻿using EmergencyCalloutsLE.Essential;
+﻿using EmergencyCallouts.Essential;
 using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
@@ -6,11 +6,11 @@ using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using RAGENativeUI;
 using System;
-using static EmergencyCalloutsLE.Essential.Color;
-using static EmergencyCalloutsLE.Essential.Helper;
-using Entity = EmergencyCalloutsLE.Essential.Helper.Entity;
+using static EmergencyCallouts.Essential.Color;
+using static EmergencyCallouts.Essential.Helper;
+using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
-namespace EmergencyCalloutsLE.Callouts
+namespace EmergencyCallouts.Callouts
 {
     [CalloutInfo("Trespassing", CalloutProbability.Medium)]
     public class Trespassing : Callout
@@ -231,7 +231,7 @@ namespace EmergencyCalloutsLE.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Game.LogTrivial("[Emergency Callouts - LE]: Callout not accepted");
+            Game.LogTrivial("[Emergency Callouts]: Callout not accepted");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
 
             base.OnCalloutNotAccepted();
@@ -253,7 +253,7 @@ namespace EmergencyCalloutsLE.Callouts
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts - LE]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -324,7 +324,7 @@ namespace EmergencyCalloutsLE.Callouts
 
                 // Enabling Route
                 EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts - LE]: Enabled route to EntranceBlip");
+                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
             }
             catch (Exception e)
             {
@@ -483,22 +483,22 @@ namespace EmergencyCalloutsLE.Callouts
                         if (PedFound)
                         {
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts - LE]: Deleted SuspectBlip");
+                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
                             LHandle pursuit = Functions.CreatePursuit();
-                            Game.LogTrivial("[Emergency Callouts - LE]: Created pursuit");
+                            Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
                             Functions.AddPedToPursuit(pursuit, Suspect);
-                            Game.LogTrivial("[Emergency Callouts - LE]: Added Suspect to pursuit");
+                            Game.LogTrivial("[Emergency Callouts]: Added Suspect to pursuit");
 
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts - LE]: Set pursuit is active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
 
                             Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Crowbar");
-                            Game.LogTrivial("[Emergency Callouts - LE]: Added \"WEAPON_CROWBAR\" to Suspect contraband");
+                            Game.LogTrivial("[Emergency Callouts]: Added \"WEAPON_CROWBAR\" to Suspect contraband");
 
                             Play.PursuitAudio();
-                            Game.LogTrivial("[Emergency Callouts - LE]: Played pursuit audio");
+                            Game.LogTrivial("[Emergency Callouts]: Played pursuit audio");
 
                             break;
                         }
@@ -530,11 +530,11 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect tasks to null");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect tasks to null");
 
                             // Suspect Achieve Player Heading
                             Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to face player");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to face player");
 
                             break;
                         }
@@ -580,14 +580,14 @@ namespace EmergencyCalloutsLE.Callouts
                 SuspectBlip.SetColor(Colors.Yellow);
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
-                Game.LogTrivial("[Emergency Callouts - LE]: Created SuspectBlip");
+                Game.LogTrivial("[Emergency Callouts]: Created SuspectBlip");
 
                 // Inspect animation
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to play animation");
+                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
-                Game.LogTrivial("[Emergency Callouts - LE]: Set ped cant be arrested by player (Suspect)");
+                Game.LogTrivial("[Emergency Callouts]: Set ped cant be arrested by player (Suspect)");
 
                 GameFiber.StartNew(delegate
                 {
@@ -600,13 +600,13 @@ namespace EmergencyCalloutsLE.Callouts
                             if (Game.IsKeyDown(Settings.TalkKey))
                             {
                                 Suspect.Tasks.Clear();
-                                Game.LogTrivial("[Emergency Callouts - LE]: Cleared Suspect tasks");
+                                Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
 
                                 DialogueStarted = true;
-                                Game.LogTrivial("[Emergency Callouts - LE]: Dialogue Started");
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
 
                                 Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180);
-                                Game.LogTrivial("[Emergency Callouts - LE]: Suspect achieved player heading");
+                                Game.LogTrivial("[Emergency Callouts]: Suspect achieved player heading");
 
                                 Game.DisplaySubtitle(dialogue[line], 99999);
                                 line++;
@@ -614,7 +614,7 @@ namespace EmergencyCalloutsLE.Callouts
                                 if (line == 3)
                                 {
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
-                                    Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to play animation");
+                                    Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
                                     Persona SuspectPersona = Persona.FromExistingPed(Suspect);
 
@@ -638,16 +638,16 @@ namespace EmergencyCalloutsLE.Callouts
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
 
-                                    Game.LogTrivial($"[Emergency Callouts - LE]: Displayed {SuspectPersona.FullName} credentials");
+                                    Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
                                 }
 
                                 if (line == 4)
                                 {
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    Game.LogTrivial($"[Emergency Callouts - LE]: Assigned {PlayerPersona.FullName} to play animation");
+                                    Game.LogTrivial($"[Emergency Callouts]: Assigned {PlayerPersona.FullName} to play animation");
 
                                     SuspectBlip.SetColor(Colors.Green);
-                                    Game.LogTrivial("[Emergency Callouts - LE]: Changed SuspectBlip color to green");
+                                    Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to green");
                                 }
 
                                 if (line == dialogue.Length)
@@ -687,7 +687,7 @@ namespace EmergencyCalloutsLE.Callouts
 
                 // Give Suspect Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_PETROLCAN", -1, true);
-                Game.LogTrivial($"[Emergency Callouts - LE]: Assigned (WEAPON_PETROLCAN) to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned (WEAPON_PETROLCAN) to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -699,11 +699,11 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts - LE]: Cleared Suspect tasks");
+                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
 
                             // Put Suspect Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to put hands up");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to put hands up");
 
                             break;
                         }
@@ -731,25 +731,25 @@ namespace EmergencyCalloutsLE.Callouts
 
                 // Change SuspectBlip color
                 SuspectBlip.SetColor(Colors.Red);
-                Game.LogTrivial("[Emergency Callouts - LE]: Changed SuspectBlip color to red");
+                Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to red");
 
                 // Guard
                 Guard = new Ped("csb_prolsec", CalloutPosition.Around2D(5f), 0f);
                 Guard.SetDefaults();
-                Game.LogTrivial("[Emergency Callouts - LE]: Created Guard");
-                Game.LogTrivial("[Emergency Callouts - LE]: Guard model: " + Guard.Model.Name);
-                Game.LogTrivial("[Emergency Callouts - LE]: Guard position: " + Guard.Position);
+                Game.LogTrivial("[Emergency Callouts]: Created Guard");
+                Game.LogTrivial("[Emergency Callouts]: Guard model: " + Guard.Model.Name);
+                Game.LogTrivial("[Emergency Callouts]: Guard position: " + Guard.Position);
 
                 // Kill Guard
                 if (Guard.Exists()) { Guard.Kill(); }
-                Game.LogTrivial("[Emergency Callouts - LE]: Killed Guard");
+                Game.LogTrivial("[Emergency Callouts]: Killed Guard");
 
                 // GuardBlip
                 GuardBlip = Guard.AttachBlip();
                 GuardBlip.SetColor(Colors.Blue);
                 GuardBlip.ScaleForPed();
                 GuardBlip.Disable();
-                Game.LogTrivial("[Emergency Callouts - LE]: Created GuardBlip");
+                Game.LogTrivial("[Emergency Callouts]: Created GuardBlip");
 
 
                 GameFiber.StartNew(delegate
@@ -762,11 +762,11 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Enable SuspectBlip
                             GuardBlip.Enable();
-                            Game.LogTrivial("[Emergency Callouts - LE]: Enabled GuardBlip");
+                            Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
                             // Delete SearchArea
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts - LE]: Deleted SearchArea");
+                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
                             
                             Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
                             break;
@@ -811,7 +811,7 @@ namespace EmergencyCalloutsLE.Callouts
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
@@ -830,7 +830,7 @@ namespace EmergencyCalloutsLE.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has found the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
                 #endregion
 
@@ -839,11 +839,11 @@ namespace EmergencyCalloutsLE.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has detained the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                    Game.LogTrivial("[Emergency Callouts - LE]: Deleted SuspectBlip");
+                    Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
                 }
                 #endregion
 
@@ -865,7 +865,7 @@ namespace EmergencyCalloutsLE.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has left the scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }

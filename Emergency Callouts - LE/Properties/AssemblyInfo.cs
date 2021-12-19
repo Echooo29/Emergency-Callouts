@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Emergency Callouts - Law Enforcement")]
-[assembly: AssemblyDescription("Emergency Callouts for Law Enforcement")]
+[assembly: AssemblyTitle("Emergency Callouts")]
+[assembly: AssemblyDescription("Emergency Callouts for LSPDFR")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("FayaDev")]
-[assembly: AssemblyProduct("Emergency Callouts - Law Enforcement")]
+[assembly: AssemblyProduct("Emergency Callouts")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
