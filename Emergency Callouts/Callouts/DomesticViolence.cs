@@ -21,19 +21,18 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
 
-        // Main
-        #region Positions
-
         Vector3 Entrance;
         Vector3 Center;
 
-        // CalloutPositions (Entrance)
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(11.3652f, 545.7453f, 175.8412f),  // Vinewood Hills
-            new Vector3(222.883f, -1726.32f, 28.87364f),  // Davis
-            new Vector3(224.5887f, 3162.886f, 42.3335f),  // Sandy Shores
-            new Vector3(1687.845f, 4680.918f, 43.02761f), // Grapeseed
+            new Vector3(11.3652f, 545.7453f, 175.8412f),    // Vinewood Hills
+            new Vector3(222.883f, -1726.32f, 28.87364f),    // Davis
+            new Vector3(-1048.924f, -1018.362f, 2.150359f), // Vespucci
+            new Vector3(224.5887f, 3162.886f, 42.3335f),    // Sandy Shores
+            new Vector3(1687.845f, 4680.918f, 43.02761f),   // Grapeseed
         };
         #endregion
 
@@ -66,6 +65,14 @@ namespace EmergencyCallouts.Callouts
             34f,
         };
         #endregion
+
+        // Vespucci
+        #region Positions
+        readonly Vector3 VespucciFightPosition = new Vector3(-1058.305f, -995.6418f, 6.410485f); // Front
+
+        readonly float VespucciFightHeading = 205.96f;
+        #endregion
+
 
         // Sandy Shores
         #region Positions
@@ -215,13 +222,19 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(222.883f, -1726.32f, 28.87364f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // Sandy Shores
+                else if (CalloutPosition == CalloutPositions[2]) // Vespucci
+                {
+                    Center = new Vector3(-1058.305f, -995.6418f, 6.410485f);
+                    Entrance = new Vector3(-1048.924f, -1018.362f, 2.150359f);
+                    EntranceBlip.Position = Entrance;
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
                 {
                     Center = new Vector3(247.4916f, 3169.519f, 42.7863f);
                     Entrance = new Vector3(224.5887f, 3162.886f, 42.3335f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+                else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
                 {
                     Center = new Vector3(1672.969f, 4670.249f, 43.40202f);
                     Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
@@ -279,7 +292,13 @@ namespace EmergencyCallouts.Callouts
                 Victim.Heading = DavisFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Sandy Shores
+            else if (CalloutPosition == CalloutPositions[2]) // Vespucci
+            {
+                Victim.Position = VespucciFightPosition;
+                Victim.Heading = VespucciFightHeading;
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
             {
                 int num = random.Next(SandyShoresFightPositions.Length);
 
@@ -287,7 +306,7 @@ namespace EmergencyCallouts.Callouts
                 Victim.Heading = SandyShoresFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
-            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
             {
                 int num = random.Next(GrapeseedFightPositions.Length);
 
