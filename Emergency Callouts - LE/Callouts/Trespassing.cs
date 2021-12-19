@@ -1,4 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
@@ -198,7 +199,7 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        Ped Suspect;
+        static Ped Suspect;
         Ped Guard;
 
         Blip SuspectBlip;
@@ -362,7 +363,7 @@ namespace EmergencyCallouts.Callouts
         private void RetrieveManagerPosition()
         {
             #region Positions
-            Entity.Delete(Suspect);
+            if (Suspect.Exists()) { Suspect.Delete(); }
 
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
@@ -479,9 +480,9 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        if (PedFound == true)
+                        if (PedFound)
                         {
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
                             LHandle pursuit = Functions.CreatePursuit();
@@ -493,7 +494,7 @@ namespace EmergencyCallouts.Callouts
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                             Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
 
-                            Functions.AddPedContraband(Suspect, LSPD_First_Response.Engine.Scripting.Entities.ContrabandType.Weapon, "Crowbar");
+                            Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Crowbar");
                             Game.LogTrivial("[Emergency Callouts]: Added \"WEAPON_CROWBAR\" to Suspect contraband");
 
                             Play.PursuitAudio();
@@ -525,7 +526,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
@@ -615,26 +616,35 @@ namespace EmergencyCallouts.Callouts
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
                                     Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
+                                    Persona SuspectPersona = Persona.FromExistingPed(Suspect);
+
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", "~y~Richard Lukens", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
+                                        SuspectPersona.Forename = "Richard";
+                                        SuspectPersona.Surname = "Lukens";
+                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", "~y~Jimmy Macmillan", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
+                                        SuspectPersona.Forename = "Jimmy";
+                                        SuspectPersona.Surname = "MacMillan";
+                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", "~y~Trevor Philips", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                        SuspectPersona.Forename = "Trevor";
+                                        SuspectPersona.Surname = "Philips";
+                                        SuspectPersona.Wanted = true;
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
 
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed ped credentials");
+                                    Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
                                 }
 
                                 if (line == 4)
                                 {
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    Game.LogTrivial("[Emergency Callouts]: Assigned MainPlayer to play animation");
+                                    Game.LogTrivial($"[Emergency Callouts]: Assigned {PlayerPersona.FullName} to play animation");
 
                                     SuspectBlip.SetColor(Colors.Green);
                                     Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to green");
@@ -643,8 +653,8 @@ namespace EmergencyCallouts.Callouts
                                 if (line == dialogue.Length)
                                 {
                                     GameFiber.Sleep(3000);
-
-                                    Handle.CalloutEnding();
+                                    Functions.StopCurrentCallout();
+                                    //Handle.CalloutEnding();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -685,7 +695,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
@@ -731,7 +741,7 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[Emergency Callouts]: Guard position: " + Guard.Position);
 
                 // Kill Guard
-                Entity.Kill(Guard);
+                if (Guard.Exists()) { Guard.Kill(); }
                 Game.LogTrivial("[Emergency Callouts]: Killed Guard");
 
                 // GuardBlip
@@ -755,7 +765,7 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
                             // Delete SearchArea
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
                             
                             Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
@@ -788,20 +798,20 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~y~trespasser~s~ in the ~y~area~s~.");
+                    Game.DisplaySubtitle("Find the ~y~trespasser~s~ in the ~y~area~s~.", 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
@@ -818,9 +828,9 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Enable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
                 #endregion
 
@@ -829,10 +839,10 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                     Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
                 }
                 #endregion
@@ -847,7 +857,7 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
@@ -855,7 +865,7 @@ namespace EmergencyCallouts.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }
@@ -871,12 +881,12 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Dismiss(Guard);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(GuardBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (Guard.Exists()) { Guard.Dismiss(); }
+            if (GuardBlip.Exists()) { GuardBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();

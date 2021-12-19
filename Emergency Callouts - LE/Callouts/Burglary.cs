@@ -1,12 +1,8 @@
 ﻿using EmergencyCallouts.Essential;
-using LSPD_First_Response.Engine.Scripting.Entities;
-using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
-using System.Diagnostics;
-using System.Windows.Forms;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -134,7 +130,6 @@ namespace EmergencyCallouts.Callouts
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
-                Game.LogTrivial("[Emergency Callouts]: Created EntranceBlip");
 
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
@@ -309,10 +304,10 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Delete SuspectBlip
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
                             // Create Pursuit
@@ -358,7 +353,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
                         
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
@@ -395,10 +390,10 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight player");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             break;
                         }
                     }
@@ -445,7 +440,7 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists())
                         {
                             // Delete SuspectBlip
-                            Entity.Delete(SuspectBlip);
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
                             // Create Pursuit
@@ -458,7 +453,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Set Pursuit Active
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for " + PlayerPersona.FullName);
 
                             // Play pursuit audio
                             Play.PursuitAudio();
@@ -487,31 +482,31 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventFirstResponderCrash(Suspect);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.");
+                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
@@ -523,27 +518,27 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Enable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                     Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
                 }
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
@@ -552,7 +547,7 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
@@ -560,7 +555,7 @@ namespace EmergencyCallouts.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }
@@ -576,10 +571,10 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();

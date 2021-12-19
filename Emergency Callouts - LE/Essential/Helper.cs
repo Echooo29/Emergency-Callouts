@@ -33,7 +33,7 @@ namespace EmergencyCallouts.Essential
         #region SettingsPath
         internal static string SettingsPath
         {
-            get { return "Plugins/LSPDFR/Emergency Callouts - Police.ini"; }
+            get { return "Plugins/LSPDFR/Emergency Callouts - LE.ini"; }
         }
         #endregion
     }
@@ -41,6 +41,7 @@ namespace EmergencyCallouts.Essential
     internal static class Helper
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
+        internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
 
         internal static bool PUBRemoteState;
         internal static bool TRERemoteState;
@@ -58,52 +59,9 @@ namespace EmergencyCallouts.Essential
 
         }
         #endregion
+
         internal static class Entity
         {
-            #region  Dismiss
-            internal static void Dismiss(Ped ped)
-            {
-                if (ped.Exists()) { ped.Dismiss(); }
-            }
-            internal static void Dismiss(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Dismiss(); }
-            }
-            #endregion
-
-            #region Delete
-            internal static void Delete(Blip blip)
-            {
-                if (blip.Exists()) { blip.Delete(); }
-            }
-            internal static void Delete(Ped ped)
-            {
-                if (ped.Exists()) { ped.Delete(); }
-            }
-            internal static void Delete(Vehicle vehicle)
-            {
-                if (vehicle.Exists()) { vehicle.Delete(); }
-            }
-            internal static void Delete(Rage.Object Object)
-            {
-                if (Object.Exists()) { Object.Delete(); }
-            }
-            #endregion
-
-            #region Kill
-            internal static void Kill(Ped ped)
-            {
-                if (ped.Exists()) { ped.Kill(); }
-            }
-            #endregion
-
-            #region Resurrect
-            internal static void Resurrect(Ped ped)
-            {
-                if (ped.Exists() && ped.IsDead) { ped.Resurrect(); }
-            }
-            #endregion
-
             #region GetRandomMaleModel
             internal static string GetRandomMaleModel()
             {
@@ -282,6 +240,19 @@ namespace EmergencyCallouts.Essential
 
         internal static class Handle
         {
+            #region CalloutEnding
+            internal static void CalloutEnding()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests@"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
+                GameFiber.Sleep(2000);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                Functions.StopCurrentCallout();
+                GameFiber.Sleep(500);
+            }
+            #endregion
+
             #region ManualEnding
             internal static void ManualEnding()
             {
@@ -297,7 +268,11 @@ namespace EmergencyCallouts.Essential
             {
                 if (suspect.Exists())
                 {
-                    if (suspect.IsCuffed || (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle))
+                    if (suspect.IsCuffed)
+                    {
+                        CalloutEnding();
+                    }
+                    else if (suspect.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
                         CalloutEnding();
                     }
@@ -477,7 +452,7 @@ namespace EmergencyCallouts.Essential
                     {
                         if (seconds == 1)
                         {
-                            Entity.Delete(SearchArea);
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
                             // Create SearchArea
                             SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
                             SearchArea.SetColor(Color.Colors.Yellow);
@@ -487,19 +462,6 @@ namespace EmergencyCallouts.Essential
                         GameFiber.Sleep(1000);
                     }
                 });
-            }
-            #endregion
-
-            #region CalloutEnding
-            internal static void CalloutEnding()
-            {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("new Random()@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
-                GameFiber.Sleep(2000);
-                Play.CodeFourAudio();
-                GameFiber.Sleep(2700);
-                Functions.StopCurrentCallout();
-                GameFiber.Sleep(500);
             }
             #endregion
         }

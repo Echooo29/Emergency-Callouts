@@ -1,7 +1,6 @@
 ﻿using EmergencyCallouts.Essential;
 using LSPD_First_Response.Mod.API;
 using Rage;
-using System.Net;
 using static EmergencyCallouts.Essential.Helper;
 
 namespace EmergencyCallouts
@@ -33,11 +32,11 @@ namespace EmergencyCallouts
 
         private static void RegisterCallouts()
         {
-            if (Settings.PublicIntoxication  && PUBRemoteState == true)  { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication));  }
-            if (Settings.Trespassing         && TRERemoteState == true)  { Functions.RegisterCallout(typeof(Callouts.Trespassing));         }
-            if (Settings.DomesticViolence    && DOMRemoteState == true)  { Functions.RegisterCallout(typeof(Callouts.DomesticViolence));    }
-            if (Settings.Burglary            && BURRemoteState == true)  { Functions.RegisterCallout(typeof(Callouts.Burglary));            }
-            if (Settings.SuspiciousActivity  && SUSRemoteState == true)  { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity));  }
+            if (Settings.PublicIntoxication  && PUBRemoteState)  { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication));  }
+            if (Settings.Trespassing         && TRERemoteState)  { Functions.RegisterCallout(typeof(Callouts.Trespassing));         }
+            if (Settings.DomesticViolence    && DOMRemoteState)  { Functions.RegisterCallout(typeof(Callouts.DomesticViolence));    }
+            if (Settings.Burglary            && BURRemoteState)  { Functions.RegisterCallout(typeof(Callouts.Burglary));            }
+            if (Settings.SuspiciousActivity  && SUSRemoteState)  { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity));  }
         }
     }
 }

@@ -106,7 +106,7 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A concerned wife called about her husband, she said she's afraid for her life, shortly after she hung up abrubtly.";
+            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims ~y~he's hurting her~s~, shortly after she ~y~hung up abrubtly~s~.";
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
@@ -134,7 +134,6 @@ namespace EmergencyCallouts.Callouts
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
-                Game.LogTrivial("Emergency Callouts: Created EntranceBlip");
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
@@ -307,7 +306,7 @@ namespace EmergencyCallouts.Callouts
                             if (line == dialogue.Length)
                             {
                                 GameFiber.Sleep(500);
-                                Entity.Kill(Victim);
+                                if (Victim.Exists()) { Victim.Kill(); }
 
                                 GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
@@ -356,14 +355,14 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (PedFound)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
 
                             // Victim Cowering
                             Victim.Tasks.Cower(-1);
-                            Game.LogTrivial("Emergency Callouts: Assigned Victim to cower");
+                            Game.LogTrivial("Emergency Callouts: Assigned victim to cower");
 
                             break;
                         }
@@ -393,7 +392,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -401,7 +400,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PlayerArrived == true)
+                        if (PlayerArrived)
                         {
                             // Husband Fighting Wife
                             Suspect.Tasks.FightAgainst(Victim);
@@ -419,7 +418,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Husband Fighting Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight player");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             
                             break;
                         }
@@ -445,11 +444,11 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("Emergency Callouts: Retrieved fight position");
 
                 // Kill Victim
-                Entity.Kill(Victim);
+                if (Victim.Exists()) { Victim.Kill(); }
                 Game.LogTrivial("Emergency Callouts: Killed Victim");
 
                 // Delete VictimBlip
-                Entity.Delete(VictimBlip);
+                if (VictimBlip.Exists()) { VictimBlip.Delete(); }
                 Game.LogTrivial("Emergency Callouts: Deleted VictimBlip");
 
                 // Suspect Sitting
@@ -478,7 +477,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -529,7 +528,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned new Random() handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -549,7 +548,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight player");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -576,31 +575,31 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventFirstResponderCrash(Suspect, Victim);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Save and find the ~o~victim~s~ in the ~y~area~s~.");
+                    Game.DisplaySubtitle("Find the ~o~victim~s~ and ~r~husband~s~ in the ~y~area~s~.", 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
 
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, 85f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial("[Emergency Callouts]: Player arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
@@ -612,12 +611,12 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Enable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
                 }
 
-                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && Ped2Found == false && PlayerArrived == true && Victim.Exists())
+                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
                 {
                     // Set Ped2Found
                     Ped2Found = true;
@@ -629,27 +628,27 @@ namespace EmergencyCallouts.Callouts
                     VictimBlip.Enable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial("[Emergency Callouts]: Player found ped2");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the victim");
                 }
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                     Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
                 }
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
@@ -658,7 +657,7 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
@@ -666,7 +665,7 @@ namespace EmergencyCallouts.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial("[Emergency Callouts]: Player left callout position");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }
@@ -681,12 +680,12 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
             CalloutActive = false;
-            Entity.Dismiss(Suspect);
-            Entity.Dismiss(Victim);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(VictimBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (Victim.Exists()) { Victim.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (VictimBlip.Exists()) { VictimBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.DetachMessage();
