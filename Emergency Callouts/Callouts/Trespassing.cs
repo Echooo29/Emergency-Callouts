@@ -878,6 +878,9 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
+
+                    GameFiber.Sleep(15000);
+                    Game.DisplayHelp("The ~y~suspect~s~ is likely hidden somewhere");
                 }
                 #endregion
 
