@@ -27,7 +27,7 @@ namespace EmergencyCalloutsLE
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Loading settings.");
+            Game.LogTrivial("[Emergency Callouts - LE]: Loading settings.");
 
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
@@ -52,7 +52,7 @@ namespace EmergencyCalloutsLE
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
-            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Loaded settings.");
+            Game.LogTrivial("[Emergency Callouts - LE]: Loaded settings.");
         }
     }
 }

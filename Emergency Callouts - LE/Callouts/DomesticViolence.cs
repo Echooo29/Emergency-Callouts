@@ -116,7 +116,7 @@ namespace EmergencyCalloutsLE.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Callout not accepted");
+            Game.LogTrivial("[Emergency Callouts - LE]: Callout not accepted");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
 
             base.OnCalloutNotAccepted();
@@ -138,7 +138,7 @@ namespace EmergencyCalloutsLE.Callouts
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Game.LogTrivial($"[Emergency Callouts - LE]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -150,7 +150,7 @@ namespace EmergencyCalloutsLE.Callouts
                 Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
                 Victim.SetDefaults();
                 Victim.Health = 135;
-                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Created Victim ({Victim.Model.Name}) at " + Victim.Position);
+                Game.LogTrivial($"[Emergency Callouts - LE]: Created Victim ({Victim.Model.Name}) at " + Victim.Position);
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
@@ -163,7 +163,7 @@ namespace EmergencyCalloutsLE.Callouts
                 if (num == 1)
                 {
                     Suspect.SetIntoxicated();
-                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Set Suspect intoxicated");
+                    Game.LogTrivial("[Emergency Callouts - LE]: Set Suspect intoxicated");
                 }
 
                 CalloutHandler();
@@ -227,7 +227,7 @@ namespace EmergencyCalloutsLE.Callouts
 
                 // Enabling Route
                 EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Enabled route to EntranceBlip");
+                Game.LogTrivial("[Emergency Callouts - LE]: Enabled route to EntranceBlip");
             }
             catch (Exception e)
             {
@@ -290,16 +290,16 @@ namespace EmergencyCalloutsLE.Callouts
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             Victim.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Cleared Victim tasks");
+                            Game.LogTrivial("[Emergency Callouts - LE]: Cleared Victim tasks");
 
                             DialogueStarted = true;
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Dialogue Started");
+                            Game.LogTrivial("[Emergency Callouts - LE]: Dialogue Started");
 
                             Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Victim achieved player heading");
+                            Game.LogTrivial("[Emergency Callouts - LE]: Victim achieved player heading");
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Displayed dialogue line " + line);
+                            Game.LogTrivial("[Emergency Callouts - LE]: Displayed dialogue line " + line);
 
                             line++;
 
@@ -311,7 +311,7 @@ namespace EmergencyCalloutsLE.Callouts
                                 GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
 
-                                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Dialogue Ended");
+                                Game.LogTrivial("[Emergency Callouts - LE]: Dialogue Ended");
                             }
                             GameFiber.Sleep(500);
                         }
@@ -335,7 +335,7 @@ namespace EmergencyCalloutsLE.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Retrieved fight position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Retrieved fight position");
 
                 // Victim Invincible
                 Victim.IsInvincible = true;
@@ -385,14 +385,14 @@ namespace EmergencyCalloutsLE.Callouts
             {
                 // Retrieve Fight Spot
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Retrieved fight position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Retrieved fight position");
 
                 // Lower Victim health
                 Victim.Health = 130;
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts - LE]: Assigned random handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -404,7 +404,7 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Husband Fighting Wife
                             Suspect.Tasks.FightAgainst(Victim);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to fight Victim");
+                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to fight Victim");
 
                             break;
                         }
@@ -418,7 +418,7 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Husband Fighting Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to fight " + PlayerPersona.FullName);
+                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             
                             break;
                         }
@@ -469,23 +469,23 @@ namespace EmergencyCalloutsLE.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Retrieved fight position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Changed Suspect position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Changed Suspect position");
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts - LE]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to aim weapon at Victim");
+                Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Victim to cower");
+                Game.LogTrivial("[Emergency Callouts - LE]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -497,7 +497,7 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Suspect Putting Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Husband putting hands up");
+                            Game.LogTrivial("[Emergency Callouts - LE]: Husband putting hands up");
 
                             break;
                         }
@@ -520,23 +520,23 @@ namespace EmergencyCalloutsLE.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Retrieved fight position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Changed Suspect position");
+                Game.LogTrivial("[Emergency Callouts - LE]: Changed Suspect position");
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: Assigned random handgun to Suspect inventory");
+                Game.LogTrivial($"[Emergency Callouts - LE]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to aim weapon at Victim");
+                Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Victim to cower");
+                Game.LogTrivial("[Emergency Callouts - LE]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -548,7 +548,7 @@ namespace EmergencyCalloutsLE.Callouts
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Assigned Suspect to fight " + PlayerPersona.FullName);
+                            Game.LogTrivial("[Emergency Callouts - LE]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -594,7 +594,7 @@ namespace EmergencyCalloutsLE.Callouts
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
-                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has arrived on scene");
+                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
@@ -613,7 +613,7 @@ namespace EmergencyCalloutsLE.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the suspect");
+                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has found the suspect");
                 }
 
                 if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
@@ -630,7 +630,7 @@ namespace EmergencyCalloutsLE.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has found the victim");
+                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has found the victim");
                 }
                 #endregion
 
@@ -639,11 +639,11 @@ namespace EmergencyCalloutsLE.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has detained the suspect");
+                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has detained the suspect");
 
                     // Delete SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                    Game.LogTrivial("[Emergency Callouts - Law Enforcement]: Deleted SuspectBlip");
+                    Game.LogTrivial("[Emergency Callouts - LE]: Deleted SuspectBlip");
                 }
                 #endregion
 
@@ -665,7 +665,7 @@ namespace EmergencyCalloutsLE.Callouts
                     // Enable Route
                     EntranceBlip.EnableRoute();
 
-                    Game.LogTrivial($"[Emergency Callouts - Law Enforcement]: {PlayerPersona.FullName} has left the scene");
+                    Game.LogTrivial($"[Emergency Callouts - LE]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
             }
