@@ -600,7 +600,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
+                    SearchArea = new Blip(Center, Settings.SearchAreaSize);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 

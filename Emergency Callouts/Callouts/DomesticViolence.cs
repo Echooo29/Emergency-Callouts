@@ -33,6 +33,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1048.924f, -1018.362f, 2.150359f), // Vespucci
             new Vector3(224.5887f, 3162.886f, 42.3335f),    // Sandy Shores
             new Vector3(1687.845f, 4680.918f, 43.02761f),   // Grapeseed
+            new Vector3(), // Paleto Bay
         };
         #endregion
 
@@ -69,10 +70,8 @@ namespace EmergencyCallouts.Callouts
         // Vespucci
         #region Positions
         readonly Vector3 VespucciFightPosition = new Vector3(-1058.305f, -995.6418f, 6.410485f); // Front
-
         readonly float VespucciFightHeading = 205.96f;
         #endregion
-
 
         // Sandy Shores
         #region Positions
@@ -105,6 +104,23 @@ namespace EmergencyCallouts.Callouts
             169.98f,
             180.06f,
             272.81f,
+        };
+        #endregion
+
+        // Paleto Bay
+        #region Positions
+        readonly Vector3[] PaletoBayFightPositions =
+        {
+            new Vector3(-388.4336f, 6255.619f, 31.48756f), // Frontyard
+            new Vector3(-374.013f, 6243.474f, 31.48722f),  // Backyard
+            new Vector3(-374.2228f, 6259.589f, 31.48723f), // Side
+        };
+
+        readonly float[] PaletoBayFightHeadings =
+        {
+            301.78f,
+            144.90f,
+            132.13f,
         };
         #endregion
 
@@ -240,6 +256,12 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
                     EntranceBlip.Position = Entrance;
                 }
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                {
+                    Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
+                    Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -312,6 +334,14 @@ namespace EmergencyCallouts.Callouts
 
                 Victim.Position = GrapeseedFightPositions[num];
                 Victim.Heading = GrapeseedFightHeadings[num];
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            {
+                int num = random.Next(PaletoBayFightPositions.Length);
+
+                Victim.Position = PaletoBayFightPositions[num];
+                Victim.Heading = PaletoBayFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
             #endregion
@@ -643,7 +673,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
+                    SearchArea = new Blip(Center, Settings.SearchAreaSize - 20);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
