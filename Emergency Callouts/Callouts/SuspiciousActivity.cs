@@ -113,6 +113,21 @@ namespace EmergencyCallouts.Callouts
         readonly float GrapeseedVehicle2Heading = 94.55f;
         #endregion
 
+        // Paleto Bay
+        #region Positions
+        readonly Vector3 PaletoBaySuspectPosition = new Vector3(1534.92f, 6341.109f, 24.1971f);
+        readonly float PaletoBaySuspectHeading = 141.26f;
+
+        readonly Vector3 PaletoBaySuspect2Position = new Vector3(1533.391f, 6338.765f, 24.20876f);
+        readonly float PaletoBaySuspect2Heading = 333.21f;
+
+        readonly Vector3 PaletoBayVehiclePosition = new Vector3(1532.055f, 6342.446f, 23.83713f);
+        readonly float PaletoBayVehicleHeading = 57.85f;
+
+        readonly Vector3 PaletoBayVehicle2Position = new Vector3(1530.411f, 6339.453f, 23.86996f);
+        readonly float PaletoBayVehicle2Heading = 80.94f;
+        #endregion
+
         Vehicle SuspectVehicle;
         Vehicle Suspect2Vehicle;
 
@@ -257,6 +272,12 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
                     EntranceBlip.Position = Entrance;
                 }
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                {
+                    Center = new Vector3(1477.096f, 6343.949f, 22.35379f);
+                    Entrance = new Vector3(1485.026f, 6412.347f, 22.35379f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -363,6 +384,20 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = GrapeseedVehicle2Position;
                 Suspect2Vehicle.Heading = GrapeseedVehicle2Heading;
             }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            {
+                Suspect.Position = PaletoBaySuspectPosition;
+                Suspect.Heading = PaletoBaySuspectHeading;
+
+                Suspect2.Position = PaletoBaySuspect2Position;
+                Suspect2.Heading = PaletoBaySuspect2Heading;
+
+                SuspectVehicle.Position = PaletoBayVehiclePosition;
+                SuspectVehicle.Heading = PaletoBayVehicleHeading;
+
+                Suspect2Vehicle.Position = PaletoBayVehicle2Position;
+                Suspect2Vehicle.Heading = PaletoBayVehicle2Heading;
+            }
             #endregion
         }
 
@@ -408,6 +443,14 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectVehicle.Heading = 116.66f;
                 Suspect2Vehicle.Heading = 301.40f;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+            {
+                SuspectVehicle.Position = new Vector3(1522.337f, 6342.176f, 23.78554f);
+                Suspect2Vehicle.Position = new Vector3(1522.379f, 6344.645f, 23.7448f);
+
+                SuspectVehicle.Heading = 270.59f;
+                Suspect2Vehicle.Heading = 88.72f;
             }
 
             vehDoors = SuspectVehicle.GetDoors();
@@ -456,7 +499,7 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
                             Functions.AddPedToPursuit(pursuit, Suspect2);
-                            Game.LogTrivial("[Emergency Callouts]: Added ped to pursuit");
+                            Game.LogTrivial("[Emergency Callouts]: Added Suspect2 to pursuit");
 
                             Functions.RequestBackup(Suspect2.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.LocalUnit);
                             Game.LogTrivial("[Emergency Callouts]: Requested backup for pursuit");

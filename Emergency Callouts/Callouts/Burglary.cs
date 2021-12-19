@@ -25,9 +25,10 @@ namespace EmergencyCallouts.Callouts
         // CalloutPositions (Entrance)
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(916.261f, -623.7192f, 58.05202f), // Mirror Park
+            new Vector3(916.261f, -623.7192f, 58.05202f),   // Mirror Park
             new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
-            new Vector3(2652.853f, 4308.485f, 44.39388f), // Grapeseed
+            new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
+            new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
         };
         #endregion
 
@@ -77,6 +78,23 @@ namespace EmergencyCallouts.Callouts
             51f,
             83f,
             283.19f,
+        };
+        #endregion
+
+        // Paleto Bay
+        #region Positions
+        readonly Vector3[] PaletoBayBreakInPositions =
+        {
+            new Vector3(125.4187f, 6643.836f, 31.79918f), // Toilet Building
+            new Vector3(174.3788f, 6642.977f, 31.57312f), // Don's Country Store
+            new Vector3(156.7488f, 6657.068f, 31.56969f), // Pop's Pills
+        };
+
+        readonly float[] PaletoBayBreakInHeadings =
+        {
+            231.12f,
+            138.59f,
+            216.67f,
         };
         #endregion
 
@@ -181,6 +199,12 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
                 }
+                else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+                {
+                    Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
+                    Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -236,6 +260,12 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
             }
+            else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+            {
+                int num = new Random().Next(PaletoBayBreakInPositions.Length);
+                Suspect.Position = PaletoBayBreakInPositions[num];
+                Suspect.Heading = PaletoBayBreakInHeadings[num];
+            }
 
             // Lockpick Animation
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
@@ -264,6 +294,11 @@ namespace EmergencyCallouts.Callouts
             {
                 SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
                 SuspectVehicle.Heading = 166.61f;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+            {
+                SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
+                SuspectVehicle.Heading = 158.69f;
             }
 
             Game.LogTrivial($"[Emergency Callouts]: Created SuspectVehicle ({SuspectVehicle.Model.Name}) at " + SuspectVehicle.Position);
