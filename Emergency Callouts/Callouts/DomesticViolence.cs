@@ -33,7 +33,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1048.924f, -1018.362f, 2.150359f), // Vespucci
             new Vector3(224.5887f, 3162.886f, 42.3335f),    // Sandy Shores
             new Vector3(1687.845f, 4680.918f, 43.02761f),   // Grapeseed
-            new Vector3(), // Paleto Bay
+            new Vector3(-394.975f, 6276.961f, 29.67487f),   // Paleto Bay
         };
         #endregion
 

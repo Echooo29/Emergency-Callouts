@@ -35,6 +35,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
             new Vector3(2165.78f, 4758.762f, 42f),          // Grapeseed
+            new Vector3(1485.026f, 6412.347f, 22.35379f),   // Paleto Bay
         };
         #endregion
 
