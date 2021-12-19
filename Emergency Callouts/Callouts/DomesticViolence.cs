@@ -30,9 +30,10 @@ namespace EmergencyCallouts.Callouts
         // CalloutPositions (Entrance)
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(11.3652f, 545.7453f, 175.8412f), // Vinewood Hills
-            new Vector3(222.883f, -1726.32f, 28.87364f), // Davis
-            new Vector3(224.5887f, 3162.886f, 42.3335f), // Sandy Shores
+            new Vector3(11.3652f, 545.7453f, 175.8412f),  // Vinewood Hills
+            new Vector3(222.883f, -1726.32f, 28.87364f),  // Davis
+            new Vector3(224.5887f, 3162.886f, 42.3335f),  // Sandy Shores
+            new Vector3(1687.845f, 4680.918f, 43.02761f), // Grapeseed
         };
         #endregion
 
@@ -80,6 +81,23 @@ namespace EmergencyCallouts.Callouts
             186f,
             0f,
             0f,
+        };
+        #endregion
+
+        // Grapeseed
+        #region Positions
+        readonly Vector3[] GrapeseedFightPositions =
+        {
+            new Vector3(1684.434f, 4692.222f, 43.00724f),  // Frontyard
+            new Vector3(1661.172f, 4688.735f, 43.20671f),  // Backyard
+            new Vector3(1673.626f, 4680.47f, 43.05536f),   // Side
+        };
+
+        readonly float[] GrapeseedFightHeadings =
+        {
+            169.98f,
+            180.06f,
+            272.81f,
         };
         #endregion
 
@@ -159,7 +177,7 @@ namespace EmergencyCallouts.Callouts
                 VictimBlip.Disable();
 
                 // 50% Drunk Chance
-                int num = new Random().Next(2);
+                int num = random.Next(2);
                 if (num == 1)
                 {
                     Suspect.SetIntoxicated();
@@ -203,6 +221,12 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(224.5887f, 3162.886f, 42.3335f);
                     EntranceBlip.Position = Entrance;
                 }
+                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+                {
+                    Center = new Vector3(1672.969f, 4670.249f, 43.40202f);
+                    Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -241,7 +265,7 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
             {
-                int num = new Random().Next(VinewoodHillsFightPositions.Length);
+                int num = random.Next(VinewoodHillsFightPositions.Length);
                 
                 Victim.Position = VinewoodHillsFightPositions[num];
                 Victim.Heading = VinewoodHillsFightHeadings[num];
@@ -249,16 +273,26 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[1]) // Davis
             {
-                int num = new Random().Next(DavisFightPositions.Length);
+                int num = random.Next(DavisFightPositions.Length);
+
                 Victim.Position = DavisFightPositions[num];
                 Victim.Heading = DavisFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Sandy Shores
             {
-                int num = new Random().Next(SandyShoresFightPositions.Length);
+                int num = random.Next(SandyShoresFightPositions.Length);
+
                 Victim.Position = SandyShoresFightPositions[num];
                 Victim.Heading = SandyShoresFightHeadings[num];
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+            {
+                int num = random.Next(GrapeseedFightPositions.Length);
+
+                Victim.Position = GrapeseedFightPositions[num];
+                Victim.Heading = GrapeseedFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
             #endregion

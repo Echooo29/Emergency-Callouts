@@ -244,25 +244,25 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
-                int num = new Random().Next(MirrorParkBreakInPositions.Length);
+                int num = random.Next(MirrorParkBreakInPositions.Length);
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
-                int num = new Random().Next(LaPuertaBreakInPositions.Length);
+                int num = random.Next(LaPuertaBreakInPositions.Length);
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
             {
-                int num = new Random().Next(GrapeseedBreakInPositions.Length);
+                int num = random.Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
             {
-                int num = new Random().Next(PaletoBayBreakInPositions.Length);
+                int num = random.Next(PaletoBayBreakInPositions.Length);
                 Suspect.Position = PaletoBayBreakInPositions[num];
                 Suspect.Heading = PaletoBayBreakInHeadings[num];
             }
