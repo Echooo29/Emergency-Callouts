@@ -42,6 +42,7 @@ namespace EmergencyCallouts.Essential
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
         internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
+        internal static Random random = new Random();
 
         internal static bool PUBRemoteState;
         internal static bool TRERemoteState;
@@ -55,7 +56,7 @@ namespace EmergencyCallouts.Essential
         #region GetRandomScenarioNumber
         internal static int GetRandomScenarioNumber(int totalScenarios)
         {
-            return new Random().Next(1, totalScenarios + 1);
+            return random.Next(1, totalScenarios + 1);
 
         }
         #endregion
@@ -88,7 +89,7 @@ namespace EmergencyCallouts.Essential
                     "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", "ig_lazlow",
                 };
 
-                int num = new Random().Next(maleModels.Length);
+                int num = random.Next(maleModels.Length);
 
                 return maleModels[num];
             }
@@ -120,7 +121,7 @@ namespace EmergencyCallouts.Essential
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
 
-                int num = new Random().Next(femaleModels.Length);
+                int num = random.Next(femaleModels.Length);
 
                 return femaleModels[num];
 
@@ -190,7 +191,7 @@ namespace EmergencyCallouts.Essential
                     "REBEL", "SCHWARZER", "CARBONIZZARE", "SULTAN", "EXEMPLAR", "MASSACRO", "PRAIRIE", "ASTEROPE", "WASHINGTON", "XLS", "REBLA",
                 };
 
-                int num = new Random().Next(vehicles.Length);
+                int num = random.Next(vehicles.Length);
                 return vehicles[num];
             }
             #endregion
@@ -205,7 +206,7 @@ namespace EmergencyCallouts.Essential
                     "SANCTUS", "SOVEREIGN", "THRUST", "VADER", "VINDICATOR", "WOLFSBANE", "ZOMBIEA", "ZOMBIEB", "SANCHEZ2", "DEFILER"
                 };
 
-                int num = new Random().Next(motorcycles.Length);
+                int num = random.Next(motorcycles.Length);
                 return motorcycles[num];
             }
             #endregion
@@ -215,7 +216,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vans = { "SPEEDO", "BURRITO", "RUMPO", "RUMPO2", "RUMPO3", "BURRITO2", "BURRITO3", "BURRITO4", "PONY2", "SPEEDO4", "YOUGA" };
 
-                int num = new Random().Next(vans.Length);
+                int num = random.Next(vans.Length);
                 return vans[num];
             }
             #endregion
@@ -543,7 +544,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_BATTLEAXE",
                 };
 
-                int num = new Random().Next(meleeWeapons.Length);
+                int num = random.Next(meleeWeapons.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
 
             }
@@ -563,7 +564,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_CERAMICPISTOL",
                 };
 
-                int num = new Random().Next(handguns.Length);
+                int num = random.Next(handguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
             }
             #endregion
@@ -579,7 +580,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MINISMG"
                 };
 
-                int num = new Random().Next(submachineGuns.Length);
+                int num = random.Next(submachineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
 
             }
@@ -597,7 +598,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_BULLPUPRIFLE",
                 };
 
-                int num = new Random().Next(rifles.Length);
+                int num = random.Next(rifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
 
             }
@@ -616,7 +617,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_COMBATSHOTGUN"
                 };
 
-                int num = new Random().Next(shotguns.Length);
+                int num = random.Next(shotguns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
 
             }
@@ -632,7 +633,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_GUSENBERG"
                 };
 
-                int num = new Random().Next(machineGuns.Length);
+                int num = random.Next(machineGuns.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
 
             }
@@ -648,7 +649,7 @@ namespace EmergencyCallouts.Essential
                     "WEAPON_MARKSMANRIFLE"
                 };
 
-                int num = new Random().Next(sniperRifles.Length);
+                int num = random.Next(sniperRifles.Length);
                 if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
 
             }

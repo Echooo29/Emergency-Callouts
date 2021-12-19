@@ -25,9 +25,12 @@ namespace EmergencyCallouts.Callouts
         // CalloutPositions (Entrance)
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(916.261f, -623.7192f, 58.05202f), // Mirror Park
+            new Vector3(916.261f, -623.7192f, 58.05202f),   // Mirror Park
             new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
-            new Vector3(2652.853f, 4308.485f, 44.39388f), // Grapeseed
+            new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
+            new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
+            new Vector3(),   // Harmony
+            new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
         };
         #endregion
 
@@ -63,6 +66,23 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
+        // El Burro
+        #region Positions
+        readonly Vector3[] ElBurroBreakInPositions =
+        {
+            new Vector3(1283.446f, -1699.925f, 55.47572f), // Back Door
+            new Vector3(1295.854f, -1697.502f, 55.07866f), // Shed
+            new Vector3(1267.995f, -1713.858f, 54.65507f), // Building 2 Back Door
+        };
+
+        readonly float[] ElBurroBreakInHeadings =
+        {
+            175.15f,
+            285.86f,
+            313.77f,
+        };
+        #endregion
+
         // Grapeseed
         #region Positions
         readonly Vector3[] GrapeseedBreakInPositions =
@@ -77,6 +97,40 @@ namespace EmergencyCallouts.Callouts
             51f,
             83f,
             283.19f,
+        };
+        #endregion
+
+        // Harmony
+        #region Positions
+        readonly Vector3[] HarmonyBreakInPositions =
+        {
+            new Vector3(1194.485f, 2721.754f, 38.81226f), // Clothing Store
+            new Vector3(1233.377f, 2737.641f, 38.0054f),  // RV Store
+            new Vector3(1258.049f, 2740.197f, 38.70864f), // Abandoned Home
+        };
+
+        readonly float[] HarmonyBreakInHeadings =
+        {
+            209.57f,
+            86.06f,
+            342.01f,
+        };
+        #endregion
+
+        // Paleto Bay
+        #region Positions
+        readonly Vector3[] PaletoBayBreakInPositions =
+        {
+            new Vector3(125.4187f, 6643.836f, 31.79918f), // Toilet Building
+            new Vector3(174.3788f, 6642.977f, 31.57312f), // Don's Country Store
+            new Vector3(156.7488f, 6657.068f, 31.56969f), // Pop's Pills
+        };
+
+        readonly float[] PaletoBayBreakInHeadings =
+        {
+            231.12f,
+            138.59f,
+            216.67f,
         };
         #endregion
 
@@ -174,12 +228,33 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+                else if (CalloutPosition == CalloutPositions[2]) // El Burro
+                {
+                    Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
+                    Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
+                    EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize = 40;
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
                 {
                     Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
                     Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
                     EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Harmony
+                {
+                    Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
+                    Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
+                    EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize = 40;
+                }
+
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                {
+                    Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
+                    Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
+                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
@@ -220,21 +295,39 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
-                int num = new Random().Next(MirrorParkBreakInPositions.Length);
+                int num = random.Next(MirrorParkBreakInPositions.Length);
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
-                int num = new Random().Next(LaPuertaBreakInPositions.Length);
+                int num = random.Next(LaPuertaBreakInPositions.Length);
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
-                int num = new Random().Next(GrapeseedBreakInPositions.Length);
+                int num = random.Next(ElBurroBreakInPositions.Length);
+                Suspect.Position = ElBurroBreakInPositions[num];
+                Suspect.Heading = ElBurroBreakInHeadings[num];
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+            {
+                int num = random.Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Harmony
+            {
+                int num = random.Next(HarmonyBreakInPositions.Length);
+                Suspect.Position = HarmonyBreakInPositions[num];
+                Suspect.Heading = HarmonyBreakInHeadings[num];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            {
+                int num = random.Next(PaletoBayBreakInPositions.Length);
+                Suspect.Position = PaletoBayBreakInPositions[num];
+                Suspect.Heading = PaletoBayBreakInHeadings[num];
             }
 
             // Lockpick Animation
@@ -260,10 +353,20 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Position = new Vector3(-723.9453f, -1491.7f, 4.61949f);
                 SuspectVehicle.Heading = 347.67f;
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[2]) // El Burro
+            {
+                SuspectVehicle.Position = new Vector3(1308.245f, -1716.298f, 54.03547f);
+                SuspectVehicle.Heading = 296.54f;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
                 SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
                 SuspectVehicle.Heading = 166.61f;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+            {
+                SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
+                SuspectVehicle.Heading = 158.69f;
             }
 
             Game.LogTrivial($"[Emergency Callouts]: Created SuspectVehicle ({SuspectVehicle.Model.Name}) at " + SuspectVehicle.Position);
