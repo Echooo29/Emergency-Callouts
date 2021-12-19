@@ -32,6 +32,7 @@ namespace EmergencyCalloutsLE.Callouts
             new Vector3(167.0673f, -1247.618f, 29.19848f), // Strawberry
             new Vector3(-1283.511f, -811.2982f, 17.32025f), // Del Perro
             new Vector3(651.5822f, 2762.731f, 41.94574f), // Harmony
+            new Vector3(1243.041f, -2395.421f, 47.91381f), // El Burro
         };
         #endregion
 
@@ -67,17 +68,32 @@ namespace EmergencyCalloutsLE.Callouts
 
         // Harmony
         #region Positions
-        readonly Vector3 Location3SuspectPosition = new Vector3(604.8357f, 2789.544f, 42.1919f);
-        readonly float Location3SuspectHeading = 4.81f;
+        readonly Vector3 HarmonySuspectPosition = new Vector3(604.8357f, 2789.544f, 42.1919f);
+        readonly float HarmonySuspectHeading = 4.81f;
 
-        readonly Vector3 Location3Suspect2Position = new Vector3(604.5134f, 2792.431f, 42.14416f);
-        readonly float Location3Suspect2Heading = 187.87f;
+        readonly Vector3 HarmonySuspect2Position = new Vector3(604.5134f, 2792.431f, 42.14416f);
+        readonly float HarmonySuspect2Heading = 187.87f;
 
-        readonly Vector3 Location3VehiclePosition = new Vector3(606.4803f, 2791.021f, 41.69831f);
-        readonly float Location3VehicleHeading = 6.87f;
+        readonly Vector3 HarmonyVehiclePosition = new Vector3(606.4803f, 2791.021f, 41.69831f);
+        readonly float HarmonyVehicleHeading = 6.87f;
 
-        readonly Vector3 Location3Vehicle2Position = new Vector3(602.7837f, 2790.826f, 41.7882f);
-        readonly float Location3Vehicle2Heading = 7.75f;
+        readonly Vector3 HarmonyVehicle2Position = new Vector3(602.7837f, 2790.826f, 41.7882f);
+        readonly float HarmonyVehicle2Heading = 7.75f;
+        #endregion
+
+        // El Burro
+        #region Positions
+        readonly Vector3 ElBurroSuspectPosition = new Vector3(1228.299f, -2354.579f, 50.30099f);
+        readonly float ElBurroSuspectHeading = 233.10f;
+
+        readonly Vector3 ElBurroSuspect2Position = new Vector3(1230.999f, -2353.718f, 50.26699f);
+        readonly float ElBurroSuspect2Heading = 102.50f;
+
+        readonly Vector3 ElBurroVehiclePosition = new Vector3(1230.793f, -2357.722f, 49.84827f);
+        readonly float ElBurroVehicleHeading = 214.59f;
+
+        readonly Vector3 ElBurroVehicle2Position = new Vector3(1233.492f, -2355.017f, 49.81187f);
+        readonly float ElBurroVehicle2Heading = 242.13f;
         #endregion
 
         Vehicle SuspectVehicle;
@@ -212,6 +228,12 @@ namespace EmergencyCalloutsLE.Callouts
                     Entrance = new Vector3(651.5822f, 2762.731f, 41.94574f);
                     EntranceBlip.Position = Entrance;
                 }
+                else if (CalloutPosition == CalloutPositions[3]) // El Burro
+                {
+                    Center = new Vector3(1243.041f, -2395.421f, 47.91381f);
+                    Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -278,17 +300,31 @@ namespace EmergencyCalloutsLE.Callouts
             }
             else if (CalloutPosition == CalloutPositions[2]) // Harmony
             {
-                Suspect.Position = Location3SuspectPosition;
-                Suspect.Heading = Location3SuspectHeading;
+                Suspect.Position = HarmonySuspectPosition;
+                Suspect.Heading = HarmonySuspectHeading;
 
-                Suspect2.Position = Location3Suspect2Position;
-                Suspect2.Heading = Location3Suspect2Heading;
+                Suspect2.Position = HarmonySuspect2Position;
+                Suspect2.Heading = HarmonySuspect2Heading;
 
-                SuspectVehicle.Position = Location3VehiclePosition;
-                SuspectVehicle.Heading = Location3VehicleHeading;
+                SuspectVehicle.Position = HarmonyVehiclePosition;
+                SuspectVehicle.Heading = HarmonyVehicleHeading;
 
-                Suspect2Vehicle.Position = Location3Vehicle2Position;
-                Suspect2Vehicle.Heading = Location3Vehicle2Heading;
+                Suspect2Vehicle.Position = HarmonyVehicle2Position;
+                Suspect2Vehicle.Heading = HarmonyVehicle2Heading;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // El Burro
+            {
+                Suspect.Position = ElBurroSuspectPosition;
+                Suspect.Heading = ElBurroSuspectHeading;
+
+                Suspect2.Position = ElBurroSuspect2Position;
+                Suspect2.Heading = ElBurroSuspect2Heading;
+
+                SuspectVehicle.Position = ElBurroVehiclePosition;
+                SuspectVehicle.Heading = ElBurroVehicleHeading;
+
+                Suspect2Vehicle.Position = ElBurroVehicle2Position;
+                Suspect2Vehicle.Heading = ElBurroVehicle2Heading;
             }
             #endregion
         }
@@ -319,6 +355,14 @@ namespace EmergencyCalloutsLE.Callouts
 
                 SuspectVehicle.Heading = 186.73f;
                 Suspect2Vehicle.Heading = 6.83f;
+            }
+            else if (CalloutPosition == CalloutPositions[2]) // El Burro
+            {
+                SuspectVehicle.Position = new Vector3(1232.671f, -2361.097f, 49.63579f);
+                Suspect2Vehicle.Position = new Vector3(1230.62f, -2359.984f, 49.77252f);
+
+                SuspectVehicle.Heading = 337.38f;
+                Suspect2Vehicle.Heading = 158.24f;
             }
 
             vehDoors = SuspectVehicle.GetDoors();
