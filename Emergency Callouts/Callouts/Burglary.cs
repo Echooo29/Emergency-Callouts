@@ -27,6 +27,7 @@ namespace EmergencyCallouts.Callouts
         {
             new Vector3(916.261f, -623.7192f, 58.05202f),   // Mirror Park
             new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
+            new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
             new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
             new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
         };
@@ -61,6 +62,23 @@ namespace EmergencyCallouts.Callouts
         {
             174.41f,
             104.47f,
+        };
+        #endregion
+
+        // El Burro
+        #region Positions
+        readonly Vector3[] ElBurroBreakInPositions =
+        {
+            new Vector3(1283.446f, -1699.925f, 55.47572f), // Back Door
+            new Vector3(1295.854f, -1697.502f, 55.07866f), // Shed
+            new Vector3(1267.995f, -1713.858f, 54.65507f), // Building 2 Back Door
+        };
+
+        readonly float[] ElBurroBreakInHeadings =
+        {
+            175.15f,
+            285.86f,
+            313.77f,
         };
         #endregion
 
@@ -192,14 +210,21 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+                else if (CalloutPosition == CalloutPositions[2]) // El Burro
+                {
+                    Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
+                    Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
+                    EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize = 40;
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
                 {
                     Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
                     Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
                     EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
                 }
-                else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+                else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
                 {
                     Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
                     Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
@@ -254,13 +279,19 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[2]) // El Burro
+            {
+                int num = random.Next(ElBurroBreakInPositions.Length);
+                Suspect.Position = ElBurroBreakInPositions[num];
+                Suspect.Heading = ElBurroBreakInHeadings[num];
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
                 int num = random.Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
             }
-            else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
             {
                 int num = random.Next(PaletoBayBreakInPositions.Length);
                 Suspect.Position = PaletoBayBreakInPositions[num];
@@ -290,12 +321,17 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Position = new Vector3(-723.9453f, -1491.7f, 4.61949f);
                 SuspectVehicle.Heading = 347.67f;
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[2]) // El Burro
+            {
+                SuspectVehicle.Position = new Vector3(1308.245f, -1716.298f, 54.03547f);
+                SuspectVehicle.Heading = 296.54f;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
                 SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
                 SuspectVehicle.Heading = 166.61f;
             }
-            else if (CalloutPosition == CalloutPositions[3]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
             {
                 SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
                 SuspectVehicle.Heading = 158.69f;
