@@ -29,6 +29,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
             new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
             new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
+            new Vector3(),   // Harmony
             new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
         };
         #endregion
@@ -96,6 +97,23 @@ namespace EmergencyCallouts.Callouts
             51f,
             83f,
             283.19f,
+        };
+        #endregion
+
+        // Harmony
+        #region Positions
+        readonly Vector3[] HarmonyBreakInPositions =
+        {
+            new Vector3(1194.485f, 2721.754f, 38.81226f), // Clothing Store
+            new Vector3(1233.377f, 2737.641f, 38.0054f),  // RV Store
+            new Vector3(1258.049f, 2740.197f, 38.70864f), // Abandoned Home
+        };
+
+        readonly float[] HarmonyBreakInHeadings =
+        {
+            209.57f,
+            86.06f,
+            342.01f,
         };
         #endregion
 
@@ -224,7 +242,15 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
                 }
-                else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+                else if (CalloutPosition == CalloutPositions[4]) // Harmony
+                {
+                    Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
+                    Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
+                    EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize = 40;
+                }
+
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
                     Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
@@ -291,7 +317,13 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
             }
-            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[4]) // Harmony
+            {
+                int num = random.Next(HarmonyBreakInPositions.Length);
+                Suspect.Position = HarmonyBreakInPositions[num];
+                Suspect.Heading = HarmonyBreakInHeadings[num];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
                 int num = random.Next(PaletoBayBreakInPositions.Length);
                 Suspect.Position = PaletoBayBreakInPositions[num];
