@@ -44,17 +44,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LSPD First Response">
+    <Reference Include="LSPD First Response, Version=0.4.7874.38392, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\LSPD First Response.dll</HintPath>
     </Reference>
-    <Reference Include="RAGENativeUI">
+    <Reference Include="RAGENativeUI, Version=1.8.1.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RAGENativeUI.dll</HintPath>
     </Reference>
-    <Reference Include="RagePluginHookSDK">
+    <Reference Include="RagePluginHookSDK, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RagePluginHookSDK.dll</HintPath>
-    </Reference>
-    <Reference Include="StopThePed">
-      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\StopThePed.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,9 +66,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UltimateBackup">
-      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\UltimateBackup.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callouts\DomesticViolence.cs" />
