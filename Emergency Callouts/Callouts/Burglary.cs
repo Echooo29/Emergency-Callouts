@@ -246,7 +246,6 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
                     Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
                     EntranceBlip.Position = Entrance;
-                    Settings.SearchAreaSize = 40;
                 }
 
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
@@ -362,7 +361,12 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
                 SuspectVehicle.Heading = 166.61f;
             }
-            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[4]) // Harmony
+            {
+                SuspectVehicle.Position = new Vector3(1234.011f, 2722.458f, 38.02638f);
+                SuspectVehicle.Heading = 137.17f;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
                 SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
                 SuspectVehicle.Heading = 158.69f;
