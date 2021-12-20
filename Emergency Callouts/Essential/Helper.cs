@@ -41,7 +41,7 @@ namespace EmergencyCallouts.Essential
     internal static class Helper
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
-        internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
+        internal static Persona PlayerPersona = Functions.GetPersonaForPed(MainPlayer);
         internal static Random random = new Random();
         internal static bool PUBRemoteState;
         internal static bool TRERemoteState;
@@ -149,7 +149,7 @@ namespace EmergencyCallouts.Essential
             #region PedDescription
             internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
             {
-                Persona SuspectPersona = Persona.FromExistingPed(Suspect);
+                Persona SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~g~{SuspectPersona.Gender}~s~\nAge Group: ~p~{SuspectPersona.ModelAge}~s~");
             }
             #endregion
