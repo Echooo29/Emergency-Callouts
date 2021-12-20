@@ -294,14 +294,14 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] BarnManagerPositions =
         {
-            new Vector3(412.4971f, 6494.906f, 28.16451f), // Generator
+            new Vector3(411.7186f, 6494.792f, 28.13385f), // Generator
             new Vector3(430.6472f, 6502.231f, 28.71397f), // Shed
             new Vector3(425.288f, 6467.4321f, 28.79181f), // Barn
         };
 
         readonly float[] BarnManagerHeadings =
         {
-            201.11f,
+            41.61f,
             97.09f,
             19.64f,
         };
