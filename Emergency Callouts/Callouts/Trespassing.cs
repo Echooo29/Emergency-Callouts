@@ -574,7 +574,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Stop
+        private void Scenario2() // Surrender
         {
             #region Scenario 2
             try
@@ -592,11 +592,11 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect tasks to null");
+                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect's tasks");
 
                             // Suspect Achieve Player Heading
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to face player");
+                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to put hands up");
 
                             break;
                         }
