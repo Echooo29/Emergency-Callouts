@@ -20,17 +20,21 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
+        bool StopChecking;
 
-        // Main
-        #region Positions
         Vector3 Entrance;
         Vector3 Center;
 
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(512f, -610.72f, 24.43f),   // La Mesa Railyard
-            new Vector3(-1106.7f, -1975.5f, 0f),   // LSIA Scrapyard
-            new Vector3(2165.78f, 4758.762f, 42f), // McKenzie Airstrip 
+            new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
+            new Vector3(-1106.7f, -1975.50f, 24.562f),  // LSIA Scrapyard
+            new Vector3(1225.66f, -2923.435f, 9.4783f), // Terminal
+            new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
+            new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
+            new Vector3(426.6624f, 6549.066f, 27.601f), // Paleto Barn
         };
         #endregion
 
@@ -76,7 +80,7 @@ namespace EmergencyCallouts.Callouts
             112f // Crates
         };
 
-        readonly Vector3[] RailyardFirePositions =
+        readonly Vector3[] RailyardArsonPositions =
         {
             new Vector3(485f, -636.5899f, 25.02777f), // Alley
             new Vector3(522.1501f, -592.4759f, 25f),  // Power Unit
@@ -84,15 +88,8 @@ namespace EmergencyCallouts.Callouts
             new Vector3(493f, -573.0732f, 24.59121f)  // Building 2
         };
 
-        readonly Vector3[] RailyardWeldingPositions =
-        {
-            new Vector3(491.9123f, -554.114f, 24.7505f), // Container
-        };
-
-        readonly float[] RailyardWeldingHeadings =
-        {
-            212f,
-        };
+        readonly Vector3 RailyardWeldingPosition = new Vector3(491.9123f, -554.114f, 24.7505f); // Container
+        readonly float RailyardWeldingHeading = 212f;
         #endregion
 
         // LSC Scrapyard
@@ -129,22 +126,60 @@ namespace EmergencyCallouts.Callouts
             262f,
         };
 
-        readonly Vector3[] ScrapyardFirePositions =
+        readonly Vector3[] ScrapyardArsonPositions =
         {
             new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
             new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
             new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
         };
 
-        readonly Vector3[] ScrapyardWeldingPositions =
+        readonly Vector3 ScrapyardWeldingPosition = new Vector3(-1151.357f, -2034.422f, 13.16053f);
+        readonly float ScrapyardWeldingHeading = 306.35f;
+        #endregion
+
+        // Terminal
+        #region Positions
+        readonly Vector3[] TerminalHidingPositions =
         {
-            new Vector3(), //
+            new Vector3(1249.729f, -2887.772f, 9.319264f), // Rear
+            new Vector3(1242.891f, -2947.398f, 9.319264f), // Middle
+            new Vector3(1236.903f, -2955.032f, 9.319268f), // Middle 2
+            new Vector3(1238.818f, -3006.345f, 9.319253f), // Front
+            new Vector3(1227.453f, -3009.943f, 9.319252f), // Front 2
         };
 
-        readonly float[] ScrapyardWeldingHeadings =
+        readonly float[] TerminalHidingPositionsHeadings =
         {
-            0f,
+            128.07f,
+            160.45f,
+            2.73f,
+            92.93f,
+            347.75f,
         };
+
+        readonly Vector3[] TerminalManagerPositions =
+        {
+            new Vector3(1228.202f, -2970.058f, 9.319256f), // Tool Cabinet
+            new Vector3(1238.923f, -2940.416f, 9.319255f), // Tool Cabinet 2
+            new Vector3(1229.698f, -2908.376f, 9.319265f), // Boxes
+        };
+
+        readonly float[] TerminalManagerHeadings =
+        {
+            81.28f,
+            30.57f,
+            310.89f,
+        };
+
+        readonly Vector3[] TerminalArsonPositions =
+        {
+            new Vector3(1240.061f, -2889.315f, 9.319265f), // Pallets
+            new Vector3(1251.003f, -2908.396f, 9.319266f), // Fuel Barrels
+            new Vector3(1243.456f, -2953.213f, 9.319252f), // Fuel Barrels 2
+        };
+
+        readonly Vector3 TerminalWeldingPosition = new Vector3(1234.051f, -3022.098f, 10.96785f); // Front Containers
+        readonly float TerminalWeldingHeading = 279.74f;
         #endregion
 
         // McKenzie Airstrip
@@ -181,23 +216,103 @@ namespace EmergencyCallouts.Callouts
             317f,
         };
 
-        readonly Vector3[] AirstripFirePositions =
+        readonly Vector3[] AirstripArsonPositions =
         {
             new Vector3(2144.962f, 4776.65f, 40.97034f), // Pile of Boxes
             new Vector3(2108.356f, 4762.68f, 41.04375f), // Gas Tank
             new Vector3(2125.861f, 4774.83f, 40.97033f), // Pile of Boxes 2
         };
 
-        readonly Vector3[] AirstripWeldingPositions =
+        readonly Vector3 AirstripWeldingPosition = new Vector3(2135.423f, 4772.376f, 40.97033f);
+        readonly float AirstripWeldingHeading = 189.83f;
+        #endregion
+
+        // Joshua Road Loading Dock
+        #region Positions
+        readonly Vector3[] LoadingDockHidingPositions =
         {
-            new Vector3(), //
+            new Vector3(216.5567f, 2808.267f, 45.65519f), // Pile Of Pallets
+            new Vector3(223.5032f, 2802.028f, 45.65519f), // Containers
+            new Vector3(167.6332f, 2736.069f, 43.37733f), // Containers 2
+            new Vector3(193.4705f, 2766.353f, 43.42632f), // Truck
+            new Vector3(163.1098f, 2770.249f, 45.69321f), // Red Container
         };
 
-        readonly float[] AirstripWeldingHeadings =
+        readonly float[] LoadingDockHidingHeadings =
         {
-            0f,
+            182.41f,
+            43.53f,
+            7.96f,
+            183.06f,
+            9.44f,
         };
+
+        readonly Vector3[] LoadingDockManagerPositions =
+        {
+            new Vector3(221.0605f, 2774.253f, 45.65525f), // Barrels
+            new Vector3(221.58971f, 2734.374f, 42.9960f), // Plyboards
+            new Vector3(219.1572f, 2806.581f, 45.65519f), // Barrels 2
+        };
+
+        readonly float[] LoadingDockManagerHeadings =
+        {
+            148.58f,
+            214.67f,
+            36.07f,
+        };
+
+        readonly Vector3[] LoadingDockArsonPositions =
+        {
+            new Vector3(202.8873f, 2776.132f, 45.65527f), // Plyboards
+            new Vector3(164.554f, 2777.1820f, 45.70289f), // Storage Tank
+            new Vector3(197.8674f, 2803.913f, 45.65517f), // Generator
+        };
+
+        readonly Vector3 LoadingDockWeldingPosition = new Vector3(221.1813f, 2746.937f, 43.3394f);
+        readonly float LoadingDockWeldingHeading = 268.66f;
         #endregion
+
+        // Paleto Bay Barn
+        #region Positions
+        readonly Vector3[] BarnHidingPositions =
+        {
+            new Vector3(435.1073f, 6456.916f, 28.74582f), // Back of the barn
+            new Vector3(426.8463f, 6479.765f, 28.86706f), // Front of the barn
+            new Vector3(436.3864f, 6502.764f, 28.77272f), // Outside overhang
+            new Vector3(399.7721f, 6474.169f, 29.33945f), // Outside Garbage Container
+            new Vector3(432.5182f, 6499.175f, 28.89931f), // Bushes
+        };
+
+        readonly float[] BarnHidingHeadings =
+        {
+            337.39f,
+            185.75f,
+            29.36f,
+            256.73f,
+            121.03f,
+        };
+
+        readonly Vector3[] BarnManagerPositions =
+        {
+            new Vector3(412.4971f, 6494.906f, 28.16451f), // Generator
+            new Vector3(430.6472f, 6502.231f, 28.71397f), // Shed
+            new Vector3(425.288f, 6467.4321f, 28.79181f), // Barn
+        };
+
+        readonly float[] BarnManagerHeadings =
+        {
+            201.11f,
+            97.09f,
+            19.64f,
+        };
+
+        readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
+
+        readonly Vector3 BarnWeldingPosition = new Vector3();
+        readonly float BarnWeldingHeading = 0f;
+        #endregion
+
+        Vehicle BarnVehicle;
 
         static Ped Suspect;
         Ped Guard;
@@ -278,7 +393,7 @@ namespace EmergencyCallouts.Callouts
             {
                 CalloutActive = true;
 
-                // Positioning
+                // Main Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                 {
@@ -292,10 +407,28 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+                else if (CalloutPosition == CalloutPositions[2]) // Terminal
+                {
+                    Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
+                    Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
+                    EntranceBlip.Position = Entrance;
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
+                    EntranceBlip.Position = Entrance;
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+                {
+                    Center = new Vector3(195.43f, 2786.759f, 45.65519f);
+                    Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
+                    EntranceBlip.Position = Entrance;
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+                {
+                    Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
+                    Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
                     EntranceBlip.Position = Entrance;
                 }
                 #endregion
@@ -341,22 +474,40 @@ namespace EmergencyCallouts.Callouts
                 int RailyardHidingSpotNum = random.Next(RailyardHidingPositions.Length);
                 Suspect.Position = RailyardHidingPositions[RailyardHidingSpotNum];
                 Suspect.Heading = RailyardHidingPositionsHeadings[RailyardHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 int ScrapyardHidingSpotNum = random.Next(ScrapyardHidingPositions.Length);
                 Suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
                 Suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
+            {
+                int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
+                Suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
+                Settings.SearchAreaSize -= 15;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
                 int AirstripHidingSpotNum = random.Next(AirstripHidingPositions.Length);
                 Suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
                 Suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                int AirstripHidingSpotNum = random.Next(LoadingDockHidingPositions.Length);
+                Suspect.Position = LoadingDockHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = LoadingDockHidingHeadings[AirstripHidingSpotNum];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            {
+                int AirstripHidingSpotNum = random.Next(BarnHidingPositions.Length);
+                Suspect.Position = BarnHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = BarnHidingHeadings[AirstripHidingSpotNum];
+            }
+
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             #endregion
         }
 
@@ -378,7 +529,6 @@ namespace EmergencyCallouts.Callouts
                 int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = RailyardManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
@@ -393,9 +543,22 @@ namespace EmergencyCallouts.Callouts
                 int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ScrapyardManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
+            {
+                Suspect = new Ped("ig_chef", CalloutPosition, 0f);
+                Suspect.SetDefaults();
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.ScaleForPed();
+                SuspectBlip.Disable();
+
+                int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
+                Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
+                Suspect.Heading = TerminalManagerHeadings[ManagerPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
                 Suspect = new Ped("player_two", CalloutPosition, 0f);
                 Suspect.SetDefaults();
@@ -408,8 +571,37 @@ namespace EmergencyCallouts.Callouts
                 int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
                 Suspect.Heading = AirstripManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect.SetDefaults();
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.ScaleForPed();
+                SuspectBlip.Disable();
+
+                int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
+                Suspect.Position = LoadingDockManagerPositions[ManagerPositionNum];
+                Suspect.Heading = LoadingDockManagerHeadings[ManagerPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            {
+                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect.SetDefaults();
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.ScaleForPed();
+                SuspectBlip.Disable();
+
+                int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
+                Suspect.Position = BarnManagerPositions[ManagerPositionNum];
+                Suspect.Heading = BarnManagerHeadings[ManagerPositionNum];
+            }
+
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             #endregion
         }
 
@@ -418,21 +610,32 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int FirePositionNum = random.Next(RailyardFirePositions.Length);
-                Suspect.Position = RailyardFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                int ArsonPositionNum = random.Next(RailyardArsonPositions.Length);
+                Suspect.Position = RailyardArsonPositions[ArsonPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int FirePositionNum = random.Next(ScrapyardFirePositions.Length);
-                Suspect.Position = ScrapyardFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                int ArsonPositionNum = random.Next(ScrapyardArsonPositions.Length);
+                Suspect.Position = ScrapyardArsonPositions[ArsonPositionNum];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                int FirePositionNum = random.Next(AirstripFirePositions.Length);
-                Suspect.Position = AirstripFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                int ArsonPositionNum = random.Next(TerminalArsonPositions.Length);
+                Suspect.Position = TerminalArsonPositions[ArsonPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+            {
+                int ArsonPositionNum = random.Next(AirstripArsonPositions.Length);
+                Suspect.Position = AirstripArsonPositions[ArsonPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                int ArsonPositionNum = random.Next(LoadingDockArsonPositions.Length);
+                Suspect.Position = LoadingDockArsonPositions[ArsonPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            {
+                Suspect.Position = BarnArsonPosition;
             }
             #endregion
         }
@@ -442,22 +645,37 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                int WeldingPositionNum = random.Next(RailyardWeldingPositions.Length);
-                Suspect.Position = RailyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = RailyardWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = RailyardWeldingPosition;
+                Suspect.Heading = RailyardWeldingHeading;
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                int WeldingPositionNum = random.Next(ScrapyardWeldingPositions.Length);
-                Suspect.Position = ScrapyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = ScrapyardWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = ScrapyardWeldingPosition;
+                Suspect.Heading = ScrapyardWeldingHeading;
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                int WeldingPositionNum = random.Next(AirstripWeldingPositions.Length);
-                Suspect.Position = AirstripWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = AirstripWeldingHeadings[WeldingPositionNum];
+                Suspect.Position = TerminalWeldingPosition;
+                Suspect.Heading = TerminalWeldingHeading;
             }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+            {
+                Suspect.Position = AirstripWeldingPosition;
+                Suspect.Heading = AirstripWeldingHeading;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                Suspect.Position = LoadingDockWeldingPosition;
+                Suspect.Heading = LoadingDockWeldingHeading;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            {
+                BarnVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
+                BarnVehicle.IsPersistent = true;
+                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
+                Suspect.Heading = 314.32f;
+            }
+
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             
             Rage.Object entity = new Rage.Object("prop_weld_torch", Suspect.Position);
@@ -482,6 +700,8 @@ namespace EmergencyCallouts.Callouts
                         GameFiber.Yield();
                         if (PedFound)
                         {
+                            StopChecking = true;
+
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
@@ -512,7 +732,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Stop
+        private void Scenario2() // Surrender
         {
             #region Scenario 2
             try
@@ -530,11 +750,11 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect tasks to null");
+                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect's tasks");
 
                             // Suspect Achieve Player Heading
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to face player");
+                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to put hands up");
 
                             break;
                         }
@@ -630,12 +850,24 @@ namespace EmergencyCallouts.Callouts
                                         SuspectPersona.Surname = "MacMillan";
                                         Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
-                                    else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+                                    else if (CalloutPosition == CalloutPositions[2]) // Terminal
+                                    {
+                                        Game.DisplayNotification("heisthud", "hc_n_che", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                                     {
                                         SuspectPersona.Forename = "Trevor";
                                         SuspectPersona.Surname = "Philips";
                                         SuspectPersona.Wanted = true;
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+                                    {
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "Mediterranean Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
+                                    {
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "Farm Company Nam Here", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
                                     Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName} credentials");
@@ -764,11 +996,30 @@ namespace EmergencyCallouts.Callouts
                             GuardBlip.Enable();
                             Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
-                            // Delete SearchArea
+                            Game.DisplayHelp("Look around for the ~r~suspect");
+                            break;
+                        }
+                    }
+                });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists())
+                        {
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
-                            
-                            Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+
+                            LHandle pursuit = Functions.CreatePursuit();
+
+                            Functions.AddPedToPursuit(pursuit, Suspect);
+                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                            Play.CodeFourAudio();
+
                             break;
                         }
                     }
@@ -792,7 +1043,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventFirstResponderCrash(Suspect, Guard);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && PlayerArrived == false)
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
@@ -807,16 +1058,19 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
+                    SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
+
+                    GameFiber.Sleep(15000);
+                    Game.DisplayHelp("The ~y~suspect~s~ is likely hidden somewhere");
                 }
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && PlayerArrived == true && Suspect.Exists())
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
@@ -835,7 +1089,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() == true && PedDetained == false && Suspect.Exists())
+                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -848,7 +1102,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived == true)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
@@ -866,6 +1120,13 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip.EnableRoute();
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
+                }
+                #endregion
+
+                #region PlayerClimbing
+                if (MainPlayer.IsClimbing)
+                {
+                    Game.DisplayHelp("~p~Clue~s~: The ~y~susect~s~ has not used a ladder", 5000);
                 }
                 #endregion
             }

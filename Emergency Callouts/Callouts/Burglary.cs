@@ -16,21 +16,21 @@ namespace EmergencyCallouts.Callouts
         bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
+        bool StopChecking;
 
-        // Main
-        #region Positions
         Vector3 Entrance;
         Vector3 Center;
-
-        // CalloutPositions (Entrance)
+        
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(916.261f, -623.7192f, 58.05202f),   // Mirror Park
-            new Vector3(-663.6192f, -1358.232f, 10.49708f), // La Puerta
+            new Vector3(916.261f, -623.7192f, 58.052020f),  // Mirror Park
+            new Vector3(-663.6192f, -1358.232f, 10.4971f),  // La Puerta
             new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
-            new Vector3(2652.853f, 4308.485f, 44.39388f),   // Grapeseed
-            new Vector3(),   // Harmony
-            new Vector3(194.8364f, 6576.915f, 31.82028f),   // Paleto Bay
+            new Vector3(2652.853f, 4308.485f, 44.393880f),  // Grapeseed
+            new Vector3(1207.165f, 2694.605f, 37.823690f),  // Harmony
+            new Vector3(194.8364f, 6576.915f, 31.820280f),  // Paleto Bay
         };
         #endregion
 
@@ -247,7 +247,6 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
                     Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
                     EntranceBlip.Position = Entrance;
-                    Settings.SearchAreaSize = 40;
                 }
 
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
@@ -363,7 +362,12 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
                 SuspectVehicle.Heading = 166.61f;
             }
-            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[4]) // Harmony
+            {
+                SuspectVehicle.Position = new Vector3(1234.011f, 2722.458f, 38.02638f);
+                SuspectVehicle.Heading = 137.17f;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
                 SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
                 SuspectVehicle.Heading = 158.69f;
@@ -409,6 +413,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (PedFound)
                         {
+                            StopChecking = true;
+
                             // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
@@ -542,6 +548,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists())
                         {
+                            StopChecking = true;
+
                             // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
@@ -600,7 +608,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
+                    SearchArea = new Blip(Center, Settings.SearchAreaSize);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
@@ -641,7 +649,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;

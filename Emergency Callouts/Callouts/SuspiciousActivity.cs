@@ -20,14 +20,13 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool DialogueStarted;
-
-        // Main
-        #region Positions
+        bool StopChecking;
 
         Vector3 Entrance;
         Vector3 Center;
 
-        // CalloutPositions (Entrance)
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
             new Vector3(167.0673f, -1247.618f, 29.19848f),  // Strawberry
@@ -35,6 +34,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
             new Vector3(2165.78f, 4758.762f, 42f),          // Grapeseed
+            new Vector3(1485.026f, 6412.347f, 22.35379f),   // Paleto Bay
         };
         #endregion
 
@@ -495,6 +495,8 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
 
+                            StopChecking = true;
+
                             pursuit = Functions.CreatePursuit();
                             Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
@@ -618,6 +620,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
                         {
+                            StopChecking = true;
+
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
@@ -838,6 +842,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect2.IsDead && Suspect2.Exists())
                         {
+                            Suspect.Tasks.Clear();
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             break;
@@ -878,7 +883,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
+                    SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
                     SearchArea.SetColor(Colors.Yellow);
                     SearchArea.Alpha = 0.5f;
 
