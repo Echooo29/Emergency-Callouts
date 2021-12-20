@@ -43,7 +43,6 @@ namespace EmergencyCallouts.Essential
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
         internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
         internal static Random random = new Random();
-
         internal static bool PUBRemoteState;
         internal static bool TRERemoteState;
         internal static bool BURRemoteState;

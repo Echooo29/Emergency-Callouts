@@ -558,10 +558,10 @@ namespace EmergencyCallouts.Callouts
                 Game.LogTrivial("[Emergency Callouts]: Assigned random handgun to Suspect2 inventory");
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
-                Game.LogTrivial("Emergency Callouts: Suspect playing animation");
+                Game.LogTrivial("[Emergency Callouts]: Suspect playing animation");
 
                 Suspect2.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@casino@peds@"), "amb_world_human_hang_out_street_male_c_base", 5f, AnimationFlags.None); // Cross Arms
-                Game.LogTrivial("Emergency Callouts: Suspect2 playing animation");
+                Game.LogTrivial("[Emergency Callouts]: Suspect2 playing animation");
 
                 GameFiber.StartNew(delegate
                 {

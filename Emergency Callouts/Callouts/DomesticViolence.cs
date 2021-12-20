@@ -422,15 +422,15 @@ namespace EmergencyCallouts.Callouts
 
                 // Victim Invincible
                 Victim.IsInvincible = true;
-                Game.LogTrivial("Emergency Callouts: Set Victim invincible");
+                Game.LogTrivial("[Emergency Callouts]: Set Victim invincible");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("Emergency Callouts: Victim cowering");
+                Game.LogTrivial("[Emergency Callouts]: Victim cowering");
                 
                 // Suspect Fighting Victim
                 Suspect.Tasks.FightAgainst(Victim);
-                Game.LogTrivial("Emergency Callouts: Suspect fighting Victim");
+                Game.LogTrivial("[Emergency Callouts]: Suspect fighting Victim");
 
                 GameFiber.StartNew(delegate
                 {
@@ -445,7 +445,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Victim Cowering
                             Victim.Tasks.Cower(-1);
-                            Game.LogTrivial("Emergency Callouts: Assigned victim to cower");
+                            Game.LogTrivial("[Emergency Callouts]: Assigned victim to cower");
 
                             break;
                         }
@@ -524,19 +524,19 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("Emergency Callouts: Retrieved fight position");
+                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Kill Victim
                 if (Victim.Exists()) { Victim.Kill(); }
-                Game.LogTrivial("Emergency Callouts: Killed Victim");
+                Game.LogTrivial("[Emergency Callouts]: Killed Victim");
 
                 // Delete VictimBlip
                 if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-                Game.LogTrivial("Emergency Callouts: Deleted VictimBlip");
+                Game.LogTrivial("[Emergency Callouts]: Deleted VictimBlip");
 
                 // Suspect Sitting
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("Emergency Callouts: Assigned Suspect to play animation");
+                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
             }
             catch (Exception e)
             {
