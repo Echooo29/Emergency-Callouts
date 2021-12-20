@@ -458,18 +458,24 @@ namespace EmergencyCallouts.Essential
             {
                 GameFiber.StartNew(delegate
                 {
-                    for (int sec = seconds; sec > 0; sec--)
+                    while (true)
                     {
-                        if (seconds == 1)
+                        GameFiber.Yield();
+                        for (int sec = seconds; sec > 0; sec--)
                         {
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            // Create SearchArea
-                            SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                            SearchArea.SetColor(Color.Colors.Yellow);
-                            SearchArea.Alpha = 0.5f;
-                            Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
+                            if (seconds == 1)
+                            {
+                                if (SearchArea.Exists()) { SearchArea.Delete(); }
+                                // Create SearchArea
+                                SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
+                                SearchArea.SetColor(Color.Colors.Yellow);
+                                SearchArea.Alpha = 0.5f;
+                                Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
+
+                                break;
+                            }
+                            GameFiber.Sleep(1000);
                         }
-                        GameFiber.Sleep(1000);
                     }
                 });
             }

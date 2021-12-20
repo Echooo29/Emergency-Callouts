@@ -225,6 +225,48 @@ namespace EmergencyCallouts.Callouts
         readonly float LoadingDockWeldingHeading = 268.66f;
         #endregion
 
+        // Paleto Bay Barn
+        #region Positions
+        readonly Vector3[] BarnHidingPositions =
+        {
+            new Vector3(435.1073f, 6456.916f, 28.74582f), // Back of the barn
+            new Vector3(426.8463f, 6479.765f, 28.86706f), // Front of the barn
+            new Vector3(436.3864f, 6502.764f, 28.77272f), // Outside overhang
+            new Vector3(399.7721f, 6474.169f, 29.33945f), // Outside Garbage Container
+            new Vector3(432.5182f, 6499.175f, 28.89931f), // Bushes
+        };
+
+        readonly float[] BarnHidingHeadings =
+        {
+            337.39f,
+            185.75f,
+            29.36f,
+            256.73f,
+            121.03f,
+        };
+
+        readonly Vector3[] BarnManagerPositions =
+        {
+            new Vector3(412.4971f, 6494.906f, 28.16451f), // Generator
+            new Vector3(430.6472f, 6502.231f, 28.71397f), // Shed
+            new Vector3(425.288f, 6467.4321f, 28.79181f), // Barn
+        };
+
+        readonly float[] BarnManagerHeadings =
+        {
+            201.11f,
+            97.09f,
+            19.64f,
+        };
+
+        readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
+
+        readonly Vector3 BarnWeldingPosition = new Vector3();
+        readonly float BarnWeldingHeading = 0f;
+        #endregion
+
+        Vehicle BarnVehicle;
+
         static Ped Suspect;
         Ped Guard;
 
@@ -330,6 +372,12 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
                     EntranceBlip.Position = Entrance;
                 }
+                else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay Barn
+                {
+                    Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
+                    Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
+                    EntranceBlip.Position = Entrance;
+                }
                 #endregion
 
                 // Scenario Deciding
@@ -394,6 +442,13 @@ namespace EmergencyCallouts.Callouts
                 int AirstripHidingSpotNum = random.Next(LoadingDockHidingPositions.Length);
                 Suspect.Position = LoadingDockHidingPositions[AirstripHidingSpotNum];
                 Suspect.Heading = LoadingDockHidingHeadings[AirstripHidingSpotNum];
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay Barn
+            {
+                int AirstripHidingSpotNum = random.Next(BarnHidingPositions.Length);
+                Suspect.Position = BarnHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = BarnHidingHeadings[AirstripHidingSpotNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             #endregion
@@ -464,6 +519,20 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Heading = LoadingDockManagerHeadings[ManagerPositionNum];
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay Barn
+            {
+                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect.SetDefaults();
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.ScaleForPed();
+                SuspectBlip.Disable();
+
+                int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
+                Suspect.Position = BarnManagerPositions[ManagerPositionNum];
+                Suspect.Heading = BarnManagerHeadings[ManagerPositionNum];
+            }
             #endregion
         }
 
@@ -474,25 +543,25 @@ namespace EmergencyCallouts.Callouts
             {
                 int ArsonPositionNum = random.Next(RailyardArsonPositions.Length);
                 Suspect.Position = RailyardArsonPositions[ArsonPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 int ArsonPositionNum = random.Next(ScrapyardArsonPositions.Length);
                 Suspect.Position = ScrapyardArsonPositions[ArsonPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
             {
                 int ArsonPositionNum = random.Next(AirstripArsonPositions.Length);
                 Suspect.Position = AirstripArsonPositions[ArsonPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[3]) // Joshua Road Loading Dock
             {
                 int ArsonPositionNum = random.Next(LoadingDockArsonPositions.Length);
                 Suspect.Position = LoadingDockArsonPositions[ArsonPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay Barn
+            {
+                Suspect.Position = BarnArsonPosition;
             }
             #endregion
         }
@@ -519,6 +588,13 @@ namespace EmergencyCallouts.Callouts
             {
                 Suspect.Position = LoadingDockWeldingPosition;
                 Suspect.Heading = LoadingDockWeldingHeading;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay Barn
+            {
+                BarnVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
+                BarnVehicle.IsPersistent = true;
+                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
+                Suspect.Heading = 314.32f;
             }
 
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
