@@ -20,6 +20,7 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool DialogueStarted;
+        bool StopChecking;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -494,6 +495,8 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
 
+                            StopChecking = true;
+
                             pursuit = Functions.CreatePursuit();
                             Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
@@ -617,6 +620,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
                         {
+                            StopChecking = true;
+
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
 
@@ -837,6 +842,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect2.IsDead && Suspect2.Exists())
                         {
+                            Suspect.Tasks.Clear();
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             break;

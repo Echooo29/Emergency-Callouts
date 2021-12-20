@@ -16,6 +16,7 @@ namespace EmergencyCallouts.Callouts
         bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
+        bool StopChecking;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -412,6 +413,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (PedFound)
                         {
+                            StopChecking = true;
+
                             // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
@@ -545,6 +548,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists())
                         {
+                            StopChecking = true;
+
                             // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
@@ -644,7 +649,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
