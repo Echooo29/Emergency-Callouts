@@ -556,7 +556,7 @@ namespace EmergencyCallouts.Callouts
 
                 int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
                 Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
-                Suspect.Heading = ElysianIslandManagerHeadings[ManagerPositionNum];
+                Suspect.Heading = TerminalManagerHeadings[ManagerPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
@@ -852,9 +852,7 @@ namespace EmergencyCallouts.Callouts
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
-                                        SuspectPersona.Forename = "Jimmy";
-                                        SuspectPersona.Surname = "MacMillan";
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("heisthud", "hc_n_che", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                                     {
