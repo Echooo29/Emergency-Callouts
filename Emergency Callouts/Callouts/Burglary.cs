@@ -415,9 +415,11 @@ namespace EmergencyCallouts.Callouts
                         {
                             StopChecking = true;
 
-                            // Delete SuspectBlip
+                            // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted all blips");
 
                             // Create Pursuit
                             LHandle pursuit = Functions.CreatePursuit();
@@ -429,7 +431,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Set Pursuit Active
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit active for " + PlayerPersona.FullName);
 
                             // Play Pursuit Audio
                             Play.PursuitAudio();

@@ -627,7 +627,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 13f)
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);

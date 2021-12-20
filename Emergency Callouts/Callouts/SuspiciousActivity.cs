@@ -519,17 +519,14 @@ namespace EmergencyCallouts.Callouts
 
                         if ((Suspect.IsDead || Suspect.IsCuffed) && Suspect.Exists())
                         {
+                            // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
-
-                            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted Suspect2Blip");
-
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted all blips");
 
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit active for " + PlayerPersona.FullName);
 
                             Play.PursuitAudio();
                             Game.LogTrivial("[Emergency Callouts]: Played pursuit audio");
@@ -622,14 +619,10 @@ namespace EmergencyCallouts.Callouts
                         {
                             StopChecking = true;
 
+                            // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
-
-                            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted Suspect2Blip");
-
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("Emergency Callouts: Deleted SearchArea");
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                             pursuit = Functions.CreatePursuit();
                             Game.LogTrivial("[Emergency Callouts]: Created pursuit");
@@ -641,7 +634,7 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Added Suspect2 to pursuit");
 
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
+                            Game.LogTrivial("[Emergency Callouts]: Set pursuit active for " + PlayerPersona.FullName);
 
                             Play.PursuitAudio();
 
