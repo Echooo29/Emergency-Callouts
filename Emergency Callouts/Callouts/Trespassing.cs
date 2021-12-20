@@ -1123,6 +1123,13 @@ namespace EmergencyCallouts.Callouts
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
                 #endregion
+
+                #region PlayerClimbing
+                if (MainPlayer.IsClimbing)
+                {
+                    Game.DisplayHelp("~p~Clue~s~: The ~y~susect~s~ has not used a ladder", 5000);
+                }
+                #endregion
             }
             catch (Exception e)
             {
