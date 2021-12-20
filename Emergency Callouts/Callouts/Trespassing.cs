@@ -164,7 +164,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(1229.698f, -2908.376f, 9.319265f), // Boxes
         };
 
-        readonly float[] ElysianIslandManagerHeadings =
+        readonly float[] TerminalManagerHeadings =
         {
             81.28f,
             30.57f,
@@ -486,6 +486,7 @@ namespace EmergencyCallouts.Callouts
                 int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
                 Suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
                 Suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
+                Settings.SearchAreaSize -= 15;
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
