@@ -31,7 +31,7 @@ namespace EmergencyCallouts.Callouts
         {
             new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
             new Vector3(-1106.7f, -1975.50f, 24.562f),  // LSIA Scrapyard
-            new Vector3(1225.66f, -2923.435f, 9.4783f), // Elysian Island
+            new Vector3(1225.66f, -2923.435f, 9.4783f), // Terminal
             new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
             new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
             new Vector3(426.6624f, 6549.066f, 27.601f), // Paleto Barn
@@ -137,9 +137,9 @@ namespace EmergencyCallouts.Callouts
         readonly float ScrapyardWeldingHeading = 306.35f;
         #endregion
 
-        // Elysian Island
+        // Terminal
         #region Positions
-        readonly Vector3[] ElysianIslandHidingPositions =
+        readonly Vector3[] TerminalHidingPositions =
         {
             new Vector3(1249.729f, -2887.772f, 9.319264f), // Rear
             new Vector3(1242.891f, -2947.398f, 9.319264f), // Middle
@@ -148,7 +148,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(1227.453f, -3009.943f, 9.319252f), // Front 2
         };
 
-        readonly float[] ElysianIslandHidingPositionsHeadings =
+        readonly float[] TerminalHidingPositionsHeadings =
         {
             128.07f,
             160.45f,
@@ -157,7 +157,7 @@ namespace EmergencyCallouts.Callouts
             347.75f,
         };
 
-        readonly Vector3[] ElysianIslandManagerPositions =
+        readonly Vector3[] TerminalManagerPositions =
         {
             new Vector3(1228.202f, -2970.058f, 9.319256f), // Tool Cabinet
             new Vector3(1238.923f, -2940.416f, 9.319255f), // Tool Cabinet 2
@@ -171,15 +171,15 @@ namespace EmergencyCallouts.Callouts
             310.89f,
         };
 
-        readonly Vector3[] ElysianIslandArsonPositions =
+        readonly Vector3[] TerminalArsonPositions =
         {
             new Vector3(1240.061f, -2889.315f, 9.319265f), // Pallets
             new Vector3(1251.003f, -2908.396f, 9.319266f), // Fuel Barrels
             new Vector3(1243.456f, -2953.213f, 9.319252f), // Fuel Barrels 2
         };
 
-        readonly Vector3 ElysianIslandWeldingPosition = new Vector3(1234.051f, -3022.098f, 10.96785f); // Front Containers
-        readonly float ElysianIslandWeldingHeading = 279.74f;
+        readonly Vector3 TerminalWeldingPosition = new Vector3(1234.051f, -3022.098f, 10.96785f); // Front Containers
+        readonly float TerminalWeldingHeading = 279.74f;
         #endregion
 
         // McKenzie Airstrip
@@ -407,10 +407,10 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+                else if (CalloutPosition == CalloutPositions[2]) // Terminal
                 {
                     Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
-                    Entrance = new Vector3(1225.664f, -2923.435f, 9.478237f);
+                    Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
                     EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
@@ -481,11 +481,11 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
                 Suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                int AirstripHidingSpotNum = random.Next(ElysianIslandHidingPositions.Length);
-                Suspect.Position = ElysianIslandHidingPositions[AirstripHidingSpotNum];
-                Suspect.Heading = ElysianIslandHidingPositionsHeadings[AirstripHidingSpotNum];
+                int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
+                Suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
+                Suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
@@ -543,7 +543,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ScrapyardManagerHeadings[ManagerPositionNum];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
                 Suspect = new Ped("ig_chef", CalloutPosition, 0f);
                 Suspect.SetDefaults();
@@ -553,8 +553,8 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
-                int ManagerPositionNum = random.Next(ElysianIslandManagerPositions.Length);
-                Suspect.Position = ElysianIslandManagerPositions[ManagerPositionNum];
+                int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
+                Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ElysianIslandManagerHeadings[ManagerPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
@@ -617,10 +617,10 @@ namespace EmergencyCallouts.Callouts
                 int ArsonPositionNum = random.Next(ScrapyardArsonPositions.Length);
                 Suspect.Position = ScrapyardArsonPositions[ArsonPositionNum];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                int ArsonPositionNum = random.Next(ElysianIslandArsonPositions.Length);
-                Suspect.Position = ElysianIslandArsonPositions[ArsonPositionNum];
+                int ArsonPositionNum = random.Next(TerminalArsonPositions.Length);
+                Suspect.Position = TerminalArsonPositions[ArsonPositionNum];
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
@@ -652,10 +652,10 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = ScrapyardWeldingPosition;
                 Suspect.Heading = ScrapyardWeldingHeading;
             }
-            else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                Suspect.Position = ElysianIslandWeldingPosition;
-                Suspect.Heading = ElysianIslandWeldingHeading;
+                Suspect.Position = TerminalWeldingPosition;
+                Suspect.Heading = TerminalWeldingHeading;
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
@@ -849,7 +849,7 @@ namespace EmergencyCallouts.Callouts
                                         SuspectPersona.Surname = "MacMillan";
                                         Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
-                                    else if (CalloutPosition == CalloutPositions[2]) // Elysian Island
+                                    else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
                                         SuspectPersona.Forename = "Jimmy";
                                         SuspectPersona.Surname = "MacMillan";
