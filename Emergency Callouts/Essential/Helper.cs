@@ -50,6 +50,7 @@ namespace EmergencyCallouts.Essential
         internal static bool SUSRemoteState;
 
         internal static string CalloutDetails { get; set; }
+        internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
 
         #region GetRandomScenarioNumber

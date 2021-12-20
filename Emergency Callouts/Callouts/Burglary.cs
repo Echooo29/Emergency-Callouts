@@ -153,6 +153,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -182,8 +183,9 @@ namespace EmergencyCallouts.Callouts
                 // Callout Accepted
                 Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
-                // 
+                // Accepting Messages
                 Display.AttachMessage(CalloutDetails);
+                Display.AttachSubtitle($"Go to the ~r~Burglary~s~ in ~y~{CalloutArea}~s~.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -280,8 +282,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario5();
                         break;
                 }
-
-                Display.AttachSubtitle($"Go to the ~r~Burglary~s~ in ~y~{CalloutPosition}~s~.");
 
                 // Enabling Route
                 EntranceBlip.EnableRoute();

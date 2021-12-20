@@ -33,6 +33,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
+            CalloutArea = World.GetStreetName(CalloutPosition);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
             //AddMinimumDistanceCheck(30f, CalloutPosition);
@@ -57,7 +58,7 @@ namespace EmergencyCallouts.Callouts
 
             // Accept Messages
             Display.AttachMessage(CalloutDetails);
-            Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutPosition}~s~.");
+            Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
 
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();

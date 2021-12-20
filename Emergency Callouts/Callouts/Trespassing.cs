@@ -331,6 +331,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -362,7 +363,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Accept Messages
                 Display.AttachMessage(CalloutDetails);
-                Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutPosition}~s~.");
+                Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
