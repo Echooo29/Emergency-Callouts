@@ -1,4 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
@@ -137,6 +138,9 @@ namespace EmergencyCallouts.Callouts
         Ped Suspect;
         Ped Suspect2;
 
+        Persona SuspectPersona;
+        Persona Suspect2Persona;
+
         Blip SuspectBlip;
         Blip Suspect2Blip;
         Blip EntranceBlip;
@@ -189,6 +193,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
                 Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
@@ -199,6 +204,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Suspect 2
                 Suspect2 = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+                Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
                 Suspect2.SetDefaults();
                 Game.LogTrivial($"[Emergency Callouts]: Created Suspect2 ({Suspect2.Model.Name}) at " + Suspect2.Position);
 
@@ -493,7 +499,7 @@ namespace EmergencyCallouts.Callouts
                             Suspect2.Tasks.ClearImmediately();
 
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
+                            Game.LogTrivial($"[Emergency Callouts]: Cleared {SuspectPersona.FullName} (Suspect) tasks");
 
                             StopChecking = true;
 
@@ -711,14 +717,14 @@ namespace EmergencyCallouts.Callouts
                             if (Game.IsKeyDown(Settings.TalkKey))
                             {
                                 DialogueStarted = true;
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
 
                                 Suspect.Tasks.Clear();
                                 Game.LogTrivial("[Emergency Callouts]: Assigned Suspect tasks to null");
 
 
                                 Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180).WaitForCompletion();
-                                Game.LogTrivial("[Emergency Callouts]: Suspect achieved player heading");
+                                Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} (Suspect) achieved player heading");
 
                                 Game.DisplaySubtitle(dialogue[line], 99999);
                                 line++;
@@ -726,7 +732,7 @@ namespace EmergencyCallouts.Callouts
                                 if (line == 3)
                                 {
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
-                                    Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
+                                    Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} now playing animation");
 
                                     if (CalloutPosition == CalloutPositions[0]) // Strawberry
                                     {

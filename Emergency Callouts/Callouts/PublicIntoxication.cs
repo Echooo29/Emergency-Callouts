@@ -1,4 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
@@ -19,6 +20,9 @@ namespace EmergencyCallouts.Callouts
         bool CalloutActive;
 
         Ped Suspect;
+        Persona SuspectPersona;
+
+
         Blip EntranceBlip;
         Blip SearchArea;
         Blip SuspectBlip;
@@ -48,12 +52,16 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnCalloutAccepted()
         {
+            // Callout Accepted
+            Log.CalloutAccepted(CalloutMessage, CalloutScenario);
+
             Display.AttachMessage(CalloutDetails);
 
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();
 
             Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+            SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
             Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);

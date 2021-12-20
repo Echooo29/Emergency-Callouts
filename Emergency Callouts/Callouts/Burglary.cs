@@ -1,4 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
@@ -138,6 +139,8 @@ namespace EmergencyCallouts.Callouts
 
         Ped Suspect;
 
+        Persona SuspectPersona;
+
         Blip SuspectBlip;
         Blip EntranceBlip;
         Blip SearchArea;
@@ -187,6 +190,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
                 Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
@@ -331,7 +335,7 @@ namespace EmergencyCallouts.Callouts
 
             // Lockpick Animation
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
-            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
+            Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} now playing animation");
 
             #endregion
         }
@@ -540,7 +544,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Search Animation
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@gangops@facility@servers@bodysearch@"), "player_search", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
+                Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} now playing animation");
 
                 GameFiber.StartNew(delegate
                 {

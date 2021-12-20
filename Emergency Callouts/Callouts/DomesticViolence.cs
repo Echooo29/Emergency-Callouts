@@ -1,4 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
@@ -127,6 +128,9 @@ namespace EmergencyCallouts.Callouts
         Ped Suspect;
         Ped Victim;
 
+        Persona SuspectPersona;
+        Persona VictimPersona;
+
         Blip SuspectBlip;
         Blip VictimBlip;
         Blip EntranceBlip;
@@ -178,6 +182,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
                 Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
 
@@ -189,6 +194,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Victim
                 Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
+                VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
                 Victim.Health = 135;
                 Game.LogTrivial($"[Emergency Callouts]: Created Victim ({Victim.Model.Name}) at " + Victim.Position);
@@ -376,7 +382,7 @@ namespace EmergencyCallouts.Callouts
                             Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
 
                             DialogueStarted = true;
-                            Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
+                            Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
 
                             Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                             Game.LogTrivial("[Emergency Callouts]: Victim achieved player heading");
@@ -536,7 +542,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Suspect Sitting
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
+                Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} now playing animation");
             }
             catch (Exception e)
             {
