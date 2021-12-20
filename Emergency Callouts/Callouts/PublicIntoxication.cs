@@ -55,7 +55,9 @@ namespace EmergencyCallouts.Callouts
             // Callout Accepted
             Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
+            // Accept Messages
             Display.AttachMessage(CalloutDetails);
+            Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutPosition}~s~.");
 
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();

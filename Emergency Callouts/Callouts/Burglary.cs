@@ -182,7 +182,7 @@ namespace EmergencyCallouts.Callouts
                 // Callout Accepted
                 Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
-                // Attach Message
+                // 
                 Display.AttachMessage(CalloutDetails);
 
                 // EntranceBlip
@@ -281,10 +281,11 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
+                Display.AttachSubtitle($"Go to the ~r~Burglary~s~ in ~y~{CalloutPosition}~s~.");
+
                 // Enabling Route
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
-
             }
             catch (Exception e)
             {

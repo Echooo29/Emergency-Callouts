@@ -146,6 +146,13 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region AttachSubtitle
+            internal static void AttachSubtitle(string message)
+            {
+                Game.DisplaySubtitle(message, 10000);
+            }
+            #endregion
+
             #region PedDescription
             internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
             {
