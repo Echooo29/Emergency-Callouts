@@ -131,8 +131,8 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
         };
 
-        readonly Vector3 ScrapyardWeldingPosition = new Vector3();
-        readonly float ScrapyardWeldingHeading = 0f;
+        readonly Vector3 ScrapyardWeldingPosition = new Vector3(-1151.357f, -2034.422f, 13.16053f);
+        readonly float ScrapyardWeldingHeading = 306.35f;
         #endregion
 
         // McKenzie Airstrip
@@ -176,8 +176,8 @@ namespace EmergencyCallouts.Callouts
             new Vector3(2125.861f, 4774.83f, 40.97033f), // Pile of Boxes 2
         };
 
-        readonly Vector3 AirstripWeldingPosition = new Vector3();
-        readonly float AirstripWeldingHeading = 0f;
+        readonly Vector3 AirstripWeldingPosition = new Vector3(2135.423f, 4772.376f, 40.97033f);
+        readonly float AirstripWeldingHeading = 189.83f;
         #endregion
 
         // Joshua Road Loading Dock
@@ -909,11 +909,30 @@ namespace EmergencyCallouts.Callouts
                             GuardBlip.Enable();
                             Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
 
-                            // Delete SearchArea
+                            Game.DisplayHelp("Look around for the ~r~suspect");
+                            break;
+                        }
+                    }
+                });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists())
+                        {
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
-                            
-                            Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+
+                            LHandle pursuit = Functions.CreatePursuit();
+
+                            Functions.AddPedToPursuit(pursuit, Suspect);
+                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                            Play.CodeFourAudio();
+
                             break;
                         }
                     }
