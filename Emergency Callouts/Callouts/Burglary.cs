@@ -184,8 +184,8 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accepting Messages
-                Display.AttachMessage(CalloutDetails);
-                Display.AttachSubtitle($"Go to the ~r~Burglary~s~ in ~y~{CalloutArea}~s~.");
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle($"Go to the ~r~Burglary~s~ in ~y~{CalloutArea}~s~.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);

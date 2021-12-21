@@ -141,7 +141,7 @@ namespace EmergencyCallouts.Essential
         internal enum PedCategory
         {
             Suspect,
-            SecondarySuspect,
+            Suspect2,
             Victim,
             Bystander,
             Guard,
@@ -152,15 +152,15 @@ namespace EmergencyCallouts.Essential
 
         internal static class Display
         {
-            #region AttachMessage
-            internal static void AttachMessage(string details)
+            #region AcceptNotification
+            internal static void AcceptNotification(string details)
             {
                 Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Attached {Settings.Callsign}", details);
             }
             #endregion
 
-            #region AttachSubtitle
-            internal static void AttachSubtitle(string message)
+            #region AcceptSubtitle
+            internal static void AcceptSubtitle(string message)
             {
                 Game.DisplaySubtitle(message, 10000);
             }

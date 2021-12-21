@@ -187,8 +187,8 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AttachMessage(CalloutDetails);
-                Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -208,7 +208,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect2 = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
                 Suspect2.SetDefaults();
-                Log.PedCreation(Suspect2, PedCategory.SecondarySuspect);
+                Log.PedCreation(Suspect2, PedCategory.Suspect2);
 
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColor(Colors.Yellow);

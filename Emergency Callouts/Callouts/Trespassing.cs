@@ -362,8 +362,8 @@ namespace EmergencyCallouts.Callouts
                 Log.CalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AttachMessage(CalloutDetails);
-                Display.AttachSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle($"Go to the ~r~{CalloutMessage}~s~ in ~y~{CalloutArea}~s~.");
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
