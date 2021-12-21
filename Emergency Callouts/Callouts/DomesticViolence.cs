@@ -541,6 +541,7 @@ namespace EmergencyCallouts.Callouts
                 // Delete VictimBlip
                 if (VictimBlip.Exists()) { VictimBlip.Delete(); }
                 Game.LogTrivial("[Emergency Callouts]: Deleted VictimBlip");
+                Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Suspect Sitting
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
