@@ -267,7 +267,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SearchArea
                 SearchArea.Remove();
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
                 NearPed = true;
             }
@@ -279,7 +279,7 @@ namespace EmergencyCallouts.Callouts
                 // Remove SuspectBlip
                 SuspectBlip.Remove();
 
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
+                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
                 PedDetained = true;
             }
