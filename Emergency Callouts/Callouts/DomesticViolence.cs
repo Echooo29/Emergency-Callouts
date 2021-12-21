@@ -186,7 +186,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Log.PedCreation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -199,7 +199,7 @@ namespace EmergencyCallouts.Callouts
                 VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
                 Victim.Health = 135;
-                Game.LogTrivial($"[Emergency Callouts]: Created Victim ({Victim.Model.Name}) at " + Victim.Position);
+                Log.PedCreation(Victim, PedCategory.Victim);
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();

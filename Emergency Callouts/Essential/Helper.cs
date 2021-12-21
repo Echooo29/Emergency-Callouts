@@ -138,6 +138,18 @@ namespace EmergencyCallouts.Essential
             Vehicle,
         }
 
+        internal enum PedCategory
+        {
+            Suspect,
+            SecondarySuspect,
+            Victim,
+            Bystander,
+            Guard,
+            Officer,
+            Paramedic,
+            Firefighter,
+        }
+
         internal static class Display
         {
             #region AttachMessage
@@ -184,6 +196,75 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
+        internal class Log
+        {
+            #region CalloutAccepted
+            internal static void CalloutAccepted(string CalloutMessage, int ScenarioNumber)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+            }
+            #endregion
+
+            #region CalloutEnded
+            internal static void CalloutEnded(string CalloutMessage, int ScenarioNumber)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+            }
+            #endregion
+
+            #region CalloutException
+            internal static void CalloutException(object o, string method, Exception e)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: {e.Message} At {o.GetType().Name}.{method}()");
+                Game.LogTrivial($"[Emergency Callouts]: Using version {Project.LocalVersion}");
+
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
+
+                try
+                {
+                    WebClient hitUpdater = new WebClient();
+                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
+                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote error counter");
+                }
+                catch (WebException webEx)
+                {
+                    Game.LogTrivial("[Emergency Callouts]: " + webEx.Message);
+                }
+            }
+            #endregion
+
+            #region PedCreation
+            internal static void PedCreation(Ped ped, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory} ({ped.Model.Name}) at {ped.Position}");
+            }
+            #endregion
+
+            #region VehicleCreation
+            internal static void VehicleCreation(Vehicle vehicle, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory}Vehicle ({vehicle.Model.Name}) at {vehicle.Position}");
+            }
+            #endregion
+        }
+
+        internal static class Play
+        {
+            #region PursuitAudio
+            internal static void PursuitAudio()
+            {
+                Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
+            }
+            #endregion
+
+            #region CodeFourAudio
+            internal static void CodeFourAudio()
+            {
+                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
+            }
+            #endregion
+        }
+
         internal static class Vehicles
         {
             #region GetRandomFourDoor
@@ -225,23 +306,6 @@ namespace EmergencyCallouts.Essential
 
                 int num = random.Next(vans.Length);
                 return vans[num];
-            }
-            #endregion
-        }
-
-        internal static class Play
-        {
-            #region PursuitAudio
-            internal static void PursuitAudio()
-            {
-                Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
-            }
-            #endregion
-
-            #region CodeFourAudio
-            internal static void CodeFourAudio()
-            {
-                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
             }
             #endregion
         }
@@ -485,44 +549,6 @@ namespace EmergencyCallouts.Essential
                         }
                     }
                 });
-            }
-            #endregion
-        }
-
-        internal class Log
-        {
-            #region CalloutAccepted
-            internal static void CalloutAccepted(string CalloutMessage, int ScenarioNumber)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
-            }
-            #endregion
-
-            #region CalloutEnded
-            internal static void CalloutEnded(string CalloutMessage, int ScenarioNumber)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
-            }
-            #endregion
-
-            #region CalloutException
-            internal static void CalloutException(object o, string method, Exception e)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: {e.Message} At {o.GetType().Name}.{method}()");
-                Game.LogTrivial($"[Emergency Callouts]: Using version {Project.LocalVersion}");
-
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
-
-                try
-                {
-                    WebClient hitUpdater = new WebClient();
-                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote error counter");
-                }
-                catch (WebException webEx)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: " + webEx.Message);
-                }
             }
             #endregion
         }

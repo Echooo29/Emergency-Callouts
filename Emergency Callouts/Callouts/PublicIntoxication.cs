@@ -67,7 +67,7 @@ namespace EmergencyCallouts.Callouts
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-            Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+            Log.PedCreation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColor(Colors.Yellow);

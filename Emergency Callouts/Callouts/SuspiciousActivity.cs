@@ -197,7 +197,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Log.PedCreation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColor(Colors.Yellow);
@@ -208,7 +208,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect2 = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
                 Suspect2.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect2 ({Suspect2.Model.Name}) at " + Suspect2.Position);
+                Log.PedCreation(Suspect2, PedCategory.SecondarySuspect);
 
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColor(Colors.Yellow);
