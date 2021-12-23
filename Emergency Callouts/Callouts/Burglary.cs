@@ -233,6 +233,7 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
                     EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize += 80;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
@@ -620,6 +621,12 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
+
+                    Ped[] NearbyPeds = Suspect.GetNearbyPeds(5);
+                    foreach(Ped ped in NearbyPeds)
+                    {
+                        if (ped.Exists()) { ped.Delete(); }
+                    }
                 }
                 #endregion
 
