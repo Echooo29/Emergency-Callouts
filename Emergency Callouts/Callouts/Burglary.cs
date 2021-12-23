@@ -6,6 +6,7 @@ using Rage;
 using System;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
+using static EmergencyCallouts.Essential.Inventory;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
@@ -386,7 +387,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Unnoticed
+        private void Scenario1() // Attack
         {
             #region Scenario 1
             try
@@ -394,6 +395,30 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Position
                 RetrievePedPositions();
                 Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
+
+                int num = random.Next(2);
+                if (num == 0)
+                {
+                    Suspect.GiveRandomWeapon(WeaponType.Melee, -1, true);
+                }
+                else
+                {
+                    Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                }
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (PedFound)
+                        {
+                            Suspect.Tasks.FightAgainst(MainPlayer);
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
