@@ -36,7 +36,7 @@ namespace EmergencyCallouts.Callouts
             CalloutArea = World.GetStreetName(CalloutPosition);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
-            //AddMinimumDistanceCheck(30f, CalloutPosition);
+            AddMinimumDistanceCheck(30f, CalloutPosition);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
