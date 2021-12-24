@@ -864,7 +864,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
+                Handle.AutomaticEnding(Suspect, Suspect2);
                 Handle.PreventFirstResponderCrash(Suspect, Suspect2);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 

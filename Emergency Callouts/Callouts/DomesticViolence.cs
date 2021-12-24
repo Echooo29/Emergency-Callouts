@@ -662,7 +662,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
+                Handle.AutomaticEnding(Suspect, Victim);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect, Victim);
 

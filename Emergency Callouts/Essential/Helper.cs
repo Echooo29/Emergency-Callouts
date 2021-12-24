@@ -354,6 +354,32 @@ namespace EmergencyCallouts.Essential
                     }
                 }
             }
+            internal static void AutomaticEnding(Ped suspect, Ped suspect2)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsCuffed && suspect2.IsCuffed)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsDead && suspect2.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsDead && suspect2.IsCuffed)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && suspect2.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                }
+            }
             #endregion
 
             #region PreventDistanceCrash
