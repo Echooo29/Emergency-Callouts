@@ -380,6 +380,28 @@ namespace EmergencyCallouts.Essential
                     }
                 }
             }
+
+            internal static void AutomaticEndingVictim(Ped suspect, Ped victim)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsDead && victim.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && victim.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && victim.IsCuffed)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                }
+            }
             #endregion
 
             #region PreventDistanceCrash
