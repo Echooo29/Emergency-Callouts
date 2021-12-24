@@ -361,11 +361,11 @@ namespace EmergencyCallouts.Callouts
             string[] dialogue =
             {
                 "~b~You~s~: M'am, are you injured?",
-                "~g~Victim~s~: Yes, I'm hurt alot.",
+                "~o~Victim~s~: Yes, I'm hurt alot.",
                 "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?.",
-                "~g~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
+                "~o~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
                 "~b~You~s~: Try to relax, positive thoughts only okay?",
-                "~g~Victim~s~: Okay, I can do th..."
+                "~o~Victim~s~: Okay, I can do th..."
             };
 
             int line = 0;
@@ -410,7 +410,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (DialogueStarted == false)
                             {
-                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~Victim~s~.");
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
                             }
                         }
                     }
@@ -673,7 +673,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~o~victim~s~ and ~r~husband~s~ in the ~y~area~s~.", 10000);
+                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
