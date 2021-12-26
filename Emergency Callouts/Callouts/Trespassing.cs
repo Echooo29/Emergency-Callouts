@@ -579,7 +579,7 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
             {
-                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect = new Ped(CalloutPosition);
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -593,7 +593,7 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
             {
-                Suspect = new Ped("player_two", CalloutPosition, 0f);
+                Suspect = new Ped(CalloutPosition);
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -862,10 +862,10 @@ namespace EmergencyCallouts.Callouts
                                     }
                                     else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Mediterranean Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("heisthud", "hc_trevor", "BSS Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
-                                    {
+                                    {p
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Farm Company Nam Here", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
@@ -885,7 +885,6 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(3000);
                                     Functions.StopCurrentCallout();
-                                    //Handle.CalloutEnding();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
