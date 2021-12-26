@@ -865,7 +865,7 @@ namespace EmergencyCallouts.Callouts
                                         Game.DisplayNotification("heisthud", "hc_trevor", "BSS Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
-                                    {p
+                                    {
                                         Game.DisplayNotification("heisthud", "hc_trevor", "Farm Company Nam Here", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
