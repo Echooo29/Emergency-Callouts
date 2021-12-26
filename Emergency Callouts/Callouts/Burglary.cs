@@ -650,7 +650,7 @@ namespace EmergencyCallouts.Callouts
                     Ped[] NearbyPeds = Suspect.GetNearbyPeds(5);
                     foreach(Ped ped in NearbyPeds)
                     {
-                        if (ped.Exists()) { ped.Delete(); }
+                        if (ped.Exists() && !ped.IsPlayer) { ped.Delete(); }
                     }
                 }
                 #endregion
