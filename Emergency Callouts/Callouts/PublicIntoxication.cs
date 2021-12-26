@@ -29,7 +29,7 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around(1000f));
+            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100f, Settings.CalloutDistance));
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
