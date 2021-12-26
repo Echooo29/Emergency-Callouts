@@ -163,7 +163,7 @@ namespace EmergencyCallouts.Essential
             #region AcceptSubtitle
             internal static void AcceptSubtitle(string message)
             {
-                Game.DisplaySubtitle(message, 10000);
+                Game.DisplaySubtitle(message, 20000);
             }
             #endregion
 
