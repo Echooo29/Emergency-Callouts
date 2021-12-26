@@ -362,10 +362,10 @@ namespace EmergencyCallouts.Callouts
             {
                 "~b~You~s~: M'am, are you injured?",
                 "~o~Victim~s~: Yes, I'm hurt alot.",
-                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?.",
+                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?",
                 "~o~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
                 "~b~You~s~: Try to relax, positive thoughts only okay?",
-                "~o~Victim~s~: Okay, I can do th..."
+                "~o~Victim~s~: Okay, I don't know if I..."
             };
 
             int line = 0;
