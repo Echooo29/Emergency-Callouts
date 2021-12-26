@@ -402,6 +402,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
 
+                                GameFiber.Sleep(3000);
                                 Game.DisplaySubtitle("Request an ~g~ambulance~s~.");
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                             }
