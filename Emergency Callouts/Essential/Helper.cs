@@ -385,7 +385,7 @@ namespace EmergencyCallouts.Essential
             {
                 if (suspect.Exists())
                 {
-                    if (suspect.IsDead && victim.IsDead)
+                    if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
                         Play.CodeFourAudio();
                         Functions.StopCurrentCallout();
