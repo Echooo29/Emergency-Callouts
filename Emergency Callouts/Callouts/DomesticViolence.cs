@@ -673,7 +673,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 10000);
+                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

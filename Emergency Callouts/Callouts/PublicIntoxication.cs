@@ -247,7 +247,7 @@ namespace EmergencyCallouts.Callouts
                 SearchArea.Alpha = 0.5f;
 
                 // Display Subtitle
-                Game.DisplaySubtitle("Find the ~r~drunk person~s~ in the ~y~area~s~.", 10000);
+                Game.DisplaySubtitle("Find the ~r~drunk person~s~ in the ~y~area~s~.", 20000);
 
                 Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
