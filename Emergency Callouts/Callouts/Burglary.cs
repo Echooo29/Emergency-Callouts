@@ -7,7 +7,6 @@ using System;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using static EmergencyCallouts.Essential.Inventory;
-using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -646,12 +645,6 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
-
-                    Ped[] NearbyPeds = Suspect.GetNearbyPeds(5);
-                    foreach(Ped ped in NearbyPeds)
-                    {
-                        if (ped.Exists() && !ped.IsPlayer) { ped.Delete(); }
-                    }
                 }
                 #endregion
 
