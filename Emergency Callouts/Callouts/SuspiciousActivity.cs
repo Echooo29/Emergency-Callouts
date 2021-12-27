@@ -200,7 +200,7 @@ namespace EmergencyCallouts.Callouts
                 Log.PedCreation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColor(Colors.Red);
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -211,7 +211,7 @@ namespace EmergencyCallouts.Callouts
                 Log.PedCreation(Suspect2, PedCategory.Suspect2);
 
                 Suspect2Blip = Suspect2.AttachBlip();
-                Suspect2Blip.SetColor(Colors.Yellow);
+                Suspect2Blip.SetColor(Colors.Red);
                 Suspect2Blip.ScaleForPed();
                 Suspect2Blip.Disable();
 
@@ -497,10 +497,12 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
                         {
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-                            Suspect2.Tasks.ClearImmediately();
+                            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
 
+                            Suspect.Tasks.FightAgainst(MainPlayer);
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
+
+                            Suspect2.Tasks.ClearImmediately();
                             Game.LogTrivial($"[Emergency Callouts]: Cleared {SuspectPersona.FullName} (Suspect) tasks");
 
                             StopChecking = true;
@@ -668,6 +670,9 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPosition();
                 Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
+                // Set SuspectBlip Color to Yellow
+                SuspectBlip.SetColor(Colors.Yellow);
+
                 // Delete Suspect2, Suspect2Blip, SuspectVehicle.
                 if (Suspect2.Exists()) { Suspect2.Delete(); }
                 Game.LogTrivial("[Emergency Callouts]: Deleted Suspect2");
@@ -783,7 +788,6 @@ namespace EmergencyCallouts.Callouts
                     }
                 });
                 #endregion
-
             }
             catch (Exception e)
             {
@@ -826,10 +830,6 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived)
                         {
-                            // Change SuspectBlip Color
-                            SuspectBlip.SetColor(Colors.Red);
-                            Suspect2Blip.SetColor(Colors.Red);
-
                             // Start fight
                             Suspect.Tasks.FightAgainst(Suspect2);
                             Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight Suspect2");
