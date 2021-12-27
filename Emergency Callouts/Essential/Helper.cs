@@ -747,34 +747,36 @@ namespace EmergencyCallouts.Essential
             Purple,
         }
 
-        internal static void SetColor(this Blip blip, Enum color)
+        internal static void SetColor(this Blip blip, Enum newColor)
         {
-            if (color.ToString() == Colors.Red.ToString())
+            string color = newColor.ToString();
+
+            if (color == Colors.Red.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
             }
 
-            if (color.ToString() == Colors.Yellow.ToString())
+            if (color == Colors.Yellow.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
             }
 
-            if (color.ToString() == Colors.Blue.ToString())
+            if (color == Colors.Blue.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
             }
 
-            if (color.ToString() == Colors.Orange.ToString())
+            if (color == Colors.Orange.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
             }
 
-            if (color.ToString() == Colors.Green.ToString())
+            if (color == Colors.Green.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
             }
 
-            if (color.ToString() == Colors.Purple.ToString())
+            if (color == Colors.Purple.ToString())
             {
                 if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
             }
