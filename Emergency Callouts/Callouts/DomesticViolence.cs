@@ -386,8 +386,8 @@ namespace EmergencyCallouts.Callouts
                             DialogueStarted = true;
                             Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
 
-                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
-                            Game.LogTrivial("[Emergency Callouts]: Victim achieved player heading");
+                            //Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
+                            Victim.Face(MainPlayer);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
@@ -396,7 +396,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (line == dialogue.Length)
                             {
-                                GameFiber.Sleep(500);
+                                GameFiber.Sleep(1500);
                                 if (Victim.Exists()) { Victim.Kill(); }
 
                                 GameFiber.Sleep(1000);
