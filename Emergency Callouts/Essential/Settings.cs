@@ -45,7 +45,7 @@ namespace EmergencyCallouts
             CalloutDistance = iniFile.ReadInt32("Measurements", "CalloutDistance", CalloutDistance);
 
             // Customization
-            Callsign = iniFile.ReadString("Customization", "Callsign", Callsign);
+            Callsign = iniFile.ReadString("Customization", "Callsign", Callsign).ToUpper();
             SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
