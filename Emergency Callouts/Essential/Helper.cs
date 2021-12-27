@@ -552,50 +552,22 @@ namespace EmergencyCallouts.Essential
                 }
             }
             #endregion
-
-            #region DecreaseSearchArea
-            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
-            {
-                GameFiber.StartNew(delegate
-                {
-                    while (true)
-                    {
-                        GameFiber.Yield();
-                        for (int sec = seconds; sec > 0; sec--)
-                        {
-                            if (seconds == 1)
-                            {
-                                if (SearchArea.Exists()) { SearchArea.Delete(); }
-                                // Create SearchArea
-                                SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                                SearchArea.SetColor(Color.Colors.Yellow);
-                                SearchArea.Alpha = 0.5f;
-                                Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
-
-                                break;
-                            }
-                            GameFiber.Sleep(1000);
-                        }
-                    }
-                });
-            }
-            #endregion
         }
+    }
 
-        internal static class Color
-        {
-            internal static void Red(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(224, 50, 50);
+    internal static class Color
+    {
+        internal static void SetColorRed(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(224, 50, 50);
 
-            internal static void Yellow(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(240, 200, 80);
+        internal static void SetColorYellow(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(240, 200, 80);
 
-            internal static void Blue(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(93, 182, 229);
+        internal static void SetColorBlue(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(93, 182, 229);
 
-            internal static void Orange(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(234, 142, 80);
+        internal static void SetColorOrange(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(234, 142, 80);
 
-            internal static void Green(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(114, 204, 114);
+        internal static void SetColorGreen(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(114, 204, 114);
 
-            internal static void Purple(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(171, 60, 230);
-        }
+        internal static void SetColorPurple(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(171, 60, 230);
     }
 
     internal static class Inventory

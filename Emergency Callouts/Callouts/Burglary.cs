@@ -199,7 +199,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -396,11 +396,11 @@ namespace EmergencyCallouts.Callouts
                 int num = random.Next(2);
                 if (num == 0)
                 {
-                    Suspect.GiveRandomWeapon(WeaponType.Melee, -1, true);
+                    Suspect.GiveRandomMeleeWeapon(-1, true);
                 }
                 else
                 {
-                    Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                    Suspect.GiveRandomHandgun(-1, true);
                 }
 
                 GameFiber.StartNew(delegate
@@ -619,7 +619,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");

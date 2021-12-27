@@ -70,7 +70,7 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
-            SuspectBlip.SetColor(Colors.Yellow);
+            SuspectBlip.SetColorYellow();
             SuspectBlip.ScaleForPed();
             SuspectBlip.Disable();
 
@@ -235,7 +235,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Create SearchArea
                 SearchArea = new Blip(Suspect.Position.Around(5f, 30f), Settings.SearchAreaSize);
-                SearchArea.SetColor(Colors.Yellow);
+                SearchArea.SetColorYellow();
                 SearchArea.Alpha = 0.5f;
 
                 // Display Subtitle
@@ -318,7 +318,7 @@ namespace EmergencyCallouts.Callouts
                 SearchArea.Remove();
 
                 SearchArea = new Blip(Suspect.Position.Around(10f, 30f), Settings.SearchAreaSize);
-                SearchArea.SetColor(Colors.Yellow);
+                SearchArea.SetColorYellow();
                 SearchArea.Alpha = 0.5f;
                 Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
 

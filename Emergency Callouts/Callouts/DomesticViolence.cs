@@ -191,7 +191,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -204,7 +204,7 @@ namespace EmergencyCallouts.Callouts
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
-                VictimBlip.SetColor(Colors.Orange);
+                VictimBlip.SetColorOrange();
                 VictimBlip.ScaleForPed();
                 VictimBlip.Disable();
 
@@ -478,7 +478,7 @@ namespace EmergencyCallouts.Callouts
                 Victim.Health = 130;
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect.GiveRandomHandgun(-1, true);
 
                 GameFiber.StartNew(delegate
                 {
@@ -555,7 +555,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect.GiveRandomHandgun(-1, true);
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -600,7 +600,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect.GiveRandomHandgun(-1, true);
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
@@ -660,7 +660,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");

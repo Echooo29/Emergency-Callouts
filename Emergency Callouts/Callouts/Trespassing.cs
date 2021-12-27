@@ -380,7 +380,7 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
                
@@ -461,8 +461,6 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
-
                 // Enabling Route
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
@@ -530,7 +528,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -544,7 +542,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -558,7 +556,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -572,7 +570,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -586,7 +584,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -600,7 +598,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -793,7 +791,7 @@ namespace EmergencyCallouts.Callouts
                 int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -860,7 +858,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
 
-                                    SuspectBlip.SetColor(Colors.Green);
+                                    SuspectBlip.SetColorGreen();
                                 }
 
                                 if (line == dialogue.Length)
@@ -939,7 +937,7 @@ namespace EmergencyCallouts.Callouts
                 RetrieveWeldingPosition();
 
                 // Change SuspectBlip color
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
 
                 // Guard
                 Guard = new Ped("csb_prolsec", CalloutPosition.Around2D(5f), 0f);
@@ -951,7 +949,7 @@ namespace EmergencyCallouts.Callouts
 
                 // GuardBlip
                 GuardBlip = Guard.AttachBlip();
-                GuardBlip.SetColor(Colors.Blue);
+                GuardBlip.SetColorBlue();
                 GuardBlip.ScaleForPed();
                 GuardBlip.Disable();
 
@@ -1032,7 +1030,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");

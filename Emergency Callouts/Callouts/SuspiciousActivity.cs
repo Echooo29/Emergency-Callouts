@@ -7,7 +7,7 @@ using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using static EmergencyCallouts.Essential.Inventory;
+using Color =  EmergencyCallouts.Essential.Color;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
@@ -200,7 +200,7 @@ namespace EmergencyCallouts.Callouts
                 Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -211,7 +211,7 @@ namespace EmergencyCallouts.Callouts
                 Log.Creation(Suspect2, PedCategory.Suspect2);
 
                 Suspect2Blip = Suspect2.AttachBlip();
-                Suspect2Blip.SetColor(Colors.Red);
+                Suspect2Blip.SetColorRed();
                 Suspect2Blip.ScaleForPed();
                 Suspect2Blip.Disable();
 
@@ -476,8 +476,8 @@ namespace EmergencyCallouts.Callouts
             {
                 RetrievePedPosition();
 
-                Suspect.GiveRandomWeapon(WeaponType.AssaultRifle, -1, true);
-                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect.GiveRandomAssaultRifle(-1, true);
+                Suspect2.GiveRandomHandgun(-1, true);
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
                 Suspect2.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@casino@peds@"), "amb_world_human_hang_out_street_male_c_base", 5f, AnimationFlags.None); // Cross Arms
@@ -544,9 +544,9 @@ namespace EmergencyCallouts.Callouts
             {
                 RetrievePedPosition();
 
-                Suspect.GiveRandomWeapon(WeaponType.SubmachineGun, -1, true);
+                Suspect.GiveRandomSubmachineGun(-1, true);
 
-                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect2.GiveRandomHandgun(-1, true);
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
 
@@ -584,8 +584,8 @@ namespace EmergencyCallouts.Callouts
                 RetrieveDrugDealPosition();
 
 
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Suspect2.GiveRandomWeapon(WeaponType.Handgun, -1, true);
+                Suspect.GiveRandomHandgun(-1, true);
+                Suspect2.GiveRandomHandgun(-1, true);
 
                 Suspect.WarpIntoVehicle(SuspectVehicle, -1);
                 Suspect2.WarpIntoVehicle(Suspect2Vehicle, -1);
@@ -635,7 +635,7 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPosition();
 
                 // Set SuspectBlip Color to Yellow
-                SuspectBlip.SetColor(Colors.Yellow);
+                SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2, Suspect2Blip, SuspectVehicle.
                 if (Suspect2.Exists()) { Suspect2.Delete(); }
@@ -715,7 +715,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
 
-                                    SuspectBlip.SetColor(Colors.Green);
+                                    SuspectBlip.SetColorGreen();
                                 }
 
                                 if (line == dialogue.Length)
@@ -763,7 +763,7 @@ namespace EmergencyCallouts.Callouts
                 Functions.SetPedResistanceChance(Suspect, 100f);
 
                 // Give new random shotgun
-                Suspect.GiveRandomWeapon(WeaponType.Shotgun, -1, true);
+                Suspect.GiveRandomShotgun(-1, true);
 
                 // Change Suspect health
                 Suspect2.Health = 110;
@@ -830,7 +830,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
