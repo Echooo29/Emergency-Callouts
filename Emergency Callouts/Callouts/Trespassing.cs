@@ -551,7 +551,7 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                Suspect = new Ped("ig_chef", CalloutPosition, 0f);
+                Suspect = new Ped("mp_m_boatstaff_01", CalloutPosition, 0f);
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -579,7 +579,7 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
             {
-                Suspect = new Ped(CalloutPosition);
+                Suspect = new Ped("ig_barry", CalloutPosition, 0f);
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -593,7 +593,7 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
             {
-                Suspect = new Ped(CalloutPosition);
+                Suspect = new Ped("csb_oscar", CalloutPosition, 0f);
                 Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -843,30 +843,30 @@ namespace EmergencyCallouts.Callouts
 
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("heisthud", "char_rickie", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("heisthud", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("scaleform_generic", "char_boatsite2", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Captain \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                                     {
                                         SuspectPersona.Forename = "Trevor";
                                         SuspectPersona.Surname = "Philips";
                                         SuspectPersona.Wanted = true;
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                        Game.DisplayNotification("scaleform_generic", "hush_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", "~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
                                     else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "BSS Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("scaleform_generic", "char_barry", "VTA Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Farm Company Nam Here", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: CEO \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("scaleform_generic", "char_oscar", "Wildflower Fields", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Owner \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
                                     Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName}'s credentials");
