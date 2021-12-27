@@ -66,7 +66,7 @@ namespace EmergencyCallouts.Callouts
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-            Log.PedCreation(Suspect, PedCategory.Suspect);
+            Log.Creation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColor(Colors.Yellow);

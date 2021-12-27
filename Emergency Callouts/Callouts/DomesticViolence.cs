@@ -186,7 +186,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.PedCreation(Suspect, PedCategory.Suspect);
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -199,7 +199,7 @@ namespace EmergencyCallouts.Callouts
                 VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
                 Victim.Health = 135;
-                Log.PedCreation(Victim, PedCategory.Victim);
+                Log.Creation(Victim, PedCategory.Victim);
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();

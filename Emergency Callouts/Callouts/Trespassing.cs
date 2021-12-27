@@ -372,7 +372,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.PedCreation(Suspect, PedCategory.Suspect);
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -966,7 +966,7 @@ namespace EmergencyCallouts.Callouts
                 // Guard
                 Guard = new Ped("csb_prolsec", CalloutPosition.Around2D(5f), 0f);
                 Guard.SetDefaults();
-                Log.PedCreation(Guard, PedCategory.Guard);
+                Log.Creation(Guard, PedCategory.Guard);
 
                 // Kill Guard
                 if (Guard.Exists()) { Guard.Kill(); }

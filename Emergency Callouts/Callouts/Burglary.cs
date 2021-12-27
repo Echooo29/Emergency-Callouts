@@ -194,7 +194,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.PedCreation(Suspect, PedCategory.Suspect);
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -347,7 +347,8 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;
-            
+            Log.Creation(SuspectVehicle, PedCategory.Suspect);
+
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
                 SuspectVehicle.Position = new Vector3(909.9557f, -624.8691f, 57.66842f);
@@ -582,9 +583,14 @@ namespace EmergencyCallouts.Callouts
                         {
                             StopChecking = true;
 
-                            // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+                            
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+                            
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted EntranceBlip");
 
                             // Create Pursuit
                             LHandle pursuit = Functions.CreatePursuit();
