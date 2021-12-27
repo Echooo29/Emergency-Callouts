@@ -184,7 +184,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
                 Display.AcceptNotification(CalloutDetails);
@@ -985,7 +985,7 @@ namespace EmergencyCallouts.Callouts
 
             Display.HideSubtitle();
             Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, CalloutScenario);
+            Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }
