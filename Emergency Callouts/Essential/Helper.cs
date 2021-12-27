@@ -11,6 +11,7 @@ using System.Net;
 using RAGENativeUI;
 using static EmergencyCallouts.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
+using System.Diagnostics;
 
 namespace EmergencyCallouts.Essential
 {
@@ -206,17 +207,20 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region Exception
-            internal static void Exception(Exception e)
+            internal static void Exception(Exception e, string _class, string method)
             {
-                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()");
+                // Log Exception
+                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
 
+                // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
                 
                 try
                 {
+                    // Send hit to remote exception counter
                     WebClient hitUpdater = new WebClient();
                     hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote error counter");
+                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
                 }
                 catch (WebException webEx)
                 {
