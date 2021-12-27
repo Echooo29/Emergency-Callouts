@@ -39,6 +39,7 @@ namespace EmergencyCallouts.Essential
         #endregion
     }
 
+
     internal static class Helper
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
@@ -580,6 +581,21 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
         }
+
+        internal static class Color
+        {
+            internal static void Red(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(224, 50, 50);
+
+            internal static void Yellow(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(240, 200, 80);
+
+            internal static void Blue(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(93, 182, 229);
+
+            internal static void Orange(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(234, 142, 80);
+
+            internal static void Green(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(114, 204, 114);
+
+            internal static void Purple(Blip blip) => blip.Color = System.Drawing.Color.FromArgb(171, 60, 230);
+        }
     }
 
     internal static class Inventory
@@ -708,56 +724,6 @@ namespace EmergencyCallouts.Essential
 
             int num = random.Next(sniperRifles.Length);
             if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
-        }
-        #endregion
-    }
-
-    internal static class Color
-    {
-        #region Colors
-        internal enum Colors
-        {
-            Red,
-            Yellow,
-            Blue,
-            Orange,
-            Green,
-            Purple,
-        }
-
-        internal static void SetColor(this Blip blip, Enum newColor)
-        {
-            string color = newColor.ToString();
-
-            if (color == Colors.Red.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
-            }
-
-            if (color == Colors.Yellow.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
-            }
-
-            if (color == Colors.Blue.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
-            }
-
-            if (color == Colors.Orange.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
-            }
-
-            if (color == Colors.Green.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
-            }
-
-            if (color == Colors.Purple.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
-            }
         }
         #endregion
     }
