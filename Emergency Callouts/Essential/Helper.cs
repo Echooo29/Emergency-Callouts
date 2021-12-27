@@ -205,14 +205,13 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region CalloutException
-            internal static void CalloutException(object o, string method, Exception e)
+            #region Exception
+            internal static void Exception(Exception e)
             {
-                Game.LogTrivial($"[Emergency Callouts]: {e.Message} At {o.GetType().Name}.{method}()");
-                Game.LogTrivial($"[Emergency Callouts]: Using version {Project.LocalVersion}");
+                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()");
 
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
-
+                
                 try
                 {
                     WebClient hitUpdater = new WebClient();
