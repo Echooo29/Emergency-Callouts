@@ -14,7 +14,7 @@ namespace EmergencyCallouts.Callouts
     public class PublicIntoxication : Callout
     {
         bool OnScene;
-        bool NearPed;
+        bool PedFound;
         bool PedDetained;
         bool NeedsRefreshing;
         bool CalloutActive;
@@ -137,7 +137,6 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -157,7 +156,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
             }
             catch (Exception e)
             {
@@ -172,7 +170,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
 
                 while (CalloutActive)
                 {
@@ -181,7 +178,6 @@ namespace EmergencyCallouts.Callouts
                     if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                     {
                         Suspect.Tasks.FightAgainst(MainPlayer);
-                        Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                         break;
                     }
@@ -208,7 +204,6 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
                         {
                             if (Suspect.Exists()) { Suspect.Kill(); }
-                            Game.LogTrivial("[Emergency Callouts]: Killed Suspect");
 
                             break;
                         }
@@ -229,9 +224,9 @@ namespace EmergencyCallouts.Callouts
             Handle.ManualEnding();
             Handle.AutomaticEnding(Suspect);
             Handle.PreventFirstResponderCrash(Suspect);
-            Handle.PreventDistanceCrash(CalloutPosition, OnScene, NearPed);
-            
-            #region On Scene
+            Handle.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
+
+            #region PlayerArrived
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
                 // Remove EntranceBlip
@@ -251,8 +246,8 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
 
-            #region NearPed
-            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !NearPed && OnScene && Suspect)
+            #region PedFound
+            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && OnScene && Suspect)
             {
                 // Hide Subtitle
                 Display.HideSubtitle();
@@ -265,11 +260,11 @@ namespace EmergencyCallouts.Callouts
 
                 Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
-                NearPed = true;
+                PedFound = true;
             }
             #endregion
 
-            #region Ped Detained
+            #region PedDetained
             if (Suspect.IsPedDetained() && !PedDetained)
             {
                 // Remove SuspectBlip
@@ -281,7 +276,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
 
-            #region Left Scene
+            #region PlayerLeft
             if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene)
             {
                 // Set OnScene
@@ -304,7 +299,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
 
             #region Refresh Search Area
-            if (!NearPed)
+            if (!PedFound)
             {
                 if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
                 {

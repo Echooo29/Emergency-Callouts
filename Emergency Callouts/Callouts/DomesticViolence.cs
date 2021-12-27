@@ -381,7 +381,6 @@ namespace EmergencyCallouts.Callouts
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             Victim.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
 
                             DialogueStarted = true;
                             Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
@@ -428,19 +427,15 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Victim Invincible
                 Victim.IsInvincible = true;
-                Game.LogTrivial("[Emergency Callouts]: Set Victim invincible");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts]: Victim cowering");
                 
                 // Suspect Fighting Victim
                 Suspect.Tasks.FightAgainst(Victim);
-                Game.LogTrivial("[Emergency Callouts]: Suspect fighting Victim");
 
                 GameFiber.StartNew(delegate
                 {
@@ -455,7 +450,6 @@ namespace EmergencyCallouts.Callouts
 
                             // Victim Cowering
                             Victim.Tasks.Cower(-1);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned victim to cower");
 
                             break;
                         }
@@ -478,14 +472,12 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Spot
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Lower Victim health
                 Victim.Health = 130;
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -497,7 +489,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Husband Fighting Wife
                             Suspect.Tasks.FightAgainst(Victim);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight Victim");
 
                             break;
                         }
@@ -511,7 +502,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Husband Fighting Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             
                             break;
                         }
@@ -534,20 +524,16 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Kill Victim
                 if (Victim.Exists()) { Victim.Kill(); }
-                Game.LogTrivial("[Emergency Callouts]: Killed Victim");
 
                 // Delete VictimBlip
                 if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-                Game.LogTrivial("[Emergency Callouts]: Deleted VictimBlip");
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Suspect Sitting
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
-                Game.LogTrivial($"[Emergency Callouts]: {SuspectPersona.FullName} now playing animation");
             }
             catch (Exception e)
             {
@@ -563,23 +549,18 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect position");
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -591,7 +572,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Suspect Putting Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Husband putting hands up");
 
                             break;
                         }
@@ -614,23 +594,18 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect position");
 
                 // Give Random Handgun
                 Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -642,7 +617,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
