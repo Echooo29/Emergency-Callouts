@@ -75,7 +75,6 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Disable();
 
             Suspect.Tasks.Wander();
-            Display.PedDescription(Suspect, DescriptionCategories.Suspect);
 
             CalloutHandler();
 
@@ -236,8 +235,6 @@ namespace EmergencyCallouts.Callouts
             #region On Scene
             if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
             {
-                Display.PedDescription(Suspect, DescriptionCategories.Suspect);
-
                 // Remove EntranceBlip
                 EntranceBlip.Remove();
 
