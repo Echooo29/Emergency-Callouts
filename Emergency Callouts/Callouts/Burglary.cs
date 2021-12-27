@@ -153,7 +153,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc);
+                    CalloutArea = World.GetStreetName(loc).Replace("Amarillo Vista", "Amarillo Vista"); ;
                 }
             }
 

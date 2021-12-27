@@ -182,7 +182,7 @@ namespace EmergencyCallouts.Callouts
         readonly float TerminalWeldingHeading = 279.74f;
         #endregion
 
-        // McKenzie Airstrip
+        // McKenzie Field
         #region Positions
         readonly Vector3[] AirstripHidingPositions =
         {
@@ -272,7 +272,7 @@ namespace EmergencyCallouts.Callouts
         readonly float LoadingDockWeldingHeading = 268.66f;
         #endregion
 
-        // Paleto Bay Barn
+        // Zancudo Grain Growers
         #region Positions
         readonly Vector3[] BarnHidingPositions =
         {
@@ -331,7 +331,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc);
+                    CalloutArea = World.GetStreetName(loc).Replace("Great Ocean Hwy", "Zancudo Grain Growers"); ;
                 }
             }
 
@@ -429,7 +429,7 @@ namespace EmergencyCallouts.Callouts
                     Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
                     EntranceBlip.Position = Entrance;
                 }
-                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+                else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
                 {
                     Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
                     Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
@@ -563,7 +563,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
                 Suspect.Heading = TerminalManagerHeadings[ManagerPositionNum];
             }
-            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Field
             {
                 Suspect = new Ped("player_two", CalloutPosition, 0f);
                 Suspect.SetDefaults();
@@ -591,7 +591,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = LoadingDockManagerPositions[ManagerPositionNum];
                 Suspect.Heading = LoadingDockManagerHeadings[ManagerPositionNum];
             }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
             {
                 Suspect = new Ped("csb_oscar", CalloutPosition, 0f);
                 Suspect.SetDefaults();
