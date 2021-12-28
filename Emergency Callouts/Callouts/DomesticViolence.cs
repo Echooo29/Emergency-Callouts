@@ -381,12 +381,15 @@ namespace EmergencyCallouts.Callouts
                     {
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
-                            Victim.Tasks.Clear();
+                            if (!DialogueStarted)
+                            {
+                                Victim.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
 
                             DialogueStarted = true;
-                            Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
 
-                            //Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
                             Victim.Face(MainPlayer);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
