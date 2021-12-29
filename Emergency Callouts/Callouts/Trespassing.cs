@@ -1098,7 +1098,8 @@ namespace EmergencyCallouts.Callouts
                 #region PlayerClimbing
                 if (MainPlayer.IsClimbing)
                 {
-                    Game.DisplayHelp("~p~Clue~s~: The ~y~susect~s~ has not used a ladder", 5000);
+                    Game.DisplayHelp("~p~Clue~s~: The ~y~susect~s~ has not used a ladder");
+                    GameFiber.Sleep(5000);
                 }
                 #endregion
             }
