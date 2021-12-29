@@ -266,7 +266,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "GRANGER", "VIRGO",
+                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "VIRGO",
                     "GRESLEY", "HABANERO", "DUKES", "BJXL", "CAVALCADE", "F620", "FELON", "FELON2", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO",
                     "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE", "DILETTANTE", 
                     "WARRENER", "DUKES", "VIRGO", "BUFFALO", "ASEA", "RANCHERXL", "CASCO", "EXEMPLAR", "SENTINEL", "CHINO", "SULTAN", "BUFFALO2", 
