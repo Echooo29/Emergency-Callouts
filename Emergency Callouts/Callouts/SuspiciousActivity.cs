@@ -651,7 +651,7 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
-            Display.DetachMessage();
+            Display.EndNotification();
             Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
