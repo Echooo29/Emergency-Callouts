@@ -225,7 +225,7 @@ namespace EmergencyCallouts.Essential
                 }
                 catch (WebException webEx)
                 {
-                    Game.LogTrivial("[Emergency Callouts]: " + webEx.Message);
+                    Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
                 }
             }
             #endregion

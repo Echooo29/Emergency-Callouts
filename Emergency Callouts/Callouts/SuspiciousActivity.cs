@@ -811,7 +811,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect, Suspect2);
                 Handle.PreventFirstResponderCrash(Suspect, Suspect2);
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -911,6 +911,7 @@ namespace EmergencyCallouts.Callouts
             catch (Exception e)
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                End();
             }
         }
 
