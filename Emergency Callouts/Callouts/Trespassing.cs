@@ -359,9 +359,6 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                string[] poo = { "test" };
-                Game.LogTrivial(poo[2]);
-
                 // Callout Accepted
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
