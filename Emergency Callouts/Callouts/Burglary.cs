@@ -186,7 +186,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Accepting Messages
                 Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle($"Go to the ~r~Burglary~s~ at ~y~{CalloutArea}~s~.");
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -398,10 +398,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     Suspect.GiveRandomMeleeWeapon(-1, true);
                 }
-                else
-                {
-                    Suspect.GiveRandomHandgun(-1, true);
-                }
+                else Suspect.GiveRandomHandgun(-1, true);
 
                 GameFiber.StartNew(delegate
                 {

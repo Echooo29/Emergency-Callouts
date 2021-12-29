@@ -163,9 +163,9 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region AcceptSubtitle
-            internal static void AcceptSubtitle(string message)
+            internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Game.DisplaySubtitle(message, 20000);
+                Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 20000);
             }
             #endregion
 

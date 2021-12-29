@@ -164,7 +164,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Suspicious Activity";
             CalloutDetails = "Multiple civilians called about a person handling guns in the trunk of their car.";
-            CalloutScenario = GetRandomScenarioNumber(5);
+            CalloutScenario = GetRandomScenarioNumber(2);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -188,7 +188,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Accept Messages
                 Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle($"Go to the ~r~{CalloutMessage}~s~ at ~y~{CalloutArea}~s~.");
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -297,15 +297,6 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
-                        break;
                 }
 
                 // Enabling Route
@@ -409,66 +400,6 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void RetrieveDrugDealPosition()
-        {
-            #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // Strawberry
-            {
-                SuspectVehicle.Position = new Vector3(153.1114f, -1236.517f, 28.82794f);
-                Suspect2Vehicle.Position = new Vector3(154.2649f, -1238.243f, 28.90071f);
-
-                SuspectVehicle.Heading = 127.4f;
-                Suspect2Vehicle.Heading = 308.8f;
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // Del Perro
-            {
-                SuspectVehicle.Position = new Vector3(-1281.334f, -817.5996f, 16.65075f);
-                Suspect2Vehicle.Position = new Vector3(-1279.269f, -816.8776f, 16.73894f);
-
-                SuspectVehicle.Heading = 205.01f;
-                Suspect2Vehicle.Heading = 24.12f;
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // Harmony
-            {
-                SuspectVehicle.Position = new Vector3(592.0656f, 2804.81f, 41.53365f);
-                Suspect2Vehicle.Position = new Vector3(595f, 2804.858f, 41.5457f);
-
-                SuspectVehicle.Heading = 186.73f;
-                Suspect2Vehicle.Heading = 6.83f;
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // El Burro
-            {
-                SuspectVehicle.Position = new Vector3(1232.671f, -2361.097f, 49.63579f);
-                Suspect2Vehicle.Position = new Vector3(1230.62f, -2359.984f, 49.77252f);
-
-                SuspectVehicle.Heading = 337.38f;
-                Suspect2Vehicle.Heading = 158.24f;
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
-            {
-                SuspectVehicle.Position = new Vector3(2129.621f, 4798.847f, 40.82703f);
-                Suspect2Vehicle.Position = new Vector3(2130.776f, 4796.763f, 40.83625f);
-
-                SuspectVehicle.Heading = 116.66f;
-                Suspect2Vehicle.Heading = 301.40f;
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Paleto Bay
-            {
-                SuspectVehicle.Position = new Vector3(1522.337f, 6342.176f, 23.78554f);
-                Suspect2Vehicle.Position = new Vector3(1522.379f, 6344.645f, 23.7448f);
-
-                SuspectVehicle.Heading = 270.59f;
-                Suspect2Vehicle.Heading = 88.72f;
-            }
-
-            vehDoors = SuspectVehicle.GetDoors();
-            veh2Doors = Suspect2Vehicle.GetDoors();
-
-            vehDoors[vehDoors.Length - 1].Close(false);
-            veh2Doors[veh2Doors.Length - 1].Close(false);
-            #endregion
-        }
-
         private void Scenario1() // Fight And Flee
         {
             #region Scenario 1
@@ -537,219 +468,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Both Attack
+        private void Scenario2() // Ripdeal
         {
             #region Scenario 2
-            try
-            {
-                RetrievePedPosition();
-
-                Suspect.GiveRandomSubmachineGun(-1, true);
-
-                Suspect2.GiveRandomHandgun(-1, true);
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@machinery@weapon_test@"), "base_amy_skater_01", 5f, AnimationFlags.Loop); // Weapon Inspect
-
-                Suspect2.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@casino@peds@"), "amb_world_human_hang_out_street_male_c_base", 5f, AnimationFlags.None); // Cross Arms
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
-                        {
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-
-                            Suspect2.Tasks.FightAgainst(MainPlayer);
-
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario3() // In-Vehicle Drug Deal
-        {
-            #region Scenario 3
-            try
-            {
-                RetrieveDrugDealPosition();
-
-
-                Suspect.GiveRandomHandgun(-1, true);
-                Suspect2.GiveRandomHandgun(-1, true);
-
-                Suspect.WarpIntoVehicle(SuspectVehicle, -1);
-                Suspect2.WarpIntoVehicle(Suspect2Vehicle, -1);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
-                        {
-                            StopChecking = true;
-
-                            // Delete Blips
-                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-
-                            pursuit = Functions.CreatePursuit();
-
-                            Functions.AddPedToPursuit(pursuit, Suspect);
-                            Functions.AddPedToPursuit(pursuit, Suspect2);
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-
-                            Play.PursuitAudio();
-
-                            break;
-                        }
-                    }
-                });
-
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario4() // Suspect Searching Trunk
-        {
-            #region Scenario 4
-            try
-            {
-                // Retrieve Ped Positions
-                RetrievePedPosition();
-
-                // Set SuspectBlip Color to Yellow
-                SuspectBlip.SetColorYellow();
-
-                // Delete Suspect2, Suspect2Blip, SuspectVehicle.
-                if (Suspect2.Exists()) { Suspect2.Delete(); }
-
-                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-
-                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
-
-                // Clear Suspect Inventory
-                Suspect.Inventory.Weapons.Clear();
-
-                // Suspect Position & Heading
-                Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + 1.9f);
-                Suspect.Heading = SuspectVehicle.Heading;
-
-                // Play Animation
-                Suspect2.Tasks.PlayAnimation(new AnimationDictionary("anim@gangops@facility@servers@bodysearch@"), "player_search", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.Loop);
-
-                #region Dialogue
-                string[] dialogue =
-                {
-                    "~b~You~s~: Hello, what are you doing here?",
-                    "~y~Suspect~s~: Hey officer, I'm about to pick up some packages from the store, they told me to wait behind.",
-                    "~b~You~s~: Okay, do you have a receipt to prove that?",
-                    "~y~Suspect~s~: Yes I do, here you go",
-                    "~b~You~s~: Looks legit.",
-                    "~g~Person~s~: Well that's because it is.",
-                    "~b~You~s~: I can see that.",
-                    "~b~You~s~: Well, I better get going!",
-                    "~g~Person~s~: Goodbye."
-                };
-
-                int line = 0;
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
-                        {
-                            if (Game.IsKeyDown(Settings.TalkKey))
-                            {
-                                DialogueStarted = true;
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
-
-                                Suspect.Tasks.Clear();
-
-
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180).WaitForCompletion();
-
-                                Game.DisplaySubtitle(dialogue[line], 99999);
-                                line++;
-
-                                if (line == 3)
-                                {
-                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
-
-                                    if (CalloutPosition == CalloutPositions[0]) // Strawberry
-                                    {
-                                        Game.DisplayNotification("", "", "Strawberry's Best Strawberries", "~y~Order ID: 4702", "3x xxx\n1x xxx\n9x xxx\n 1x xxx\n\nTotal: xxx");
-                                    }
-                                    else if (CalloutPosition == CalloutPositions[1]) // Del Perro
-                                    {
-                                        Game.DisplayNotification("", "", "Elen's Elentronics", "~y~Order ID: 0068", "1x Samsung 43AU7170 TV: $589 \n1x 1 Year of insurance: $0.00\n\nTotal: xxx");
-                                    }
-                                    else if (CalloutPosition == CalloutPositions[2]) // Harmony
-                                    {
-                                        Game.DisplayNotification("", "", "", "~y~Order ID: 0151", "1x Leather couch: $1200\n3x Bar stool: $149.97\n\nTotal: 1349.97");
-                                    }
-
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed Receipt");
-                                }
-
-                                if (line == 4)
-                                {
-                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-
-                                    SuspectBlip.SetColorGreen();
-                                }
-
-                                if (line == dialogue.Length)
-                                {
-                                    GameFiber.Sleep(3000);
-                                    Play.CodeFourAudio();
-
-                                    End();
-                                    break;
-                                }
-                                GameFiber.Sleep(500);
-                            }
-                            else
-                            {
-                                if (DialogueStarted == false)
-                                {
-                                    Game.DisplayHelp($"Press ~y~{Settings.TalkKey}~s~ to talk to the ~y~suspect~s~.");
-                                }
-                            }
-                        }
-                    }
-                });
-                #endregion
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario5() // Ripdeal
-        {
-            #region Scenario 5
             try
             {
                 // Close SuspectVehicle Doors

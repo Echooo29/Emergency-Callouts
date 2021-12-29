@@ -18,7 +18,7 @@ namespace EmergencyCallouts
                 Game.LogTrivial("[Emergency Callouts]: Checking for updates");
 
                 OnlineVersion = webClient.DownloadString(OnlineVersionURI).Trim();
-                OnlineVersion = "0.1.0"; // ! Temp
+                OnlineVersion = "filehidden"; // ! Temp
             }
             catch (WebException)
             {
@@ -32,7 +32,7 @@ namespace EmergencyCallouts
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
             }
-            else if (OnlineVersion.ToLower() == "file hidden")
+            else if (OnlineVersion.ToLower() == "filehidden")
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~{Project.LocalVersion} ~m~by Faya", "New update is being reviewed by LSPDFR!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; File is hidden");
