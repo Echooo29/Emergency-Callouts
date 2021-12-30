@@ -308,9 +308,6 @@ namespace EmergencyCallouts.Callouts
         };
 
         readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
-
-        readonly Vector3 BarnWeldingPosition = new Vector3();
-        readonly float BarnWeldingHeading = 0f;
         #endregion
 
         Vehicle BarnVehicle;
@@ -830,7 +827,7 @@ namespace EmergencyCallouts.Callouts
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("heisthud", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~m~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
