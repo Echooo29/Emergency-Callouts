@@ -158,7 +158,7 @@ namespace EmergencyCallouts.Essential
             #region AcceptNotification
             internal static void AcceptNotification(string details)
             {
-                Game.DisplayNotification("dia_police", "dia_police", "Dispatch", $"~{Settings.SubtitleColor}~Notification", details);
+                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", details);
             }
             #endregion
 
@@ -172,7 +172,7 @@ namespace EmergencyCallouts.Essential
             #region EndNotification
             internal static void EndNotification()
             {
-                Game.DisplayNotification("dia_police", "dia_police", "Dispatch", $"~{Settings.SubtitleColor}~Notification", "Situation is under control.");
+                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", "Situation is under control.");
             }
             #endregion
 

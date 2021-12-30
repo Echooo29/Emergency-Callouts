@@ -18,7 +18,7 @@ namespace EmergencyCallouts
         internal static int CalloutDistance = 1000;
 
         // Customization
-        internal static string Callsign = "1-LINCOLN-18";
+        internal static string DipatchName = "Dipatch";
         internal static string SubtitleColor = "Yellow";
 
         // Keys
@@ -45,7 +45,7 @@ namespace EmergencyCallouts
             CalloutDistance = iniFile.ReadInt32("Measurements", "CalloutDistance", CalloutDistance);
 
             // Customization
-            Callsign = iniFile.ReadString("Customization", "Callsign", Callsign).ToUpper();
+            DipatchName = iniFile.ReadString("Customization", "DispatchName", DipatchName);
             SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
