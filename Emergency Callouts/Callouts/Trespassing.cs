@@ -124,7 +124,7 @@ namespace EmergencyCallouts.Callouts
         {
             224f, 
             343f, 
-            262f,
+            78f,
         };
 
         readonly Vector3[] ScrapyardArsonPositions =
