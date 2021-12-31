@@ -15,7 +15,7 @@ namespace EmergencyCallouts
 
         // Measurements
         internal static int SearchAreaSize = 60;
-        internal static int CalloutDistance = 1000;
+        internal static int MaxCalloutDistance = 1000;
 
         // Customization
         internal static string DipatchName = "Dipatch";
@@ -42,7 +42,7 @@ namespace EmergencyCallouts
 
             // Callout Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
-            CalloutDistance = iniFile.ReadInt32("Measurements", "CalloutDistance", CalloutDistance);
+            MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
 
             // Customization
             DipatchName = iniFile.ReadString("Customization", "DispatchName", DipatchName);
