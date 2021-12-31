@@ -20,7 +20,6 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool Ped2Found;
         bool PedDetained;
-        bool DialogueStarted;
         bool StopChecking;
 
         Vector3 Entrance;

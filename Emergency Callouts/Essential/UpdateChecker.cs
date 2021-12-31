@@ -10,7 +10,7 @@ namespace EmergencyCallouts
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
-            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=20730&textOnly=1");
+            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
             string OnlineVersion = null;
 
             try
@@ -18,7 +18,6 @@ namespace EmergencyCallouts
                 Game.LogTrivial("[Emergency Callouts]: Checking for updates");
 
                 OnlineVersion = webClient.DownloadString(OnlineVersionURI).Trim();
-                OnlineVersion = "0.1.0"; // ! Temp
             }
             catch (WebException)
             {
