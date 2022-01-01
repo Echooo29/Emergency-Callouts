@@ -43,14 +43,14 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] VinewoodHillsFightPositions =
         {
-            new Vector3(23.723f, 523.2088f, 170.2274f),   // Chill Area 1
-            new Vector3(-6.617259f, 509.189f, 170.6275f), // Chill Area 2
+            new Vector3(24.13852f, 520.5587f, 170.2275f),   // Chill Area 1
+            new Vector3(-6.628098f, 509.4984f, 170.6278f), // Chill Area 2
         };
 
         readonly float[] VinewoodHillsFightHeadings =
         {
-            0f,
-            0f,
+            24.09f,
+            61.64f,
         };
         #endregion
 
