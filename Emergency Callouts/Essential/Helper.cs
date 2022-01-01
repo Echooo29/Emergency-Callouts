@@ -333,6 +333,8 @@ namespace EmergencyCallouts.Essential
                         Functions.StopCurrentCallout();
                     }
                 }
+
+                if (MainPlayer.IsDead) { Functions.StopCurrentCallout(); }
             }
             internal static void AutomaticEnding(Ped suspect, Ped suspect2)
             {
