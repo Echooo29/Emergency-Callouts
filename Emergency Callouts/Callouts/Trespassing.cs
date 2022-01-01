@@ -812,7 +812,7 @@ namespace EmergencyCallouts.Callouts
 
                                 DialogueStarted = true;
 
-                                Suspect.Face(MainPlayer);
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                                 Game.DisplaySubtitle(dialogue[line], 99999);
                                 line++;

@@ -390,7 +390,7 @@ namespace EmergencyCallouts.Callouts
 
                             DialogueStarted = true;
 
-                            Victim.Face(MainPlayer);
+                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
