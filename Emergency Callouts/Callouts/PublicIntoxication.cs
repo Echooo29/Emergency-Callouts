@@ -1,8 +1,10 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -13,25 +15,28 @@ namespace EmergencyCallouts.Callouts
     public class PublicIntoxication : Callout
     {
         bool OnScene;
-        bool NearPed;
+        bool PedFound;
         bool PedDetained;
         bool NeedsRefreshing;
         bool CalloutActive;
 
         Ped Suspect;
+        Persona SuspectPersona;
+
         Blip EntranceBlip;
         Blip SearchArea;
         Blip SuspectBlip;
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around(1000f));
+            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100f, Settings.MaxCalloutDistance));
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
+            CalloutArea = World.GetStreetName(CalloutPosition);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
-            //AddMinimumDistanceCheck(30f, CalloutPosition);
+            AddMinimumDistanceCheck(30f, CalloutPosition);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
@@ -40,29 +45,36 @@ namespace EmergencyCallouts.Callouts
 
         public override void OnCalloutNotAccepted()
         {
+            Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+
             base.OnCalloutNotAccepted();
         }
 
         public override bool OnCalloutAccepted()
         {
-            Display.AttachMessage(CalloutDetails);
+            // Callout Accepted
+            Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+            // Accept Messages
+            Display.AcceptNotification(CalloutDetails);
+            Display.AcceptSubtitle(CalloutMessage, CalloutArea);
 
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();
 
             Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+            SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-            Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+            Log.Creation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
-            SuspectBlip.SetColor(Colors.Yellow);
+            SuspectBlip.SetColorYellow();
             SuspectBlip.ScaleForPed();
             SuspectBlip.Disable();
 
             Suspect.Tasks.Wander();
-            Display.PedDescription(Suspect, DescriptionCategories.Suspect);
 
             CalloutHandler();
 
@@ -95,7 +107,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "CalloutHandler", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -107,7 +119,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario1", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -126,7 +138,6 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -135,7 +146,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario2", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -146,11 +157,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario3", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -161,7 +171,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                Game.LogTrivial("[Emergency Callouts]: Added weapon (WEAPON_BOTTLE) to Suspect inventory");
 
                 while (CalloutActive)
                 {
@@ -170,7 +179,6 @@ namespace EmergencyCallouts.Callouts
                     if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
                     {
                         Suspect.Tasks.FightAgainst(MainPlayer);
-                        Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                         break;
                     }
@@ -178,7 +186,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario4", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -197,7 +205,6 @@ namespace EmergencyCallouts.Callouts
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
                         {
                             if (Suspect.Exists()) { Suspect.Kill(); }
-                            Game.LogTrivial("[Emergency Callouts]: Killed Suspect");
 
                             break;
                         }
@@ -206,7 +213,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario5", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -215,111 +222,117 @@ namespace EmergencyCallouts.Callouts
         {
             base.Process();
 
-            Handle.ManualEnding();
-            Handle.AutomaticEnding(Suspect);
-            Handle.PreventFirstResponderCrash(Suspect);
-            Handle.PreventDistanceCrash(CalloutPosition, OnScene, NearPed);
-            
-            #region On Scene
-            if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
+            try
             {
-                Display.PedDescription(Suspect, DescriptionCategories.Suspect);
+                Handle.ManualEnding();
+                Handle.AutomaticEnding(Suspect);
+                Handle.PreventFirstResponderCrash(Suspect);
+                Handle.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
 
-                // Remove EntranceBlip
-                EntranceBlip.Remove();
-
-                // Create SearchArea
-                SearchArea = new Blip(Suspect.Position.Around(5f, 30f), Settings.SearchAreaSize);
-                SearchArea.SetColor(Colors.Yellow);
-                SearchArea.Alpha = 0.5f;
-
-                // Display Subtitle
-                Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.", 10000);
-
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
-
-                OnScene = true;
-            }
-            #endregion
-
-            #region NearPed
-            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !NearPed && OnScene && Suspect)
-            {
-                // Hide Subtitle
-                Display.HideSubtitle();
-
-                // Enable SuspectBlip
-                SuspectBlip.Enable();
-
-                // Remove SearchArea
-                SearchArea.Remove();
-
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
-
-                NearPed = true;
-            }
-            #endregion
-
-            #region Ped Detained
-            if (Suspect.IsPedDetained() && !PedDetained)
-            {
-                // Remove SuspectBlip
-                SuspectBlip.Remove();
-
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
-
-                PedDetained = true;
-            }
-            #endregion
-
-            #region Left Scene
-            if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene)
-            {
-                // Set OnScene
-                OnScene = false;
-
-                // Disable SuspectBlip
-                SuspectBlip.Disable();
-
-                // Delete SearchArea
-                SearchArea.Remove();
-
-                // Create EntranceBlip
-                EntranceBlip = new Blip(CalloutPosition);
-
-                // Enable Route
-                EntranceBlip.EnableRoute();
-
-                Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
-            }
-            #endregion
-
-            #region Refresh Search Area
-            if (!NearPed)
-            {
-                if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
+                #region PlayerArrived
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
                 {
-                    NeedsRefreshing = false;
+                    // Remove EntranceBlip
+                    EntranceBlip.Remove();
+
+                    // Create SearchArea
+                    SearchArea = new Blip(Suspect.Position.Around(5f, 30f), Settings.SearchAreaSize);
+                    SearchArea.SetColorYellow();
+                    SearchArea.Alpha = 0.5f;
+
+                    // Display Subtitle
+                    Game.DisplaySubtitle("Find the ~r~drunk person~s~ in the ~y~area~s~.", 20000);
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
+
+                    OnScene = true;
                 }
-                else
+                #endregion
+
+                #region PedFound
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && OnScene && Suspect)
                 {
-                    NeedsRefreshing = true;
+                    // Hide Subtitle
+                    Display.HideSubtitle();
+
+                    // Enable SuspectBlip
+                    SuspectBlip.Enable();
+
+                    // Remove SearchArea
+                    SearchArea.Remove();
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
+
+                    PedFound = true;
                 }
-            }
+                #endregion
 
-            if (Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
+                #region PedDetained
+                if (Suspect.IsPedDetained() && !PedDetained)
+                {
+                    // Remove SuspectBlip
+                    SuspectBlip.Remove();
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
+
+                    PedDetained = true;
+                }
+                #endregion
+
+                #region PlayerLeft
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene)
+                {
+                    // Set OnScene
+                    OnScene = false;
+
+                    // Disable SuspectBlip
+                    SuspectBlip.Disable();
+
+                    // Delete SearchArea
+                    SearchArea.Remove();
+
+                    // Create EntranceBlip
+                    EntranceBlip = new Blip(CalloutPosition);
+
+                    // Enable Route
+                    EntranceBlip.EnableRoute();
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
+                }
+                #endregion
+
+                #region Refresh Search Area
+                if (!PedFound)
+                {
+                    if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
+                    {
+                        NeedsRefreshing = false;
+                    }
+                    else
+                    {
+                        NeedsRefreshing = true;
+                    }
+                }
+
+                if (Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
+                {
+                    CalloutPosition = Suspect.Position;
+                    SearchArea.Remove();
+
+                    SearchArea = new Blip(Suspect.Position.Around(10f, 30f), Settings.SearchAreaSize);
+                    SearchArea.SetColorYellow();
+                    SearchArea.Alpha = 0.5f;
+                    Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
+
+                    Functions.PlayScannerAudioUsingPosition("SUSPECT_LAST_SEEN IN_OR_ON_POSITION", Suspect.Position);
+                }
+                #endregion
+            }
+            catch (Exception e)
             {
-                CalloutPosition = Suspect.Position;
-                SearchArea.Remove();
-
-                SearchArea = new Blip(Suspect.Position.Around(10f, 30f), Settings.SearchAreaSize);
-                SearchArea.SetColor(Colors.Yellow);
-                SearchArea.Alpha = 0.5f;
-                Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
-
-                Functions.PlayScannerAudioUsingPosition("SUSPECT_LAST_SEEN IN_OR_ON_POSITION", Suspect.Position);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                End();
             }
-            #endregion
         }
 
         public override void End()
@@ -334,8 +347,8 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
-            Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, CalloutScenario);
+            Display.EndNotification();
+            Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

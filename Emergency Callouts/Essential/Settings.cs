@@ -15,10 +15,10 @@ namespace EmergencyCallouts
 
         // Measurements
         internal static int SearchAreaSize = 60;
-        internal static int CalloutDistance = 1000;
+        internal static int MaxCalloutDistance = 1000;
 
         // Customization
-        internal static string Callsign = "1-LINCOLN-18";
+        internal static string DipatchName = "Dipatch";
         internal static string SubtitleColor = "Yellow";
 
         // Keys
@@ -27,7 +27,7 @@ namespace EmergencyCallouts
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts]: Loading settings.");
+            Game.LogTrivial("[Emergency Callouts]: Loading settings");
 
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
@@ -42,17 +42,17 @@ namespace EmergencyCallouts
 
             // Callout Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
-            CalloutDistance = iniFile.ReadInt32("Measurements", "CalloutDistance", CalloutDistance);
+            MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
 
             // Customization
-            Callsign = iniFile.ReadString("Customization", "Callsign", Callsign);
+            DipatchName = iniFile.ReadString("Customization", "DispatchName", DipatchName);
             SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
-            Game.LogTrivial("[Emergency Callouts]: Loaded settings.");
+            Game.LogTrivial("[Emergency Callouts]: Loaded settings");
         }
     }
 }

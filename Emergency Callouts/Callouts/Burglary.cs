@@ -1,11 +1,13 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using Entity = EmergencyCallouts.Essential.Helper.Entity;
+using static EmergencyCallouts.Essential.Inventory;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -138,6 +140,8 @@ namespace EmergencyCallouts.Callouts
 
         Ped Suspect;
 
+        Persona SuspectPersona;
+
         Blip SuspectBlip;
         Blip EntranceBlip;
         Blip SearchArea;
@@ -150,6 +154,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
+                    CalloutArea = World.GetStreetName(loc).Replace("Amarillo Vista", "Amarillo Vista"); ;
                 }
             }
 
@@ -166,7 +171,7 @@ namespace EmergencyCallouts.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Game.LogTrivial("[Emergency Callouts]: Callout not accepted");
+            Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
 
             base.OnCalloutNotAccepted();
@@ -177,22 +182,24 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
-                // Attach Message
-                Display.AttachMessage(CalloutDetails);
+                // Accepting Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
 
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
@@ -200,7 +207,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "OnCalloutAccepted", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
             return base.OnCalloutAccepted();
@@ -227,6 +234,7 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
                     EntranceBlip.Position = Entrance;
+                    Settings.SearchAreaSize += 80;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
@@ -280,11 +288,10 @@ namespace EmergencyCallouts.Callouts
                 // Enabling Route
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
-
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "CalloutHandler", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -331,7 +338,6 @@ namespace EmergencyCallouts.Callouts
 
             // Lockpick Animation
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
-            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
             #endregion
         }
@@ -341,7 +347,8 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;
-            
+            Log.Creation(SuspectVehicle, PedCategory.Suspect);
+
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
                 SuspectVehicle.Position = new Vector3(909.9557f, -624.8691f, 57.66842f);
@@ -373,25 +380,43 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Heading = 158.69f;
             }
 
-            Game.LogTrivial($"[Emergency Callouts]: Created SuspectVehicle ({SuspectVehicle.Model.Name}) at " + SuspectVehicle.Position);
-
             VehicleDoor[] vehDoors = SuspectVehicle.GetDoors();
             vehDoors[vehDoors.Length - 2].Open(false);
             #endregion
         }
 
-        private void Scenario1() // Unnoticed
+        private void Scenario1() // Attack
         {
             #region Scenario 1
             try
             {
                 // Retrieve Ped Position
                 RetrievePedPositions();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
+
+                int num = random.Next(2);
+                if (num == 0)
+                {
+                    Suspect.GiveRandomMeleeWeapon(-1, true);
+                }
+                else Suspect.GiveRandomHandgun(-1, true);
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (PedFound)
+                        {
+                            Suspect.Tasks.FightAgainst(MainPlayer);
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario1", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -403,7 +428,6 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Positions
                 RetrievePedPositions();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
                 GameFiber.StartNew(delegate
                 {
@@ -415,25 +439,22 @@ namespace EmergencyCallouts.Callouts
                         {
                             StopChecking = true;
 
-                            // Delete SuspectBlip
+                            // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                             // Create Pursuit
                             LHandle pursuit = Functions.CreatePursuit();
-                            Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
                             // Add Suspect To Pursuit
                             Functions.AddPedToPursuit(pursuit, Suspect);
-                            Game.LogTrivial("[Emergency Callouts]: Added Suspect to pursuit");
 
                             // Set Pursuit Active
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit active for player");
 
                             // Play Pursuit Audio
                             Play.PursuitAudio();
-                            Game.LogTrivial("[Emergency Callouts]: Played pursuit audio");
 
                             break;
                         }
@@ -442,7 +463,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario2", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -454,7 +475,6 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Positions
                 RetrievePedPositions();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
                 GameFiber.StartNew(delegate
                 {
@@ -466,7 +486,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to put hands up");
 
                             break;
                         }
@@ -475,7 +494,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario3", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -487,11 +506,9 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Positions
                 RetrievePedPositions();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved ped position");
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned (WEAPON_CROWBAR) to Suspect inventory");
 
                 GameFiber.StartNew(delegate
                 {
@@ -502,7 +519,6 @@ namespace EmergencyCallouts.Callouts
                         if (PedFound)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             break;
                         }
                     }
@@ -510,7 +526,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario4", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -522,23 +538,18 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Vehicle Positions
                 RetrieveVehiclePositions();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved vehicle position");
 
                 // Suspect Resistance Chance
                 Functions.SetPedResistanceChance(Suspect, 40f);
-                Game.LogTrivial("[Emergency Callouts]: Set ped resistance chance to 40%");
 
                 // Suspect Position
                 Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + 1.9f);
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect position");
 
                 // Suspect Heading
                 Suspect.Heading = SuspectVehicle.Heading;
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect heading");
 
                 // Search Animation
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@gangops@facility@servers@bodysearch@"), "player_search", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
                 GameFiber.StartNew(delegate
                 {
@@ -550,25 +561,21 @@ namespace EmergencyCallouts.Callouts
                         {
                             StopChecking = true;
 
-                            // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                             // Create Pursuit
                             LHandle pursuit = Functions.CreatePursuit();
-                            Game.LogTrivial("[Emergency Callouts]: Created pursuit");
 
                             // Add Suspect to pursuit
                             Functions.AddPedToPursuit(pursuit, Suspect);
-                            Game.LogTrivial("[Emergency Callouts]: Added Suspect to pursuit");
 
                             // Set Pursuit Active
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for " + PlayerPersona.FullName);
 
                             // Play pursuit audio
                             Play.PursuitAudio();
-                            Game.LogTrivial("[Emergency Callouts]: Played pursuit audio");
 
                             break;
                         }
@@ -577,7 +584,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario5", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -599,7 +606,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 10000);
+                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -609,7 +616,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
@@ -631,7 +638,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
                 #endregion
 
@@ -640,7 +647,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
                     // Delete SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -672,7 +679,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Process", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                 End();
             }
         }
@@ -688,8 +695,8 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
-            Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, CalloutScenario);
+            Display.EndNotification();
+            Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

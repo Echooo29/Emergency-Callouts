@@ -1,9 +1,11 @@
 ﻿using EmergencyCallouts.Essential;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using RAGENativeUI;
 using System;
+using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using static EmergencyCallouts.Essential.Inventory;
@@ -127,6 +129,9 @@ namespace EmergencyCallouts.Callouts
         Ped Suspect;
         Ped Victim;
 
+        Persona SuspectPersona;
+        Persona VictimPersona;
+
         Blip SuspectBlip;
         Blip VictimBlip;
         Blip EntranceBlip;
@@ -141,13 +146,14 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's getting assaulted by him every hour.";
+            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~r~assaulted~s~.";
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
@@ -157,7 +163,7 @@ namespace EmergencyCallouts.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Game.LogTrivial("[Emergency Callouts]: Callout not accepted");
+            Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
 
             base.OnCalloutNotAccepted();
@@ -168,34 +174,37 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, CalloutScenario);
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
-                // Attach Message
-                Display.AttachMessage(CalloutDetails);
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Red);
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
                 // Victim
                 Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
+                VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
                 Victim.Health = 135;
-                Game.LogTrivial($"[Emergency Callouts]: Created Victim ({Victim.Model.Name}) at " + Victim.Position);
+                Log.Creation(Victim, PedCategory.Victim);
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
-                VictimBlip.SetColor(Colors.Orange);
+                VictimBlip.SetColorOrange();
                 VictimBlip.ScaleForPed();
                 VictimBlip.Disable();
 
@@ -211,7 +220,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "OnCalloutAccepted", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
             return base.OnCalloutAccepted();
@@ -290,7 +299,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "CalloutHandler", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -353,11 +362,11 @@ namespace EmergencyCallouts.Callouts
             string[] dialogue =
             {
                 "~b~You~s~: M'am, are you injured?",
-                "~g~Victim~s~: Yes, I'm hurt alot.",
-                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?.",
-                "~g~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
+                "~o~Victim~s~: Yes, I'm hurt alot.",
+                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?",
+                "~o~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
                 "~b~You~s~: Try to relax, positive thoughts only okay?",
-                "~g~Victim~s~: Okay, I can do th..."
+                "~o~Victim~s~: Okay, I don't know if I..."
             };
 
             int line = 0;
@@ -372,14 +381,16 @@ namespace EmergencyCallouts.Callouts
                     {
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
-                            Victim.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Victim tasks");
+                            if (!DialogueStarted)
+                            {
+                                Victim.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
 
                             DialogueStarted = true;
-                            Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
 
-                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180);
-                            Game.LogTrivial("[Emergency Callouts]: Victim achieved player heading");
+                            Victim.Face(MainPlayer);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
@@ -388,12 +399,14 @@ namespace EmergencyCallouts.Callouts
 
                             if (line == dialogue.Length)
                             {
-                                GameFiber.Sleep(500);
+                                GameFiber.Sleep(1500);
                                 if (Victim.Exists()) { Victim.Kill(); }
 
                                 GameFiber.Sleep(1000);
                                 Display.HideSubtitle();
 
+                                GameFiber.Sleep(3000);
+                                Game.DisplaySubtitle("Request an ~g~ambulance~s~.");
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                             }
                             GameFiber.Sleep(500);
@@ -402,7 +415,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (DialogueStarted == false)
                             {
-                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~Victim~s~.");
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
                             }
                         }
                     }
@@ -418,19 +431,15 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Victim Invincible
                 Victim.IsInvincible = true;
-                Game.LogTrivial("Emergency Callouts: Set Victim invincible");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("Emergency Callouts: Victim cowering");
                 
                 // Suspect Fighting Victim
                 Suspect.Tasks.FightAgainst(Victim);
-                Game.LogTrivial("Emergency Callouts: Suspect fighting Victim");
 
                 GameFiber.StartNew(delegate
                 {
@@ -445,7 +454,6 @@ namespace EmergencyCallouts.Callouts
 
                             // Victim Cowering
                             Victim.Tasks.Cower(-1);
-                            Game.LogTrivial("Emergency Callouts: Assigned victim to cower");
 
                             break;
                         }
@@ -456,7 +464,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario1", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -468,14 +476,12 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Spot
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Lower Victim health
                 Victim.Health = 130;
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Suspect.GiveRandomHandgun(-1, true);
 
                 GameFiber.StartNew(delegate
                 {
@@ -487,7 +493,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Husband Fighting Wife
                             Suspect.Tasks.FightAgainst(Victim);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight Victim");
 
                             break;
                         }
@@ -501,7 +506,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Husband Fighting Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
                             
                             break;
                         }
@@ -512,7 +516,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario2", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -524,23 +528,20 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("Emergency Callouts: Retrieved fight position");
 
                 // Kill Victim
                 if (Victim.Exists()) { Victim.Kill(); }
-                Game.LogTrivial("Emergency Callouts: Killed Victim");
 
                 // Delete VictimBlip
                 if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-                Game.LogTrivial("Emergency Callouts: Deleted VictimBlip");
+                Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Suspect Sitting
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("Emergency Callouts: Assigned Suspect to play animation");
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario3", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -552,23 +553,18 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect position");
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Suspect.GiveRandomHandgun(-1, true);
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -576,11 +572,10 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 13f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
                         {
                             // Suspect Putting Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Husband putting hands up");
 
                             break;
                         }
@@ -591,7 +586,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario4", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -603,23 +598,18 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Position
                 RetrieveFightPosition();
-                Game.LogTrivial("[Emergency Callouts]: Retrieved fight position");
 
                 // Suspect Position
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
-                Game.LogTrivial("[Emergency Callouts]: Changed Suspect position");
 
                 // Give Random Handgun
-                Suspect.GiveRandomWeapon(WeaponType.Handgun, -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned random handgun to Suspect inventory");
+                Suspect.GiveRandomHandgun(-1, true);
 
                 // Aim at Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to aim weapon at Victim");
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Victim to cower");
 
                 GameFiber.StartNew(delegate
                 {
@@ -631,7 +621,6 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to fight " + PlayerPersona.FullName);
 
                             break;
                         }
@@ -642,7 +631,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario5", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -653,7 +642,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
+                Handle.AutomaticEndingVictim(Suspect, Victim);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect, Victim);
 
@@ -664,7 +653,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~o~victim~s~ and ~r~husband~s~ in the ~y~area~s~.", 10000);
+                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -674,7 +663,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Create SearchArea
                     SearchArea = new Blip(Center, Settings.SearchAreaSize);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
@@ -696,7 +685,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
 
                 if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
@@ -713,7 +702,7 @@ namespace EmergencyCallouts.Callouts
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found the victim");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {VictimPersona.FullName} (Victim)");
                 }
                 #endregion
 
@@ -722,7 +711,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained the suspect");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
                     // Delete SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -754,7 +743,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Process", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                 End();
             }
         }
@@ -771,8 +760,8 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
             Display.HideSubtitle();
-            Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, CalloutScenario);
+            Display.EndNotification();
+            Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Net;
 using RAGENativeUI;
 using static EmergencyCallouts.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
+using System.Diagnostics;
 
 namespace EmergencyCallouts.Essential
 {
@@ -38,10 +39,11 @@ namespace EmergencyCallouts.Essential
         #endregion
     }
 
+
     internal static class Helper
     {
         internal static Ped MainPlayer => Game.LocalPlayer.Character;
-        internal static Persona PlayerPersona = Persona.FromExistingPed(MainPlayer);
+        internal static Persona PlayerPersona = Functions.GetPersonaForPed(MainPlayer);
         internal static Random random = new Random();
 
         internal static bool PUBRemoteState;
@@ -51,6 +53,7 @@ namespace EmergencyCallouts.Essential
         internal static bool SUSRemoteState;
 
         internal static string CalloutDetails { get; set; }
+        internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
 
         #region GetRandomScenarioNumber
@@ -138,27 +141,38 @@ namespace EmergencyCallouts.Essential
             Vehicle,
         }
 
+        internal enum PedCategory
+        {
+            Suspect,
+            Suspect2,
+            Victim,
+            Bystander,
+            Guard,
+            Officer,
+            Paramedic,
+            Firefighter,
+        }
+
         internal static class Display
         {
-            #region AttachMessage
-            internal static void AttachMessage(string details)
+            #region AcceptNotification
+            internal static void AcceptNotification(string details)
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Attached {Settings.Callsign}", details);
+                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", details);
             }
             #endregion
 
-            #region PedDescription
-            internal static void PedDescription(Ped Suspect, Enum DescriptionCategory)
+            #region AcceptSubtitle
+            internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Persona SuspectPersona = Persona.FromExistingPed(Suspect);
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~{DescriptionCategory} Description", $"Gender: ~g~{SuspectPersona.Gender}~s~\nAge Group: ~p~{SuspectPersona.ModelAge}~s~");
+                Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 20000);
             }
             #endregion
 
-            #region DetachMessage
-            internal static void DetachMessage()
+            #region EndNotification
+            internal static void EndNotification()
             {
-                Game.DisplayNotification("helicopterhud", "orb_target_d", "Dispatch", $"~{Settings.SubtitleColor}~Detached {Settings.Callsign}", "Situation is under control.");
+                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", "Situation is under control.");
             }
             #endregion
 
@@ -177,6 +191,74 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
+        internal class Log
+        {
+            #region OnCalloutAccepted
+            internal static void OnCalloutAccepted(string CalloutMessage, int ScenarioNumber)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+            }
+            #endregion
+
+            #region OnCalloutEnded
+            internal static void OnCalloutEnded(string CalloutMessage, int ScenarioNumber)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
+            }
+            #endregion
+
+            #region Exception
+            internal static void Exception(Exception e, string _class, string method)
+            {
+                // Log Exception
+                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
+
+                // Refer to bug report form
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
+                
+                try
+                {
+                    // Send hit to remote exception counter
+                    WebClient hitUpdater = new WebClient();
+                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
+                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
+                }
+                catch (WebException webEx)
+                {
+                    Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
+                }
+            }
+            #endregion
+
+            #region Creation
+            internal static void Creation(Ped ped, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory} ({ped.Model.Name}) at {ped.Position}");
+            }
+            internal static void Creation(Vehicle vehicle, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory}Vehicle ({vehicle.Model.Name}) at {vehicle.Position}");
+            }
+            #endregion
+        }
+
+        internal static class Play
+        {
+            #region PursuitAudio
+            internal static void PursuitAudio()
+            {
+                Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
+            }
+            #endregion
+
+            #region CodeFourAudio
+            internal static void CodeFourAudio()
+            {
+                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
+            }
+            #endregion
+        }
+
         internal static class Vehicles
         {
             #region GetRandomFourDoor
@@ -184,7 +266,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "GRANGER", "VIRGO",
+                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "VIRGO",
                     "GRESLEY", "HABANERO", "DUKES", "BJXL", "CAVALCADE", "F620", "FELON", "FELON2", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO",
                     "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE", "DILETTANTE", 
                     "WARRENER", "DUKES", "VIRGO", "BUFFALO", "ASEA", "RANCHERXL", "CASCO", "EXEMPLAR", "SENTINEL", "CHINO", "SULTAN", "BUFFALO2", 
@@ -222,38 +304,8 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
-        internal static class Play
-        {
-            #region PursuitAudio
-            internal static void PursuitAudio()
-            {
-                Functions.PlayScannerAudio("OFFICERS_REPORT CRIME_RESIST_ARREST");
-            }
-            #endregion
-
-            #region CodeFourAudio
-            internal static void CodeFourAudio()
-            {
-                Functions.PlayScannerAudio("ACKNOWLEDGE CODE_FOUR NO_UNITS_REQUIRED");
-            }
-            #endregion
-        }
-
         internal static class Handle
         {
-            #region CalloutEnding
-            //internal static void CalloutEnding()
-            //{
-            //    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 0, 5f, 5f, 0f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-            //    Game.DisplayNotification($"~b~You~s~: Dispatch, call is code 4.");
-            //    GameFiber.Sleep(2000);
-            //    Play.CodeFourAudio();
-            //    GameFiber.Sleep(2700);
-            //    Functions.StopCurrentCallout();
-            //    GameFiber.Sleep(500);
-            //}
-            #endregion
-
             #region ManualEnding
             internal static void ManualEnding()
             {
@@ -276,6 +328,54 @@ namespace EmergencyCallouts.Essential
                         Functions.StopCurrentCallout();
                     }
                     else if (suspect.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                }
+            }
+            internal static void AutomaticEnding(Ped suspect, Ped suspect2)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsCuffed && suspect2.IsCuffed)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsDead && suspect2.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsDead && suspect2.IsCuffed)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && suspect2.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                }
+            }
+
+            internal static void AutomaticEndingVictim(Ped suspect, Ped victim)
+            {
+                if (suspect.Exists())
+                {
+                    if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && victim.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
+                    }
+                    else if (suspect.IsCuffed && victim.IsCuffed)
                     {
                         Play.CodeFourAudio();
                         Functions.StopCurrentCallout();
@@ -452,271 +552,150 @@ namespace EmergencyCallouts.Essential
                 }
             }
             #endregion
-
-            #region DecreaseSearchArea
-            internal static void DecreaseSearchArea(Blip SearchArea, Ped ped, int seconds)
-            {
-                GameFiber.StartNew(delegate
-                {
-                    while (true)
-                    {
-                        GameFiber.Yield();
-                        for (int sec = seconds; sec > 0; sec--)
-                        {
-                            if (seconds == 1)
-                            {
-                                if (SearchArea.Exists()) { SearchArea.Delete(); }
-                                // Create SearchArea
-                                SearchArea = new Blip(ped.Position.Around(5f, 15f), 30f);
-                                SearchArea.SetColor(Color.Colors.Yellow);
-                                SearchArea.Alpha = 0.5f;
-                                Game.LogTrivial("[Emergency Callouts]: Decreased SearchArea size");
-
-                                break;
-                            }
-                            GameFiber.Sleep(1000);
-                        }
-                    }
-                });
-            }
-            #endregion
         }
-
-        internal class Log
-        {
-            #region CalloutAccepted
-            internal static void CalloutAccepted(string CalloutMessage, int ScenarioNumber)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
-            }
-            #endregion
-
-            #region CalloutEnded
-            internal static void CalloutEnded(string CalloutMessage, int ScenarioNumber)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: Ended callout ({CalloutMessage}, Scenario {ScenarioNumber})");
-            }
-            #endregion
-
-            #region CalloutException
-            internal static void CalloutException(object o, string method, Exception e)
-            {
-                Game.LogTrivial($"[Emergency Callouts]: {e.Message} At {o.GetType().Name}.{method}()");
-                Game.LogTrivial($"[Emergency Callouts]: Using version {Project.LocalVersion}");
-
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
-
-                try
-                {
-                    WebClient hitUpdater = new WebClient();
-                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote error counter");
-                }
-                catch (WebException webEx)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: " + webEx.Message);
-                }
-            }
-            #endregion
-        }
-    }
-
-    internal static class Inventory
-    {
-        #region GiveRandomWeapon
-        internal enum WeaponType
-        {
-            Melee,
-            Handgun,
-            SubmachineGun,
-            AssaultRifle,
-            Shotgun,
-            MachineGun,
-            SniperRifle,
-        }
-
-        internal static void GiveRandomWeapon(this Ped ped, Enum weaponType, short ammoCount, bool equipNow)
-        {
-            #region Melee
-            if (weaponType.ToString() == WeaponType.Melee.ToString())
-            {
-                string[] meleeWeapons =
-                {
-                    "WEAPON_DAGGER",
-                    "WEAPON_BAT",
-                    "WEAPON_BOTTLE",
-                    "WEAPON_CROWBAR",
-                    "WEAPON_UNARMED",
-                    "WEAPON_FLASHLIGHT",
-                    "WEAPON_HAMMER",
-                    "WEAPON_HATCHET",
-                    "WEAPON_KNUCKLE",
-                    "WEAPON_KNIFE",
-                    "WEAPON_MACHETE",
-                    "WEAPON_SWITCHBLADE",
-                    "WEAPON_NIGHTSTICK",
-                    "WEAPON_WRENCH",
-                    "WEAPON_BATTLEAXE",
-                };
-
-                int num = random.Next(meleeWeapons.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-
-            #region Handgun
-            if (weaponType.ToString() == WeaponType.Handgun.ToString())
-            {
-                string[] handguns =
-                {
-                    "WEAPON_PISTOL",
-                    "WEAPON_COMBATPISTOL",
-                    "WEAPON_PISTOL50",
-                    "WEAPON_VINTAGEPISTOL",
-                    "WEAPON_SNSPISTOL",
-                    "WEAPON_HEAVYPISTOL",
-                    "WEAPON_CERAMICPISTOL",
-                };
-
-                int num = random.Next(handguns.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
-            }
-            #endregion
-
-            #region Submachine Gun
-            if (weaponType.ToString() == WeaponType.SubmachineGun.ToString())
-            {
-                string[] submachineGuns =
-                {
-                    "WEAPON_MICROSMG",
-                    "WEAPON_SMG",
-                    "WEAPON_ASSAULTSMG",
-                    "WEAPON_MINISMG"
-                };
-
-                int num = random.Next(submachineGuns.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-
-            #region Assault Rifle
-            if (weaponType.ToString() == WeaponType.AssaultRifle.ToString())
-            {
-                string[] rifles =
-                {
-                    "WEAPON_CARBINERIFLE",
-                    "WEAPON_ASSAULTRIFLE",
-                    "WEAPON_ADVANCEDRIFLE",
-                    "WEAPON_SPECIALCARBINE",
-                    "WEAPON_BULLPUPRIFLE",
-                };
-
-                int num = random.Next(rifles.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-
-            #region Shotgun
-            if (weaponType.ToString() == WeaponType.Shotgun.ToString())
-            {
-                string[] shotguns =
-                {
-                    "WEAPON_PUMPSHOTGUN",
-                    "WEAPON_SAWNOFFSHOTGUN",
-                    "WEAPON_BULLPUPSHOTGUN",
-                    "WEAPON_HEAVYSHOTGUN",
-                    "WEAPON_DBSHOTGUN",
-                    "WEAPON_COMBATSHOTGUN"
-                };
-
-                int num = random.Next(shotguns.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-
-            #region MachineGun
-            if (weaponType.ToString() == WeaponType.MachineGun.ToString())
-            {
-                string[] machineGuns =
-                {
-                    "WEAPON_MG",
-                    "WEAPON_COMBATMG",
-                    "WEAPON_GUSENBERG"
-                };
-
-                int num = random.Next(machineGuns.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-
-            #region Sniper Rifles
-            if (weaponType.ToString() == WeaponType.SniperRifle.ToString())
-            {
-                string[] sniperRifles =
-                {
-                    "WEAPON_SNIPERRIFLE",
-                    "WEAPON_HEAVYSNIPER",
-                    "WEAPON_MARKSMANRIFLE"
-                };
-
-                int num = random.Next(sniperRifles.Length);
-                if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
-
-            }
-            #endregion
-        }
-        #endregion
     }
 
     internal static class Color
     {
-        #region Colors
-        internal enum Colors
+        internal static void SetColorRed(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(224, 50, 50);
+
+        internal static void SetColorYellow(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(240, 200, 80);
+
+        internal static void SetColorBlue(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(93, 182, 229);
+
+        internal static void SetColorOrange(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(234, 142, 80);
+
+        internal static void SetColorGreen(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(114, 204, 114);
+
+        internal static void SetColorPurple(this Blip blip) => blip.Color = System.Drawing.Color.FromArgb(171, 60, 230);
+    }
+
+    internal static class Inventory
+    {
+        #region Melee
+        internal static void GiveRandomMeleeWeapon(this Ped ped, short ammoCount, bool equipNow)
         {
-            Red,
-            Yellow,
-            Blue,
-            Orange,
-            Green,
-            Purple,
+            string[] meleeWeapons =
+            {
+                "WEAPON_DAGGER",
+                "WEAPON_BAT",
+                "WEAPON_BOTTLE",
+                "WEAPON_CROWBAR",
+                "WEAPON_UNARMED",
+                "WEAPON_FLASHLIGHT",
+                "WEAPON_HAMMER",
+                "WEAPON_HATCHET",
+                "WEAPON_KNUCKLE",
+                "WEAPON_KNIFE",
+                "WEAPON_MACHETE",
+                "WEAPON_SWITCHBLADE",
+                "WEAPON_NIGHTSTICK",
+                "WEAPON_WRENCH",
+                "WEAPON_BATTLEAXE",
+            };
+
+            int num = random.Next(meleeWeapons.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(meleeWeapons[num], ammoCount, equipNow); }
         }
+        #endregion
 
-        internal static void SetColor(this Blip blip, Enum color)
+        #region Handgun
+        internal static void GiveRandomHandgun(this Ped ped, short ammoCount, bool equipNow)
         {
-            if (color.ToString() == Colors.Red.ToString())
+            string[] handguns =
             {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(224, 50, 50); }
-            }
+                "WEAPON_PISTOL",
+                "WEAPON_COMBATPISTOL",
+                "WEAPON_PISTOL50",
+                "WEAPON_VINTAGEPISTOL",
+                "WEAPON_SNSPISTOL",
+                "WEAPON_HEAVYPISTOL",
+                "WEAPON_CERAMICPISTOL",
+            };
 
-            if (color.ToString() == Colors.Yellow.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(240, 200, 80); }
-            }
+            int num = random.Next(handguns.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(handguns[num], ammoCount, equipNow); }
+        }
+        #endregion
 
-            if (color.ToString() == Colors.Blue.ToString())
+        #region Submachine Gun
+        internal static void GiveRandomSubmachineGun(this Ped ped, short ammoCount, bool equipNow)
+        {
+            string[] submachineGuns =
             {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(93, 182, 229); }
-            }
+                "WEAPON_MICROSMG",
+                "WEAPON_SMG",
+                "WEAPON_ASSAULTSMG",
+                "WEAPON_MINISMG"
+            };
 
-            if (color.ToString() == Colors.Orange.ToString())
-            {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(234, 142, 80); }
-            }
+            int num = random.Next(submachineGuns.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(submachineGuns[num], ammoCount, equipNow); }
+        }
+        #endregion
 
-            if (color.ToString() == Colors.Green.ToString())
+        #region Assault Rifle
+        internal static void GiveRandomAssaultRifle(this Ped ped, short ammoCount, bool equipNow)
+        {
+            string[] rifles =
             {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(114, 204, 114); }
-            }
+                "WEAPON_CARBINERIFLE",
+                "WEAPON_ASSAULTRIFLE",
+                "WEAPON_ADVANCEDRIFLE",
+                "WEAPON_SPECIALCARBINE",
+                "WEAPON_BULLPUPRIFLE",
+            };
 
-            if (color.ToString() == Colors.Purple.ToString())
+            int num = random.Next(rifles.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(rifles[num], ammoCount, equipNow); }
+        }
+        #endregion
+
+        #region Shotgun
+        internal static void GiveRandomShotgun(this Ped ped, short ammoCount, bool equipNow)
+        {
+            string[] shotguns =
             {
-                if (blip.Exists()) { blip.Color = System.Drawing.Color.FromArgb(171, 60, 230); }
-            }
+                "WEAPON_PUMPSHOTGUN",
+                "WEAPON_SAWNOFFSHOTGUN",
+                "WEAPON_BULLPUPSHOTGUN",
+                "WEAPON_HEAVYSHOTGUN",
+                "WEAPON_DBSHOTGUN",
+                "WEAPON_COMBATSHOTGUN"
+            };
+
+            int num = random.Next(shotguns.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(shotguns[num], ammoCount, equipNow); }
+        }
+        #endregion
+
+        #region Machine Gun
+        internal static void GiveRandomMachineGun(this Ped ped, short ammoCount, bool equipNow)
+        {
+            string[] machineGuns =
+            {
+                "WEAPON_MG",
+                "WEAPON_COMBATMG",
+                "WEAPON_GUSENBERG"
+            };
+
+            int num = random.Next(machineGuns.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(machineGuns[num], ammoCount, equipNow); }
+        }
+        #endregion
+
+        #region Sniper Rifle
+        internal static void GiveRandomSniperRifle(this Ped ped, short ammoCount, bool equipNow)
+        {
+            string[] sniperRifles =
+            {
+                "WEAPON_SNIPERRIFLE",
+                "WEAPON_HEAVYSNIPER",
+                "WEAPON_MARKSMANRIFLE"
+            };
+
+            int num = random.Next(sniperRifles.Length);
+            if (ped.Exists()) { ped.Inventory.GiveNewWeapon(sniperRifles[num], ammoCount, equipNow); }
         }
         #endregion
     }
