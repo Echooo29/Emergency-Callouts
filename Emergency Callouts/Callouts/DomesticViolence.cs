@@ -377,7 +377,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
+                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
