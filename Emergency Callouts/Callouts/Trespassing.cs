@@ -207,14 +207,14 @@ namespace EmergencyCallouts.Callouts
         {
             new Vector3(2137.664f, 4791.458f, 40.9702f), // Hangar Table
             new Vector3(2135.579f, 4772.35f, 40.97029f), // Red Tool Storage
-            new Vector3(2144.962f, 4776.65f, 40.97034f), // Pile of Boxes
+            new Vector3(2136.503f, 4793.45f, 40.98348f), // Pile of Boxes
         };
 
         readonly float[] AirstripManagerHeadings =
         {
             290f,
             190f,
-            317f,
+            259.41f,
         };
 
         readonly Vector3[] AirstripArsonPositions =
