@@ -43,14 +43,14 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] VinewoodHillsFightPositions =
         {
-            new Vector3(23.723f, 523.2088f, 170.2274f),   // Chill Area 1
-            new Vector3(-6.617259f, 509.189f, 170.6275f), // Chill Area 2
+            new Vector3(24.13852f, 520.5587f, 170.2275f),   // Chill Area 1
+            new Vector3(-6.628098f, 509.4984f, 170.6278f), // Chill Area 2
         };
 
         readonly float[] VinewoodHillsFightHeadings =
         {
-            0f,
-            0f,
+            24.09f,
+            61.64f,
         };
         #endregion
 
@@ -187,7 +187,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -199,15 +198,14 @@ namespace EmergencyCallouts.Callouts
                 Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
                 VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
-                Victim.Health = 135;
-                Log.Creation(Victim, PedCategory.Victim);
+                Victim.SetInjured(135);
 
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
                 VictimBlip.ScaleForPed();
                 VictimBlip.Disable();
-
+                
                 // 50% Drunk Chance
                 int num = random.Next(2);
                 if (num == 1)
@@ -296,6 +294,10 @@ namespace EmergencyCallouts.Callouts
                 // Enabling Route
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+
+                // Log Creation
+                Log.Creation(Suspect, PedCategory.Suspect);
+                Log.Creation(Victim, PedCategory.Victim);
             }
             catch (Exception e)
             {
@@ -377,8 +379,10 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Suspect.IsDead && Victim.IsAlive)
+                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
+                        GameFiber.Sleep(3000);
+
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             if (!DialogueStarted)
@@ -390,7 +394,7 @@ namespace EmergencyCallouts.Callouts
 
                             DialogueStarted = true;
 
-                            Victim.Face(MainPlayer);
+                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);

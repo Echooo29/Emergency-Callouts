@@ -333,6 +333,8 @@ namespace EmergencyCallouts.Essential
                         Functions.StopCurrentCallout();
                     }
                 }
+
+                if (MainPlayer.IsDead) { Functions.StopCurrentCallout(); }
             }
             internal static void AutomaticEnding(Ped suspect, Ped suspect2)
             {
@@ -773,6 +775,20 @@ namespace EmergencyCallouts.Essential
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
             animSet.LoadAndWait();
             ped.MovementAnimationSet = animSet;
+        }
+        #endregion
+
+        #region SetInjured
+        /// <summary>
+        /// Sets peds walking style to injured
+        /// </summary>
+        internal static void SetInjured(this Ped ped, int health)
+        {
+            AnimationSet animSet = new AnimationSet("move_m@injured");
+            animSet.LoadAndWait();
+            ped.MovementAnimationSet = animSet;
+
+            if (ped.IsAlive) { ped.Health = health; }
         }
         #endregion
 
