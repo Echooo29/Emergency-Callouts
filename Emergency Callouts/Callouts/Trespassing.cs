@@ -355,7 +355,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -443,6 +442,9 @@ namespace EmergencyCallouts.Callouts
                 // Enabling Route
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+
+                // Log Creation
+                Log.Creation(Suspect, PedCategory.Suspect);
             }
             catch (Exception e)
             {

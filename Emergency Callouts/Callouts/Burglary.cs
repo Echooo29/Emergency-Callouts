@@ -195,7 +195,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
@@ -339,6 +338,8 @@ namespace EmergencyCallouts.Callouts
             // Lockpick Animation
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
 
+            // Log Creation
+            Log.Creation(Suspect, PedCategory.Suspect);
             #endregion
         }
 
