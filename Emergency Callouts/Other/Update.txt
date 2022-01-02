@@ -1,8 +1,11 @@
 ﻿1) Update AssemblyFileVersion.
 2) Update 'Emergency Callouts Audio' folder.
-3) Get hits from previous version and say something like: 
-4) Build in release mode
-5) Obfuscate the file
+3) Get hits from previous version and add a note.
+4) Build in release mode.
+5) Obfuscate the file.
+6) Add to the Emergency Callouts ZIP File.
+7) Change the comment to the next version.
+8) Update 'Changelog.txt'
 
 Extra:
 "Hey everyone, thanks for all the different reviews, In update x.x.x there have been *hits* hits sent to me, to see , *hits* x *downloads*, rounding that up would be *outcome*!
