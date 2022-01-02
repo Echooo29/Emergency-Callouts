@@ -196,16 +196,16 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] AirstripManagerPositions =
         {
-            new Vector3(2137.664f, 4791.458f, 40.9702f), // Hangar Table
-            new Vector3(2135.579f, 4772.35f, 40.97029f), // Red Tool Storage
-            new Vector3(2136.29f, 4793.342f, 40.98573f), // Pile of Boxes
+            new Vector3(2136.808f, 4793.051f, 40.97145f), // Pile of Boxes 
+            new Vector3(2135.579f, 4772.35f, 40.97029f),  // Red Tool Storage
+            new Vector3(2146.067f, 4779.588f, 40.97029f), // Pile of Boxes 2
         };
 
         readonly float[] AirstripManagerHeadings =
         {
             290f,
             190f,
-            270.78f,
+            215.13f,
         };
 
         readonly Vector3[] AirstripArsonPositions =
@@ -653,8 +653,8 @@ namespace EmergencyCallouts.Callouts
             {
                 PropertyVehicle = new Vehicle("TOWTRUCK2", new Vector3(2108.898f, 4763.609f, 40.70122f), 276.80f);
                 PropertyVehicle.IsPersistent = true;
-                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
-                Suspect.Heading = 314.32f;
+                Suspect.Position = new Vector3(2108.608f, 4764.889f, 41.15301f);
+                Suspect.Heading = 188.73f;
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
             }
@@ -669,8 +669,8 @@ namespace EmergencyCallouts.Callouts
             {
                 PropertyVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
                 PropertyVehicle.IsPersistent = true;
-                Suspect.Position = new Vector3(2108.633f, 4765.104f, 41.16177f);
-                Suspect.Heading = 190.30f;
+                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
+                Suspect.Heading = 314.32f;
 
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
             }
