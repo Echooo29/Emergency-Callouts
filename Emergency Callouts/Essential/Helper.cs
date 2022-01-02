@@ -778,6 +778,20 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
+        #region SetInjured
+        /// <summary>
+        /// Sets peds walking style to injured
+        /// </summary>
+        internal static void SetInjured(this Ped ped, int health)
+        {
+            AnimationSet animSet = new AnimationSet("move_m@injured");
+            animSet.LoadAndWait();
+            ped.MovementAnimationSet = animSet;
+
+            if (ped.IsAlive) { ped.Health = health; }
+        }
+        #endregion
+
         #region ScaleForPed
         internal static void ScaleForPed(this Blip blip)
         {

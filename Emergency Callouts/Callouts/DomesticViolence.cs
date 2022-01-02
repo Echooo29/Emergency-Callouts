@@ -199,7 +199,8 @@ namespace EmergencyCallouts.Callouts
                 Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
                 VictimPersona = Functions.GetPersonaForPed(Victim);
                 Victim.SetDefaults();
-                Victim.Health = 135;
+                Victim.SetInjured(135);
+                
                 Log.Creation(Victim, PedCategory.Victim);
 
                 // VictimBlip
@@ -207,7 +208,7 @@ namespace EmergencyCallouts.Callouts
                 VictimBlip.SetColorOrange();
                 VictimBlip.ScaleForPed();
                 VictimBlip.Disable();
-
+                
                 // 50% Drunk Chance
                 int num = random.Next(2);
                 if (num == 1)
