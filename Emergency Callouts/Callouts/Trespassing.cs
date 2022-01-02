@@ -88,9 +88,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(500f, -609.7313f, 24.75132f), // Building 1
             new Vector3(493f, -573.0732f, 24.59121f)  // Building 2
         };
-
-        readonly Vector3 RailyardWeldingPosition = new Vector3(491.9123f, -554.114f, 24.7505f); // Container
-        readonly float RailyardWeldingHeading = 212f;
         #endregion
 
         // LSC Scrapyard
@@ -133,9 +130,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
             new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
         };
-
-        readonly Vector3 ScrapyardWeldingPosition = new Vector3(-1151.357f, -2034.422f, 13.16053f);
-        readonly float ScrapyardWeldingHeading = 306.35f;
         #endregion
 
         // Terminal
@@ -178,9 +172,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(1251.003f, -2908.396f, 9.319266f), // Fuel Barrels
             new Vector3(1243.456f, -2953.213f, 9.319252f), // Fuel Barrels 2
         };
-
-        readonly Vector3 TerminalWeldingPosition = new Vector3(1234.051f, -3022.098f, 10.96785f); // Front Containers
-        readonly float TerminalWeldingHeading = 279.74f;
         #endregion
 
         // McKenzie Field
@@ -207,14 +198,14 @@ namespace EmergencyCallouts.Callouts
         {
             new Vector3(2137.664f, 4791.458f, 40.9702f), // Hangar Table
             new Vector3(2135.579f, 4772.35f, 40.97029f), // Red Tool Storage
-            new Vector3(2136.503f, 4793.45f, 40.98348f), // Pile of Boxes
+            new Vector3(2136.29f, 4793.342f, 40.98573f), // Pile of Boxes
         };
 
         readonly float[] AirstripManagerHeadings =
         {
             290f,
             190f,
-            259.41f,
+            270.78f,
         };
 
         readonly Vector3[] AirstripArsonPositions =
@@ -223,9 +214,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(2108.356f, 4762.68f, 41.04375f), // Gas Tank
             new Vector3(2125.861f, 4774.83f, 40.97033f), // Pile of Boxes 2
         };
-
-        readonly Vector3 AirstripWeldingPosition = new Vector3(2135.423f, 4772.376f, 40.97033f);
-        readonly float AirstripWeldingHeading = 189.83f;
         #endregion
 
         // Joshua Road Loading Dock
@@ -268,9 +256,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(164.554f, 2777.1820f, 45.70289f), // Storage Tank
             new Vector3(197.8674f, 2803.913f, 45.65517f), // Generator
         };
-
-        readonly Vector3 LoadingDockWeldingPosition = new Vector3(221.1813f, 2746.937f, 43.3394f);
-        readonly float LoadingDockWeldingHeading = 268.66f;
         #endregion
 
         // Zancudo Grain Growers
@@ -310,7 +295,7 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
         #endregion
 
-        Vehicle BarnVehicle;
+        Vehicle PropertyVehicle;
 
         static Ped Suspect;
         Ped Guard;
@@ -645,38 +630,50 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
-                Suspect.Position = RailyardWeldingPosition;
-                Suspect.Heading = RailyardWeldingHeading;
+                Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
+                Suspect.Heading = 212f;
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
-                Suspect.Position = ScrapyardWeldingPosition;
-                Suspect.Heading = ScrapyardWeldingHeading;
+                Suspect.Position = new Vector3(-1151.357f, -2034.422f, 13.16053f);
+                Suspect.Heading = 306.35f;
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                Suspect.Position = TerminalWeldingPosition;
-                Suspect.Heading = TerminalWeldingHeading;
+                Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
+                Suspect.Heading = 279.74f;
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
-                Suspect.Position = AirstripWeldingPosition;
-                Suspect.Heading = AirstripWeldingHeading;
+                PropertyVehicle = new Vehicle("TOWTRUCK2", new Vector3(2108.898f, 4763.609f, 40.70122f), 276.80f);
+                PropertyVehicle.IsPersistent = true;
+                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
+                Suspect.Heading = 314.32f;
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
             {
-                Suspect.Position = LoadingDockWeldingPosition;
-                Suspect.Heading = LoadingDockWeldingHeading;
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
-            {
-                BarnVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
-                BarnVehicle.IsPersistent = true;
-                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
-                Suspect.Heading = 314.32f;
-            }
+                Suspect.Position = new Vector3(221.1813f, 2746.937f, 43.3394f);
+                Suspect.Heading = 268.66f;
 
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
+            {
+                PropertyVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
+                PropertyVehicle.IsPersistent = true;
+                Suspect.Position = new Vector3(2108.633f, 4765.104f, 41.16177f);
+                Suspect.Heading = 190.30f;
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
+            }
             #endregion
         }
 
