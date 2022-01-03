@@ -952,6 +952,7 @@ namespace EmergencyCallouts.Callouts
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
                             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
 
                             LHandle pursuit = Functions.CreatePursuit();
                             Functions.AddPedToPursuit(pursuit, Suspect);
