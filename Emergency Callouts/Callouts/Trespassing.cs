@@ -1062,7 +1062,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerClimbing
-                if (MainPlayer.IsClimbing)
+                if (MainPlayer.IsClimbing && !PedFound)
                 {
                     Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not climbed anything");
                     GameFiber.Sleep(5000);
