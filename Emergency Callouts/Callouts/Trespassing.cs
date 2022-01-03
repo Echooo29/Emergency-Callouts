@@ -634,6 +634,7 @@ namespace EmergencyCallouts.Callouts
             // Welding Device
             WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
             int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
+            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
 
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
@@ -641,15 +642,13 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
                 Suspect.Heading = 212f;
 
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 Suspect.Position = new Vector3(-1151.357f, -2034.422f, 13.16053f);
                 Suspect.Heading = 306.35f;
-
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
@@ -657,7 +656,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
                 Suspect.Heading = 279.74f;
 
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
@@ -674,7 +672,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(221.1813f, 2746.937f, 43.3394f);
                 Suspect.Heading = 268.66f;
 
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
