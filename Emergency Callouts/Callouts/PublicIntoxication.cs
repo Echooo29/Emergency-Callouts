@@ -59,6 +59,7 @@ namespace EmergencyCallouts.Callouts
             // Accept Messages
             Display.AcceptNotification(CalloutDetails);
             Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+            Display.OutdatedReminder();
 
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();

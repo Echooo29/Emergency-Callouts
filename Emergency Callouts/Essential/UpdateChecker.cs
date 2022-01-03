@@ -7,11 +7,13 @@ namespace EmergencyCallouts
 {
     internal class UpdateChecker
     {
+        internal static string OnlineVersion = null;
+
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
-            string OnlineVersion = null;
+            
 
             try
             {
@@ -27,7 +29,7 @@ namespace EmergencyCallouts
 
             if (OnlineVersion != Project.LocalVersion)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~m~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
             }

@@ -347,6 +347,7 @@ namespace EmergencyCallouts.Callouts
                 // Accept Messages
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
