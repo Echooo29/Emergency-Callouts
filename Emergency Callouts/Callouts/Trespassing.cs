@@ -4,6 +4,7 @@ using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
 using RAGENativeUI;
 using System;
 using System.Reflection;
@@ -295,14 +296,14 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
         #endregion
 
+        Rage.Object WeldingDevice;
+
         Vehicle PropertyVehicle;
 
-        static Ped Suspect;
-        Ped Guard;
+        Ped Suspect;
         Persona SuspectPersona;
 
         Blip SuspectBlip;
-        Blip GuardBlip;
         Blip EntranceBlip;
         Blip SearchArea;
 
@@ -359,10 +360,10 @@ namespace EmergencyCallouts.Callouts
 
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorYellow();
+                SuspectBlip.SetColorRed();
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
-               
+
                 CalloutHandler();
             }
             catch (Exception e)
@@ -424,16 +425,16 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario5();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario5();
                         break;
                     case 3:
-                        Scenario3();
+                        Scenario5();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario5();
                         break;
                     case 5:
                         Scenario5();
@@ -630,12 +631,17 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveWeldingPosition()
         {
+            // Welding Device
+            WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
+            int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
+
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
                 Suspect.Heading = 212f;
 
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
@@ -643,6 +649,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(-1151.357f, -2034.422f, 13.16053f);
                 Suspect.Heading = 306.35f;
 
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
@@ -650,6 +657,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
                 Suspect.Heading = 279.74f;
 
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
@@ -666,6 +674,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(221.1813f, 2746.937f, 43.3394f);
                 Suspect.Heading = 268.66f;
 
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
@@ -703,13 +712,10 @@ namespace EmergencyCallouts.Callouts
                             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                             LHandle pursuit = Functions.CreatePursuit();
-
                             Functions.AddPedToPursuit(pursuit, Suspect);
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                             Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Crowbar");
-
                             Play.PursuitAudio();
-
                             break;
                         }
                     }
@@ -926,7 +932,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario5() // Knocked Out Guard
+        private void Scenario5() // Welder
         {
             #region Scenario 5
             try
@@ -934,48 +940,13 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Welding Position
                 RetrieveWeldingPosition();
 
-                // Change SuspectBlip color
-                SuspectBlip.SetColorRed();
-
-                // Guard
-                Guard = new Ped("csb_prolsec", CalloutPosition.Around2D(5f), 0f);
-                Guard.SetDefaults();
-                Log.Creation(Guard, PedCategory.Guard);
-
-                // Kill Guard
-                if (Guard.Exists()) { Guard.Kill(); }
-
-                // GuardBlip
-                GuardBlip = Guard.AttachBlip();
-                GuardBlip.SetColorBlue();
-                GuardBlip.ScaleForPed();
-                GuardBlip.Disable();
-
-
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f && Guard.Exists())
-                        {
-                            // Enable SuspectBlip
-                            GuardBlip.Enable();
-
-                            Game.DisplayHelp("Look around for the ~r~suspect");
-                            break;
-                        }
-                    }
-                });
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists())
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -983,12 +954,9 @@ namespace EmergencyCallouts.Callouts
                             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                             LHandle pursuit = Functions.CreatePursuit();
-
                             Functions.AddPedToPursuit(pursuit, Suspect);
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-
                             Play.CodeFourAudio();
-
                             break;
                         }
                     }
@@ -1009,7 +977,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventFirstResponderCrash(Suspect, Guard);
+                Handle.PreventFirstResponderCrash(Suspect);
                 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -1114,10 +1082,9 @@ namespace EmergencyCallouts.Callouts
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-            if (Guard.Exists()) { Guard.Dismiss(); }
-            if (GuardBlip.Exists()) { GuardBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+            if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();

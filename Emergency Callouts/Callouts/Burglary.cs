@@ -22,7 +22,7 @@ namespace EmergencyCallouts.Callouts
 
         Vector3 Entrance;
         Vector3 Center;
-        
+
         // Main
         #region Positions
         readonly Vector3[] CalloutPositions =
