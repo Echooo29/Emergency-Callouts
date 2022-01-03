@@ -957,7 +957,7 @@ namespace EmergencyCallouts.Callouts
                             LHandle pursuit = Functions.CreatePursuit();
                             Functions.AddPedToPursuit(pursuit, Suspect);
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Play.CodeFourAudio();
+                            Play.PursuitAudio();
                             break;
                         }
                     }

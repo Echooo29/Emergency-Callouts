@@ -6,6 +6,7 @@
 6) Add to the Emergency Callouts ZIP File.
 7) Change the comment to the next version.
 8) Update 'Changelog.txt'
+9) Merge dev branch to master branch
 
 Extra:
 "Hey everyone, thanks for all the different reviews, In update x.x.x there have been *hits* hits sent to me, to see , *hits* x *downloads*, rounding that up would be *outcome*!
