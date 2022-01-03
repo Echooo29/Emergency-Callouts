@@ -657,6 +657,15 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
+                    // Gang Attack Fix
+                    foreach (Ped ped in World.GetAllPeds()) // Maybe gang members only?
+                    {
+                        if (ped.Exists() && ped.Position.DistanceTo(Suspect.Position) < 100f)
+                        {
+                            ped.BlockPermanentEvents = true;
+                        }
+                    }
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 20000);
 
