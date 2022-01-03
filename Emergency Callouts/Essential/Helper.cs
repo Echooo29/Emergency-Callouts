@@ -17,26 +17,11 @@ namespace EmergencyCallouts.Essential
 {
     internal static class Project
     {
-        #region Name
-        internal static string Name
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().ToString(); }
-        }
-        #endregion
+        internal static string Name => Assembly.GetExecutingAssembly().GetName().Name;
 
-        #region LocalVersion
-        internal static string LocalVersion
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5); }
-        }
-        #endregion
+        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
 
-        #region SettingsPath
-        internal static string SettingsPath
-        {
-            get { return "Plugins/LSPDFR/Emergency Callouts.ini"; }
-        }
-        #endregion
+        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
     }
 
 
