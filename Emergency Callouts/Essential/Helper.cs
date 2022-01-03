@@ -49,6 +49,29 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
+        #region Enumerations
+        internal enum DescriptionCategories
+        {
+            Civilian,
+            Suspect,
+            Victim,
+            Officer,
+            Vehicle,
+        }
+
+        internal enum PedCategory
+        {
+            Suspect,
+            Suspect2,
+            Victim,
+            Bystander,
+            Guard,
+            Officer,
+            Paramedic,
+            Firefighter,
+        }
+        #endregion
+
         internal static class Entity
         {
             #region GetRandomMaleModel
@@ -115,27 +138,6 @@ namespace EmergencyCallouts.Essential
 
             }
             #endregion
-        }
-
-        internal enum DescriptionCategories
-        {
-            Civilian,
-            Suspect,
-            Victim,
-            Officer,
-            Vehicle,
-        }
-
-        internal enum PedCategory
-        {
-            Suspect,
-            Suspect2,
-            Victim,
-            Bystander,
-            Guard,
-            Officer,
-            Paramedic,
-            Firefighter,
         }
 
         internal static class Display
@@ -206,7 +208,7 @@ namespace EmergencyCallouts.Essential
             internal static void Exception(Exception e, string _class, string method)
             {
                 // Log Exception
-                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
+                Game.LogTrivial($"[Emergency Callouts v{Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
 
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");

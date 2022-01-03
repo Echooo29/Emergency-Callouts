@@ -606,7 +606,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
-
+                    
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
 
