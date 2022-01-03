@@ -1007,6 +1007,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
+                Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect, Guard);
                 
@@ -1017,7 +1018,14 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
+                    if (MainPlayer.IsInAnyVehicle(false))
+                    {
+                        Game.DisplaySubtitle("Leave your vehicle and find the ~r~trespasser~s~.", 20000);
+                    }
+                    else
+                    {
+                        Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
+                    }
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -1031,9 +1039,6 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
-
-                    GameFiber.Sleep(15000);
-                    Game.DisplayHelp("The ~r~suspect~s~ is likely hidden somewhere");
                 }
                 #endregion
 
@@ -1094,7 +1099,7 @@ namespace EmergencyCallouts.Callouts
                 #region PlayerClimbing
                 if (MainPlayer.IsClimbing)
                 {
-                    Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not used a ladder");
+                    Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not climbed anything");
                     GameFiber.Sleep(5000);
                 }
                 #endregion
