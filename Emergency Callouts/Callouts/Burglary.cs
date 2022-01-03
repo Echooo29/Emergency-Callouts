@@ -597,7 +597,6 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
-                Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect);
 
@@ -621,6 +620,9 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
+                    // SpookCheck
+                    Handle.SpookCheck(Entrance, 10f);
+                    
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion

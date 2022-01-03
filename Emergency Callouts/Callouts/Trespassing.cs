@@ -1007,7 +1007,6 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
-                Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect, Guard);
                 
@@ -1018,14 +1017,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    if (MainPlayer.IsInAnyVehicle(false))
-                    {
-                        Game.DisplaySubtitle("Leave your vehicle and find the ~r~trespasser~s~.", 20000);
-                    }
-                    else
-                    {
-                        Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
-                    }
+                    Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -1037,6 +1029,9 @@ namespace EmergencyCallouts.Callouts
                     SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
+
+                    // SpookCheck
+                    Handle.SpookCheck(Entrance, 10f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }

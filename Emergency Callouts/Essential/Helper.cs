@@ -378,9 +378,10 @@ namespace EmergencyCallouts.Essential
                 {
                     int chance = random.Next(0, 101);
 
-                    if (chance <= Settings.EndChance && Settings.EndChance >= 0) // Hits the end chance
+                    if (chance <= Settings.EndChance && Settings.EndChance >= 0)
                     {
                         Game.DisplayHelp("You alerted the ~r~suspect~s~!", 5000);
+                        Display.HideSubtitle();
                         GameFiber.Sleep(5000);
                         Functions.StopCurrentCallout();
                     }
