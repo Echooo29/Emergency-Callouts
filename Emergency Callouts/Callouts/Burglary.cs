@@ -606,7 +606,16 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
-                    
+
+                    // Delete Nearby Peds
+                    //foreach (Ped ped in World.GetAllPeds())
+                    //{
+                    //    if (ped && ped.Position.DistanceTo(Suspect) < 30f)
+                    //    {
+                    //        ped.Delete();
+                    //    }
+                    //}
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
 
