@@ -154,7 +154,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc).Replace("Amarillo Vista", "Amarillo Vista"); ;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -346,6 +346,9 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveVehiclePositions()
         {
+            // Delete Nearby Vehicles
+            Handle.DeleteNearbyVehicles(CalloutPosition);
+
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;
@@ -610,9 +613,6 @@ namespace EmergencyCallouts.Callouts
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect);
-
-                    // Delete Nearby Vehicles
-                    Handle.DeleteNearbyVehicles(SuspectVehicle);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);

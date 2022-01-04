@@ -438,6 +438,17 @@ namespace EmergencyCallouts.Essential
                     }
                 }
             }
+            internal static void DeleteNearbyVehicles(Vector3 location)
+            {
+                // Delete Nearby Vehicles
+                foreach (Vehicle vehicle in World.GetAllVehicles())
+                {
+                    if (vehicle && vehicle.Position.DistanceTo(location) < 30f)
+                    {
+                        vehicle.Delete();
+                    }
+                }
+            }
             #endregion
 
             #region PreventDistanceCrash

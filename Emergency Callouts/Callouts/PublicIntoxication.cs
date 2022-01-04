@@ -89,16 +89,16 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario5();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario5();
                         break;
                     case 3:
-                        Scenario3();
+                        Scenario5();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario5();
                         break;
                     case 5:
                         Scenario5();
@@ -207,6 +207,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
+                            Suspect.Tasks.ClearImmediately();
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("move_fall"), "land_fall", 5f, AnimationFlags.StayInEndFrame);
                             if (Suspect.Exists()) { Suspect.Kill(); }
 
                             break;
