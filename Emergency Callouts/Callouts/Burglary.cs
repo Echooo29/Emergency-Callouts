@@ -384,6 +384,7 @@ namespace EmergencyCallouts.Callouts
 
             VehicleDoor[] vehDoors = SuspectVehicle.GetDoors();
             vehDoors[vehDoors.Length - 2].Open(false);
+            vehDoors[vehDoors.Length - 1].Open(false);
             #endregion
         }
 
