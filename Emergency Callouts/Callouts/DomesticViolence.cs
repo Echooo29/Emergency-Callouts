@@ -452,7 +452,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
@@ -577,7 +577,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             // Suspect Putting Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
@@ -622,7 +622,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);

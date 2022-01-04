@@ -14,7 +14,7 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("Public Intoxication", CalloutProbability.Medium)]
     public class PublicIntoxication : Callout
     {
-        bool OnScene;
+        bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
         bool NeedsRefreshing;
@@ -138,7 +138,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
 
@@ -179,7 +179,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot)
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot && PlayerArrived)
                     {
                         Suspect.Tasks.FightAgainst(MainPlayer);
 
@@ -205,7 +205,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
                             if (Suspect.Exists()) { Suspect.Kill(); }
 
@@ -230,10 +230,10 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventFirstResponderCrash(Suspect);
-                Handle.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
+                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !OnScene)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
                 {
                     // Remove EntranceBlip
                     EntranceBlip.Remove();
@@ -248,12 +248,12 @@ namespace EmergencyCallouts.Callouts
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
-                    OnScene = true;
+                    PlayerArrived = true;
                 }
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && OnScene && Suspect)
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -283,10 +283,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived)
                 {
                     // Set OnScene
-                    OnScene = false;
+                    PlayerArrived = false;
 
                     // Disable SuspectBlip
                     SuspectBlip.Disable();

@@ -421,7 +421,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 25f && PlayerArrived)
                         {
                             if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
 
