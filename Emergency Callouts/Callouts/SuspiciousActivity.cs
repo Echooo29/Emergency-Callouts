@@ -542,6 +542,9 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
+                    // Delete Nearby Vehicles
+                    Handle.DeleteNearbyVehicles(SuspectVehicle, Suspect2Vehicle);
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
 

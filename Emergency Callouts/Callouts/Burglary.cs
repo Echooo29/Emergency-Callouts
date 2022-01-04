@@ -611,6 +611,9 @@ namespace EmergencyCallouts.Callouts
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect);
 
+                    // Delete Nearby Vehicles
+                    Handle.DeleteNearbyVehicles(SuspectVehicle);
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
 

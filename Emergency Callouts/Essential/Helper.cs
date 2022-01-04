@@ -415,6 +415,31 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region DeleteNearbyVehicles
+            internal static void DeleteNearbyVehicles(Vehicle mainVehicle)
+            {
+                // Delete Nearby Vehicles
+                foreach (Vehicle vehicle in World.GetAllVehicles())
+                {
+                    if (vehicle && vehicle.Position.DistanceTo(mainVehicle) < 30f && vehicle != mainVehicle)
+                    {
+                        vehicle.Delete();
+                    }
+                }
+            }
+            internal static void DeleteNearbyVehicles(Vehicle mainVehicle, Vehicle mainVehicle2)
+            {
+                // Delete Nearby Vehicles
+                foreach (Vehicle vehicle in World.GetAllVehicles())
+                {
+                    if (vehicle && vehicle.Position.DistanceTo(mainVehicle) < 30f && vehicle != mainVehicle && vehicle != mainVehicle2)
+                    {
+                        vehicle.Delete();
+                    }
+                }
+            }
+            #endregion
+
             #region PreventDistanceCrash
             internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool PlayerArrived, bool PedFound)
             {
