@@ -86,6 +86,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Other\Links.txt" />
     <Content Include="Other\Update.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
