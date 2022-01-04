@@ -1,4 +1,5 @@
-﻿1) Update AssemblyFileVersion.
+﻿1) Check if all scenarios are enabled
+1) Update AssemblyFileVersion.
 2) Update 'Emergency Callouts Audio' folder.
 3) Set EarlyAccess bool to false.
 3) Get hits from previous version and add a note.
