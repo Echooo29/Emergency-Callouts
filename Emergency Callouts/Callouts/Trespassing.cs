@@ -814,30 +814,30 @@ namespace EmergencyCallouts.Callouts
 
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
-                                        Game.DisplayNotification("heisthud", "char_rickie", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_rickie", "char_rickie", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~m~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_chef", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~m~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
-                                        Game.DisplayNotification("dia_police", "char_boatsite2", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Captain \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_boatsite2", "char_boatsite2", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Captain \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                                     {
                                         SuspectPersona.Forename = "Trevor";
                                         SuspectPersona.Surname = "Philips";
                                         SuspectPersona.Wanted = true;
-                                        Game.DisplayNotification("dia_police", "hush_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", "~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                        Game.DisplayNotification("hush_trevor", "hush_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", "~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
                                     }
                                     else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
                                     {
-                                        Game.DisplayNotification("dia_police", "char_barry", "VTA Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_barry", "char_barry", "VTA Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
                                     {
-                                        Game.DisplayNotification("dia_police", "char_oscar", "Wildflower Fields", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Owner \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_oscar", "char_oscar", "Wildflower Fields", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Owner \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
                                     Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName}'s credentials");
