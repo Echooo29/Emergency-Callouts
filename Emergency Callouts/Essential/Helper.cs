@@ -263,11 +263,11 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "VIRGO",
-                    "GRESLEY", "HABANERO", "DUKES", "BJXL", "CAVALCADE", "F620", "FELON", "FELON2", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO",
-                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE", "DILETTANTE", 
-                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "ASEA", "RANCHERXL", "CASCO", "EXEMPLAR", "SENTINEL", "CHINO", "SULTAN", "BUFFALO2", 
-                    "REBEL", "SCHWARZER", "CARBONIZZARE", "SULTAN", "EXEMPLAR", "MASSACRO", "PRAIRIE", "ASTEROPE", "WASHINGTON", "XLS", "REBLA",
+                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", 
+                    "GRESLEY", "HABANERO", "BJXL", "CAVALCADE", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO", "FQ2",
+                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
+                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "BUFFALO2", "ASEA", "RANCHERXL", "SULTAN", "DILETTANTE",
+                    "REBEL", "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
                 };
 
                 int num = random.Next(vehicles.Length);

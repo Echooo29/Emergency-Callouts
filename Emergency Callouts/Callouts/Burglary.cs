@@ -346,13 +346,14 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveVehiclePositions()
         {
-            // Delete Nearby Vehicles
-            Handle.DeleteNearbyVehicles(CalloutPosition);
 
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
+
+            // Delete Nearby Vehicles
+            Handle.DeleteNearbyVehicles(CalloutPosition);
 
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
