@@ -699,7 +699,7 @@ namespace EmergencyCallouts.Callouts
                             LHandle pursuit = Functions.CreatePursuit();
                             Functions.AddPedToPursuit(pursuit, Suspect);
                             Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Crowbar");
+                            Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Lockpick set");
                             Play.PursuitAudio();
                             break;
                         }
@@ -791,7 +791,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived)
                         {
                             if (Game.IsKeyDown(Settings.TalkKey))
                             {
@@ -893,7 +893,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
