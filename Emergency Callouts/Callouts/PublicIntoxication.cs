@@ -34,6 +34,7 @@ namespace EmergencyCallouts.Callouts
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
             CalloutArea = World.GetStreetName(CalloutPosition);
+            CalloutScenario = GetRandomScenarioNumber(5);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
@@ -209,7 +210,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             Suspect.Tasks.ClearImmediately();
                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("move_fall"), "land_fall", 5f, AnimationFlags.StayInEndFrame);
-                            if (Suspect.Exists()) { Suspect.Kill(); }
+                            //if (Suspect.Exists()) { Suspect.Kill(); }
 
                             break;
                         }
