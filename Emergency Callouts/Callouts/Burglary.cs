@@ -353,7 +353,7 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
             // Delete Nearby Vehicles
-            Handle.DeleteNearbyVehicles(CalloutPosition);
+            Handle.DeleteNearbyVehicles(SuspectVehicle);
 
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
