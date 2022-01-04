@@ -983,6 +983,9 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect);
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
 

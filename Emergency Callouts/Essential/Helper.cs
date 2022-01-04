@@ -401,6 +401,20 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region DeleteNearbyPeds
+            internal static void DeleteNearbyPeds(Ped mainPed)
+            {
+                // Delete Nearby Peds
+                foreach (Ped ped in World.GetAllPeds())
+                {
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed)
+                    {
+                        ped.Delete();
+                    }
+                }
+            }
+            #endregion
+
             #region PreventDistanceCrash
             internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool PlayerArrived, bool PedFound)
             {

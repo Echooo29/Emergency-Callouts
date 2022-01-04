@@ -559,7 +559,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists())
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists() && PlayerArrived)
                         {
                             StopChecking = true;
 
@@ -608,13 +608,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Delete Nearby Peds
-                    //foreach (Ped ped in World.GetAllPeds())
-                    //{
-                    //    if (ped && ped.Position.DistanceTo(Suspect) < 30f)
-                    //    {
-                    //        ped.Delete();
-                    //    }
-                    //}
+                    Handle.DeleteNearbyPeds(Suspect);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
