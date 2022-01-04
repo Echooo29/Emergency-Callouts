@@ -113,16 +113,16 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] ScrapyardManagerPositions =
         {
-            new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
-            new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
-            new Vector3(-1180.037f, -2058.742f, 14.09963f), // Casual Spot
+            new Vector3(-1161.296f, -2060.376f, 13.81086f), // Huge Gas Containers
+            new Vector3(-1157.456f, -2033.004f, 13.16054f), // Industrial Crane
+            new Vector3(-1179.293f, -2059.016f, 14.13962f), // Casual Spot
         };
 
         readonly float[] ScrapyardManagerHeadings =
         {
-            224f, 
-            343f, 
-            78f,
+            45.99f,
+            2.16f,
+            74.74f,
         };
 
         readonly Vector3[] ScrapyardArsonPositions =
@@ -197,16 +197,16 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] AirstripManagerPositions =
         {
-            new Vector3(2136.808f, 4793.051f, 40.97145f), // Pile of Boxes 
-            new Vector3(2135.579f, 4772.35f, 40.97029f),  // Red Tool Storage
-            new Vector3(2146.067f, 4779.588f, 40.97029f), // Pile of Boxes 2
+            new Vector3(2139.753f, 4791.316f, 40.97028f), // Pile of Boxes 
+            new Vector3(2135.525f, 4772.93f, 40.97032f),  // Red Tool Storage
+            new Vector3(2144.859f, 4779.579f, 40.97027f), // Pile of Boxes 2
         };
 
         readonly float[] AirstripManagerHeadings =
         {
-            290f,
-            190f,
-            215.13f,
+            282.48f,
+            187.58f,
+            234.06f,
         };
 
         readonly Vector3[] AirstripArsonPositions =
@@ -281,14 +281,14 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] BarnManagerPositions =
         {
-            new Vector3(411.7186f, 6494.792f, 28.13385f), // Generator
+            new Vector3(409.8339f, 6493.519f, 28.12436f), // Generator
             new Vector3(430.6472f, 6502.231f, 28.71397f), // Shed
             new Vector3(425.288f, 6467.4321f, 28.79181f), // Barn
         };
 
         readonly float[] BarnManagerHeadings =
         {
-            41.61f,
+            327.94f,
             97.09f,
             19.64f,
         };
@@ -297,6 +297,7 @@ namespace EmergencyCallouts.Callouts
         #endregion
 
         Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
+        Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
 
         Vehicle PropertyVehicle;
 
@@ -425,19 +426,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario3();
+                        Scenario2();
                         break;
                     case 3:
                         Scenario3();
                         break;
                     case 4:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 5:
-                        Scenario3();
+                        Scenario5();
                         break;
                 }
 
@@ -652,7 +653,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
                 Suspect.Heading = 279.74f;
             }
-            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Field
             {
                 PropertyVehicle = new Vehicle("TOWTRUCK2", new Vector3(2108.898f, 4763.609f, 40.70122f), 276.80f);
                 PropertyVehicle.IsPersistent = true;
@@ -780,8 +781,13 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.ScaleForPed();
                 SuspectBlip.Disable();
 
+                // Clipboard
+                int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.LeftPhHand);
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
+
                 // Inspect animation
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
+                //Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
 
@@ -1084,6 +1090,7 @@ namespace EmergencyCallouts.Callouts
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
+            if (Clipboard.Exists()) { Clipboard.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();
