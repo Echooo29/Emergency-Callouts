@@ -635,28 +635,23 @@ namespace EmergencyCallouts.Callouts
             WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
             int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
             NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
 
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
                 Suspect.Heading = 212f;
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 Suspect.Position = new Vector3(-1151.357f, -2034.422f, 13.16053f);
                 Suspect.Heading = 306.35f;
-                
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
                 Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
                 Suspect.Heading = 279.74f;
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
@@ -664,15 +659,11 @@ namespace EmergencyCallouts.Callouts
                 PropertyVehicle.IsPersistent = true;
                 Suspect.Position = new Vector3(2108.608f, 4764.889f, 41.15301f);
                 Suspect.Heading = 188.73f;
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
             {
                 Suspect.Position = new Vector3(221.1813f, 2746.937f, 43.3394f);
                 Suspect.Heading = 268.66f;
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
             }
             else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
             {
@@ -680,8 +671,6 @@ namespace EmergencyCallouts.Callouts
                 PropertyVehicle.IsPersistent = true;
                 Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
                 Suspect.Heading = 314.32f;
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
             }
             #endregion
         }
@@ -945,11 +934,21 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
-                            // Delete Blips
+                            // Delete SuspectBlip
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted suspect's blip");
+
+                            // Delete SearchArea
                             if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted search area");
+
+                            // Delete EntranceBlip
                             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted entrance blip");
+
+                            // Delete Welding Device
                             if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
+                            Game.LogTrivial("[Emergency Callouts]: Deleted welding device");
 
                             LHandle pursuit = Functions.CreatePursuit();
                             Functions.AddPedToPursuit(pursuit, Suspect);
