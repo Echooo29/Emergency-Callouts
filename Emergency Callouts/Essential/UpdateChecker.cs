@@ -14,7 +14,7 @@ namespace EmergencyCallouts
         {
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
-            string EarlyAccessExtension = ".2";
+            string EarlyAccessExtension = "";
 
             try
             {
