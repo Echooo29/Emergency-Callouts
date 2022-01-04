@@ -566,9 +566,6 @@ namespace EmergencyCallouts.Callouts
                     // Set PedFound
                     PedFound = true;
 
-                    // Hide Subtitle
-                    Display.HideSubtitle();
-
                     // Enable SuspectBlip
                     SuspectBlip.Enable();
 
