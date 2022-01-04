@@ -8,13 +8,13 @@ namespace EmergencyCallouts
     internal class UpdateChecker
     {
         internal static string OnlineVersion = null;
+        internal static bool EarlyAccess = false;
 
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
-            bool EarlyAccess = true;
-            string EarlyAccessExtension = "";
+            string EarlyAccessExtension = ".2";
 
             try
             {
@@ -36,7 +36,7 @@ namespace EmergencyCallouts
             }
             else if (EarlyAccess)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~o~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
                 return false;
             }

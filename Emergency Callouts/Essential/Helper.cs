@@ -159,7 +159,7 @@ namespace EmergencyCallouts.Essential
             #region OutdatedReminder
             internal static void OutdatedReminder()
             {
-                if (UpdateChecker.UpdateAvailable())
+                if (UpdateChecker.OnlineVersion != Project.LocalVersion && !UpdateChecker.EarlyAccess)
                 {
                     Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{UpdateChecker.OnlineVersion} ~s~available for you!");
                 }
