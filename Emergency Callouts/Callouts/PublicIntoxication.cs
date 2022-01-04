@@ -197,7 +197,7 @@ namespace EmergencyCallouts.Callouts
 
         private void Scenario5()
         {
-            #region Passout
+            #region Pass out
             try
             {
                 GameFiber.StartNew(delegate
@@ -208,9 +208,9 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
-                            Suspect.Tasks.ClearImmediately();
-                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("move_fall"), "land_fall", 5f, AnimationFlags.StayInEndFrame);
-                            //if (Suspect.Exists()) { Suspect.Kill(); }
+                            Game.DisplaySubtitle("I'm drunk! Big deal ri...!");
+                            GameFiber.Sleep(3000);
+                            if (Suspect.Exists()) { Suspect.Kill(); }
 
                             break;
                         }
