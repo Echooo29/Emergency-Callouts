@@ -17,26 +17,11 @@ namespace EmergencyCallouts.Essential
 {
     internal static class Project
     {
-        #region Name
-        internal static string Name
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().ToString(); }
-        }
-        #endregion
+        internal static string Name => Assembly.GetExecutingAssembly().GetName().Name;
 
-        #region LocalVersion
-        internal static string LocalVersion
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5); }
-        }
-        #endregion
+        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
 
-        #region SettingsPath
-        internal static string SettingsPath
-        {
-            get { return "Plugins/LSPDFR/Emergency Callouts.ini"; }
-        }
-        #endregion
+        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
     }
 
 
@@ -61,6 +46,29 @@ namespace EmergencyCallouts.Essential
         {
             return random.Next(1, totalScenarios + 1);
 
+        }
+        #endregion
+
+        #region Enumerations
+        internal enum DescriptionCategories
+        {
+            Civilian,
+            Suspect,
+            Victim,
+            Officer,
+            Vehicle,
+        }
+
+        internal enum PedCategory
+        {
+            Suspect,
+            Suspect2,
+            Victim,
+            Bystander,
+            Guard,
+            Officer,
+            Paramedic,
+            Firefighter,
         }
         #endregion
 
@@ -132,27 +140,6 @@ namespace EmergencyCallouts.Essential
             #endregion
         }
 
-        internal enum DescriptionCategories
-        {
-            Civilian,
-            Suspect,
-            Victim,
-            Officer,
-            Vehicle,
-        }
-
-        internal enum PedCategory
-        {
-            Suspect,
-            Suspect2,
-            Victim,
-            Bystander,
-            Guard,
-            Officer,
-            Paramedic,
-            Firefighter,
-        }
-
         internal static class Display
         {
             #region AcceptNotification
@@ -166,6 +153,16 @@ namespace EmergencyCallouts.Essential
             internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
                 Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 20000);
+            }
+            #endregion
+
+            #region OutdatedReminder
+            internal static void OutdatedReminder()
+            {
+                if (UpdateChecker.OnlineVersion != Project.LocalVersion && !UpdateChecker.EarlyAccess)
+                {
+                    Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{UpdateChecker.OnlineVersion} ~s~available for you!");
+                }
             }
             #endregion
 
@@ -211,7 +208,7 @@ namespace EmergencyCallouts.Essential
             internal static void Exception(Exception e, string _class, string method)
             {
                 // Log Exception
-                Game.LogTrivial($"[Emergency Callouts {Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
+                Game.LogTrivial($"[Emergency Callouts v{Project.LocalVersion}]: {e.Message} At {_class}.{method}()");
 
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
@@ -381,6 +378,38 @@ namespace EmergencyCallouts.Essential
                     {
                         Play.CodeFourAudio();
                         Functions.StopCurrentCallout();
+                    }
+                }
+            }
+            #endregion
+
+            #region SpookCheck
+            internal static void SpookCheck(Vector3 entrance, float distanceFromEntrance)
+            {
+                if (Settings.EndOnArrivalWithLights && MainPlayer.Position.DistanceTo(entrance) <= distanceFromEntrance && MainPlayer.CurrentVehicle.IsSirenOn && MainPlayer.IsInAnyPoliceVehicle)
+                {
+                    int chance = random.Next(0, 101);
+
+                    if (chance <= Settings.EndChance && Settings.EndChance >= 0)
+                    {
+                        Game.DisplayHelp("You alerted the ~r~suspect~s~!", 5000);
+                        Display.HideSubtitle();
+                        GameFiber.Sleep(5000);
+                        Functions.StopCurrentCallout();
+                    }
+                }
+            }
+            #endregion
+
+            #region DeleteNearbyPeds
+            internal static void DeleteNearbyPeds(Ped mainPed)
+            {
+                // Delete Nearby Peds
+                foreach (Ped ped in World.GetAllPeds())
+                {
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed)
+                    {
+                        ped.Delete();
                     }
                 }
             }

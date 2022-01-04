@@ -25,6 +25,10 @@ namespace EmergencyCallouts
         internal static Keys TalkKey = Keys.Y;
         internal static Keys EndCalloutKey = Keys.End;
 
+        // Other
+        internal static bool EndOnArrivalWithLights = true;
+        internal static int EndChance = 50;
+
         internal static void Initialize()
         {
             Game.LogTrivial("[Emergency Callouts]: Loading settings");
@@ -51,6 +55,10 @@ namespace EmergencyCallouts
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
+
+            // Other
+            EndOnArrivalWithLights = iniFile.ReadBoolean("Other", "EndOnArrivalWithLights", EndOnArrivalWithLights);
+            EndChance = iniFile.ReadInt32("Other", "EndChance", EndChance);
 
             Game.LogTrivial("[Emergency Callouts]: Loaded settings");
         }

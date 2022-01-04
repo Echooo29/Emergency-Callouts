@@ -7,11 +7,14 @@ namespace EmergencyCallouts
 {
     internal class UpdateChecker
     {
+        internal static string OnlineVersion = null;
+        internal static bool EarlyAccess = false;
+
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
-            string OnlineVersion = null;
+            string EarlyAccessExtension = "";
 
             try
             {
@@ -25,11 +28,17 @@ namespace EmergencyCallouts
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
             }
 
-            if (OnlineVersion != Project.LocalVersion)
+            if (OnlineVersion != Project.LocalVersion && !EarlyAccess)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~m~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
+            }
+            else if (EarlyAccess)
+            {
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
+                Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
+                return false;
             }
             else
             {

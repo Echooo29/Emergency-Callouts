@@ -179,6 +179,7 @@ namespace EmergencyCallouts.Callouts
                 // Accept Messages
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -381,8 +382,6 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
-                        GameFiber.Sleep(3000);
-
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             if (!DialogueStarted)
@@ -397,9 +396,9 @@ namespace EmergencyCallouts.Callouts
                             Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                             Game.DisplaySubtitle(dialogue[line], 99999);
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
                             line++;
+                            
+                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
 
                             if (line == dialogue.Length)
                             {
@@ -451,7 +450,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
@@ -576,7 +575,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             // Suspect Putting Hands Up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
@@ -621,7 +620,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
@@ -655,6 +654,15 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
+
+                    // Gang Attack Fix
+                    foreach (Ped ped in World.GetAllPeds()) // Maybe gang members only?
+                    {
+                        if (ped.Exists() && ped.Position.DistanceTo(Suspect.Position) < 100f)
+                        {
+                            ped.BlockPermanentEvents = true;
+                        }
+                    }
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 20000);

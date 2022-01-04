@@ -22,7 +22,7 @@ namespace EmergencyCallouts.Callouts
 
         Vector3 Entrance;
         Vector3 Center;
-        
+
         // Main
         #region Positions
         readonly Vector3[] CalloutPositions =
@@ -40,14 +40,14 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] MirrorParkBreakInPositions =
         {
-            new Vector3(891.6117f, -625.4667f, 58.26054f), // Backdoor
+            new Vector3(891.7003f, -625.6554f, 58.26049f), // Backdoor
             new Vector3(905.5065f, -632.9874f, 58.04898f), // Shed 1
             new Vector3(869.7964f, -607.5421f, 58.21951f), // Shed 2
         };
 
         readonly float[] MirrorParkBreakInHeadings =
         {
-            295f,
+            322.62f,
             212f,
             39.6f,
         };
@@ -187,6 +187,7 @@ namespace EmergencyCallouts.Callouts
                 // Accepting Messages
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
@@ -407,7 +408,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             break;
@@ -436,7 +437,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             StopChecking = true;
 
@@ -483,7 +484,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
                         
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
@@ -517,7 +518,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             break;
@@ -558,7 +559,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists())
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists() && PlayerArrived)
                         {
                             StopChecking = true;
 
@@ -606,6 +607,9 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect);
+
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
 
@@ -620,6 +624,9 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
+                    // SpookCheck
+                    Handle.SpookCheck(Entrance, 10f);
+                    
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
