@@ -382,8 +382,6 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
-                        GameFiber.Sleep(3000);
-
                         if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             if (!DialogueStarted)
