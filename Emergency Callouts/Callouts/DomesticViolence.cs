@@ -180,7 +180,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
-
+                Handle.CalloutEndingSequence();
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
 
@@ -276,19 +276,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
                         break;
                     case 3:
                         Scenario3();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario3();
                         break;
                     case 5:
-                        Scenario5();
+                        Scenario3();
                         break;
                 }
 
@@ -419,13 +419,13 @@ namespace EmergencyCallouts.Callouts
                                 if (!DialogueStarted)
                                 {
                                     Victim.Tasks.Clear();
-
+                                    Victim.Face(MainPlayer);
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                //Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                                 if (Suspect.IsCuffed)
                                 {

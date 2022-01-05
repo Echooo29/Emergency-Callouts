@@ -19,7 +19,7 @@ namespace EmergencyCallouts.Essential
     {
         internal static string Name => Assembly.GetExecutingAssembly().GetName().Name;
 
-        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Remove(LocalVersion.Length - 2);
+        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);//.Remove(LocalVersion.Length - 2)
 
         internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
     }
@@ -380,6 +380,19 @@ namespace EmergencyCallouts.Essential
                         Functions.StopCurrentCallout();
                     }
                 }
+            }
+            #endregion
+
+            #region CalloutEndingSequence
+            internal static void CalloutEndingSequence()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("arrest@"), "radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                GameFiber.Sleep(500);
+                Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                GameFiber.Sleep(1500);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                Functions.StopCurrentCallout();
             }
             #endregion
 
