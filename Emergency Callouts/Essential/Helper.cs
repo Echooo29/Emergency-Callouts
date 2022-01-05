@@ -478,6 +478,15 @@ namespace EmergencyCallouts.Essential
                             }
                         }
                     }
+
+                    foreach (Vehicle Ambulance in World.GetAllVehicles())
+                    {
+                        if (Ambulance.Position.DistanceTo(ped.Position) < 20f && Ambulance.Model.Name.ToLower() == "ambulance")
+                        {
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
+                        }
+                    }
                 }
             }
 
