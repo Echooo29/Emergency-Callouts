@@ -119,7 +119,7 @@ namespace EmergencyCallouts.Essential
                     "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02",
                     "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01",
                     "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta",
-                    "ig_maryann", "u_f_y_mistress", "ig_molly", "u_f_o_moviestar", "ig_mrsphillips",
+                    "ig_maryann", "u_f_y_mistress", "ig_molly", "ig_mrsphillips",
                     "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess",
                     "a_f_m_salton_01", "a_f_o_salton_01", "a_f_y_rurmeth_01", "a_f_y_runner_01", "a_f_y_scdressy_01",
                     "ig_screen_writer", "s_f_m_shop_high", "s_f_y_shop_low", "s_f_y_shop_mid", "a_f_y_skater_01",

@@ -362,14 +362,42 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            string[] dialogue =
+            bool stopDialogue = false;
+
+            string[] dialogueArrested =
             {
-                "~b~You~s~: M'am, are you injured?",
-                "~o~Victim~s~: Yes, I'm hurt alot.",
-                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?",
-                "~o~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
-                "~b~You~s~: Try to relax, positive thoughts only okay?",
-                "~o~Victim~s~: Okay, I don't know if I..."
+                "~b~You~s~: Ma'am, are you injured?",
+                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                "~b~You~s~: Okay, is this your property?",
+                "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
+                "~b~You~s~: I assume you want to press charges?",
+                "~o~Victim~s~: Yes, and how do I get a restraining order?",
+                "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
+                "~o~Victim~s~: Thank you for helping me.",
+                "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
+                "~b~You~s~: It depends on multiple things, first time arrested, he could get out earlier with good behaviour.",
+                "~b~You~s~: But you won't have to worry for the coming years.",
+                "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
+                "~b~You~s~: But you won't have to worry for the coming years.",
+                "~b~You~s~: I'm gonna have to do some more things, other officers will help you further.",
+                "~c~dialogue ended",
+            };
+
+            string[] dialogueDeceased =
+            {
+                "~b~You~s~: Ma'am, are you hurt?",
+                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                "~b~You~s~: Okay, is this property yours?",
+                "~o~Victim~s~: Yes it is.",
+                "~b~You~s~: The body will get moved soon.",
+                "~o~Victim~s~: Good, what about the blood?",
+                "~b~You~s~: That will be taken care of by crime scene cleaners.",
+                "~o~Victim~s~: Okay, thanks",
+                "~b~You~s~: Here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks.",
+                "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
+                "~c~dialogue ended",
             };
 
             int line = 0;
@@ -380,45 +408,67 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                    if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
-                        if (Game.IsKeyDown(Settings.TalkKey))
+                        if (!DialogueStarted) { Game.DisplaySubtitle("Speak to the ~o~victim", 10000); }
+
+                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists())
                         {
-                            if (!DialogueStarted)
+                            if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue)
                             {
-                                Victim.Tasks.Clear();
+                                if (!DialogueStarted)
+                                {
+                                    Victim.Tasks.Clear();
 
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
+                                }
+
+                                DialogueStarted = true;
+
+                                Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                if (Suspect.IsCuffed)
+                                {
+                                    Game.DisplaySubtitle(dialogueArrested[line], 15000);
+                                    line++;
+
+                                    if (line == dialogueArrested.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                        stopDialogue = true;
+                                    }
+                                }
+                                else if (Suspect.IsDead)
+                                {
+                                    Game.DisplaySubtitle(dialogueDeceased[line], 15000);
+                                    line++;
+
+                                    if (line == dialogueDeceased.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                        stopDialogue = true;
+                                    }
+                                }
+
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                                if (line == 9)
+                                {
+                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    GameFiber.Sleep(200);
+
+                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                }
+
+                                
+                                GameFiber.Sleep(500);
                             }
-
-                            DialogueStarted = true;
-
-                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                            Game.DisplaySubtitle(dialogue[line], 15000);
-                            line++;
-                            
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                            if (line == dialogue.Length)
+                            else
                             {
-                                GameFiber.Sleep(1500);
-                                if (Victim.Exists()) { Victim.Kill(); }
-
-                                GameFiber.Sleep(1000);
-                                Display.HideSubtitle();
-
-                                GameFiber.Sleep(3000);
-                                Game.DisplaySubtitle("Request an ~g~ambulance~s~.");
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                            }
-                            GameFiber.Sleep(500);
-                        }
-                        else
-                        {
-                            if (DialogueStarted == false)
-                            {
-                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
+                                if (DialogueStarted == false)
+                                {
+                                    Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
+                                }
                             }
                         }
                     }

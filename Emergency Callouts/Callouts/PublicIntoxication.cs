@@ -199,14 +199,6 @@ namespace EmergencyCallouts.Callouts
                                 
                                 if (Game.IsKeyDown(System.Windows.Forms.Keys.N))
                                 {
-                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    GameFiber.Sleep(200);
-
-                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    Suspect.Inventory.Weapons.Clear();
-
-                                    GameFiber.Sleep(1000);
-
                                     End();
                                 }
                             }
