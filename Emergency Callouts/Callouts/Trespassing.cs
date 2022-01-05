@@ -1084,6 +1084,8 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
+            Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
