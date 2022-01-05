@@ -417,13 +417,12 @@ namespace EmergencyCallouts.Callouts
                                 if (!DialogueStarted)
                                 {
                                     Victim.Tasks.Clear();
-                                    Victim.Face(MainPlayer);
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                //Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                                 if (Suspect.IsCuffed)
                                 {
