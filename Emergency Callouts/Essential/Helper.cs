@@ -455,7 +455,7 @@ namespace EmergencyCallouts.Essential
             #region PreventFirstResponderCrash
             internal static void PreventFirstResponderCrash(Ped ped)
             {
-                if (ped.Exists()) 
+                if (ped.Exists() && ped.IsDead) 
                 {
                     foreach (Ped FirstResponder in World.GetAllPeds())
                     {
