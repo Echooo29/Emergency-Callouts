@@ -218,14 +218,14 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.IsPersistent = true;
 
                 vehDoors = SuspectVehicle.GetDoors();
-                vehDoors[5].Open(false);
+                vehDoors[vehDoors.Length - 1].Open(false);
 
                 // Suspect2Vehicle
                 Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
                 Suspect2Vehicle.IsPersistent = true;
 
                 veh2Doors = Suspect2Vehicle.GetDoors();
-                veh2Doors[5].Open(false);
+                veh2Doors[veh2Doors.Length - 1].Open(false);
 
                 CalloutHandler();
             }
