@@ -579,6 +579,64 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 3
             try
             {
+                #region Dialogue
+                bool stopDialogue = false;
+
+                string[] dialogue =
+                {
+                    "~b~You~s~: Why would you do such a thing?",
+                    "~r~Suspect~s~: You wouldn't understand.",
+                    "~b~You~s~: You're right, animals can't talk to humans.",
+                    "~r~Suspect~s~: Keep your mouth shut.",
+                    "~b~You~s~: You think you're tough but you're not.",
+                    "~r~Suspect~s~: Says the person who needs a gun, tazer, pepperspray and a nightstick.",
+                    "~b~You~s~: Yeah I need those, but never for your kind.",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        {
+                            if (!DialogueStarted)
+                            {
+                                Suspect.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
+
+                            DialogueStarted = true;
+
+                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                            Game.DisplaySubtitle(dialogue[line], 15000);
+                            line++;
+                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                            if (line == dialogue.Length)
+                            {
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                stopDialogue = true;
+                            }
+
+                            GameFiber.Sleep(500);
+                        }
+                        else
+                        {
+                            if (!DialogueStarted && Suspect.IsCuffed)
+                            {
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~r~suspect~s~.");
+                            }
+                        }
+                    }
+                });
+                #endregion
+
                 // Retrieve Fight Position
                 RetrieveFightPosition();
 
@@ -695,7 +753,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEndingVictim(Suspect, Victim);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventFirstResponderCrash(Suspect, Victim);
 
