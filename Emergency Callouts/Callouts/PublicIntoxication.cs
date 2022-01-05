@@ -164,7 +164,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
                     {
-                        if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue)
+                        if (Game.IsKeyDown(Settings.TalkKey))
                         {
                             if (!DialogueStarted)
                             {
@@ -178,9 +178,8 @@ namespace EmergencyCallouts.Callouts
                             Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                             Game.DisplaySubtitle(dialogue[line], 15000);
-
-                            line++;
-
+                            if (!stopDialogue) { line++; }
+                            
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
 
                             if (line == dialogue.Length)
@@ -198,10 +197,22 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
                                 }
-                                
-                                if (Game.IsKeyDown(System.Windows.Forms.Keys.N))
+
+                                while (CalloutActive)
                                 {
-                                    End();
+                                    GameFiber.Yield();
+                                    if (Game.IsKeyDown(Keys.N))
+                                    {
+                                        if (HasBottle)
+                                        {
+                                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForStatus(TaskStatus.Preparing);
+                                            Suspect.Inventory.Weapons.Clear();
+                                        }
+                                        GameFiber.Sleep(2000);
+                                        Play.CodeFourAudio();
+                                        End();
+                                        break;
+                                    }
                                 }
                             }
 
@@ -209,7 +220,7 @@ namespace EmergencyCallouts.Callouts
                         }
                         else
                         {
-                            if (DialogueStarted == false)
+                            if (!DialogueStarted)
                             {
                                 Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~y~suspect~s~.");
                             }
