@@ -267,7 +267,7 @@ namespace EmergencyCallouts.Essential
                     "GRESLEY", "HABANERO", "BJXL", "CAVALCADE", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO", "FQ2",
                     "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
                     "WARRENER", "DUKES", "VIRGO", "BUFFALO", "BUFFALO2", "ASEA", "RANCHERXL", "SULTAN", "DILETTANTE",
-                    "REBEL", "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
+                    "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
                 };
 
                 int num = random.Next(vehicles.Length);
