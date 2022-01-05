@@ -825,8 +825,6 @@ namespace EmergencyCallouts.Essential
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
             animSet.LoadAndWait();
             ped.MovementAnimationSet = animSet;
-
-            StopThePed.API.Functions.setPedAlcoholOverLimit(ped, true);
         }
         #endregion
 

@@ -208,8 +208,8 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
-                            Game.DisplaySubtitle("I'm drunk! Big deal ri...!");
-                            GameFiber.Sleep(3000);
+                            Game.DisplaySubtitle("~y~Suspect~s~: I'm drunk! Big deal ri...!", 2500);
+                            GameFiber.Sleep(2500);
                             if (Suspect.Exists()) { Suspect.Kill(); }
 
                             break;
