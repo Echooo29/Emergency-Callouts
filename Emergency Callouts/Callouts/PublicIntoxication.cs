@@ -19,6 +19,9 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool NeedsRefreshing;
         bool CalloutActive;
+        bool DialogueStarted;
+        bool UseDialogue;
+        bool HasBottle;
 
         Ped Suspect;
         Persona SuspectPersona;
@@ -69,7 +72,7 @@ namespace EmergencyCallouts.Callouts
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-
+            
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();
             SuspectBlip.ScaleForPed();
@@ -90,19 +93,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario5();
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario5();
+                        Scenario1();
                         break;
                     case 3:
-                        Scenario5();
+                        Scenario1();
                         break;
                     case 4:
-                        Scenario5();
+                        Scenario3();
                         break;
                     case 5:
-                        Scenario5();
+                        Scenario3();
                         break;
                 }
 
@@ -115,11 +118,120 @@ namespace EmergencyCallouts.Callouts
             }
         }
 
+        private void Dialogue()
+        {
+            #region Dialogue
+
+            bool stopDialogue = false;
+
+            string timeOfDay;
+            if (World.TimeOfDay.Hours <= 6 && World.TimeOfDay.Hours >= 12)
+            {
+                timeOfDay = " so early?";
+            }
+            else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 18)
+            {
+                timeOfDay = " in the middle of the day?";
+            }
+            else
+            {
+                timeOfDay = ", shouldn't you go home?";
+            }
+
+            string[] dialogue =
+            {
+                "~b~You~s~: Hey you, come here for a second.",
+                "~y~Suspect~s~: Leave...me...ALONE!",
+                $"~b~You~s~: Calm down sir, Just have a talk with me...",
+                "~y~Suspect~s~: FINE!",
+                $"~b~You~s~: So what are you doing here being drunk{timeOfDay}",
+                "~y~Suspect~s~: Who cares what I do here, I'm not harming anyone right?",
+                "~b~You~s~: Well I didn't get any assault calls yet.",
+                "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
+                "~b~You~s~: That wasn't what I meant, sorry.",
+                "~y~Suspect~s~: Well you got of lucky this time haha.",
+                "~r~Arrest~s~ or ~g~let go~s~ the person.",
+            };
+
+            int line = 0;
+
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
+                    {
+                        if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue)
+                        {
+                            if (!DialogueStarted)
+                            {
+                                Suspect.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
+
+                            DialogueStarted = true;
+
+                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                            Game.DisplaySubtitle(dialogue[line], 15000);
+
+                            line++;
+
+                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                            if (line == dialogue.Length)
+                            {
+                                stopDialogue = true;
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                GameFiber.Sleep(1500);
+                                if (HasBottle)
+                                {
+                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~let go~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                }
+                                else
+                                {
+                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~let go~s~ the ~y~suspect");
+                                }
+                                
+                                if (Game.IsKeyDown(System.Windows.Forms.Keys.N))
+                                {
+                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    GameFiber.Sleep(200);
+
+                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    Suspect.Inventory.Weapons.Clear();
+
+                                    GameFiber.Sleep(1000);
+
+                                    End();
+                                }
+                            }
+
+                            GameFiber.Sleep(500);
+                        }
+                        else
+                        {
+                            if (DialogueStarted == false)
+                            {
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~y~suspect~s~.");
+                            }
+                        }
+                    }
+                }
+            });
+            #endregion
+        }
+
         private void Scenario1()
         {
             #region Default
             try
             {
+                Dialogue();
             }
             catch (Exception e)
             {
@@ -161,6 +273,9 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
+                HasBottle = true;
+                Dialogue();
+
             }
             catch (Exception e)
             {
