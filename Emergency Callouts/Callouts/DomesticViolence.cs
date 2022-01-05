@@ -180,7 +180,7 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
-                Handle.CalloutEndingSequence();
+                //Handle.CalloutEndingSequence();
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
 
@@ -276,19 +276,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 2:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 3:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 4:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 5:
-                        Scenario3();
+                        Scenario4();
                         break;
                 }
 
@@ -376,12 +376,10 @@ namespace EmergencyCallouts.Callouts
                 "~o~Victim~s~: Thank you for helping me.",
                 "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
                 "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
-                "~b~You~s~: It depends on multiple things, first time arrested, he could get out earlier with good behaviour.",
-                "~b~You~s~: But you won't have to worry for the coming years.",
+                "~b~You~s~: I'd guess around 10 or 15 years.",
                 "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
-                "~b~You~s~: But you won't have to worry for the coming years.",
-                "~b~You~s~: I'm gonna have to do some more things, other officers will help you further.",
-                "~c~dialogue ended",
+                "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
+                "~m~dialogue ended",
             };
 
             string[] dialogueDeceased =
@@ -397,7 +395,7 @@ namespace EmergencyCallouts.Callouts
                 "~b~You~s~: Here is my card if you have any questions or need any help.",
                 "~o~Victim~s~: Thanks.",
                 "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
-                "~c~dialogue ended",
+                "~m~dialogue ended",
             };
 
             int line = 0;
@@ -591,6 +589,7 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: You think you're tough but you're not.",
                     "~r~Suspect~s~: Says the person who needs a gun, tazer, pepperspray and a nightstick.",
                     "~b~You~s~: Yeah I need those, but never for your kind.",
+                    "~m~dialogue ended",
                 };
 
                 int line = 0;

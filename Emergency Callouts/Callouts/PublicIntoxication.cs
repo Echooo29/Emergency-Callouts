@@ -151,7 +151,7 @@ namespace EmergencyCallouts.Callouts
                 "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
                 "~b~You~s~: That wasn't what I meant, sorry.",
                 "~y~Suspect~s~: Well you got of lucky this time haha.",
-                "~r~Arrest~s~ or ~g~let go~s~ the person.",
+                "~r~Arrest~s~ or ~g~dismiss~s~ the person.",
             };
 
             int line = 0;
@@ -189,13 +189,14 @@ namespace EmergencyCallouts.Callouts
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
 
                                 GameFiber.Sleep(1500);
+
                                 if (HasBottle)
                                 {
-                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~let go~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
                                 }
                                 else
                                 {
-                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~let go~s~ the ~y~suspect");
+                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
                                 }
                                 
                                 if (Game.IsKeyDown(System.Windows.Forms.Keys.N))
