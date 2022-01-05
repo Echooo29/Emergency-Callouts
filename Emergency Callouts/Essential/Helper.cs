@@ -820,22 +820,17 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region SetIntoxicated
-        /// <summary>
-        /// Sets ped to drunk with a walking style
-        /// </summary>
-        /// <param name="ped"></param>
         internal static void SetIntoxicated(this Ped ped)
         {
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
             animSet.LoadAndWait();
             ped.MovementAnimationSet = animSet;
+
+            StopThePed.API.Functions.setPedAlcoholOverLimit(ped, true);
         }
         #endregion
 
         #region SetInjured
-        /// <summary>
-        /// Sets peds walking style to injured
-        /// </summary>
         internal static void SetInjured(this Ped ped, int health)
         {
             AnimationSet animSet = new AnimationSet("move_m@injured");
