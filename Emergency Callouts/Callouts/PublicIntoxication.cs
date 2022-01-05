@@ -5,6 +5,7 @@ using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
 using System.Reflection;
+using System.Windows.Forms;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
@@ -59,12 +60,12 @@ namespace EmergencyCallouts.Callouts
         {
             // Callout Accepted
             Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-
+            
             // Accept Messages
             Display.AcceptNotification(CalloutDetails);
             Display.AcceptSubtitle(CalloutMessage, CalloutArea);
             Display.OutdatedReminder();
-
+            
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();
 
@@ -267,7 +268,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
                 HasBottle = true;
                 Dialogue();
-
             }
             catch (Exception e)
             {

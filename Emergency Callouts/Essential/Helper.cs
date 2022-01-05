@@ -19,7 +19,7 @@ namespace EmergencyCallouts.Essential
     {
         internal static string Name => Assembly.GetExecutingAssembly().GetName().Name;
 
-        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
+        internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Remove(LocalVersion.Length - 2);
 
         internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
     }
