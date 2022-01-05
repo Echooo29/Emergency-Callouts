@@ -632,12 +632,12 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveWeldingPosition()
         {
+            #region Positions
             // Welding Device
             int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
             NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
-
-            #region Positions
+            
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
@@ -784,10 +784,9 @@ namespace EmergencyCallouts.Callouts
                 // Clipboard
                 int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.LeftPhHand);
                 NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
 
                 // Inspect animation
-                //Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
 
@@ -811,7 +810,7 @@ namespace EmergencyCallouts.Callouts
 
                                 Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
-                                Game.DisplaySubtitle(dialogue[line], 99999);
+                                Game.DisplaySubtitle(dialogue[line], 15000);
                                 line++;
 
                                 if (line == 3)
