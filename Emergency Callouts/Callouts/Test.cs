@@ -18,7 +18,8 @@ namespace EmergencyCallouts.Callouts
         bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
-        bool NearAmbulance;
+
+        Vector3 CalloutPosition;
 
         Ped Suspect;
         Persona SuspectPersona;
@@ -29,8 +30,8 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            //CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, 400f));
-            CalloutPosition = MainPlayer.GetOffsetPositionFront(5f);
+            World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100f, 300f)).GetSafePositionForPed(out CalloutPosition);
+
             CalloutMessage = "Test";
             CalloutArea = World.GetStreetName(CalloutPosition);
 

@@ -736,6 +736,33 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
+        #region GetSafePositionForPed
+        public static unsafe bool GetSafePositionForPed(this Vector3 CalloutPosition, out Vector3 SafePosition)
+        {
+            Vector3 TempSpawn;
+
+            if (!NativeFunction.Natives.GET_SAFE_COORD_FOR_PED<bool>(CalloutPosition.X, CalloutPosition.Y, CalloutPosition.Z, true, out TempSpawn, 0))
+            {
+                TempSpawn = World.GetNextPositionOnStreet(CalloutPosition);
+                Rage.Entity NearbyEntity = World.GetClosestEntity(TempSpawn, 25f, GetEntitiesFlags.ConsiderHumanPeds);
+
+                if (NearbyEntity.Exists())
+                {
+                    TempSpawn = NearbyEntity.Position;
+                    SafePosition = TempSpawn;
+                    return true;
+                }
+                else
+                {
+                    SafePosition = TempSpawn;
+                    return false;
+                }
+            }
+            SafePosition = TempSpawn;
+            return true;
+        }
+        #endregion
+
         #region Enable
         internal static void Enable(this Blip blip)
         {

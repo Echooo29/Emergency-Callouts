@@ -23,6 +23,8 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool HasBottle;
 
+        Vector3 CalloutPosition;
+
         Ped Suspect;
         Persona SuspectPersona;
 
@@ -32,7 +34,14 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance));
+            int count = 0;
+            while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around(260f)).GetSafePositionForPed(out CalloutPosition))
+            {
+                GameFiber.Yield();
+
+                count++;
+                if (count >= 15) { return false; }
+            }
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
@@ -211,7 +220,7 @@ namespace EmergencyCallouts.Callouts
                                             Suspect.Inventory.Weapons.Clear();
                                         }
                                         MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                        GameFiber.Sleep(700);
+                                        GameFiber.Sleep(4000);
                                         Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
                                         GameFiber.Sleep(2700);
                                         Play.CodeFourAudio();
