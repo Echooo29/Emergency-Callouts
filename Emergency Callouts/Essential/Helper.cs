@@ -470,7 +470,6 @@ namespace EmergencyCallouts.Essential
                     if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
                         GameFiber.Sleep(1000);
-                        if (ped.Exists()) { ped.Delete(); }
                         Functions.StopCurrentCallout();
                     }
                 }

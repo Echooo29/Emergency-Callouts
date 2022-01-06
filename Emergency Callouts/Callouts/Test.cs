@@ -64,7 +64,7 @@ namespace EmergencyCallouts.Callouts
 
             // Log Creation
             Log.Creation(Suspect, PedCategory.Suspect);
-
+            
             return base.OnCalloutAccepted();
         }
 
@@ -76,6 +76,12 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventFirstResponderCrash(Suspect);
+
+                if (Game.IsKeyDown(Keys.Y) && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f)
+                {
+                    Suspect.Face(MainPlayer.Position);
+                    //GameFiber.Sleep(500);
+                }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
