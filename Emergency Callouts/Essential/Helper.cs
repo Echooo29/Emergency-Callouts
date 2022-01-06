@@ -384,16 +384,15 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region CalloutEndingSequence
-            //internal static void CalloutEndingSequence()
-            //{
-            //    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-            //    GameFiber.Sleep(500);
-            //    Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
-            //    GameFiber.Sleep(1500);
-            //    Play.CodeFourAudio();
-            //    GameFiber.Sleep(2700);
-            //    Functions.StopCurrentCallout();
-            //}
+            internal static void CalloutEndingSequence()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly).WaitForCompletion();
+                Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_exit", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly).WaitForCompletion();
+                Play.CodeFourAudio();
+                GameFiber.Sleep(2700);
+                //Functions.StopCurrentCallout();
+            }
             #endregion
 
             #region SpookCheck
@@ -468,66 +467,25 @@ namespace EmergencyCallouts.Essential
             #region PreventFirstResponderCrash
             internal static void PreventFirstResponderCrash(Ped ped)
             {
-                if (ped.Exists() && ped.IsDead) 
+                foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    foreach (Ped FirstResponder in World.GetAllPeds())
+                    if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
-                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f)
-                        {
-                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                        }
-                    }
-
-                    foreach (Vehicle Ambulance in World.GetAllVehicles())
-                    {
-                        if (Ambulance.Position.DistanceTo(ped.Position) < 20f && Ambulance.Model.Name.ToLower() == "ambulance")
-                        {
-                            Play.CodeFourAudio();
-                            Functions.StopCurrentCallout();
-                        }
+                        GameFiber.Sleep(1000);
+                        if (ped.Exists()) { ped.Delete(); }
+                        Functions.StopCurrentCallout();
                     }
                 }
             }
 
             internal static void PreventFirstResponderCrash(Ped ped, Ped ped2)
             {
-                if (ped.Exists() && ped2.Exists())
+                if (!ped.IsCollisionEnabled || !ped2.IsCollisionEnabled)
                 {
-                    foreach (Ped FirstResponder in World.GetAllPeds())
-                    {
-                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f || FirstResponder.Position.DistanceTo(ped2.Position) < 5f)
-                        {
-                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                        }
-                    }
+                    ped.IsVisible = false;
+                    GameFiber.Sleep(1000);
+                    ped.IsVisible = true;
+                    Functions.StopCurrentCallout();
                 }
             }
             #endregion

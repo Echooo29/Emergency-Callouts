@@ -296,8 +296,8 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
         #endregion
 
-        Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
-        Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
 
         Vehicle PropertyVehicle;
 

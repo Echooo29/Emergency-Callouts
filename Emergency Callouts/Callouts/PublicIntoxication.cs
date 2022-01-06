@@ -21,7 +21,6 @@ namespace EmergencyCallouts.Callouts
         bool NeedsRefreshing;
         bool CalloutActive;
         bool DialogueStarted;
-        bool UseDialogue;
         bool HasBottle;
 
         Ped Suspect;
@@ -33,14 +32,14 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(100f, Settings.MaxCalloutDistance));
+            CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance));
 
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
             CalloutArea = World.GetStreetName(CalloutPosition);
             CalloutScenario = GetRandomScenarioNumber(5);
 
-            ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, 60f);
+            ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
@@ -205,12 +204,14 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         if (HasBottle)
                                         {
-                                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForStatus(TaskStatus.Preparing);
+                                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
+                                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
+
+                                            GameFiber.Sleep(1000);
                                             Suspect.Inventory.Weapons.Clear();
                                         }
                                         GameFiber.Sleep(2000);
-                                        Play.CodeFourAudio();
-                                        End();
+                                        Handle.CalloutEndingSequence();
                                         break;
                                     }
                                 }
