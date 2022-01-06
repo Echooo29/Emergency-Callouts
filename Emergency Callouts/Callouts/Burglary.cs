@@ -223,42 +223,36 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(888.6841f, -625.1655f, 58.04898f);
                     Entrance = new Vector3(916.261f, -623.7192f, 58.05202f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // La Puerta
                 {
                     Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize += 80;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
                     Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
                     Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
                 {
                     Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
                     Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Harmony
                 {
                     Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
                     Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
-                    EntranceBlip.Position = Entrance;
                 }
 
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
                     Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 

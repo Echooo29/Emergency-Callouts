@@ -180,7 +180,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
-                //Handle.CalloutEndingSequence();
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
@@ -236,37 +235,31 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(0f, 526.2725f, 175.1643f);
                     Entrance = new Vector3(11.3652f, 545.7453f, 175.8412f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // Davis
                 {
                     Center = new Vector3(208.0452f, -1707.766f, 29.65307f);
                     Entrance = new Vector3(222.883f, -1726.32f, 28.87364f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Vespucci
                 {
                     Center = new Vector3(-1058.305f, -995.6418f, 6.410485f);
                     Entrance = new Vector3(-1048.924f, -1018.362f, 2.150359f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
                 {
                     Center = new Vector3(247.4916f, 3169.519f, 42.7863f);
                     Entrance = new Vector3(224.5887f, 3162.886f, 42.3335f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
                 {
                     Center = new Vector3(1672.969f, 4670.249f, 43.40202f);
                     Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
                     Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
@@ -578,7 +571,7 @@ namespace EmergencyCallouts.Callouts
                 #region Dialogue
                 bool stopDialogue = false;
 
-                string[] dialogue =
+                string[] dialogueSuspect =
                 {
                     "~b~You~s~: Why would you do such a thing?",
                     "~r~Suspect~s~: You wouldn't understand.",
@@ -611,11 +604,11 @@ namespace EmergencyCallouts.Callouts
 
                             Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
-                            Game.DisplaySubtitle(dialogue[line], 15000);
+                            Game.DisplaySubtitle(dialogueSuspect[line], 15000);
                             line++;
                             Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
 
-                            if (line == dialogue.Length)
+                            if (line == dialogueSuspect.Length)
                             {
                                 Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                 stopDialogue = true;

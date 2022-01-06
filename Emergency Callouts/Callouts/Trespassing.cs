@@ -385,37 +385,31 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(512f, -610.72f, 24.43f);
                     Entrance = new Vector3(510.59f, -666.95f, 24.40f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                 {
                     Center = new Vector3(-1170.024f, -2045.655f, 14.22536f);
                     Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Terminal
                 {
                     Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
                     Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
                 {
                     Center = new Vector3(195.43f, 2786.759f, 45.65519f);
                     Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
                 {
                     Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
                     Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 

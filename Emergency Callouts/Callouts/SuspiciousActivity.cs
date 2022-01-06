@@ -247,37 +247,31 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(167.0673f, -1247.618f, 29.19848f);
                     Entrance = new Vector3(207.6943f, -1261.656f, 29.16432f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // Del Perro
                 {
                     Center = new Vector3(-1283.511f, -811.2982f, 17.32025f);
                     Entrance = new Vector3(-1364.522f, -709.0762f, 24.67615f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Harmony
                 {
                     Center = new Vector3(597.8428f, 2796.708f, 41.99812f);
                     Entrance = new Vector3(651.5822f, 2762.731f, 41.94574f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // El Burro
                 {
                     Center = new Vector3(1243.041f, -2395.421f, 47.91381f);
                     Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(1477.096f, 6343.949f, 22.35379f);
                     Entrance = new Vector3(1485.026f, 6412.347f, 22.35379f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
