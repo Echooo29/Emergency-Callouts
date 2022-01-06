@@ -210,8 +210,13 @@ namespace EmergencyCallouts.Callouts
                                             GameFiber.Sleep(1000);
                                             Suspect.Inventory.Weapons.Clear();
                                         }
-                                        GameFiber.Sleep(2000);
-                                        Handle.CalloutEndingSequence();
+                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                        GameFiber.Sleep(700);
+                                        Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                                        GameFiber.Sleep(2700);
+                                        Play.CodeFourAudio();
+                                        GameFiber.Sleep(5000);
+                                        Functions.StopCurrentCallout();
                                         break;
                                     }
                                 }

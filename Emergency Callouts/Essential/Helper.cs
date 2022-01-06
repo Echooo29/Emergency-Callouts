@@ -308,7 +308,12 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
+                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                    GameFiber.Sleep(700);
+                    Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                    GameFiber.Sleep(2700);
                     Play.CodeFourAudio();
+                    GameFiber.Sleep(5000);
                     Functions.StopCurrentCallout();
                 }
             }
@@ -321,7 +326,12 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed)
                     {
+                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                        GameFiber.Sleep(700);
+                        Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                        GameFiber.Sleep(2700);
                         Play.CodeFourAudio();
+                        GameFiber.Sleep(5000);
                         Functions.StopCurrentCallout();
                     }
                     else if (suspect.IsDead)
@@ -380,18 +390,6 @@ namespace EmergencyCallouts.Essential
                         Functions.StopCurrentCallout();
                     }
                 }
-            }
-            #endregion
-
-            #region CalloutEndingSequence
-            internal static void CalloutEndingSequence()
-            {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly).WaitForCompletion();
-                Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_exit", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly).WaitForCompletion();
-                Play.CodeFourAudio();
-                GameFiber.Sleep(2700);
-                //Functions.StopCurrentCallout();
             }
             #endregion
 
