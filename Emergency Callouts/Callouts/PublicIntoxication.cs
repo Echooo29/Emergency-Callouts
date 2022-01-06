@@ -23,7 +23,7 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool HasBottle;
 
-        Vector3 CalloutPosition;
+        new Vector3 CalloutPosition;
 
         Ped Suspect;
         Persona SuspectPersona;

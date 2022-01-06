@@ -19,7 +19,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
 
-        Vector3 CalloutPosition;
+        new Vector3 CalloutPosition;
 
         Ped Suspect;
         Persona SuspectPersona;

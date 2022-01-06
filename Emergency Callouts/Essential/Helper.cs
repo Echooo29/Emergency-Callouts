@@ -425,31 +425,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region DeleteNearbyVehicles
-            internal static void DeleteNearbyVehicles(Vehicle mainVehicle)
-            {
-                // Delete Nearby Vehicles
-                foreach (Vehicle vehicle in World.GetAllVehicles())
-                {
-                    if (vehicle != mainVehicle)
-                    {
-                        vehicle.Delete();
-                    }
-                }
-            }
-            internal static void DeleteNearbyVehicles(Vehicle mainVehicle, Vehicle mainVehicle2)
-            {
-                // Delete Nearby Vehicles
-                foreach (Vehicle vehicle in World.GetAllVehicles())
-                {
-                    if (vehicle && vehicle.Position.DistanceTo(mainVehicle) < 30f && vehicle != mainVehicle && vehicle != mainVehicle2)
-                    {
-                        vehicle.Delete();
-                    }
-                }
-            }
-            #endregion
-
             #region PreventDistanceCrash
             internal static void PreventDistanceCrash(Vector3 CalloutPosition, bool PlayerArrived, bool PedFound)
             {
@@ -738,9 +713,7 @@ namespace EmergencyCallouts.Essential
         #region GetSafePositionForPed
         public static unsafe bool GetSafePositionForPed(this Vector3 CalloutPosition, out Vector3 SafePosition)
         {
-            Vector3 TempSpawn;
-
-            if (!NativeFunction.Natives.GET_SAFE_COORD_FOR_PED<bool>(CalloutPosition.X, CalloutPosition.Y, CalloutPosition.Z, true, out TempSpawn, 0))
+            if (!NativeFunction.Natives.GET_SAFE_COORD_FOR_PED<bool>(CalloutPosition.X, CalloutPosition.Y, CalloutPosition.Z, true, out Vector3 TempSpawn, 0))
             {
                 TempSpawn = World.GetNextPositionOnStreet(CalloutPosition);
                 Rage.Entity NearbyEntity = World.GetClosestEntity(TempSpawn, 25f, GetEntitiesFlags.ConsiderHumanPeds);

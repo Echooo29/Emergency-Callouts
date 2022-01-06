@@ -350,9 +350,6 @@ namespace EmergencyCallouts.Callouts
             SuspectVehicle.IsPersistent = true;
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
-            // Delete Nearby Vehicles
-            Handle.DeleteNearbyVehicles(SuspectVehicle);
-
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
                 SuspectVehicle.Position = new Vector3(909.9557f, -624.8691f, 57.66842f);
