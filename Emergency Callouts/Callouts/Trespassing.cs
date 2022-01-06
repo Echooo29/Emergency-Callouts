@@ -1030,7 +1030,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;

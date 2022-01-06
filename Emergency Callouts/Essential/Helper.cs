@@ -850,16 +850,5 @@ namespace EmergencyCallouts.Essential
             if (blip.Exists()) { blip.Scale = 0.75f; }
         }
         #endregion
-
-        #region IsPedDetained
-        internal static bool IsPedDetained(this Ped ped)
-        {
-            if (Functions.IsPedStoppedByPlayer(ped) && ped.Exists())
-            {
-                return true;
-            }
-            else return false;
-        }
-        #endregion
     }
 }

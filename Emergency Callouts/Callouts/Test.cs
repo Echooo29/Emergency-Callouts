@@ -116,7 +116,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained)
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Remove SuspectBlip
                     SuspectBlip.Remove();
