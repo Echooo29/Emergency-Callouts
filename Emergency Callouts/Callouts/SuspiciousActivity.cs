@@ -190,9 +190,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
@@ -295,9 +292,9 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
                 // Log Creation
                 Log.Creation(Suspect, PedCategory.Suspect);
@@ -543,7 +540,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Delete Nearby Vehicles
-                    Handle.DeleteNearbyVehicles(SuspectVehicle, Suspect2Vehicle);
+                    //Handle.DeleteNearbyVehicles(SuspectVehicle, Suspect2Vehicle);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);

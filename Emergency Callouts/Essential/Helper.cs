@@ -431,7 +431,7 @@ namespace EmergencyCallouts.Essential
                 // Delete Nearby Vehicles
                 foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    if (vehicle && vehicle.Position.DistanceTo(mainVehicle) < 30f && vehicle != mainVehicle)
+                    if (vehicle != mainVehicle)
                     {
                         vehicle.Delete();
                     }

@@ -181,8 +181,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
                 //Handle.CalloutEndingSequence();
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
@@ -292,7 +290,8 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
