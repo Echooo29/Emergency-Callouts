@@ -59,7 +59,7 @@ namespace EmergencyCallouts.Callouts
 
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();
-            SuspectBlip.ScaleForPed();
+            SuspectBlip.Scale = (float)Settings.PedBlipScale;
             SuspectBlip.Disable();
 
             // Log Creation

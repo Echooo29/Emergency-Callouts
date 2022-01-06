@@ -84,7 +84,7 @@ namespace EmergencyCallouts.Callouts
             
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();
-            SuspectBlip.ScaleForPed();
+            SuspectBlip.Scale = (float)Settings.PedBlipScale;
             SuspectBlip.Disable();
 
             Suspect.Tasks.Wander();
@@ -218,9 +218,10 @@ namespace EmergencyCallouts.Callouts
 
                                             GameFiber.Sleep(1000);
                                             Suspect.Inventory.Weapons.Clear();
+                                            GameFiber.Sleep(4000);
                                         }
                                         MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                        GameFiber.Sleep(4000);
+                                        GameFiber.Sleep(1000);
                                         Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
                                         GameFiber.Sleep(2700);
                                         Play.CodeFourAudio();

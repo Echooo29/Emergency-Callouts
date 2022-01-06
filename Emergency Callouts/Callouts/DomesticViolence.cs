@@ -192,7 +192,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Victim
@@ -204,7 +204,7 @@ namespace EmergencyCallouts.Callouts
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
-                VictimBlip.ScaleForPed();
+                VictimBlip.Scale = (float)Settings.PedBlipScale;
                 VictimBlip.Disable();
                 
                 // 50% Drunk Chance

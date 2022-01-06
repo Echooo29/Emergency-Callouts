@@ -200,7 +200,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 CalloutHandler();

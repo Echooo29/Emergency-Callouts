@@ -843,12 +843,5 @@ namespace EmergencyCallouts.Essential
             if (ped.IsAlive) { ped.Health = health; }
         }
         #endregion
-
-        #region ScaleForPed
-        internal static void ScaleForPed(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Scale = 0.75f; }
-        }
-        #endregion
     }
 }

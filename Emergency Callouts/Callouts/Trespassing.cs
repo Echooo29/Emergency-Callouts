@@ -362,7 +362,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 CalloutHandler();
@@ -513,7 +513,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
@@ -527,7 +527,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
@@ -541,7 +541,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
@@ -555,7 +555,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
@@ -569,7 +569,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
@@ -583,7 +583,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
@@ -778,7 +778,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Clipboard

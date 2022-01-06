@@ -200,7 +200,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Suspect 2
@@ -210,7 +210,7 @@ namespace EmergencyCallouts.Callouts
 
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColorRed();
-                Suspect2Blip.ScaleForPed();
+                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
                 Suspect2Blip.Disable();
 
                 // SuspectVehicle
