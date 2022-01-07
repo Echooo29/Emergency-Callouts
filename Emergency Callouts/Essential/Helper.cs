@@ -308,13 +308,7 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                    GameFiber.Sleep(700);
-                    Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
-                    GameFiber.Sleep(2700);
-                    Play.CodeFourAudio();
-                    GameFiber.Sleep(5000);
-                    Functions.StopCurrentCallout();
+                    AdvancedEndingSequence();
                 }
             }
             #endregion
@@ -378,9 +372,9 @@ namespace EmergencyCallouts.Essential
             #region AdvancedEndingSequence
             internal static void AdvancedEndingSequence()
             {
-                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                 GameFiber.Sleep(700);
-                Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance needed.");
                 GameFiber.Sleep(2700);
                 Play.CodeFourAudio();
                 GameFiber.Sleep(5000);
