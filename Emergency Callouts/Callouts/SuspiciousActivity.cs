@@ -533,9 +533,6 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
-                    // Delete Nearby Vehicles
-                    //Handle.DeleteNearbyVehicles(SuspectVehicle, Suspect2Vehicle);
-
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
 
@@ -546,7 +543,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 

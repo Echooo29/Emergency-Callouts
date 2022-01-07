@@ -261,6 +261,8 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
                     Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
                 }
+
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
                 #endregion
 
                 // Scenario Deciding
@@ -771,7 +773,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
