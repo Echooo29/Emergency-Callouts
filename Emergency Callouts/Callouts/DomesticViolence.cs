@@ -416,11 +416,14 @@ namespace EmergencyCallouts.Callouts
 
                                 DialogueStarted = true;
 
+                                // Face the player
                                 Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
+                                // Victim dialogue
                                 if (Suspect.IsCuffed)
                                 {
                                     Game.DisplaySubtitle(dialogueArrested[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
                                     line++;
 
                                     if (line == dialogueArrested.Length)
@@ -432,26 +435,26 @@ namespace EmergencyCallouts.Callouts
                                 else if (Suspect.IsDead)
                                 {
                                     Game.DisplaySubtitle(dialogueDeceased[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
                                     line++;
 
                                     if (line == dialogueDeceased.Length)
                                     {
-                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                         stopDialogue = true;
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                     }
                                 }
 
-                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
+                                // Give officer's card
                                 if (line == 9)
                                 {
-                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    Suspect.Tasks.ClearImmediately();
+                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                     GameFiber.Sleep(200);
 
-                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                 }
 
-                                
                                 GameFiber.Sleep(500);
                             }
                             else
@@ -746,7 +749,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventPickupCrash(Suspect, Victim);
+                Handle.PreventPickupCrash(Suspect, Victim); // VICTIM
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)

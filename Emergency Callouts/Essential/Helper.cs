@@ -444,7 +444,26 @@ namespace EmergencyCallouts.Essential
                 {
                     if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
-                        GameFiber.Sleep(1000);
+                        if (vehicle.Model.Name == "AMBULANCE")
+                        {
+                            GameFiber.Sleep(1000);
+                            Functions.StopCurrentCallout();
+                        }
+                    }
+                }
+
+                int coroners = 0;
+
+                foreach (Ped _ped in World.GetAllPeds())
+                {
+                    if (_ped.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(_ped.Position) < 5f && _ped.IsDead)
+                    {
+                        coroners++;
+                    }
+
+                    if (coroners == 2)
+                    {
+                        GameFiber.Sleep(5000);
                         Functions.StopCurrentCallout();
                     }
                 }
@@ -454,13 +473,26 @@ namespace EmergencyCallouts.Essential
             {
                 foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    if (vehicle.Model.Name.ToLower() == "ambulance" || vehicle.Model.Name.ToLower() == "speedo")
+                    if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f && vehicle.Model.Name == "AMBULANCE")
                     {
-                        if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
-                        {
-                            GameFiber.Sleep(1000);
-                            Functions.StopCurrentCallout();
-                        }
+                        GameFiber.Sleep(1000);
+                        Functions.StopCurrentCallout();
+                    }
+                }
+
+                int coroners = 0;
+
+                foreach (Ped _ped in World.GetAllPeds())
+                {
+                    if (_ped.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(_ped.Position) < 5f && _ped.IsDead)
+                    { 
+                        coroners++; 
+                    }
+
+                    if (coroners == 2)
+                    {
+                        //GameFiber.Sleep(5000);
+                        Functions.StopCurrentCallout();
                     }
                 }
             }
