@@ -448,8 +448,8 @@ namespace EmergencyCallouts.Callouts
                                 // Give officer's card
                                 if (line == 9)
                                 {
-                                    Suspect.Tasks.ClearImmediately();
-                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                    Victim.Tasks.ClearImmediately();
+                                    Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                     GameFiber.Sleep(200);
 
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
@@ -465,6 +465,10 @@ namespace EmergencyCallouts.Callouts
                                 }
                             }
                         }
+                    }
+                    else if (Victim.IsDead) // Victim is dead
+                    {
+                        break;
                     }
                 }
             });

@@ -324,20 +324,9 @@ namespace EmergencyCallouts.Essential
             {
                 if (suspect.Exists())
                 {
-                    if (suspect.IsCuffed)
+                    if (suspect.IsCuffed || suspect.IsDead)
                     {
-                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                        GameFiber.Sleep(700);
-                        Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
-                        GameFiber.Sleep(2700);
-                        Play.CodeFourAudio();
-                        GameFiber.Sleep(5000);
-                        Functions.StopCurrentCallout();
-                    }
-                    else if (suspect.IsDead)
-                    {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                 }
 
@@ -349,23 +338,19 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed && suspect2.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && suspect2.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                 }
             }
@@ -376,20 +361,30 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && victim.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && victim.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                 }
+            }
+            #endregion
+
+            #region AdvancedEndingSequence
+            internal static void AdvancedEndingSequence()
+            {
+                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                GameFiber.Sleep(700);
+                Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
+                GameFiber.Sleep(2700);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(5000);
+                Functions.StopCurrentCallout();
             }
             #endregion
 
@@ -446,24 +441,17 @@ namespace EmergencyCallouts.Essential
                     {
                         if (vehicle.Model.Name == "AMBULANCE")
                         {
-                            GameFiber.Sleep(1000);
+                            Play.CodeFourAudio();
                             Functions.StopCurrentCallout();
                         }
                     }
                 }
 
-                int coroners = 0;
-
-                foreach (Ped _ped in World.GetAllPeds())
+                foreach (Ped retrievedPed in World.GetAllPeds())
                 {
-                    if (_ped.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(_ped.Position) < 5f && _ped.IsDead)
+                    if (retrievedPed.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(retrievedPed.Position) <= 5f && retrievedPed.IsDead)
                     {
-                        coroners++;
-                    }
-
-                    if (coroners == 2)
-                    {
-                        GameFiber.Sleep(5000);
+                        Play.CodeFourAudio();
                         Functions.StopCurrentCallout();
                     }
                 }
@@ -473,26 +461,25 @@ namespace EmergencyCallouts.Essential
             {
                 foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f && vehicle.Model.Name == "AMBULANCE")
+                    if ((!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f) || !ped2.IsCollisionEnabled && ped2.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
-                        GameFiber.Sleep(1000);
-                        Functions.StopCurrentCallout();
+                        if (vehicle.Model.Name == "AMBULANCE")
+                        {
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
+                        }
                     }
                 }
 
-                int coroners = 0;
-
-                foreach (Ped _ped in World.GetAllPeds())
+                foreach (Ped retrievedPed in World.GetAllPeds())
                 {
-                    if (_ped.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(_ped.Position) < 5f && _ped.IsDead)
-                    { 
-                        coroners++; 
-                    }
-
-                    if (coroners == 2)
+                    if (ped.IsDead || ped2.IsDead)
                     {
-                        //GameFiber.Sleep(5000);
-                        Functions.StopCurrentCallout();
+                        if (retrievedPed.Model.Name.ToLower() == "s_m_m_doctor_01" && (ped.Position.DistanceTo(retrievedPed.Position) <= 5f || ped2.Position.DistanceTo(retrievedPed.Position) <= 5f))
+                        {
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
+                        }
                     }
                 }
             }
