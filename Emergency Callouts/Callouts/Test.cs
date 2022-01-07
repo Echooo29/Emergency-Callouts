@@ -75,7 +75,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.PreventFirstResponderCrash(Suspect);
+                Handle.PreventPickupCrash(Suspect);
 
                 if (Game.IsKeyDown(Keys.Y) && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f)
                 {

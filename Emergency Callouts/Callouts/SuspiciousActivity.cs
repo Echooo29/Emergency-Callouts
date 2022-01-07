@@ -524,7 +524,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect, Suspect2);
-                Handle.PreventFirstResponderCrash(Suspect, Suspect2);
+                Handle.PreventPickupCrash(Suspect, Suspect2);
                 //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived

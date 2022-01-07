@@ -437,8 +437,8 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region PreventFirstResponderCrash
-            internal static void PreventFirstResponderCrash(Ped ped)
+            #region PreventPickupCrash
+            internal static void PreventPickupCrash(Ped ped)
             {
                 foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
@@ -450,14 +450,18 @@ namespace EmergencyCallouts.Essential
                 }
             }
 
-            internal static void PreventFirstResponderCrash(Ped ped, Ped ped2)
+            internal static void PreventPickupCrash(Ped ped, Ped ped2)
             {
-                if (!ped.IsCollisionEnabled || !ped2.IsCollisionEnabled)
+                foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    ped.IsVisible = false;
-                    GameFiber.Sleep(1000);
-                    ped.IsVisible = true;
-                    Functions.StopCurrentCallout();
+                    if (vehicle.Model.Name.ToLower() == "ambulance" || vehicle.Model.Name.ToLower() == "speedo")
+                    {
+                        if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
+                        {
+                            GameFiber.Sleep(1000);
+                            Functions.StopCurrentCallout();
+                        }
+                    }
                 }
             }
             #endregion

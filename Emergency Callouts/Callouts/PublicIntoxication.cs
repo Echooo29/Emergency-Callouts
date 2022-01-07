@@ -367,7 +367,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
-                Handle.PreventFirstResponderCrash(Suspect);
+                Handle.PreventPickupCrash(Suspect);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived
@@ -442,7 +442,7 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
-                #region Refresh Search Area
+                #region RefreshSearchArea
                 if (!PedFound)
                 {
                     if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
