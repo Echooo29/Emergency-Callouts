@@ -21,6 +21,7 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool StopChecking;
+        bool WithinRange;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -209,9 +210,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Blip.SetColorRed();
                 Suspect2Blip.Scale = (float)Settings.PedBlipScale;
                 Suspect2Blip.Disable();
-
-                // Delete Nearby Trailers
-                Handle.DeleteNearbyTrailers(Center);
 
                 // SuspectVehicle
                 SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
@@ -528,16 +526,28 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect, Suspect2);
                 Handle.PreventPickupCrash(Suspect, Suspect2);
-                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+
+                #region WithinRange
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                {
+                    // Set WithinRange
+                    WithinRange = true;
+
+                    // Delete Nearby Trailers
+                    Handle.DeleteNearbyTrailers(Center);
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, Suspect2);
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 100 meters");
+                }
+                #endregion
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
-
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect, Suspect2);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
