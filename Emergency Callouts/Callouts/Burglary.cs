@@ -19,6 +19,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool StopChecking;
+        bool WithinRange;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -595,14 +596,27 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect);
 
+                #region WithinRange
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                {
+                    // Set WithinRange
+                    WithinRange = true;
+
+                    // Delete Nearby Trailers
+                    Handle.DeleteNearbyTrailers(Center);
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect);
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
+                }
+                #endregion
+
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
-
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
