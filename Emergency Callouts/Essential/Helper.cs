@@ -412,7 +412,7 @@ namespace EmergencyCallouts.Essential
                 // Delete Nearby Peds
                 foreach (Ped ped in World.GetAllPeds())
                 {
-                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed)
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != MainPlayer)
                     {
                         ped.Delete();
                     }
@@ -423,7 +423,7 @@ namespace EmergencyCallouts.Essential
                 // Delete Nearby Peds
                 foreach (Ped ped in World.GetAllPeds())
                 {
-                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != mainPed2)
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != mainPed2 && ped != MainPlayer)
                     {
                         ped.Delete();
                     }
