@@ -3,15 +3,10 @@ using System.Reflection;
 using System.Windows.Forms;
 using Rage;
 using LSPD_First_Response.Mod.API;
-using System.IO;
 using Rage.Native;
 using static EmergencyCallouts.Essential.Helper;
-using System.Media;
 using System.Net;
-using RAGENativeUI;
-using static EmergencyCallouts.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
-using System.Diagnostics;
 using System.Linq;
 
 namespace EmergencyCallouts.Essential
@@ -819,9 +814,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region SetDefaults
-        /// <summary>
-        /// Sets ped persistency and blocks permanent events.
-        /// </summary>
         internal static void SetDefaults(this Ped ped)
         {
             if (ped.Exists())
