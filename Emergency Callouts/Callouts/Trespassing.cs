@@ -787,7 +787,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
-                            if (Game.IsKeyDown(Settings.TalkKey))
+                            if (Game.IsKeyDown(Settings.InteractKey))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -979,7 +979,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyPeds(Suspect);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

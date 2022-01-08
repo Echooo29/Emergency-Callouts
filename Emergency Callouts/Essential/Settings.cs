@@ -18,13 +18,13 @@ namespace EmergencyCallouts.Essential
         internal static double PedBlipScale = 0.75f;
 
         // Keys
-        internal static Keys TalkKey = Keys.Y;
+        internal static Keys InteractKey = Keys.Y;
         internal static Keys EndCalloutKey = Keys.End;
 
         // Other
         internal static bool EndOnArrivalWithLights = true;
         internal static int EndChance = 50;
-
+        internal static int ChanceOfPropertyDamage = 50;
         // Back end
         internal static bool EarlyAccess = true;
 
@@ -49,7 +49,7 @@ namespace EmergencyCallouts.Essential
             PedBlipScale = iniFile.ReadDouble("Measurements", "PedBlipScale", PedBlipScale);
 
             // Keybindings
-            TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);
+            InteractKey = iniFile.ReadEnum("Keybindings", "InteractKey", InteractKey);
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Other

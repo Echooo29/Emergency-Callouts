@@ -153,7 +153,7 @@ namespace EmergencyCallouts.Essential
             #region AcceptSubtitle
             internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Game.DisplaySubtitle($"{Localization.AcceptSubtitleIntro} ~r~{calloutMessage}~s~ {Localization.AcceptSubtitleAt} ~y~{calloutArea}~s~.", 20000);
+                Game.DisplaySubtitle($"{Localization.AcceptSubtitleIntro} ~r~{calloutMessage}~s~ {Localization.AcceptSubtitleAt} ~y~{calloutArea}~s~.", 10000);
             }
             #endregion
 
@@ -392,7 +392,7 @@ namespace EmergencyCallouts.Essential
                 {
                     int chance = random.Next(0, 101);
 
-                    if (chance <= Settings.EndChance && Settings.EndChance >= 0)
+                    if (chance <= Settings.EndChance)
                     {
                         Game.DisplayHelp(Localization.EndNotificationAlertedPed, 5000);
                         Display.HideSubtitle();

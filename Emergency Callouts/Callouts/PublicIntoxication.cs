@@ -172,7 +172,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
                     {
-                        if (Game.IsKeyDown(Settings.TalkKey))
+                        if (Game.IsKeyDown(Settings.InteractKey))
                         {
                             if (!DialogueStarted)
                             {
@@ -382,7 +382,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     // Display Subtitle
-                    Game.DisplaySubtitle(Localization.PublicIntoxicationSubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.PublicIntoxicationSubtitle, 10000);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 

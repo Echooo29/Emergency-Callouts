@@ -563,7 +563,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
