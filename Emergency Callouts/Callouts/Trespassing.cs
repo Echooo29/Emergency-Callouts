@@ -1,16 +1,13 @@
 ﻿using EmergencyCallouts.Essential;
 using LSPD_First_Response.Engine.Scripting.Entities;
-using LSPD_First_Response.Engine.UI;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
-using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {

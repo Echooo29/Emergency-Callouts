@@ -5,12 +5,6 @@ Set EarlyAccess bool to false
 Build in release mode
 Push
 
-[.NET REACTOR]
-Double check the modified time in release folder
-Enable all the right obfuscation settings
-Obfuscate the file
-Test the secure version
-
 [EMERGENCY CALLOUTS ZIP]
 Add the secure .dll to the zip
 Add the vanilla .ini to the zip

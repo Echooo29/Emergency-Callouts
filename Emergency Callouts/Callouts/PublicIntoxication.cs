@@ -35,7 +35,7 @@ namespace EmergencyCallouts.Callouts
         public override bool OnBeforeCalloutDisplayed()
         {
             int count = 0;
-            while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around(260f)).GetSafePositionForPed(out CalloutPosition))
+            while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
 
