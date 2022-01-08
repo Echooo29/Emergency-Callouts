@@ -3,15 +3,11 @@ using System.Reflection;
 using System.Windows.Forms;
 using Rage;
 using LSPD_First_Response.Mod.API;
-using System.IO;
 using Rage.Native;
 using static EmergencyCallouts.Essential.Helper;
-using System.Media;
 using System.Net;
-using RAGENativeUI;
-using static EmergencyCallouts.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
-using System.Diagnostics;
+using System.Linq;
 
 namespace EmergencyCallouts.Essential
 {
@@ -119,7 +115,7 @@ namespace EmergencyCallouts.Essential
                     "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02",
                     "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01",
                     "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta",
-                    "ig_maryann", "u_f_y_mistress", "ig_molly", "u_f_o_moviestar", "ig_mrsphillips",
+                    "ig_maryann", "u_f_y_mistress", "ig_molly", "ig_mrsphillips",
                     "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess",
                     "a_f_m_salton_01", "a_f_o_salton_01", "a_f_y_rurmeth_01", "a_f_y_runner_01", "a_f_y_scdressy_01",
                     "ig_screen_writer", "s_f_m_shop_high", "s_f_y_shop_low", "s_f_y_shop_mid", "a_f_y_skater_01",
@@ -263,11 +259,11 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", "FQ2", "VIRGO",
-                    "GRESLEY", "HABANERO", "DUKES", "BJXL", "CAVALCADE", "F620", "FELON", "FELON2", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO",
-                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE", "DILETTANTE", 
-                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "ASEA", "RANCHERXL", "CASCO", "EXEMPLAR", "SENTINEL", "CHINO", "SULTAN", "BUFFALO2", 
-                    "REBEL", "SCHWARZER", "CARBONIZZARE", "SULTAN", "EXEMPLAR", "MASSACRO", "PRAIRIE", "ASTEROPE", "WASHINGTON", "XLS", "REBLA",
+                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", 
+                    "GRESLEY", "HABANERO", "BJXL", "CAVALCADE", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO", "FQ2",
+                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
+                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "BUFFALO2", "ASEA", "RANCHERXL", "SULTAN", "DILETTANTE",
+                    "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
                 };
 
                 int num = random.Next(vehicles.Length);
@@ -308,8 +304,7 @@ namespace EmergencyCallouts.Essential
             {
                 if (Game.IsKeyDown(Keys.End))
                 {
-                    Play.CodeFourAudio();
-                    Functions.StopCurrentCallout();
+                    AdvancedEndingSequence();
                 }
             }
             #endregion
@@ -319,15 +314,10 @@ namespace EmergencyCallouts.Essential
             {
                 if (suspect.Exists())
                 {
-                    if (suspect.IsCuffed)
+                    if (suspect.IsCuffed || suspect.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
-                    }
-                    else if (suspect.IsDead)
-                    {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(4000);
+                        AdvancedEndingSequence();
                     }
                 }
 
@@ -339,23 +329,23 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed && suspect2.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(4000);
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(4000);
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(4000);
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && suspect2.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        GameFiber.Sleep(4000);
+                        AdvancedEndingSequence();
                     }
                 }
             }
@@ -366,20 +356,30 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && victim.IsDead)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && victim.IsCuffed)
                     {
-                        Play.CodeFourAudio();
-                        Functions.StopCurrentCallout();
+                        AdvancedEndingSequence();
                     }
                 }
+            }
+            #endregion
+
+            #region AdvancedEndingSequence
+            internal static void AdvancedEndingSequence()
+            {
+                if (MainPlayer.IsOnFoot) { MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask); }
+                GameFiber.Sleep(700);
+                Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance is needed.");
+                GameFiber.Sleep(2700);
+                Play.CodeFourAudio();
+                GameFiber.Sleep(5000);
+                Functions.StopCurrentCallout();
             }
             #endregion
 
@@ -407,11 +407,43 @@ namespace EmergencyCallouts.Essential
                 // Delete Nearby Peds
                 foreach (Ped ped in World.GetAllPeds())
                 {
-                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed)
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != MainPlayer)
                     {
                         ped.Delete();
                     }
                 }
+            }
+            internal static void DeleteNearbyPeds(Ped mainPed, Ped mainPed2)
+            {
+                // Delete Nearby Peds
+                foreach (Ped ped in World.GetAllPeds())
+                {
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != mainPed2 && ped != MainPlayer)
+                    {
+                        ped.Delete();
+                    }
+                }
+            }
+            #endregion
+
+            #region DeleteNearbyTrailers
+            internal static void DeleteNearbyTrailers(Vector3 position)
+            {
+                string[] trailerList = 
+                { 
+                    "ARMYTRAILER", "ARMYTRAILER2", "BALETRAILER", "BOATTRAILER", "DOCKTRAILER", "FREIGHTTRAILER", "GRAINTRAILER", "TRAILERLARGE", "TVTRAILER",
+                    "PROPTRAILER", "RAKETRAILER", "BOATTRAILER", "TRAILERLOGS", "TRAILERS", "TRAILERS2", "TRAILERS3", "TRAILERS4", "TRAILERSMALL", "TRAILERSMALL2"
+                };
+
+                foreach (Vehicle veh in World.GetAllVehicles())
+                {
+                    if (veh.Position.DistanceTo(position) <= 60f && trailerList.Contains(veh.Model.Name))
+                    {
+                        if (veh.Exists()) { veh.Delete(); }
+                    }
+                }
+
+                
             }
             #endregion
 
@@ -427,58 +459,53 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region PreventFirstResponderCrash
-            internal static void PreventFirstResponderCrash(Ped ped)
+            #region PreventPickupCrash
+            internal static void PreventPickupCrash(Ped ped)
             {
-                if (ped.Exists()) 
+                foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    foreach (Ped FirstResponder in World.GetAllPeds())
+                    if (!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
-                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f)
+                        if (vehicle.Model.Name == "AMBULANCE")
                         {
-                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
                         }
+                    }
+                }
+
+                foreach (Ped retrievedPed in World.GetAllPeds())
+                {
+                    if (retrievedPed.Model.Name.ToLower() == "s_m_m_doctor_01" && ped.Position.DistanceTo(retrievedPed.Position) <= 5f && retrievedPed.IsDead)
+                    {
+                        Play.CodeFourAudio();
+                        Functions.StopCurrentCallout();
                     }
                 }
             }
 
-            internal static void PreventFirstResponderCrash(Ped ped, Ped ped2)
+            internal static void PreventPickupCrash(Ped ped, Ped ped2)
             {
-                if (ped.Exists() && ped2.Exists())
+                foreach (Vehicle vehicle in World.GetAllVehicles())
                 {
-                    foreach (Ped FirstResponder in World.GetAllPeds())
+                    if ((!ped.IsCollisionEnabled && ped.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f) || !ped2.IsCollisionEnabled && ped2.Position.DistanceTo(vehicle.GetOffsetPositionFront(-vehicle.Length + 1f)) <= 2f)
                     {
-                        if (FirstResponder.Position.DistanceTo(ped.Position) < 5f || FirstResponder.Position.DistanceTo(ped2.Position) < 5f)
+                        if (vehicle.Model.Name == "AMBULANCE")
                         {
-                            if (FirstResponder.Model.Name.ToLower() == "s_m_m_paramedic_01") // Ambulance
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_m_doctor_01") // Coroner
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
-                            else if (FirstResponder.Model.Name.ToLower() == "s_m_y_fireman_01") // Fireman
-                            {
-                                Play.CodeFourAudio();
-                                Functions.StopCurrentCallout();
-                            }
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
+                        }
+                    }
+                }
+
+                foreach (Ped retrievedPed in World.GetAllPeds())
+                {
+                    if (ped.IsDead || ped2.IsDead)
+                    {
+                        if (retrievedPed.Model.Name.ToLower() == "s_m_m_doctor_01" && (ped.Position.DistanceTo(retrievedPed.Position) <= 5f || ped2.Position.DistanceTo(retrievedPed.Position) <= 5f))
+                        {
+                            Play.CodeFourAudio();
+                            Functions.StopCurrentCallout();
                         }
                     }
                 }
@@ -733,6 +760,31 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
+        #region GetSafePositionForPed
+        public static unsafe bool GetSafePositionForPed(this Vector3 CalloutPosition, out Vector3 SafePosition)
+        {
+            if (!NativeFunction.Natives.GET_SAFE_COORD_FOR_PED<bool>(CalloutPosition.X, CalloutPosition.Y, CalloutPosition.Z, true, out Vector3 TempSpawn, 0))
+            {
+                TempSpawn = World.GetNextPositionOnStreet(CalloutPosition);
+                Rage.Entity NearbyEntity = World.GetClosestEntity(TempSpawn, 25f, GetEntitiesFlags.ConsiderHumanPeds);
+
+                if (NearbyEntity.Exists())
+                {
+                    TempSpawn = NearbyEntity.Position;
+                    SafePosition = TempSpawn;
+                    return true;
+                }
+                else
+                {
+                    SafePosition = TempSpawn;
+                    return false;
+                }
+            }
+            SafePosition = TempSpawn;
+            return true;
+        }
+        #endregion
+
         #region Enable
         internal static void Enable(this Blip blip)
         {
@@ -744,25 +796,6 @@ namespace EmergencyCallouts.Essential
         internal static void Disable(this Blip blip)
         {
             if (blip.Exists()) { blip.Alpha = 0f; }
-        }
-        #endregion
-
-        #region Remove
-        internal static void Remove(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Delete(); }
-        }
-        internal static void Remove(this Ped ped)
-        {
-            if (ped.Exists()) { ped.Delete(); }
-        }
-        internal static void Remove(this Vehicle vehicle)
-        {
-            if (vehicle.Exists()) { vehicle.Delete(); }
-        }
-        internal static void Remove(this Rage.Object Object)
-        {
-            if (Object.Exists()) { Object.Delete(); }
         }
         #endregion
 
@@ -781,9 +814,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region SetDefaults
-        /// <summary>
-        /// Sets ped persistency and blocks permanent events.
-        /// </summary>
         internal static void SetDefaults(this Ped ped)
         {
             if (ped.Exists())
@@ -795,10 +825,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region SetIntoxicated
-        /// <summary>
-        /// Sets ped to drunk with a walking style
-        /// </summary>
-        /// <param name="ped"></param>
         internal static void SetIntoxicated(this Ped ped)
         {
             AnimationSet animSet = new AnimationSet("move_m@drunk@verydrunk");
@@ -808,9 +834,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region SetInjured
-        /// <summary>
-        /// Sets peds walking style to injured
-        /// </summary>
         internal static void SetInjured(this Ped ped, int health)
         {
             AnimationSet animSet = new AnimationSet("move_m@injured");
@@ -818,24 +841,6 @@ namespace EmergencyCallouts.Essential
             ped.MovementAnimationSet = animSet;
 
             if (ped.IsAlive) { ped.Health = health; }
-        }
-        #endregion
-
-        #region ScaleForPed
-        internal static void ScaleForPed(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Scale = 0.75f; }
-        }
-        #endregion
-
-        #region IsPedDetained
-        internal static bool IsPedDetained(this Ped ped)
-        {
-            if (Functions.IsPedStoppedByPlayer(ped) && ped.Exists())
-            {
-                return true;
-            }
-            else return false;
         }
         #endregion
     }

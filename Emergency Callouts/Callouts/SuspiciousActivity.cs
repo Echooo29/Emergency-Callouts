@@ -21,6 +21,7 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool StopChecking;
+        bool WithinRange;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -29,7 +30,7 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(167.0673f, -1247.618f, 29.19848f),  // Strawberry
+            new Vector3(-646.7701f, -1639.802f, 25.06787f), // La Puerta
             new Vector3(-1283.511f, -811.2982f, 17.32025f), // Del Perro
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
@@ -38,19 +39,19 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        // Strawberry
+        // La Puerta
         #region Positions
-        readonly Vector3 StrawberrySuspectPosition = new Vector3(151.7143f, -1262.308f, 29.31358f);
-        readonly float StrawberrySuspectHeading = 25.75f;
+        readonly Vector3 LaPuertaSuspectPosition = new Vector3(-587.6331f, -1587.74f, 26.75113f);
+        readonly float LaPuertaSuspectHeading = 14.97f;
 
-        readonly Vector3 StrawberrySuspect2Position = new Vector3(150.6859f, -1259.686f, 29.29234f);
-        readonly float StrawberrySuspect2Heading = 212f;
+        readonly Vector3 LaPuertaSuspect2Position = new Vector3(-587.4804f, -1585.351f, 26.75113f);
+        readonly float LaPuertaSuspect2Heading = 163.78f;
 
-        readonly Vector3 StrawberryVehiclePosition = new Vector3(151.4726f, -1264.789f, 28.93705f);
-        readonly float StrawberryVehicleHeading = 209f;
+        readonly Vector3 LaPuertaVehiclePosition = new Vector3(-591.1713f, -1587.647f, 26.41216f);
+        readonly float LaPuertaVehicleHeading = 89.17f;
 
-        readonly Vector3 StrawberryVehicle2Position = new Vector3(149.1889f, -1259.119f, 28.89105f);
-        readonly float StrawberryVehicle2Heading = 116f;
+        readonly Vector3 LaPuertaVehicle2Position = new Vector3(-590.5353f, -1584.49f, 26.44631f);
+        readonly float LaPuertaVehicle2Heading = 77.31f;
         #endregion
 
         // Del Perro
@@ -155,7 +156,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc).Replace("Olympic Fwy", "Strawberry Ave"); ;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -190,9 +191,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
@@ -200,7 +198,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Suspect 2
@@ -210,7 +208,7 @@ namespace EmergencyCallouts.Callouts
 
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColorRed();
-                Suspect2Blip.ScaleForPed();
+                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
                 Suspect2Blip.Disable();
 
                 // SuspectVehicle
@@ -246,41 +244,35 @@ namespace EmergencyCallouts.Callouts
 
                 // Positioning
                 #region Positioning
-                if (CalloutPosition == CalloutPositions[0]) // Strawberry
+                if (CalloutPosition == CalloutPositions[0]) // La Puerta
                 {
-                    Center = new Vector3(167.0673f, -1247.618f, 29.19848f);
-                    Entrance = new Vector3(207.6943f, -1261.656f, 29.16432f);
-                    EntranceBlip.Position = Entrance;
+                    Center = new Vector3(-616.0434f, -1600.232f, 26.75098f);
+                    Entrance = new Vector3(-646.7701f, -1639.802f, 25.06787f);
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // Del Perro
                 {
                     Center = new Vector3(-1283.511f, -811.2982f, 17.32025f);
                     Entrance = new Vector3(-1364.522f, -709.0762f, 24.67615f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Harmony
                 {
                     Center = new Vector3(597.8428f, 2796.708f, 41.99812f);
                     Entrance = new Vector3(651.5822f, 2762.731f, 41.94574f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // El Burro
                 {
                     Center = new Vector3(1243.041f, -2395.421f, 47.91381f);
                     Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(1477.096f, 6343.949f, 22.35379f);
                     Entrance = new Vector3(1485.026f, 6412.347f, 22.35379f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
@@ -295,9 +287,9 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
                 // Log Creation
                 Log.Creation(Suspect, PedCategory.Suspect);
@@ -315,19 +307,19 @@ namespace EmergencyCallouts.Callouts
         private void RetrievePedPosition()
         {
             #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // Strawberry
+            if (CalloutPosition == CalloutPositions[0]) // La Puerta
             {
-                Suspect.Position = StrawberrySuspectPosition;
-                Suspect.Heading = StrawberrySuspectHeading;
+                Suspect.Position = LaPuertaSuspectPosition;
+                Suspect.Heading = LaPuertaSuspectHeading;
 
-                Suspect2.Position = StrawberrySuspect2Position;
-                Suspect2.Heading = StrawberrySuspect2Heading;
+                Suspect2.Position = LaPuertaSuspect2Position;
+                Suspect2.Heading = LaPuertaSuspect2Heading;
 
-                SuspectVehicle.Position = StrawberryVehiclePosition;
-                SuspectVehicle.Heading = StrawberryVehicleHeading;
+                SuspectVehicle.Position = LaPuertaVehiclePosition;
+                SuspectVehicle.Heading = LaPuertaVehicleHeading;
 
-                Suspect2Vehicle.Position = StrawberryVehicle2Position;
-                Suspect2Vehicle.Heading = StrawberryVehicle2Heading;
+                Suspect2Vehicle.Position = LaPuertaVehicle2Position;
+                Suspect2Vehicle.Heading = LaPuertaVehicle2Heading;
             }
             else if (CalloutPosition == CalloutPositions[1]) // Del Perro
             {
@@ -498,7 +490,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived && Suspect.Exists())
                         {
                             // Start fight
                             Suspect.Tasks.FightAgainst(Suspect2);
@@ -510,10 +502,24 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect2.IsDead && Suspect2.Exists())
+                        if (Suspect.IsAlive && Suspect2.IsDead && Suspect.Exists() && Suspect2.Exists())
                         {
                             Suspect.Tasks.Clear();
                             Suspect.Tasks.FightAgainst(MainPlayer);
+                            break;
+                        }
+                    }
+                });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                        {
+                            Suspect2.Tasks.PutHandsUp(-1, MainPlayer);
                             break;
                         }
                     }
@@ -533,8 +539,23 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect, Suspect2);
-                Handle.PreventFirstResponderCrash(Suspect, Suspect2);
-                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventPickupCrash(Suspect, Suspect2);
+
+                #region WithinRange
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                {
+                    // Set WithinRange
+                    WithinRange = true;
+
+                    // Delete Nearby Trailers
+                    Handle.DeleteNearbyTrailers(Center);
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, Suspect2);
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
+                }
+                #endregion
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -552,7 +573,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -565,9 +586,6 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PedFound
                     PedFound = true;
-
-                    // Hide Subtitle
-                    Display.HideSubtitle();
 
                     // Enable SuspectBlip
                     SuspectBlip.Enable();
@@ -597,7 +615,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;

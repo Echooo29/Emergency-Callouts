@@ -19,6 +19,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool StopChecking;
+        bool WithinRange;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -40,14 +41,14 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] MirrorParkBreakInPositions =
         {
-            new Vector3(891.7003f, -625.6554f, 58.26049f), // Backdoor
+            new Vector3(880.1386f, -610.4592f, 58.44222f), // Backdoor
             new Vector3(905.5065f, -632.9874f, 58.04898f), // Shed 1
             new Vector3(869.7964f, -607.5421f, 58.21951f), // Shed 2
         };
 
         readonly float[] MirrorParkBreakInHeadings =
         {
-            322.62f,
+            313.57f,
             212f,
             39.6f,
         };
@@ -154,7 +155,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc).Replace("Amarillo Vista", "Amarillo Vista"); ;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -189,9 +190,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
@@ -200,7 +198,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 CalloutHandler();
@@ -226,42 +224,36 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(888.6841f, -625.1655f, 58.04898f);
                     Entrance = new Vector3(916.261f, -623.7192f, 58.05202f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // La Puerta
                 {
                     Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize += 80;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
                     Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
                     Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
                 {
                     Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
                     Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
-                    EntranceBlip.Position = Entrance;
                     Settings.SearchAreaSize = 85;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Harmony
                 {
                     Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
                     Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
-                    EntranceBlip.Position = Entrance;
                 }
 
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
                     Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
@@ -285,7 +277,8 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
             }
@@ -383,7 +376,8 @@ namespace EmergencyCallouts.Callouts
             }
 
             VehicleDoor[] vehDoors = SuspectVehicle.GetDoors();
-            vehDoors[vehDoors.Length - 2].Open(false);
+            vehDoors[2].Open(false);
+            vehDoors[3].Open(false);
             #endregion
         }
 
@@ -599,16 +593,29 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventFirstResponderCrash(Suspect);
+                Handle.PreventPickupCrash(Suspect);
+
+                #region WithinRange
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                {
+                    // Set WithinRange
+                    WithinRange = true;
+
+                    // Delete Nearby Trailers
+                    Handle.DeleteNearbyTrailers(Center);
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect);
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
+                }
+                #endregion
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
-
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
@@ -620,7 +627,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -651,7 +658,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;

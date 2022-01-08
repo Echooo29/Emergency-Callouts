@@ -296,8 +296,8 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
         #endregion
 
-        Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
-        Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
 
         Vehicle PropertyVehicle;
 
@@ -351,9 +351,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-
                 // Suspect
                 Suspect = new Ped(CalloutPosition);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
@@ -362,7 +359,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 CalloutHandler();
@@ -388,37 +385,31 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(512f, -610.72f, 24.43f);
                     Entrance = new Vector3(510.59f, -666.95f, 24.40f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                 {
                     Center = new Vector3(-1170.024f, -2045.655f, 14.22536f);
                     Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Terminal
                 {
                     Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
                     Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
                 {
                     Center = new Vector3(195.43f, 2786.759f, 45.65519f);
                     Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
                 {
                     Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
                     Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
-                    EntranceBlip.Position = Entrance;
                 }
                 #endregion
 
@@ -442,7 +433,8 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
@@ -513,7 +505,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
@@ -527,7 +519,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
@@ -541,7 +533,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
@@ -555,7 +547,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
@@ -569,7 +561,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
@@ -583,7 +575,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
@@ -632,12 +624,12 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveWeldingPosition()
         {
+            #region Positions
             // Welding Device
             int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
             NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
-
-            #region Positions
+            
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
@@ -778,16 +770,15 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Clipboard
                 int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.LeftPhHand);
                 NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
 
                 // Inspect animation
-                //Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
 
@@ -797,7 +788,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
                             if (Game.IsKeyDown(Settings.TalkKey))
                             {
@@ -811,7 +802,7 @@ namespace EmergencyCallouts.Callouts
 
                                 Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
-                                Game.DisplaySubtitle(dialogue[line], 99999);
+                                Game.DisplaySubtitle(dialogue[line], 15000);
                                 line++;
 
                                 if (line == 3)
@@ -979,7 +970,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventFirstResponderCrash(Suspect);
+                Handle.PreventPickupCrash(Suspect);
                 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -1000,7 +991,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize + 25f);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -1031,7 +1022,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -1084,6 +1075,8 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
             CalloutActive = false;
+
+            Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }

@@ -181,9 +181,6 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
@@ -192,7 +189,7 @@ namespace EmergencyCallouts.Callouts
                 // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
-                SuspectBlip.ScaleForPed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Disable();
 
                 // Victim
@@ -204,7 +201,7 @@ namespace EmergencyCallouts.Callouts
                 // VictimBlip
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
-                VictimBlip.ScaleForPed();
+                VictimBlip.Scale = (float)Settings.PedBlipScale;
                 VictimBlip.Disable();
                 
                 // 50% Drunk Chance
@@ -238,38 +235,34 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(0f, 526.2725f, 175.1643f);
                     Entrance = new Vector3(11.3652f, 545.7453f, 175.8412f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // Davis
                 {
                     Center = new Vector3(208.0452f, -1707.766f, 29.65307f);
                     Entrance = new Vector3(222.883f, -1726.32f, 28.87364f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // Vespucci
                 {
                     Center = new Vector3(-1058.305f, -995.6418f, 6.410485f);
                     Entrance = new Vector3(-1048.924f, -1018.362f, 2.150359f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
                 {
                     Center = new Vector3(247.4916f, 3169.519f, 42.7863f);
                     Entrance = new Vector3(224.5887f, 3162.886f, 42.3335f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
                 {
                     Center = new Vector3(1672.969f, 4670.249f, 43.40202f);
                     Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
-                    EntranceBlip.Position = Entrance;
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
                 {
                     Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
                     Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
-                    EntranceBlip.Position = Entrance;
                 }
+
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
                 #endregion
 
                 // Scenario Deciding
@@ -292,7 +285,8 @@ namespace EmergencyCallouts.Callouts
                         break;
                 }
 
-                // Enabling Route
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
                 EntranceBlip.EnableRoute();
                 Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
 
@@ -362,14 +356,40 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            string[] dialogue =
+            bool stopDialogue = false;
+
+            string[] dialogueArrested =
             {
-                "~b~You~s~: M'am, are you injured?",
-                "~o~Victim~s~: Yes, I'm hurt alot.",
-                "~b~You~s~: Okay, I'm gonna get an ambulance over here for you okay?",
-                "~o~Victim~s~: Okay, but I'm pretty sure I'm gonna go unconscious...",
-                "~b~You~s~: Try to relax, positive thoughts only okay?",
-                "~o~Victim~s~: Okay, I don't know if I..."
+                "~b~You~s~: Ma'am, are you injured?",
+                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                "~b~You~s~: Okay, is this your property?",
+                "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
+                "~b~You~s~: I assume you want to press charges?",
+                "~o~Victim~s~: Yes, and how do I get a restraining order?",
+                "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
+                "~o~Victim~s~: Thank you for helping me.",
+                "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
+                "~b~You~s~: I'd guess around 10 or 15 years.",
+                "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
+                "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
+                "~m~dialogue ended",
+            };
+
+            string[] dialogueDeceased =
+            {
+                "~b~You~s~: Ma'am, are you hurt?",
+                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                "~b~You~s~: Okay, is this property yours?",
+                "~o~Victim~s~: Yes it is.",
+                "~b~You~s~: The body will get moved soon.",
+                "~o~Victim~s~: Good, what about the blood?",
+                "~b~You~s~: That will be taken care of by crime scene cleaners.",
+                "~o~Victim~s~: Okay, thanks",
+                "~b~You~s~: Here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks.",
+                "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
+                "~m~dialogue ended",
             };
 
             int line = 0;
@@ -380,47 +400,75 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                    if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
-                        if (Game.IsKeyDown(Settings.TalkKey))
+                        if (!DialogueStarted) { Game.DisplaySubtitle("Speak to the ~o~victim", 10000); }
+
+                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists())
                         {
-                            if (!DialogueStarted)
+                            if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue)
                             {
-                                Victim.Tasks.Clear();
+                                if (!DialogueStarted)
+                                {
+                                    Victim.Tasks.Clear();
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
+                                }
 
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                DialogueStarted = true;
+
+                                // Face the player
+                                Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                // Victim dialogue
+                                if (Suspect.IsCuffed)
+                                {
+                                    Game.DisplaySubtitle(dialogueArrested[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                    line++;
+
+                                    if (line == dialogueArrested.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                        stopDialogue = true;
+                                    }
+                                }
+                                else if (Suspect.IsDead)
+                                {
+                                    Game.DisplaySubtitle(dialogueDeceased[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                    line++;
+
+                                    if (line == dialogueDeceased.Length)
+                                    {
+                                        stopDialogue = true;
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                    }
+                                }
+
+                                // Give officer's card
+                                if (line == 9)
+                                {
+                                    Victim.Tasks.ClearImmediately();
+                                    Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                    GameFiber.Sleep(200);
+
+                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                }
+
+                                GameFiber.Sleep(500);
                             }
-
-                            DialogueStarted = true;
-
-                            Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                            Game.DisplaySubtitle(dialogue[line], 99999);
-                            line++;
-                            
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                            if (line == dialogue.Length)
+                            else
                             {
-                                GameFiber.Sleep(1500);
-                                if (Victim.Exists()) { Victim.Kill(); }
-
-                                GameFiber.Sleep(1000);
-                                Display.HideSubtitle();
-
-                                GameFiber.Sleep(3000);
-                                Game.DisplaySubtitle("Request an ~g~ambulance~s~.");
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                if (DialogueStarted == false)
+                                {
+                                    Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
+                                }
                             }
-                            GameFiber.Sleep(500);
                         }
-                        else
-                        {
-                            if (DialogueStarted == false)
-                            {
-                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
-                            }
-                        }
+                    }
+                    else if (Victim.IsDead) // Victim is dead
+                    {
+                        break;
                     }
                 }
             });
@@ -529,6 +577,65 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 3
             try
             {
+                #region Dialogue
+                bool stopDialogue = false;
+
+                string[] dialogueSuspect =
+                {
+                    "~b~You~s~: Why would you do such a thing?",
+                    "~r~Suspect~s~: You wouldn't understand.",
+                    "~b~You~s~: You're right, animals can't talk to humans.",
+                    "~r~Suspect~s~: Keep your mouth shut.",
+                    "~b~You~s~: You think you're tough but you're not.",
+                    "~r~Suspect~s~: Says the person who needs a gun, tazer, pepperspray and a nightstick.",
+                    "~b~You~s~: Yeah I need those, but never for your kind.",
+                    "~m~dialogue ended",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        {
+                            if (!DialogueStarted)
+                            {
+                                Suspect.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
+
+                            DialogueStarted = true;
+
+                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                            Game.DisplaySubtitle(dialogueSuspect[line], 15000);
+                            line++;
+                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                            if (line == dialogueSuspect.Length)
+                            {
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                stopDialogue = true;
+                            }
+
+                            GameFiber.Sleep(500);
+                        }
+                        else
+                        {
+                            if (!DialogueStarted && Suspect.IsCuffed)
+                            {
+                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~r~suspect~s~.");
+                            }
+                        }
+                    }
+                });
+                #endregion
+
                 // Retrieve Fight Position
                 RetrieveFightPosition();
 
@@ -645,9 +752,8 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEndingVictim(Suspect, Victim);
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventFirstResponderCrash(Suspect, Victim);
+                Handle.PreventPickupCrash(Suspect, Victim); // VICTIM
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -674,7 +780,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -719,7 +825,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.IsPedDetained() && !PedDetained && Suspect.Exists())
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;

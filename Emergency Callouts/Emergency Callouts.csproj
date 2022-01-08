@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RagePluginHookSDK.dll</HintPath>
     </Reference>
+    <Reference Include="StopThePed">
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\StopThePed.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -86,6 +89,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Other\Links.txt" />
     <Content Include="Other\Update.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

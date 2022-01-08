@@ -1,5 +1,6 @@
 ﻿using EmergencyCallouts.Essential;
 using Rage;
+using System;
 using System.Windows.Forms;
 
 namespace EmergencyCallouts
@@ -16,6 +17,7 @@ namespace EmergencyCallouts
         // Measurements
         internal static int SearchAreaSize = 60;
         internal static int MaxCalloutDistance = 1000;
+        internal static double PedBlipScale = 0.75f;
 
         // Customization
         internal static string DipatchName = "Dipatch";
@@ -47,6 +49,7 @@ namespace EmergencyCallouts
             // Callout Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
             MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
+            PedBlipScale = iniFile.ReadDouble("Measurements", "PedBlipScale", PedBlipScale);
 
             // Customization
             DipatchName = iniFile.ReadString("Customization", "DispatchName", DipatchName);
