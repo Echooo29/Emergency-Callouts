@@ -1,9 +1,7 @@
-﻿using EmergencyCallouts.Essential;
-using Rage;
-using System;
+﻿using Rage;
 using System.Windows.Forms;
 
-namespace EmergencyCallouts
+namespace EmergencyCallouts.Essential
 {
     internal static class Settings
     {
@@ -18,10 +16,6 @@ namespace EmergencyCallouts
         internal static int SearchAreaSize = 60;
         internal static int MaxCalloutDistance = 1000;
         internal static double PedBlipScale = 0.75f;
-
-        // Customization
-        internal static string DipatchName = "Dipatch";
-        internal static string SubtitleColor = "Yellow";
 
         // Keys
         internal static Keys TalkKey = Keys.Y;
@@ -53,10 +47,6 @@ namespace EmergencyCallouts
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
             MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
             PedBlipScale = iniFile.ReadDouble("Measurements", "PedBlipScale", PedBlipScale);
-
-            // Customization
-            DipatchName = iniFile.ReadString("Customization", "DispatchName", DipatchName);
-            SubtitleColor = iniFile.ReadString("Customization", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
 
             // Keybindings
             TalkKey = iniFile.ReadEnum("Keybindings", "TalkKey", TalkKey);

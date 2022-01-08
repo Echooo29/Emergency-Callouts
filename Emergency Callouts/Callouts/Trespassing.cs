@@ -319,8 +319,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Trespassing";
-            CalloutDetails = "Someone reported a person trespassing on private property.";
+            CalloutMessage = Localization.Trespassing;
+            CalloutDetails = Localization.TrespassingDetails;
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
@@ -979,7 +979,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyPeds(Suspect);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 20000);
+                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -1056,7 +1056,7 @@ namespace EmergencyCallouts.Callouts
                 #region PlayerClimbing
                 if (MainPlayer.IsClimbing && !PedFound)
                 {
-                    Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not climbed anything");
+                    Game.DisplayHelp(Localization.ClimbClue);
                     GameFiber.Sleep(5000);
                 }
                 #endregion

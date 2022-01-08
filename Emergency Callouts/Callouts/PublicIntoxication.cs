@@ -43,8 +43,8 @@ namespace EmergencyCallouts.Callouts
                 if (count >= 15) { return false; }
             }
 
-            CalloutMessage = "Public Intoxication";
-            CalloutDetails = "There are multiple reports of a person under the influence of alcohol.";
+            CalloutMessage = Localization.PublicIntoxication;
+            CalloutDetails = Localization.PublicIntoxicationDetails;
             CalloutArea = World.GetStreetName(CalloutPosition);
             CalloutScenario = GetRandomScenarioNumber(5);
 
@@ -382,7 +382,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     // Display Subtitle
-                    Game.DisplaySubtitle("Find the ~r~drunk person~s~ in the ~y~area~s~.", 20000);
+                    Game.DisplaySubtitle(Localization.PublicIntoxicationSubtitle, 20000);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 

@@ -20,7 +20,9 @@ namespace EmergencyCallouts.Essential
 
         internal static DateTime DateCreated => File.GetCreationTimeUtc("Emergency Callouts.dll");
 
-        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
+        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts/Settings.ini";
+
+        internal static string LocalizationPath => "Plugins/LSPDFR/Emergency Callouts/Localization.ini";
     }
 
 
@@ -144,14 +146,14 @@ namespace EmergencyCallouts.Essential
             #region AcceptNotification
             internal static void AcceptNotification(string details)
             {
-                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", details);
+                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.AcceptNotificationSubtitle, details);
             }
             #endregion
 
             #region AcceptSubtitle
             internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 20000);
+                Game.DisplaySubtitle($"{Localization.AcceptSubtitleIntro} ~r~{calloutMessage}~s~ {Localization.AcceptSubtitleAt} ~y~{calloutArea}~s~.", 20000);
             }
             #endregion
 
@@ -168,14 +170,7 @@ namespace EmergencyCallouts.Essential
             #region EndNotification
             internal static void EndNotification()
             {
-                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", "Situation is under control.");
-            }
-            #endregion
-
-            #region HintEndCallout
-            internal static void HintEndCallout()
-            {
-                Game.DisplayHelp("Press ~y~End~s~ to end the callout.", 20000);
+                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.EndNotificationSubtitle, Localization.EndNotificationText);
             }
             #endregion
 
@@ -382,7 +377,7 @@ namespace EmergencyCallouts.Essential
                 }
 
                 GameFiber.Sleep(700);
-                Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance is needed.");
+                Game.DisplayNotification(Localization.EndNotificationTransmit);
                 GameFiber.Sleep(2700);
                 Play.CodeFourAudio();
                 GameFiber.Sleep(5000);
@@ -399,7 +394,7 @@ namespace EmergencyCallouts.Essential
 
                     if (chance <= Settings.EndChance && Settings.EndChance >= 0)
                     {
-                        Game.DisplayHelp("You alerted the ~r~suspect~s~!", 5000);
+                        Game.DisplayHelp(Localization.EndNotificationAlertedPed, 5000);
                         Display.HideSubtitle();
                         GameFiber.Sleep(5000);
                         Functions.StopCurrentCallout();

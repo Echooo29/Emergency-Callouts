@@ -1,9 +1,8 @@
-﻿using EmergencyCallouts.Essential;
-using Rage;
+﻿using Rage;
 using System;
 using System.Net;
 
-namespace EmergencyCallouts
+namespace EmergencyCallouts.Essential
 {
     internal class UpdateChecker
     {

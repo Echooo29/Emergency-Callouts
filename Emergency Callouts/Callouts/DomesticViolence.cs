@@ -151,8 +151,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~r~assaulted~s~.";
+            CalloutMessage = Localization.DomesticViolence;
+            CalloutDetails = Localization.DomesticViolenceDetails;
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
@@ -770,7 +770,7 @@ namespace EmergencyCallouts.Callouts
                     }
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 20000);
+                    Game.DisplaySubtitle(Localization.DomesticViolenceSubtitle, 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

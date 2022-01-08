@@ -78,6 +78,7 @@
     <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Callouts\SuspiciousActivity.cs" />
     <Compile Include="Essential\Helper.cs" />
+    <Compile Include="Essential\Localization.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Essential\Settings.cs" />
     <Compile Include="Essential\UpdateChecker.cs" />
@@ -86,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\Emergency Callouts.ini" />
+    <None Include="Other\Localization.ini" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

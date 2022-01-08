@@ -161,8 +161,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Suspicious Activity";
-            CalloutDetails = "Multiple civilians called about a person handling possible firearms in the trunk of their car.";
+            CalloutMessage = Localization.SuspiciousActivity;
+            CalloutDetails = Localization.SuspiciousActivityDetails;
             CalloutScenario = GetRandomScenarioNumber(2);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
@@ -563,7 +563,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
+                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

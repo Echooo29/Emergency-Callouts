@@ -162,8 +162,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Burglary";
-            CalloutDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
+            CalloutMessage = Localization.Burglary;
+            CalloutDetails = Localization.BurglaryDetails;
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
@@ -632,7 +632,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
+                    Game.DisplaySubtitle(Localization.BurglarySubtitle, 20000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
