@@ -373,7 +373,11 @@ namespace EmergencyCallouts.Essential
             #region AdvancedEndingSequence
             internal static void AdvancedEndingSequence()
             {
-                if (MainPlayer.IsOnFoot) { MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask); }
+                if (MainPlayer.IsOnFoot && !MainPlayer.IsAiming)
+                {
+                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                }
+
                 GameFiber.Sleep(700);
                 Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance is needed.");
                 GameFiber.Sleep(2700);
