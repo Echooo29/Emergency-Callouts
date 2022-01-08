@@ -7,7 +7,6 @@ using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using Color =  EmergencyCallouts.Essential.Color;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts

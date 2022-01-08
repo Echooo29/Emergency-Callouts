@@ -3,7 +3,6 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
-using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
