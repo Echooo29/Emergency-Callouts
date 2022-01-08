@@ -550,7 +550,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyTrailers(Center);
 
                     // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect, Suspect2);
+                    Handle.DeleteNearbyPeds(Suspect, Suspect2, 40f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
@@ -563,7 +563,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

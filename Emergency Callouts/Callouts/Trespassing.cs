@@ -787,7 +787,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
-                            if (Game.IsKeyDown(Settings.TalkKey))
+                            if (Game.IsKeyDown(Settings.InteractKey))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -839,8 +839,9 @@ namespace EmergencyCallouts.Callouts
 
                                 if (line == 4)
                                 {
+                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-
+                                    GameFiber.Sleep(2000);
                                     SuspectBlip.SetColorGreen();
                                 }
 
@@ -976,10 +977,10 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect);
+                    Handle.DeleteNearbyPeds(Suspect, 30f);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

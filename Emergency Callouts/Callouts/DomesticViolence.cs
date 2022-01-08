@@ -405,7 +405,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists())
                         {
-                            if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue)
+                            if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue)
                             {
                                 if (!DialogueStarted)
                                 {
@@ -599,7 +599,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Game.IsKeyDown(Settings.TalkKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
                         {
                             if (!DialogueStarted)
                             {
@@ -752,7 +752,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
-                Handle.PreventPickupCrash(Suspect, Victim); // VICTIM
+                Handle.PreventPickupCrash(Suspect, Victim);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -770,7 +770,7 @@ namespace EmergencyCallouts.Callouts
                     }
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.DomesticViolenceSubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.DomesticViolenceSubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();

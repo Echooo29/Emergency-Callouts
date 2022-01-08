@@ -3,6 +3,7 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -21,9 +22,11 @@ namespace EmergencyCallouts.Callouts
         bool StopChecking;
         bool WithinRange;
         bool BarriersDeleted;
+        bool VehicleUsed;
 
         Vector3 Entrance;
         Vector3 Center;
+        Vector3 DamagedProperty;
 
         // Main
         #region Positions
@@ -138,6 +141,9 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
+
         Vehicle SuspectVehicle;
 
         Ped Suspect;
@@ -147,6 +153,7 @@ namespace EmergencyCallouts.Callouts
         Blip SuspectBlip;
         Blip EntranceBlip;
         Blip SearchArea;
+        Blip DamagedPropertyBlip;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -262,19 +269,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
                         break;
                     case 3:
                         Scenario3();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario3();
                         break;
                     case 5:
-                        Scenario5();
+                        Scenario3();
                         break;
                 }
 
@@ -298,36 +305,42 @@ namespace EmergencyCallouts.Callouts
                 int num = random.Next(MirrorParkBreakInPositions.Length);
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
+                DamagedProperty = MirrorParkBreakInPositions[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
                 int num = random.Next(LaPuertaBreakInPositions.Length);
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
+                DamagedProperty = LaPuertaBreakInPositions[num];
             }
             else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
                 int num = random.Next(ElBurroBreakInPositions.Length);
                 Suspect.Position = ElBurroBreakInPositions[num];
                 Suspect.Heading = ElBurroBreakInHeadings[num];
+                DamagedProperty = ElBurroBreakInPositions[num];
             }
             else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
                 int num = random.Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
+                DamagedProperty = GrapeseedBreakInPositions[num];
             }
             else if (CalloutPosition == CalloutPositions[4]) // Harmony
             {
                 int num = random.Next(HarmonyBreakInPositions.Length);
                 Suspect.Position = HarmonyBreakInPositions[num];
                 Suspect.Heading = HarmonyBreakInHeadings[num];
+                DamagedProperty = HarmonyBreakInPositions[num];
             }
             else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
                 int num = random.Next(PaletoBayBreakInPositions.Length);
                 Suspect.Position = PaletoBayBreakInPositions[num];
                 Suspect.Heading = PaletoBayBreakInHeadings[num];
+                DamagedProperty = PaletoBayBreakInPositions[num];
             }
 
             // Lockpick Animation
@@ -382,6 +395,87 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
+        private void CheckForDamage()
+        {
+            string property;
+
+            if (VehicleUsed)
+            {
+                property = "vehicle";
+            }
+            else
+            {
+                property = "door";
+            }
+
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (Suspect.IsCuffed)
+                    {
+                        GameFiber.Sleep(10000);
+
+                        Game.DisplaySubtitle($"Inspect the ~p~{property}~s~ for any ~y~property damage~s~.", 10000);
+
+                        DamagedPropertyBlip = new Blip(DamagedProperty);
+                        DamagedPropertyBlip.SetColorPurple();
+                        DamagedPropertyBlip.Scale = 0.6f;
+                        DamagedPropertyBlip.Flash(500, -1);
+                        break;
+                    }
+                }
+
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f)
+                    {
+                        Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
+
+                        if (Game.IsKeyDown(Settings.InteractKey))
+                        {
+                            // Play Animation
+                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.Loop);
+
+                            // Attach Clipboard
+                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+
+                            // Attach Pencil
+                            int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Pencil, MainPlayer, rhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+
+                            // Chance of damage
+                            int chance = random.Next(0, 101);
+                            if (chance <= Settings.ChanceOfPropertyDamage) // Damage
+                            {
+                                GameFiber.Sleep(15000);
+                                Game.DisplayHelp($"You found ~r~damage~s~ on the ~p~{property}~s~.");
+                                GameFiber.Sleep(3000);
+                                MainPlayer.Tasks.Clear();
+                                if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                if (Pencil.Exists()) { Pencil.Delete(); }
+                            }
+                            else // No Damage
+                            {
+                                GameFiber.Sleep(15000);
+                                Game.DisplayHelp($"You found ~g~no damage~s~ on the ~p~{property}~s~.");
+                                GameFiber.Sleep(3000);
+                                MainPlayer.Tasks.Clear();
+                                if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                if (Pencil.Exists()) { Pencil.Delete(); }
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
         private void Scenario1() // Attack
         {
             #region Scenario 1
@@ -389,6 +483,8 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Position
                 RetrievePedPositions();
+
+                CheckForDamage();
 
                 int num = random.Next(2);
                 if (num == 0)
@@ -473,6 +569,8 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrievePedPositions();
 
+                CheckForDamage();
+
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -503,6 +601,8 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Positions
                 RetrievePedPositions();
+
+                CheckForDamage();
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
@@ -592,8 +692,7 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventPickupCrash(Suspect);
 
                 #region WithinRange
@@ -601,6 +700,9 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set WithinRange
                     WithinRange = true;
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, 40f);
 
                     // Delete Nearby Trailers
                     Handle.DeleteNearbyTrailers(Center);
@@ -610,16 +712,14 @@ namespace EmergencyCallouts.Callouts
                     {
                         foreach (Rage.Object obj in World.GetAllObjects())
                         {
-                            if (obj.Position.DistanceTo(new Vector3(-708.7535f, -1382.413f, 5.281574f)) <= 10f && (obj.Model.Name == "0x18396ad2" || obj.Model.Name == "0x0e76574c"))
+                            if (obj.Position.DistanceTo(new Vector3(-708.7535f, -1382.413f, 5.281574f)) <= 15f && (obj.Model.Name == "0x18396ad2" || obj.Model.Name == "0x0e76574c"))
                             {
                                 if (obj.Exists()) { obj.Delete(); }
+                                GameFiber.Sleep(500);
                                 BarriersDeleted = true;
                             }
                         }
                     }
-
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
@@ -632,7 +732,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.BurglarySubtitle, 20000);
+                    Game.DisplaySubtitle(Localization.BurglarySubtitle, 10000);
 
                     // Disable route
                     EntranceBlip.DisableRoute();
@@ -722,6 +822,9 @@ namespace EmergencyCallouts.Callouts
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+            if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+            if (Clipboard.Exists()) { Clipboard.Delete(); }
+            if (Pencil.Exists()) { Pencil.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();
