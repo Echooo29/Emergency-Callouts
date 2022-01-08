@@ -490,7 +490,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived && Suspect.Exists())
                         {
                             // Start fight
                             Suspect.Tasks.FightAgainst(Suspect2);
@@ -502,7 +502,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect2.IsDead && Suspect2.Exists())
+                        if (Suspect.IsAlive && Suspect2.IsDead && Suspect.Exists() && Suspect2.Exists())
                         {
                             Suspect.Tasks.Clear();
                             Suspect.Tasks.FightAgainst(MainPlayer);
@@ -519,7 +519,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                         {
-                            if (Suspect2.Exists()) { Suspect2.Kill(); }
+                            Suspect2.Tasks.PutHandsUp(-1, MainPlayer);
                             break;
                         }
                     }
