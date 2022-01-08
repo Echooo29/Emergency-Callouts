@@ -8,6 +8,7 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Net;
 using LSPD_First_Response.Engine.Scripting.Entities;
 using System.Linq;
+using System.IO;
 
 namespace EmergencyCallouts.Essential
 {
@@ -16,6 +17,8 @@ namespace EmergencyCallouts.Essential
         internal static string Name => Assembly.GetExecutingAssembly().GetName().Name;
 
         internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
+
+        internal static DateTime DateCreated => File.GetCreationTimeUtc("Emergency Callouts.dll");
 
         internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
     }
