@@ -105,16 +105,16 @@ namespace EmergencyCallouts.Callouts
                         Scenario1();
                         break;
                     case 2:
-                        Scenario1();
+                        Scenario2();
                         break;
                     case 3:
-                        Scenario1();
+                        Scenario3();
                         break;
                     case 4:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 5:
-                        Scenario3();
+                        Scenario5();
                         break;
                 }
 
