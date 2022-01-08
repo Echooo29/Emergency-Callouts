@@ -29,7 +29,7 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(167.0673f, -1247.618f, 29.19848f),  // Strawberry
+            new Vector3(-646.7701f, -1639.802f, 25.06787f), // La Puerta
             new Vector3(-1283.511f, -811.2982f, 17.32025f), // Del Perro
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
@@ -38,19 +38,19 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        // Strawberry
+        // La Puerta
         #region Positions
-        readonly Vector3 StrawberrySuspectPosition = new Vector3(151.7143f, -1262.308f, 29.31358f);
-        readonly float StrawberrySuspectHeading = 25.75f;
+        readonly Vector3 LaPuertaSuspectPosition = new Vector3(-587.6331f, -1587.74f, 26.75113f);
+        readonly float LaPuertaSuspectHeading = 14.97f;
 
-        readonly Vector3 StrawberrySuspect2Position = new Vector3(150.6859f, -1259.686f, 29.29234f);
-        readonly float StrawberrySuspect2Heading = 212f;
+        readonly Vector3 LaPuertaSuspect2Position = new Vector3(-587.4804f, -1585.351f, 26.75113f);
+        readonly float LaPuertaSuspect2Heading = 163.78f;
 
-        readonly Vector3 StrawberryVehiclePosition = new Vector3(151.4726f, -1264.789f, 28.93705f);
-        readonly float StrawberryVehicleHeading = 209f;
+        readonly Vector3 LaPuertaVehiclePosition = new Vector3(-591.1713f, -1587.647f, 26.41216f);
+        readonly float LaPuertaVehicleHeading = 89.17f;
 
-        readonly Vector3 StrawberryVehicle2Position = new Vector3(149.1889f, -1259.119f, 28.89105f);
-        readonly float StrawberryVehicle2Heading = 116f;
+        readonly Vector3 LaPuertaVehicle2Position = new Vector3(-590.5353f, -1584.49f, 26.44631f);
+        readonly float LaPuertaVehicle2Heading = 77.31f;
         #endregion
 
         // Del Perro
@@ -155,7 +155,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc).Replace("Olympic Fwy", "Strawberry Ave"); ;
+                    CalloutArea = World.GetStreetName(loc);
                 }
             }
 
@@ -243,10 +243,10 @@ namespace EmergencyCallouts.Callouts
 
                 // Positioning
                 #region Positioning
-                if (CalloutPosition == CalloutPositions[0]) // Strawberry
+                if (CalloutPosition == CalloutPositions[0]) // La Puerta
                 {
-                    Center = new Vector3(167.0673f, -1247.618f, 29.19848f);
-                    Entrance = new Vector3(207.6943f, -1261.656f, 29.16432f);
+                    Center = new Vector3(-616.0434f, -1600.232f, 26.75098f);
+                    Entrance = new Vector3(-646.7701f, -1639.802f, 25.06787f);
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // Del Perro
                 {
@@ -306,19 +306,19 @@ namespace EmergencyCallouts.Callouts
         private void RetrievePedPosition()
         {
             #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // Strawberry
+            if (CalloutPosition == CalloutPositions[0]) // La Puerta
             {
-                Suspect.Position = StrawberrySuspectPosition;
-                Suspect.Heading = StrawberrySuspectHeading;
+                Suspect.Position = LaPuertaSuspectPosition;
+                Suspect.Heading = LaPuertaSuspectHeading;
 
-                Suspect2.Position = StrawberrySuspect2Position;
-                Suspect2.Heading = StrawberrySuspect2Heading;
+                Suspect2.Position = LaPuertaSuspect2Position;
+                Suspect2.Heading = LaPuertaSuspect2Heading;
 
-                SuspectVehicle.Position = StrawberryVehiclePosition;
-                SuspectVehicle.Heading = StrawberryVehicleHeading;
+                SuspectVehicle.Position = LaPuertaVehiclePosition;
+                SuspectVehicle.Heading = LaPuertaVehicleHeading;
 
-                Suspect2Vehicle.Position = StrawberryVehicle2Position;
-                Suspect2Vehicle.Heading = StrawberryVehicle2Heading;
+                Suspect2Vehicle.Position = LaPuertaVehicle2Position;
+                Suspect2Vehicle.Heading = LaPuertaVehicle2Heading;
             }
             else if (CalloutPosition == CalloutPositions[1]) // Del Perro
             {
@@ -532,6 +532,9 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, )
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
