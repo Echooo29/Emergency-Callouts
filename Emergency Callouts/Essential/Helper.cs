@@ -12,6 +12,7 @@ using RAGENativeUI;
 using static EmergencyCallouts.Essential.Color;
 using LSPD_First_Response.Engine.Scripting.Entities;
 using System.Diagnostics;
+using System.Linq;
 
 namespace EmergencyCallouts.Essential
 {
@@ -427,6 +428,27 @@ namespace EmergencyCallouts.Essential
                         ped.Delete();
                     }
                 }
+            }
+            #endregion
+
+            #region DeleteNearbyTrailers
+            internal static void DeleteNearbyTrailers(Vector3 position)
+            {
+                string[] trailerList = 
+                { 
+                    "ARMYTRAILER", "ARMYTRAILER2", "BALETRAILER", "BOATTRAILER", "DOCKTRAILER", "FREIGHTTRAILER", "GRAINTRAILER", "TRAILERLARGE", "TVTRAILER",
+                    "PROPTRAILER", "RAKETRAILER", "BOATTRAILER", "TRAILERLOGS", "TRAILERS", "TRAILERS2", "TRAILERS3", "TRAILERS4", "TRAILERSMALL", "TRAILERSMALL2"
+                };
+
+                foreach (Vehicle veh in World.GetAllVehicles())
+                {
+                    if (veh.Position.DistanceTo(position) <= 60f && trailerList.Contains(veh.Model.Name))
+                    {
+                        if (veh.Exists()) { veh.Delete(); }
+                    }
+                }
+
+                
             }
             #endregion
 

@@ -210,6 +210,9 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Blip.Scale = (float)Settings.PedBlipScale;
                 Suspect2Blip.Disable();
 
+                // Delete Nearby Trailers
+                Handle.DeleteNearbyTrailers(Center);
+
                 // SuspectVehicle
                 SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
                 SuspectVehicle.IsPersistent = true;
