@@ -510,6 +510,20 @@ namespace EmergencyCallouts.Callouts
                         }
                     }
                 });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                        {
+                            if (Suspect2.Exists()) { Suspect2.Kill(); }
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
