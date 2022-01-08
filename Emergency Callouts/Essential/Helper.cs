@@ -320,6 +320,7 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed || suspect.IsDead)
                     {
+                        GameFiber.Sleep(4000);
                         AdvancedEndingSequence();
                     }
                 }
@@ -332,18 +333,22 @@ namespace EmergencyCallouts.Essential
                 {
                     if (suspect.IsCuffed && suspect2.IsCuffed)
                     {
+                        GameFiber.Sleep(4000);
                         AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsDead)
                     {
+                        GameFiber.Sleep(4000);
                         AdvancedEndingSequence();
                     }
                     else if (suspect.IsDead && suspect2.IsCuffed)
                     {
+                        GameFiber.Sleep(4000);
                         AdvancedEndingSequence();
                     }
                     else if (suspect.IsCuffed && suspect2.IsDead)
                     {
+                        GameFiber.Sleep(4000);
                         AdvancedEndingSequence();
                     }
                 }
@@ -407,6 +412,17 @@ namespace EmergencyCallouts.Essential
                 foreach (Ped ped in World.GetAllPeds())
                 {
                     if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed)
+                    {
+                        ped.Delete();
+                    }
+                }
+            }
+            internal static void DeleteNearbyPeds(Ped mainPed, Ped mainPed2)
+            {
+                // Delete Nearby Peds
+                foreach (Ped ped in World.GetAllPeds())
+                {
+                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != mainPed2)
                     {
                         ped.Delete();
                     }
@@ -763,25 +779,6 @@ namespace EmergencyCallouts.Essential
         internal static void Disable(this Blip blip)
         {
             if (blip.Exists()) { blip.Alpha = 0f; }
-        }
-        #endregion
-
-        #region Remove
-        internal static void Remove(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Delete(); }
-        }
-        internal static void Remove(this Ped ped)
-        {
-            if (ped.Exists()) { ped.Delete(); }
-        }
-        internal static void Remove(this Vehicle vehicle)
-        {
-            if (vehicle.Exists()) { vehicle.Delete(); }
-        }
-        internal static void Remove(this Rage.Object Object)
-        {
-            if (Object.Exists()) { Object.Delete(); }
         }
         #endregion
 
