@@ -31,6 +31,9 @@ namespace EmergencyCallouts
         internal static bool EndOnArrivalWithLights = true;
         internal static int EndChance = 50;
 
+        // Back end
+        internal static bool EarlyAccess = true;
+
         internal static void Initialize()
         {
             Game.LogTrivial("[Emergency Callouts]: Loading settings");

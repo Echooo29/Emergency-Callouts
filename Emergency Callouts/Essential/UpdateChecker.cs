@@ -8,7 +8,6 @@ namespace EmergencyCallouts
     internal class UpdateChecker
     {
         internal static string OnlineVersion = null;
-        internal static bool EarlyAccess = false;
 
         internal static bool UpdateAvailable()
         {
@@ -28,13 +27,13 @@ namespace EmergencyCallouts
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
             }
 
-            if (OnlineVersion != Project.LocalVersion && !EarlyAccess)
+            if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
             }
-            else if (EarlyAccess)
+            else if (Settings.EarlyAccess)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
