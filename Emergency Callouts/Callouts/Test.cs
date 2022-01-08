@@ -87,7 +87,7 @@ namespace EmergencyCallouts.Callouts
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
                 {
                     // Remove EntranceBlip
-                    EntranceBlip.Remove();
+                    if (EntranceBlip.Exists()) {EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Suspect.Position.Around(5f, 30f), Settings.SearchAreaSize);
@@ -113,7 +113,7 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Enable();
 
                     // Remove SearchArea
-                    SearchArea.Remove();
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
@@ -125,7 +125,7 @@ namespace EmergencyCallouts.Callouts
                 if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Remove SuspectBlip
-                    SuspectBlip.Remove();
+                    if (SuspectBlip.Exists()) {SuspectBlip.Delete(); }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
@@ -143,7 +143,7 @@ namespace EmergencyCallouts.Callouts
                     SuspectBlip.Disable();
 
                     // Delete SearchArea
-                    SearchArea.Remove();
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(CalloutPosition);
