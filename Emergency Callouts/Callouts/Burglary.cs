@@ -339,7 +339,6 @@ namespace EmergencyCallouts.Callouts
 
         private void RetrieveVehiclePositions()
         {
-
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;

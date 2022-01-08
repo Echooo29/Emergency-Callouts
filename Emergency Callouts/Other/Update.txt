@@ -1,14 +1,44 @@
-﻿1) Check if all scenarios are enabled
-2) Update AssemblyFileVersion.
-3) Update 'Emergency Callouts Audio' folder.
-4) Set EarlyAccess bool to false.
-5) Get hits from previous version and add a note.
-6) Build in release mode.
-7) Obfuscate the file.
-8) Add to the Emergency Callouts ZIP File.
-9) Change the comment to the next version.
-10) Update 'Changelog.txt'
-11) Merge dev branch to master branch
+﻿[VISUAL STUDIO]
+Check if all scenarios are enabled
+Update AssemblyFileVersion
+Set EarlyAccess bool to false
+Build in release mode
+Push
 
-Extra:
-"Hey everyone, thanks for all the different reviews, In update x.x.x there have been *hits* hits sent to me, to see , *hits* x *downloads*, rounding that up would be *outcome*!
+[.NET REACTOR]
+Double check the modified time in release folder
+Enable all the right obfuscation settings
+Obfuscate the file
+Test the secure version
+
+[EMERGENCY CALLOUTS ZIP]
+Add the secure .dll to the zip
+Add the vanilla .ini to the zip
+Add possibly new audio files
+Update comment version
+
+[TRELLO]
+Check if changelog is correct with what's in the Finished section
+Archive all cards in Finished list
+
+[DEVELOPING FOLDER]
+Add the new ZIP file to the versions folder
+Update Changelog.txt
+
+[DISCORD]
+Update #Changelog
+
+[GITHUB]
+Merge Dev to Master branch
+
+[PAGE]
+Add the Emergency Callouts.zip to the file upload with the main tag
+Update the version textbox
+Update the changelog
+Publish
+Update Patch Notes
+Clear Known Issues
+Remove the next update changelog trello link
+
+[POST-UPDATE]
+Change build mode to Debug
