@@ -188,7 +188,6 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
 
-                // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
@@ -200,7 +199,6 @@ namespace EmergencyCallouts.Callouts
                 Victim.SetDefaults();
                 Victim.SetInjured(135);
 
-                // VictimBlip
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
                 VictimBlip.Scale = (float)Settings.PedBlipScale;

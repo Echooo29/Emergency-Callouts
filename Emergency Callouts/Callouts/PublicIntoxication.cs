@@ -74,9 +74,11 @@ namespace EmergencyCallouts.Callouts
             Display.AcceptSubtitle(CalloutMessage, CalloutArea);
             Display.OutdatedReminder();
             
+            // EntranceBlip
             EntranceBlip = new Blip(CalloutPosition);
             EntranceBlip.EnableRoute();
 
+            // Suspect
             Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
