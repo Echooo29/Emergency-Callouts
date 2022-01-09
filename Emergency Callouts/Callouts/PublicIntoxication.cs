@@ -213,7 +213,7 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         if (HasBottle)
                                         {
-                                            Handle.MoveToPed(MainPlayer, Suspect);
+                                            MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
                                             GameFiber.Sleep(500);
                                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
                                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);

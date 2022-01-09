@@ -435,6 +435,16 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                         stopDialogue = true;
+
+                                        foreach (Ped ped in World.GetAllPeds())
+                                        {
+                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                            {
+                                                Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
+                                            }
+                                        }
+
+                                        break;
                                     }
                                 }
                                 else if (Suspect.IsDead)
@@ -445,15 +455,25 @@ namespace EmergencyCallouts.Callouts
 
                                     if (line == dialogueDeceased.Length)
                                     {
-                                        stopDialogue = true;
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                        foreach (Ped ped in World.GetAllPeds())
+                                        {
+                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                            {
+                                                Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
+                                            }
+                                        }
+
+                                        stopDialogue = true;
+                                        break;
                                     }
                                 }
 
                                 // Give officer's card
                                 if (line == 9)
                                 {
-                                    Handle.MoveToPed(MainPlayer, Victim);
+                                    MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
                                     //GameFiber.Sleep(500);
 
                                     Victim.Tasks.ClearImmediately();
