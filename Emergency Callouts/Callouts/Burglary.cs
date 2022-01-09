@@ -481,7 +481,7 @@ namespace EmergencyCallouts.Callouts
                         }
                         else if (!DialogueStarted)
                         {
-                            Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~r~suspect~s~.");
+                            Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
                         }
                     }
                 }

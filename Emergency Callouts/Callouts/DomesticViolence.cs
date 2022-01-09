@@ -358,7 +358,7 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            bool stopDialogue = false;
+            //bool stopDialogue = false;
 
             string[] dialogueArrested =
             {
@@ -411,9 +411,9 @@ namespace EmergencyCallouts.Callouts
                             FirstTime = true;
                         }
 
-                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists() && FirstTime)
+                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue)
+                            if (Game.IsKeyDown(Settings.InteractKey))// && !stopDialogue
                             {
                                 if (!DialogueStarted)
                                 {
@@ -436,13 +436,13 @@ namespace EmergencyCallouts.Callouts
                                     if (line == dialogueArrested.Length)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                        stopDialogue = true;
+                                        //stopDialogue = true;
 
                                         foreach (Ped ped in World.GetAllPeds())
                                         {
                                             if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
                                             {
-                                                Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
+                                                Victim.Tasks.GoStraightToPosition(ped.Position, 2f, 1f, 0f, 0);
                                             }
                                         }
 
@@ -467,7 +467,7 @@ namespace EmergencyCallouts.Callouts
                                             }
                                         }
 
-                                        stopDialogue = true;
+                                        //stopDialogue = true;
                                         break;
                                     }
                                 }
@@ -477,7 +477,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
                                     //GameFiber.Sleep(500);
-
+                                    
                                     Victim.Tasks.ClearImmediately();
                                     Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
@@ -485,12 +485,9 @@ namespace EmergencyCallouts.Callouts
 
                                 GameFiber.Sleep(500);
                             }
-                            else
+                            else if(DialogueStarted == false)
                             {
-                                if (DialogueStarted == false)
-                                {
-                                    Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~o~victim~s~.");
-                                }
+                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~o~victim~s~.");
                             }
                         }
                     }
@@ -667,7 +664,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (!DialogueStarted && Suspect.IsCuffed)
                             {
-                                Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~r~suspect~s~.");
+                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
                             }
                         }
                     }

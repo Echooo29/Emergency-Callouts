@@ -766,6 +766,10 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
+        internal static void Sit(this TaskInvoker instance)
+        {
+
+        }
         #region GetSafePositionForPed
         public static unsafe bool GetSafePositionForPed(this Vector3 CalloutPosition, out Vector3 SafePosition)
         {
