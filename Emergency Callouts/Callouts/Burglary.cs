@@ -537,7 +537,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Attach Clipboard
                             int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, 0f, 0f, 0f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
 
                             // Attach Pencil
                             int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
