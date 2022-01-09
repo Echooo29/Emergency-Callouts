@@ -208,7 +208,7 @@ namespace EmergencyCallouts.Callouts
                 Display.OutdatedReminder();
 
                 // Suspect
-                Suspect = new Ped(CalloutPosition);
+                Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), CalloutPosition, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.SetDefaults();
 
