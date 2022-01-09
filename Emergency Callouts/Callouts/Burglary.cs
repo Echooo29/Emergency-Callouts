@@ -234,7 +234,7 @@ namespace EmergencyCallouts.Callouts
             {
                 CalloutActive = true;
 
-                // Positioning
+                // Positionings
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // Mirror Park
                 {
@@ -453,34 +453,37 @@ namespace EmergencyCallouts.Callouts
                             FirstTime = true;
                         }
 
-                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && FirstTime)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                         {
-                            if (!DialogueStarted)
+                            if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && FirstTime)
                             {
-                                Suspect.Tasks.Clear();
+                                if (!DialogueStarted)
+                                {
+                                    Suspect.Tasks.Clear();
 
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                }
+
+                                DialogueStarted = true;
+
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                Game.DisplaySubtitle(dialogue[line], 15000);
+                                line++;
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                                if (line == dialogue.Length)
+                                {
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                    stopDialogue = true;
+                                }
+
+                                GameFiber.Sleep(500);
                             }
-
-                            DialogueStarted = true;
-
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                            Game.DisplaySubtitle(dialogue[line], 15000);
-                            line++;
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                            if (line == dialogue.Length)
+                            else if (!DialogueStarted)
                             {
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                stopDialogue = true;
+                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
                             }
-
-                            GameFiber.Sleep(500);
-                        }
-                        else if (!DialogueStarted)
-                        {
-                            Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
                         }
                     }
                 }
@@ -535,8 +538,8 @@ namespace EmergencyCallouts.Callouts
                             // Play Animation
                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
-                            // Attach Clipboard
-                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                            // Attach Notepad
+                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftHand);
                             NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
 
                             // Attach Pencil
