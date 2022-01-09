@@ -364,7 +364,8 @@ namespace EmergencyCallouts.Essential
             {
                 if (MainPlayer.IsOnFoot && !MainPlayer.IsAiming)
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                    LSPD_First_Response.Mod.Menus.EPoliceRadioAction customRadioAction = Functions.GetPlayerRadioAction();
+                    Functions.PlayPlayerRadioAction(customRadioAction, 3000);
                 }
 
                 GameFiber.Sleep(700);
