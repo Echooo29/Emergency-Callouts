@@ -407,6 +407,13 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region MoveToPed
+            internal static void MoveToPed(Ped ped, Ped target)
+            {
+                ped.Tasks.GoToOffsetFromEntity(target, 1f, 0f, 2f);
+            }
+            #endregion
+
             #region DeleteNearbyPeds
             internal static void DeleteNearbyPeds(Ped mainPed, float radius)
             {

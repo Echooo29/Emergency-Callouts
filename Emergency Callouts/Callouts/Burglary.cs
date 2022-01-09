@@ -397,6 +397,7 @@ namespace EmergencyCallouts.Callouts
 
         private void CheckForDamage()
         {
+            #region CheckForDamage
             string property;
 
             if (VehicleUsed)
@@ -474,6 +475,7 @@ namespace EmergencyCallouts.Callouts
                     }
                 }
             });
+            #endregion
         }
 
         private void Scenario1() // Attack

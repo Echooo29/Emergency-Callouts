@@ -839,6 +839,9 @@ namespace EmergencyCallouts.Callouts
 
                                 if (line == 4)
                                 {
+                                    Handle.MoveToPed(MainPlayer, Suspect);
+                                    GameFiber.Sleep(500);
+
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
                                     GameFiber.Sleep(2000);
@@ -967,7 +970,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect);
                 
                 #region PlayerArrived

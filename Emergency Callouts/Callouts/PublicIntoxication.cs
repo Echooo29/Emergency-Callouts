@@ -213,6 +213,8 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         if (HasBottle)
                                         {
+                                            Handle.MoveToPed(MainPlayer, Suspect);
+                                            GameFiber.Sleep(500);
                                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
                                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
 
@@ -220,13 +222,7 @@ namespace EmergencyCallouts.Callouts
                                             Suspect.Inventory.Weapons.Clear();
                                             GameFiber.Sleep(4000);
                                         }
-                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_enter", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                        GameFiber.Sleep(1000);
-                                        Game.DisplayNotification("~b~You~s~: Dispatch, call is code 4.");
-                                        GameFiber.Sleep(2700);
-                                        Play.CodeFourAudio();
-                                        GameFiber.Sleep(5000);
-                                        Functions.StopCurrentCallout();
+                                        Handle.AdvancedEndingSequence();
                                         break;
                                     }
                                 }
@@ -368,7 +364,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventPickupCrash(Suspect);
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)

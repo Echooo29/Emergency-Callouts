@@ -21,6 +21,7 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool DialogueStarted;
+        bool FirstTime;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -401,7 +402,12 @@ namespace EmergencyCallouts.Callouts
 
                     if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                     {
-                        if (!DialogueStarted) { Game.DisplaySubtitle("Speak to the ~o~victim", 10000); }
+                        if (!DialogueStarted && !FirstTime)
+                        {
+                            FirstTime = true;
+                            GameFiber.Sleep(10000);
+                            Game.DisplaySubtitle("Speak to the ~o~victim", 10000);
+                        }
 
                         if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists())
                         {
@@ -447,6 +453,8 @@ namespace EmergencyCallouts.Callouts
                                 // Give officer's card
                                 if (line == 9)
                                 {
+                                    Handle.MoveToPed(MainPlayer, Victim);
+                                    //GameFiber.Sleep(500);
                                     Victim.Tasks.ClearImmediately();
                                     Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                     GameFiber.Sleep(200);
