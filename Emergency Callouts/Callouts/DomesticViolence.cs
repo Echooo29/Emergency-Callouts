@@ -23,7 +23,6 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool FirstTime;
         bool WithinRange;
-        bool BarriersDeleted;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -550,9 +549,6 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Fight Spot
                 RetrieveFightPosition();
-
-                // Lower Victim health
-                Victim.Health = 130;
 
                 // Give Random Handgun
                 Suspect.GiveRandomHandgun(-1, true);

@@ -399,7 +399,7 @@ namespace EmergencyCallouts.Essential
             {
                 foreach (Ped ped in World.GetAllPeds()) // Maybe gang members only?
                 {
-                    if (ped.Exists() && ped.Position.DistanceTo(location) < 100f)
+                    if (ped.Exists() && ped.Position.DistanceTo(location) < radius)
                     {
                         ped.BlockPermanentEvents = true;
                     }
@@ -766,10 +766,6 @@ namespace EmergencyCallouts.Essential
 
     internal static class ExtensionMethods
     {
-        internal static void Sit(this TaskInvoker instance)
-        {
-
-        }
         #region GetSafePositionForPed
         public static unsafe bool GetSafePositionForPed(this Vector3 CalloutPosition, out Vector3 SafePosition)
         {
