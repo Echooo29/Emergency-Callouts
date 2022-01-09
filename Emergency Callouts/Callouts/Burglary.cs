@@ -23,6 +23,13 @@ namespace EmergencyCallouts.Callouts
         bool WithinRange;
         bool BarriersDeleted;
         bool VehicleUsed;
+        bool DialogueStarted;
+        bool FirstTime;
+        bool CheckedForDamage;
+        bool Damage;
+
+        string DamageLine;
+        string DamageLine2;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -399,6 +406,89 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
+        private void Dialogue()
+        {
+            #region Dialogue
+            bool stopDialogue = false;
+
+            if (Damage == true)
+            {
+                DamageLine = "Anyway, you also left some dagage behind.";
+                DamageLine2 = "Bro that was already there when I came here!";
+            }
+            else
+            {
+                DamageLine = "Luckily for you I didn't find any damage.";
+                DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
+            }
+
+            string[] dialogue =
+            {
+                    "~b~You~s~: So, why did you do it?",
+                    "~r~Suspect~s~: For the money...",
+                    "~b~You~s~: So you don't have a job?",
+                    "~r~Suspect~s~: Yeah, I don't.",
+                    "~b~You~s~: " + DamageLine,
+                    "~r~Suspect~s~: " + DamageLine2,
+                    "~b~You~s~: You expect me to believe that?",
+                    "~r~Suspect~s~: Nah, cops only hear what they want to hear.",
+                    "~r~Suspect~s~: I'm staying silent until I can speak to my lawyer.",
+                    "~b~You~s~: Not a problem.",
+                    "~m~dialogue ended",
+                };
+
+            int line = 0;
+
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
+                    {
+                        if (!DialogueStarted && !FirstTime)
+                        {
+                            GameFiber.Sleep(5000);
+                            Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
+                            FirstTime = true;
+                        }
+
+                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && FirstTime)
+                        {
+                            if (!DialogueStarted)
+                            {
+                                Suspect.Tasks.Clear();
+
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                            }
+
+                            DialogueStarted = true;
+
+                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                            Game.DisplaySubtitle(dialogue[line], 15000);
+                            line++;
+                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                            if (line == dialogue.Length)
+                            {
+                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                stopDialogue = true;
+                            }
+
+                            GameFiber.Sleep(500);
+                        }
+                        else if (!DialogueStarted)
+                        {
+                            Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~r~suspect~s~.");
+                        }
+                    }
+                }
+            });
+            #endregion
+        }
+
         private void CheckForDamage()
         {
             #region CheckForDamage
@@ -466,6 +556,8 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(1000);
                                 if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
+                                CheckedForDamage = true;
+                                Damage = true;
                             }
                             else // No Damage
                             {
@@ -476,6 +568,8 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(1000);
                                 if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
+                                CheckedForDamage = true;
+                                Damage = false;
                             }
                             break;
                         }
