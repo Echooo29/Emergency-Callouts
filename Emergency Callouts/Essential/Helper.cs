@@ -51,15 +51,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region Enumerations
-        internal enum DescriptionCategories
-        {
-            Civilian,
-            Suspect,
-            Victim,
-            Officer,
-            Vehicle,
-        }
-
         internal enum PedCategory
         {
             Suspect,

@@ -636,6 +636,9 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Vehicle Positions
                 RetrieveVehiclePositions();
 
+                // Set VehicleUsed
+                VehicleUsed = true;
+
                 // Suspect Resistance Chance
                 Functions.SetPedResistanceChance(Suspect, 40f);
 
@@ -741,7 +744,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
