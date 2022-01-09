@@ -390,6 +390,7 @@ namespace EmergencyCallouts.Essential
                         Display.HideSubtitle();
                         GameFiber.Sleep(5000);
                         Functions.StopCurrentCallout();
+                        Game.LogTrivial("[Emergency Callouts]: Scared ped, ended callout");
                     }
                 }
             }
