@@ -155,6 +155,8 @@ namespace EmergencyCallouts.Callouts
         Blip SearchArea;
         Blip DamagedPropertyBlip;
 
+        float DamagedPropertyHeading;
+
         public override bool OnBeforeCalloutDisplayed()
         {
             CalloutPosition = new Vector3(0, 0, 3000);
@@ -232,25 +234,21 @@ namespace EmergencyCallouts.Callouts
                 {
                     Center = new Vector3(888.6841f, -625.1655f, 58.04898f);
                     Entrance = new Vector3(916.261f, -623.7192f, 58.05202f);
-                    Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // La Puerta
                 {
                     Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
                     Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
-                    Settings.SearchAreaSize += 80;
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
                     Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
                     Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
-                    Settings.SearchAreaSize = 40;
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
                 {
                     Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
                     Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
-                    Settings.SearchAreaSize = 85;
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Harmony
                 {
@@ -306,6 +304,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
                 DamagedProperty = MirrorParkBreakInPositions[num];
+                DamagedPropertyHeading = MirrorParkBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
@@ -313,6 +312,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
                 DamagedProperty = LaPuertaBreakInPositions[num];
+                DamagedPropertyHeading = LaPuertaBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
@@ -320,6 +320,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = ElBurroBreakInPositions[num];
                 Suspect.Heading = ElBurroBreakInHeadings[num];
                 DamagedProperty = ElBurroBreakInPositions[num];
+                DamagedPropertyHeading = ElBurroBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
@@ -327,6 +328,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
                 DamagedProperty = GrapeseedBreakInPositions[num];
+                DamagedPropertyHeading = GrapeseedBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[4]) // Harmony
             {
@@ -334,6 +336,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = HarmonyBreakInPositions[num];
                 Suspect.Heading = HarmonyBreakInHeadings[num];
                 DamagedProperty = HarmonyBreakInPositions[num];
+                DamagedPropertyHeading = HarmonyBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
@@ -341,6 +344,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = PaletoBayBreakInPositions[num];
                 Suspect.Heading = PaletoBayBreakInHeadings[num];
                 DamagedProperty = PaletoBayBreakInPositions[num];
+                DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
             }
 
             // Lockpick Animation
@@ -440,7 +444,8 @@ namespace EmergencyCallouts.Callouts
                         if (Game.IsKeyDown(Settings.InteractKey))
                         {
                             // Play Animation
-                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.Loop);
+                            MainPlayer.Tasks.GoStraightToPosition(DamagedProperty, 2f,  DamagedPropertyHeading, 0f, 0).WaitForCompletion();
+                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
                             // Attach Clipboard
                             int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
@@ -458,6 +463,7 @@ namespace EmergencyCallouts.Callouts
                                 Game.DisplayHelp($"You found ~r~damage~s~ on the ~p~{property}~s~.");
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
+                                GameFiber.Sleep(1000);
                                 if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                             }
@@ -467,6 +473,7 @@ namespace EmergencyCallouts.Callouts
                                 Game.DisplayHelp($"You found ~g~no damage~s~ on the ~p~{property}~s~.");
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
+                                GameFiber.Sleep(1000);
                                 if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                             }
