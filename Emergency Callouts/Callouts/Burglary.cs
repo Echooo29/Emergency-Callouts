@@ -148,7 +148,7 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Notepad = new Rage.Object(new Model("p_notepad_01_s"), new Vector3(0, 0, 0));
         readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
 
         Vehicle SuspectVehicle;
@@ -537,7 +537,7 @@ namespace EmergencyCallouts.Callouts
 
                             // Attach Clipboard
                             int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, 0f, 0f, 0f, -90f, 0f, 0f, true, true, false, false, 2, 1);
 
                             // Attach Pencil
                             int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
@@ -552,7 +552,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
-                                if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                if (Notepad.Exists()) { Notepad.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                                 CheckedForDamage = true;
                                 Damage = true;
@@ -564,7 +564,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
-                                if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                if (Notepad.Exists()) { Notepad.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                                 CheckedForDamage = true;
                                 Damage = false;
@@ -930,7 +930,7 @@ namespace EmergencyCallouts.Callouts
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
-            if (Clipboard.Exists()) { Clipboard.Delete(); }
+            if (Notepad.Exists()) { Notepad.Delete(); }
             if (Pencil.Exists()) { Pencil.Delete(); }
 
             Display.HideSubtitle();
