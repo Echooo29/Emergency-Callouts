@@ -273,19 +273,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario3();
+                        Scenario2();
                         break;
                     case 3:
                         Scenario3();
                         break;
                     case 4:
-                        Scenario3();
+                        Scenario4();
                         break;
                     case 5:
-                        Scenario3();
+                        Scenario5();
                         break;
                 }
 
@@ -448,7 +448,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         if (!DialogueStarted && !FirstTime)
                         {
-                            GameFiber.Sleep(5000);
+                            GameFiber.Sleep(3000);
                             Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
                             FirstTime = true;
                         }
@@ -510,7 +510,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (Suspect.IsCuffed)
                     {
-                        GameFiber.Sleep(10000);
+                        GameFiber.Sleep(7500);
 
                         Game.DisplaySubtitle($"Inspect the ~p~{property}~s~ for any ~y~property damage~s~.", 10000);
 
@@ -586,6 +586,7 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
+                Dialogue();
 
                 int num = random.Next(2);
                 if (num == 0)
@@ -671,6 +672,7 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
+                Dialogue();
 
                 GameFiber.StartNew(delegate
                 {
@@ -704,6 +706,7 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
+                Dialogue();
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
@@ -812,18 +815,18 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyTrailers(Center);
 
                     // Delete Barriers
-                    if (!BarriersDeleted)
-                    {
-                        foreach (Rage.Object obj in World.GetAllObjects())
-                        {
-                            if (obj.Position.DistanceTo(new Vector3(-708.7535f, -1382.413f, 5.281574f)) <= 15f && (obj.Model.Name == "0x18396ad2" || obj.Model.Name == "0x0e76574c"))
-                            {
-                                if (obj.Exists()) { obj.Delete(); }
-                                GameFiber.Sleep(500);
-                                BarriersDeleted = true;
-                            }
-                        }
-                    }
+                    //if (!BarriersDeleted && CalloutPosition == CalloutPositions[0])
+                    //{
+                    //    foreach (Rage.Object obj in World.GetAllObjects())
+                    //    {
+                    //        if (obj.Position.DistanceTo(new Vector3(-708.7535f, -1382.413f, 5.281574f)) <= 15f && (obj.Model.Name == "0x18396ad2" || obj.Model.Name == "0x0e76574c"))
+                    //        {
+                    //            if (obj.Exists()) { obj.Delete(); }
+                    //            GameFiber.Sleep(500);
+                    //            BarriersDeleted = true;
+                    //        }
+                    //    }
+                    //}
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
