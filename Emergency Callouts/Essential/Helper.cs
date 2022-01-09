@@ -394,6 +394,19 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region BlockPermanentEventsRadius
+            internal static void BlockPermanentEventsRadius(Vector3 location, float radius)
+            {
+                foreach (Ped ped in World.GetAllPeds()) // Maybe gang members only?
+                {
+                    if (ped.Exists() && ped.Position.DistanceTo(location) < 100f)
+                    {
+                        ped.BlockPermanentEvents = true;
+                    }
+                }
+            }
+            #endregion
+
             #region DeleteNearbyPeds
             internal static void DeleteNearbyPeds(Ped mainPed, float radius)
             {

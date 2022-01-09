@@ -489,10 +489,10 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived && Suspect.Exists())
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && PlayerArrived && Suspect.Exists())
                         {
                             // Start fight
-                            Suspect.Tasks.FightAgainst(Suspect2);
+                            if (Suspect.IsAlive) { Suspect.Tasks.FightAgainst(Suspect2); }
                             break;
                         }
                     }
@@ -561,6 +561,9 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
+
+                    // Gang Attack Fix
+                    Handle.BlockPermanentEventsRadius(Center, 60f);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
