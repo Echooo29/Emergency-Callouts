@@ -273,19 +273,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
                         break;
                     case 3:
                         Scenario3();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario3();
                         break;
                     case 5:
-                        Scenario5();
+                        Scenario3();
                         break;
                 }
 
@@ -539,8 +539,8 @@ namespace EmergencyCallouts.Callouts
                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
                             // Attach Notepad
-                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, -0.001f, 0f, -0.002f, 0f, 0f, 0f, true, true, false, false, 2, 1);
 
                             // Attach Pencil
                             int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
@@ -685,6 +685,10 @@ namespace EmergencyCallouts.Callouts
                         
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
+                            // Clipping Through Wall Fix
+                            Suspect.Tasks.ClearImmediately();
+                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 2f, DamagedPropertyHeading - 180, 0f, 1000);
+                            GameFiber.Sleep(5000);
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
 
