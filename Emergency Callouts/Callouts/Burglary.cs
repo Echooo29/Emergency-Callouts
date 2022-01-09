@@ -533,7 +533,6 @@ namespace EmergencyCallouts.Callouts
                         if (Game.IsKeyDown(Settings.InteractKey))
                         {
                             // Play Animation
-                            MainPlayer.Tasks.GoStraightToPosition(DamagedProperty, 2f,  DamagedPropertyHeading, 0f, 0).WaitForCompletion();
                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
                             // Attach Clipboard
