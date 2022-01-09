@@ -404,12 +404,12 @@ namespace EmergencyCallouts.Callouts
                     {
                         if (!DialogueStarted && !FirstTime)
                         {
-                            FirstTime = true;
-                            GameFiber.Sleep(10000);
+                            GameFiber.Sleep(5000);
                             Game.DisplaySubtitle("Speak to the ~o~victim", 10000);
+                            FirstTime = true;
                         }
 
-                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists())
+                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && Victim.Exists() && FirstTime)
                         {
                             if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue)
                             {
@@ -455,10 +455,9 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     Handle.MoveToPed(MainPlayer, Victim);
                                     //GameFiber.Sleep(500);
+
                                     Victim.Tasks.ClearImmediately();
                                     Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                    GameFiber.Sleep(200);
-
                                     MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
                                 }
 
@@ -541,6 +540,9 @@ namespace EmergencyCallouts.Callouts
                 // Give Random Handgun
                 Suspect.GiveRandomHandgun(-1, true);
 
+                // Aim At Victim
+                Suspect.Tasks.AimWeaponAt(Victim, -1);
+
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -607,7 +609,14 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        if (!DialogueStarted && !FirstTime && Suspect.IsCuffed && Suspect.IsAlive)
+                        {
+                            GameFiber.Sleep(5000);
+                            Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
+                            FirstTime = true;
+                        }
+
+                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && FirstTime)
                         {
                             if (!DialogueStarted)
                             {
