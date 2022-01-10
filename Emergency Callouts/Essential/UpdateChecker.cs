@@ -6,7 +6,7 @@ namespace EmergencyCallouts.Essential
 {
     internal class UpdateChecker
     {
-        internal static string OnlineVersion = null;
+        internal static string OnlineVersion = string.Empty;
 
         internal static bool UpdateAvailable()
         {
