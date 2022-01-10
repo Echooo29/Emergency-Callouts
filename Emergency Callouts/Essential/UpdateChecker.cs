@@ -40,7 +40,7 @@ namespace EmergencyCallouts.Essential
             }
             else
             {
-                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~m~by Faya", "~y~Reporting for duty!");
+                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~c~by Faya", "~y~Reporting for duty!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; None available");
                 return false;
             }

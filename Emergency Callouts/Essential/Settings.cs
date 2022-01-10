@@ -25,6 +25,7 @@ namespace EmergencyCallouts.Essential
         internal static bool EndOnArrivalWithLights = true;
         internal static int EndChance = 50;
         internal static int ChanceOfPropertyDamage = 50;
+
         // Back end
         internal static bool EarlyAccess = true;
 
