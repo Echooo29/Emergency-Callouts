@@ -557,6 +557,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(1000);
                                 if (Notepad.Exists()) { Notepad.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
+                                if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                 CheckedForDamage = true;
                                 Damage = true;
                             }
@@ -569,6 +570,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(1000);
                                 if (Notepad.Exists()) { Notepad.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
+                                if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                 CheckedForDamage = true;
                                 Damage = false;
                             }
