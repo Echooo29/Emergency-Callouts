@@ -482,7 +482,7 @@ namespace EmergencyCallouts.Callouts
 
                                 GameFiber.Sleep(500);
                             }
-                            else if(DialogueStarted == false)
+                            else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                             {
                                 Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~o~victim~s~.");
                             }

@@ -198,16 +198,19 @@ namespace EmergencyCallouts.Essential
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
                 
-                try
+                if (!Settings.EarlyAccess)
                 {
-                    // Send hit to remote exception counter
-                    WebClient hitUpdater = new WebClient();
-                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
-                }
-                catch (WebException webEx)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
+                    try
+                    {
+                        // Send hit to remote exception counter
+                        WebClient hitUpdater = new WebClient();
+                        hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
+                        Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
+                    }
+                    catch (WebException webEx)
+                    {
+                        Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
+                    }
                 }
             }
             #endregion
