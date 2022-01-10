@@ -148,7 +148,7 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        readonly Rage.Object Notepad = new Rage.Object(new Model("p_notepad_01_s"), new Vector3(0, 0, 0));
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
         readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
 
         Vehicle SuspectVehicle;
@@ -538,9 +538,9 @@ namespace EmergencyCallouts.Callouts
                             // Play Animation
                             MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
-                            // Attach Notepad
+                            // Attach Clipboard
                             int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Notepad, MainPlayer, lhBoneIndex, -0.001f, 0f, -0.002f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.008f, -90f, 0f, 0f, true, true, false, false, 2, 1);
 
                             // Attach Pencil
                             int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
@@ -555,7 +555,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
-                                if (Notepad.Exists()) { Notepad.Delete(); }
+                                if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                                 if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                 CheckedForDamage = true;
@@ -568,7 +568,7 @@ namespace EmergencyCallouts.Callouts
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
-                                if (Notepad.Exists()) { Notepad.Delete(); }
+                                if (Clipboard.Exists()) { Clipboard.Delete(); }
                                 if (Pencil.Exists()) { Pencil.Delete(); }
                                 if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                 CheckedForDamage = true;
@@ -685,12 +685,13 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
                         
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 13f && Suspect.Exists() && PlayerArrived)
                         {
                             // Clipping Through Wall Fix
                             Suspect.Tasks.ClearImmediately();
-                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 2f, DamagedPropertyHeading - 180, 0f, 1000);
-                            GameFiber.Sleep(5000);
+                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, DamagedPropertyHeading - 180, 0f, 25);
+                            GameFiber.Sleep(25);
+
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
 
@@ -939,7 +940,7 @@ namespace EmergencyCallouts.Callouts
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
-            if (Notepad.Exists()) { Notepad.Delete(); }
+            if (Clipboard.Exists()) { Clipboard.Delete(); }
             if (Pencil.Exists()) { Pencil.Delete(); }
 
             Display.HideSubtitle();
