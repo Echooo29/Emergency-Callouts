@@ -171,6 +171,13 @@ namespace EmergencyCallouts.Essential
                 Game.DisplaySubtitle(string.Empty);
             }
             #endregion
+
+            #region ContinuePrompt
+            internal static void ContinuePrompt()
+            {
+                Game.DisplaySubtitle("~g~Continue~s~ or ~r~end~s~ the callout");
+            }
+            #endregion
         }
 
         internal class Log
