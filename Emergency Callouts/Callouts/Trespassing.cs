@@ -684,13 +684,16 @@ namespace EmergencyCallouts.Callouts
                         int chance = random.Next(0, 101);
 
                         GameFiber.Sleep(3000);
-                        Game.DisplaySubtitle("~g~Secure~s~ the ~y~suspect~s~.", 10000);
 
                         if (Suspect.IsCuffed && Suspect.IsInAnyPoliceVehicle && !SecuredSuspect)
                         {
                             Game.DisplaySubtitle("Search the ~y~area~s~ for a possible ~y~accomplice~s~.", 10000);
                             //SearchArea.Flash(500, 5000);
                             SecuredSuspect = true;
+                        }
+                        else if (Suspect.IsCuffed && !SecuredSuspect)
+                        {
+                            Game.DisplaySubtitle("~g~Secure~s~ the ~y~suspect~s~.", 10000);
                         }
 
                         if (chance <= Settings.ChanceOfSecondSuspect && SecuredSuspect)
