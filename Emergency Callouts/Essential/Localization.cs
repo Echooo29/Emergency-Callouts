@@ -1,6 +1,5 @@
 ﻿using EmergencyCallouts.Essential;
 using Rage;
-using System.Windows.Forms;
 
 namespace EmergencyCallouts
 {
@@ -27,7 +26,7 @@ namespace EmergencyCallouts
         internal static string InteractionDismiss = "Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect";
 
         // Inspecting
-        internal static string CheckForDamageSubtitleIntro = "Inspect theto look for any ~y~property damage~s~.";
+        internal static string CheckForDamageSubtitleIntro = "Inspect the";
         internal static string CheckForDamageSubtitleRest = "for any ~y~property damage~s~.";
         internal static string CheckForDamagePrompt = "to look for any ~y~property damage~s~.";
         internal static string CheckForDamageVehicle = "vehicle";

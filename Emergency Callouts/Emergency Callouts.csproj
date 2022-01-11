@@ -82,7 +82,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="Essential\Settings.cs" />
     <Compile Include="Essential\UpdateChecker.cs" />
-    <Compile Include="Other\Testing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +91,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Other\Links.txt" />
-    <Content Include="Other\Update.txt" />
+    <Content Include="Other\Release.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

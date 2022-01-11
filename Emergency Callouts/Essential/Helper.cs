@@ -103,7 +103,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] femaleModels =
                 {
-                    "ig_abigail", "ig_amandatownley", "csb_anita", "ig_ashley", "s_f_y_bartender_01",
+                    "ig_abigail", "ig_amandatownley", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01",
                     "a_f_m_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
                     "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane",
                     "ig_denise", "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02",
@@ -120,7 +120,7 @@ namespace EmergencyCallouts.Essential
                     "ig_tanisha", "a_f_y_tennis_01", "ig_tonya", "a_f_y_tourist_01", "a_f_y_tourist_02",
                     "g_f_y_vagos_01", "a_f_y_vinewood_01", "a_f_y_vinewood_02", "a_f_y_vinewood_03",
                     "a_f_y_vinewood_04", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
-                    "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", "ig_isldj_04_d_01",
+                    "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", 
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
 
