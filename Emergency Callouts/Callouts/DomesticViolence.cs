@@ -375,7 +375,7 @@ namespace EmergencyCallouts.Callouts
                     "~m~dialogue ended",
                 };
 
-                    string[] dialogueDeceased =
+                string[] dialogueDeceased =
                 {
                     "~b~You~s~: Ma'am, are you hurt?",
                     "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",

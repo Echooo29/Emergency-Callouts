@@ -39,8 +39,6 @@ namespace EmergencyCallouts
             if (Settings.DomesticViolence    && DOMRemoteState)  { Functions.RegisterCallout(typeof(Callouts.DomesticViolence));    }
             if (Settings.Burglary            && BURRemoteState)  { Functions.RegisterCallout(typeof(Callouts.Burglary));            }
             if (Settings.SuspiciousActivity  && SUSRemoteState)  { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity));  }
-
-            if (Settings.EarlyAccess) { Functions.RegisterCallout(typeof(Other.Testing)); }
         }
     }
 }
