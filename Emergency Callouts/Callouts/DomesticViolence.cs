@@ -410,7 +410,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))// && !stopDialogue
+                            if (Game.IsKeyDown(Settings.InteractKey))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -433,7 +433,6 @@ namespace EmergencyCallouts.Callouts
                                     if (line == dialogueArrested.Length)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                        //stopDialogue = true;
 
                                         foreach (Ped ped in World.GetAllPeds())
                                         {
@@ -464,7 +463,6 @@ namespace EmergencyCallouts.Callouts
                                             }
                                         }
 
-                                        //stopDialogue = true;
                                         break;
                                     }
                                 }
@@ -473,7 +471,6 @@ namespace EmergencyCallouts.Callouts
                                 if (line == 9)
                                 {
                                     MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
-                                    //GameFiber.Sleep(500);
                                     
                                     Victim.Tasks.ClearImmediately();
                                     Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
