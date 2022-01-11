@@ -22,7 +22,7 @@ namespace EmergencyCallouts.Essential
             }
             catch (WebException)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~y~Error", "Failed to check for updates; Possible network error.");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates; Possible network error.\nYou can still continue playing LSPDFR.");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
             }
 
