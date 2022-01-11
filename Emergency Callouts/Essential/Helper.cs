@@ -20,7 +20,7 @@ namespace EmergencyCallouts.Essential
 
         internal static DateTime DateCreated => File.GetCreationTime("Emergency Callouts.dll");
 
-        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts/Settings.ini";
+        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini";
 
         internal static string LocalizationPath => "Plugins/LSPDFR/Emergency Callouts/Localization.ini";
     }
