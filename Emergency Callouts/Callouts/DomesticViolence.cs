@@ -355,6 +355,7 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
+            //bool stopDialogue = false;
 
             string[] dialogueArrested =
             {
@@ -457,17 +458,18 @@ namespace EmergencyCallouts.Callouts
 
                                         foreach (Ped ped in World.GetAllPeds())
                                         {
-                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f && ped != MainPlayer)
+                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
                                             {
                                                 Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
                                             }
                                         }
 
+                                        //stopDialogue = true;
                                         break;
                                     }
                                 }
 
-                                // Give your business card
+                                // Give officer's card
                                 if (line == 9)
                                 {
                                     MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
