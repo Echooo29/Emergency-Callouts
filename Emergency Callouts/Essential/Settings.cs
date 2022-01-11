@@ -22,10 +22,8 @@ namespace EmergencyCallouts.Essential
         internal static Keys EndCalloutKey = Keys.End;
 
         // Other
-        internal static bool EndOnArrivalWithLights = true;
         internal static int EndChance = 50;
         internal static int ChanceOfPropertyDamage = 50;
-        internal static int ChanceOfSecondSuspect = 50;
 
         // Back end
         internal static bool EarlyAccess = true;
@@ -55,10 +53,8 @@ namespace EmergencyCallouts.Essential
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Other
-            EndOnArrivalWithLights = iniFile.ReadBoolean("Other", "EndOnArrivalWithLights", EndOnArrivalWithLights);
             EndChance = iniFile.ReadInt32("Other", "EndChance", EndChance);
             ChanceOfPropertyDamage = iniFile.ReadInt32("Other", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
-            ChanceOfSecondSuspect = iniFile.ReadInt32("Other", "ChanceOfSecondSuspect", ChanceOfSecondSuspect);
 
             Game.LogTrivial("[Emergency Callouts]: Loaded settings");
         }

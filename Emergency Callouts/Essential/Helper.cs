@@ -383,7 +383,7 @@ namespace EmergencyCallouts.Essential
             #region SpookCheck
             internal static void SpookCheck(Vector3 entrance, float distanceFromEntrance)
             {
-                if (Settings.EndOnArrivalWithLights && MainPlayer.Position.DistanceTo(entrance) <= distanceFromEntrance && MainPlayer.CurrentVehicle.IsSirenOn && MainPlayer.IsInAnyPoliceVehicle)
+                if (MainPlayer.Position.DistanceTo(entrance) <= distanceFromEntrance && MainPlayer.CurrentVehicle.IsSirenOn && MainPlayer.IsInAnyPoliceVehicle)
                 {
                     int chance = random.Next(0, 101);
 
