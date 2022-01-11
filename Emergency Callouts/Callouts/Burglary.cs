@@ -449,7 +449,7 @@ namespace EmergencyCallouts.Callouts
                         if (!DialogueStarted && !FirstTime)
                         {
                             GameFiber.Sleep(3000);
-                            Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
+                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
                             FirstTime = true;
                         }
 
@@ -482,7 +482,7 @@ namespace EmergencyCallouts.Callouts
                             }
                             else if (!DialogueStarted)
                             {
-                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
+                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
                             }
                         }
                     }
@@ -498,11 +498,11 @@ namespace EmergencyCallouts.Callouts
 
             if (VehicleUsed)
             {
-                property = "vehicle";
+                property = Localization.CheckForDamageVehicle;
             }
             else
             {
-                property = "door";
+                property = Localization.CheckForDamageDoor;
             }
 
             GameFiber.StartNew(delegate
@@ -515,7 +515,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Sleep(7500);
 
-                        Game.DisplaySubtitle($"Inspect the ~p~{property}~s~ for any ~y~property damage~s~.", 10000);
+                        Game.DisplaySubtitle($"{Localization.CheckForDamageSubtitleIntro} ~p~{property}~s~ {Localization.CheckForDamageSubtitleRest}", 10000);
 
                         DamagedPropertyBlip = new Blip(DamagedProperty);
                         DamagedPropertyBlip.SetColorPurple();
@@ -531,7 +531,7 @@ namespace EmergencyCallouts.Callouts
 
                     if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f)
                     {
-                        Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
+                        Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
 
                         if (Game.IsKeyDown(Settings.InteractKey))
                         {
@@ -551,7 +551,7 @@ namespace EmergencyCallouts.Callouts
                             if (chance <= Settings.ChanceOfPropertyDamage) // Damage
                             {
                                 GameFiber.Sleep(15000);
-                                Game.DisplayHelp($"You found ~r~damage~s~ on the ~p~{property}~s~.");
+                                Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
@@ -564,7 +564,7 @@ namespace EmergencyCallouts.Callouts
                             else // No Damage
                             {
                                 GameFiber.Sleep(15000);
-                                Game.DisplayHelp($"You found ~g~no damage~s~ on the ~p~{property}~s~.");
+                                Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
                                 GameFiber.Sleep(3000);
                                 MainPlayer.Tasks.Clear();
                                 GameFiber.Sleep(1000);
@@ -825,7 +825,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyTrailers(Center);
 
                     // Delete Barriers
-                    //if (!BarriersDeleted && CalloutPosition == CalloutPositions[0])
+                    //if (!BarriersDeleted && CalloutPosition == CalloutPositions[0]!!)
                     //{
                     //    foreach (Rage.Object obj in World.GetAllObjects())
                     //    {

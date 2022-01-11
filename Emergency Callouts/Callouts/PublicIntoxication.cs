@@ -201,11 +201,11 @@ namespace EmergencyCallouts.Callouts
 
                                 if (HasBottle)
                                 {
-                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                    Game.DisplayHelp(Localization.InteractionDismissAndConfiscate);
                                 }
                                 else
                                 {
-                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
+                                    Game.DisplayHelp(Localization.InteractionDismiss);
                                 }
 
                                 while (CalloutActive)
@@ -236,7 +236,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (!DialogueStarted)
                             {
-                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect~s~.");
+                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
                             }
                         }
                     }
@@ -341,7 +341,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
                         {
-                            Game.DisplaySubtitle("~y~Suspect~s~: I'm drunk! Big deal ri...!", 2500);
+                            Game.DisplaySubtitle(Localization.PassOutLine, 2500);
                             GameFiber.Sleep(2500);
                             if (Suspect.Exists()) { Suspect.Kill(); }
 
@@ -366,7 +366,6 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.AutomaticEnding(Suspect);
                 Handle.PreventPickupCrash(Suspect);
-                //Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)

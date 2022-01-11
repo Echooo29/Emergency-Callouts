@@ -355,8 +355,6 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            //bool stopDialogue = false;
-
             string[] dialogueArrested =
             {
                 "~b~You~s~: Ma'am, are you injured?",
@@ -404,7 +402,7 @@ namespace EmergencyCallouts.Callouts
                         if (!DialogueStarted && !FirstTime)
                         {
                             GameFiber.Sleep(5000);
-                            Game.DisplaySubtitle("Speak to the ~o~victim", 10000);
+                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptVictim, 10000);
                             FirstTime = true;
                         }
 
@@ -481,7 +479,7 @@ namespace EmergencyCallouts.Callouts
                             }
                             else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                             {
-                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~o~victim~s~.");
+                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptVictim}");
                             }
                         }
                     }
@@ -622,7 +620,7 @@ namespace EmergencyCallouts.Callouts
                         if (!DialogueStarted && !FirstTime && Suspect.IsCuffed && Suspect.IsAlive)
                         {
                             GameFiber.Sleep(5000);
-                            Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
+                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
                             FirstTime = true;
                         }
 
@@ -655,7 +653,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (!DialogueStarted && Suspect.IsCuffed)
                             {
-                                Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect~s~.");
+                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
                             }
                         }
                     }
