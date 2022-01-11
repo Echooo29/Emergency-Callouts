@@ -37,11 +37,11 @@ namespace EmergencyCallouts
         // Accept Notification
         internal static string AcceptNotificationSubtitle = "~y~Notification";
 
-        internal static string BurglaryDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
+        internal static string BurglaryDetails = "A person has been seen looking through windows, caller states he's now ~y~lockpicking~s~ a door.";
         internal static string DomesticViolenceDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
-        internal static string PublicIntoxicationDetails = "There are multiple reports of a person under the influence of alcohol.";
+        internal static string PublicIntoxicationDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
         internal static string SuspiciousActivityDetails = "Multiple civilians called about a person handling possible firearms in the trunk of their car.";
-        internal static string TrespassingDetails = "Someone reported a person trespassing on private property.";
+        internal static string TrespassingDetails = "Someone reported a person ~y~trespassing~s~ on private property.";
 
         // Accept Subtitle
         internal static string AcceptSubtitleIntro = "Go to the";
@@ -106,7 +106,7 @@ namespace EmergencyCallouts
             DomesticViolenceDetails = locFile.ReadString("Accept Notification", "DomesticViolenceDetails", DomesticViolenceDetails);
             PublicIntoxicationDetails = locFile.ReadString("Accept Notification", "PublicIntoxicationDetails", PublicIntoxicationDetails);
             SuspiciousActivityDetails = locFile.ReadString("Accept Notification", "SuspiciousActivityDetails", SuspiciousActivityDetails);
-            TrespassingDetails = locFile.ReadString("Accept Notification", "DomesticViolenceDetails", TrespassingDetails);
+            TrespassingDetails = locFile.ReadString("Accept Notification", "TrespassingDetails", TrespassingDetails);
 
             // Accept Subtitle
             AcceptSubtitleIntro = locFile.ReadString("Accept Subtitle", "Intro", AcceptSubtitleIntro);
