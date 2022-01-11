@@ -22,7 +22,7 @@ namespace EmergencyCallouts.Essential
         internal static Keys EndCalloutKey = Keys.End;
 
         // Other
-        internal static int EndChance = 50;
+        internal static int ScarePedChance = 50;
         internal static int ChanceOfPropertyDamage = 50;
 
         // Back end
@@ -53,7 +53,7 @@ namespace EmergencyCallouts.Essential
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Other
-            EndChance = iniFile.ReadInt32("Other", "EndChance", EndChance);
+            ScarePedChance = iniFile.ReadInt32("Other", "ScarePedChance", ScarePedChance);
             ChanceOfPropertyDamage = iniFile.ReadInt32("Other", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
 
             Game.LogTrivial("[Emergency Callouts]: Loaded settings");
