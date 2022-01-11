@@ -786,18 +786,18 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect, Victim);
 
-                #region WithinRange
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
-                {
-                    // Set WithinRange
-                    WithinRange = true;
+                //#region WithinRange
+                //if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                //{
+                //    // Set WithinRange
+                //    WithinRange = true;
 
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect, 20f);
+                //    // Delete Nearby Peds
+                //    Handle.DeleteNearbyPeds(Suspect, 20f);
 
-                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
-                }
-                #endregion
+                //    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
+                //}
+                //#endregion
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)

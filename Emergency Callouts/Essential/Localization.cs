@@ -39,7 +39,7 @@ namespace EmergencyCallouts
         internal static string AcceptNotificationSubtitle = "~y~Notification";
 
         internal static string BurglaryDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
-        internal static string DomesticViolenceDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~r~assaulted~s~.";
+        internal static string DomesticViolenceDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
         internal static string PublicIntoxicationDetails = "There are multiple reports of a person under the influence of alcohol.";
         internal static string SuspiciousActivityDetails = "Multiple civilians called about a person handling possible firearms in the trunk of their car.";
         internal static string TrespassingDetails = "Someone reported a person trespassing on private property.";
