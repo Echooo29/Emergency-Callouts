@@ -355,140 +355,147 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            string[] dialogueArrested =
+            try
             {
-                "~b~You~s~: Ma'am, are you injured?",
-                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
-                "~b~You~s~: Okay, is this your property?",
-                "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
-                "~b~You~s~: I assume you want to press charges?",
-                "~o~Victim~s~: Yes, and how do I get a restraining order?",
-                "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
-                "~o~Victim~s~: Thank you for helping me.",
-                "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
-                "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
-                "~b~You~s~: I'd guess around 10 or 15 years.",
-                "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
-                "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
-                "~m~dialogue ended",
-            };
-
-            string[] dialogueDeceased =
-            {
-                "~b~You~s~: Ma'am, are you hurt?",
-                "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
-                "~b~You~s~: Okay, is this property yours?",
-                "~o~Victim~s~: Yes it is.",
-                "~b~You~s~: The body will get moved soon.",
-                "~o~Victim~s~: Good, what about the blood?",
-                "~b~You~s~: That will be taken care of by crime scene cleaners.",
-                "~o~Victim~s~: Okay, thanks",
-                "~b~You~s~: Here is my card if you have any questions or need any help.",
-                "~o~Victim~s~: Thanks.",
-                "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
-                "~m~dialogue ended",
-            };
-
-            int line = 0;
-
-            GameFiber.StartNew(delegate
-            {
-                while (CalloutActive)
+                string[] dialogueArrested =
                 {
-                    GameFiber.Yield();
+                    "~b~You~s~: Ma'am, are you injured?",
+                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~b~You~s~: Okay, is this your property?",
+                    "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
+                    "~b~You~s~: I assume you want to press charges?",
+                    "~o~Victim~s~: Yes, and how do I get a restraining order?",
+                    "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
+                    "~o~Victim~s~: Thank you for helping me.",
+                    "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
+                    "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
+                    "~b~You~s~: I'd guess around 10 or 15 years.",
+                    "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
+                    "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
+                    "~m~dialogue ended",
+                };
 
-                    if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                    string[] dialogueDeceased =
+                {
+                    "~b~You~s~: Ma'am, are you hurt?",
+                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~b~You~s~: Okay, is this property yours?",
+                    "~o~Victim~s~: Yes it is.",
+                    "~b~You~s~: The body will get moved soon.",
+                    "~o~Victim~s~: Good, what about the blood?",
+                    "~b~You~s~: That will be taken care of by crime scene cleaners.",
+                    "~o~Victim~s~: Okay, thanks",
+                    "~b~You~s~: Here is my card if you have any questions or need any help.",
+                    "~o~Victim~s~: Thanks.",
+                    "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
+                    "~m~dialogue ended",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
                     {
-                        if (!DialogueStarted && !FirstTime)
+                        GameFiber.Yield();
+
+                        if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                         {
-                            GameFiber.Sleep(5000);
-                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptVictim, 10000);
-                            FirstTime = true;
+                            if (!DialogueStarted && !FirstTime)
+                            {
+                                GameFiber.Sleep(5000);
+                                Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptVictim, 10000);
+                                FirstTime = true;
+                            }
+
+                            if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
+                            {
+                                if (Game.IsKeyDown(Settings.InteractKey))
+                                {
+                                    if (!DialogueStarted)
+                                    {
+                                        Victim.Tasks.Clear();
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
+                                    }
+
+                                    DialogueStarted = true;
+
+                                    // Face the player
+                                    Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                    // Victim dialogue
+                                    if (Suspect.IsCuffed)
+                                    {
+                                        Game.DisplaySubtitle(dialogueArrested[line], 15000);
+                                        Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                        line++;
+
+                                        if (line == dialogueArrested.Length)
+                                        {
+                                            Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                            foreach (Ped ped in World.GetAllPeds())
+                                            {
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                                {
+                                                    Victim.Tasks.GoStraightToPosition(ped.Position, 2f, 1f, 0f, 0);
+                                                }
+                                            }
+
+                                            break;
+                                        }
+                                    }
+                                    else if (Suspect.IsDead)
+                                    {
+                                        Game.DisplaySubtitle(dialogueDeceased[line], 15000);
+                                        Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                        line++;
+
+                                        if (line == dialogueDeceased.Length)
+                                        {
+                                            Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                            foreach (Ped ped in World.GetAllPeds())
+                                            {
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                                {
+                                                    Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
+                                                }
+                                            }
+
+                                            break;
+                                        }
+                                    }
+
+                                    // Give officer's card
+                                    if (line == 9)
+                                    {
+                                        MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
+
+                                        Victim.Tasks.ClearImmediately();
+                                        Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
+                                else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
+                                {
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptVictim}");
+                                }
+                            }
                         }
-
-                        if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
+                        else if (Victim.IsDead) // Victim is dead
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
-                            {
-                                if (!DialogueStarted)
-                                {
-                                    Victim.Tasks.Clear();
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
-                                }
-
-                                DialogueStarted = true;
-
-                                // Face the player
-                                Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                                // Victim dialogue
-                                if (Suspect.IsCuffed)
-                                {
-                                    Game.DisplaySubtitle(dialogueArrested[line], 15000);
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-                                    line++;
-
-                                    if (line == dialogueArrested.Length)
-                                    {
-                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-
-                                        foreach (Ped ped in World.GetAllPeds())
-                                        {
-                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
-                                            {
-                                                Victim.Tasks.GoStraightToPosition(ped.Position, 2f, 1f, 0f, 0);
-                                            }
-                                        }
-
-                                        break;
-                                    }
-                                }
-                                else if (Suspect.IsDead)
-                                {
-                                    Game.DisplaySubtitle(dialogueDeceased[line], 15000);
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-                                    line++;
-
-                                    if (line == dialogueDeceased.Length)
-                                    {
-                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-
-                                        foreach (Ped ped in World.GetAllPeds())
-                                        {
-                                            if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
-                                            {
-                                                Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
-                                            }
-                                        }
-
-                                        break;
-                                    }
-                                }
-
-                                // Give officer's card
-                                if (line == 9)
-                                {
-                                    MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
-                                    
-                                    Victim.Tasks.ClearImmediately();
-                                    Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                }
-
-                                GameFiber.Sleep(500);
-                            }
-                            else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
-                            {
-                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptVictim}");
-                            }
+                            break;
                         }
                     }
-                    else if (Victim.IsDead) // Victim is dead
-                    {
-                        break;
-                    }
-                }
-            });
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 

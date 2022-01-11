@@ -408,21 +408,23 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-            bool stopDialogue = false;
+            try
+            {
+                bool stopDialogue = false;
 
-            if (Damage == true)
-            {
-                DamageLine = "Anyway, you also left some dagage behind.";
-                DamageLine2 = "Bro that was already there when I came here!";
-            }
-            else
-            {
-                DamageLine = "Luckily for you I didn't find any damage.";
-                DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
-            }
+                if (Damage == true)
+                {
+                    DamageLine = "Anyway, you also left some dagage behind.";
+                    DamageLine2 = "Bro that was already there when I came here!";
+                }
+                else
+                {
+                    DamageLine = "Luckily for you I didn't find any damage.";
+                    DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
+                }
 
-            string[] dialogue =
-            {
+                string[] dialogue =
+                {
                     "~b~You~s~: So, why did you do it?",
                     "~r~Suspect~s~: For the money...",
                     "~b~You~s~: So you don't have a job?",
@@ -436,149 +438,161 @@ namespace EmergencyCallouts.Callouts
                     "~m~dialogue ended",
                 };
 
-            int line = 0;
+                int line = 0;
 
-            GameFiber.StartNew(delegate
-            {
-                while (CalloutActive)
+                GameFiber.StartNew(delegate
                 {
-                    GameFiber.Yield();
-
-                    if (Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
+                    while (CalloutActive)
                     {
-                        if (!DialogueStarted && !FirstTime)
-                        {
-                            GameFiber.Sleep(3000);
-                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
-                            FirstTime = true;
-                        }
+                        GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
+                        if (Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && FirstTime)
+                            if (!DialogueStarted && !FirstTime)
                             {
-                                if (!DialogueStarted)
-                                {
-                                    Suspect.Tasks.Clear();
-
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
-                                }
-
-                                DialogueStarted = true;
-
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                                Game.DisplaySubtitle(dialogue[line], 15000);
-                                line++;
-                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                                if (line == dialogue.Length)
-                                {
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                    stopDialogue = true;
-                                }
-
-                                GameFiber.Sleep(500);
+                                GameFiber.Sleep(3000);
+                                Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
+                                FirstTime = true;
                             }
-                            else if (!DialogueStarted)
+
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
+                                if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && FirstTime)
+                                {
+                                    if (!DialogueStarted)
+                                    {
+                                        Suspect.Tasks.Clear();
+
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                    }
+
+                                    DialogueStarted = true;
+
+                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                    Game.DisplaySubtitle(dialogue[line], 15000);
+                                    line++;
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                                    if (line == dialogue.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                        stopDialogue = true;
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
+                                else if (!DialogueStarted)
+                                {
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 
         private void CheckForDamage()
         {
             #region CheckForDamage
-            string property;
+            try
+            {
+                string property;
 
-            if (VehicleUsed)
-            {
-                property = Localization.CheckForDamageVehicle;
-            }
-            else
-            {
-                property = Localization.CheckForDamageDoor;
-            }
-
-            GameFiber.StartNew(delegate
-            {
-                while (CalloutActive)
+                if (VehicleUsed)
                 {
-                    GameFiber.Yield();
-
-                    if (Suspect.IsCuffed)
-                    {
-                        GameFiber.Sleep(7500);
-
-                        Game.DisplaySubtitle($"{Localization.CheckForDamageSubtitleIntro} ~p~{property}~s~ {Localization.CheckForDamageSubtitleRest}", 10000);
-
-                        DamagedPropertyBlip = new Blip(DamagedProperty);
-                        DamagedPropertyBlip.SetColorPurple();
-                        DamagedPropertyBlip.Scale = 0.6f;
-                        DamagedPropertyBlip.Flash(500, -1);
-                        break;
-                    }
+                    property = Localization.CheckForDamageVehicle;
+                }
+                else
+                {
+                    property = Localization.CheckForDamageDoor;
                 }
 
-                while (CalloutActive)
+                GameFiber.StartNew(delegate
                 {
-                    GameFiber.Yield();
-
-                    if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f)
+                    while (CalloutActive)
                     {
-                        Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
+                        GameFiber.Yield();
 
-                        if (Game.IsKeyDown(Settings.InteractKey))
+                        if (Suspect.IsCuffed)
                         {
-                            // Play Animation
-                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+                            GameFiber.Sleep(7500);
 
-                            // Attach Clipboard
-                            int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.008f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+                            Game.DisplaySubtitle($"{Localization.CheckForDamageSubtitleIntro} ~p~{property}~s~ {Localization.CheckForDamageSubtitleRest}", 10000);
 
-                            // Attach Pencil
-                            int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
-                            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Pencil, MainPlayer, rhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-
-                            // Chance of damage
-                            int chance = random.Next(0, 101);
-                            if (chance <= Settings.ChanceOfPropertyDamage) // Damage
-                            {
-                                GameFiber.Sleep(15000);
-                                Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
-                                GameFiber.Sleep(3000);
-                                MainPlayer.Tasks.Clear();
-                                GameFiber.Sleep(1000);
-                                if (Clipboard.Exists()) { Clipboard.Delete(); }
-                                if (Pencil.Exists()) { Pencil.Delete(); }
-                                if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
-                                CheckedForDamage = true;
-                                Damage = true;
-                            }
-                            else // No Damage
-                            {
-                                GameFiber.Sleep(15000);
-                                Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
-                                GameFiber.Sleep(3000);
-                                MainPlayer.Tasks.Clear();
-                                GameFiber.Sleep(1000);
-                                if (Clipboard.Exists()) { Clipboard.Delete(); }
-                                if (Pencil.Exists()) { Pencil.Delete(); }
-                                if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
-                                CheckedForDamage = true;
-                                Damage = false;
-                            }
+                            DamagedPropertyBlip = new Blip(DamagedProperty);
+                            DamagedPropertyBlip.SetColorPurple();
+                            DamagedPropertyBlip.Scale = 0.6f;
+                            DamagedPropertyBlip.Flash(500, -1);
                             break;
                         }
                     }
-                }
-            });
+
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f)
+                        {
+                            Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
+
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                // Play Animation
+                                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+
+                                // Attach Clipboard
+                                int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.008f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+
+                                // Attach Pencil
+                                int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Pencil, MainPlayer, rhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+
+                                // Chance of damage
+                                int chance = random.Next(0, 101);
+                                if (chance <= Settings.ChanceOfPropertyDamage) // Damage
+                                {
+                                    GameFiber.Sleep(15000);
+                                    Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
+                                    GameFiber.Sleep(3000);
+                                    MainPlayer.Tasks.Clear();
+                                    GameFiber.Sleep(1000);
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                    if (Pencil.Exists()) { Pencil.Delete(); }
+                                    if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+                                    CheckedForDamage = true;
+                                    Damage = true;
+                                }
+                                else // No Damage
+                                {
+                                    GameFiber.Sleep(15000);
+                                    Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
+                                    GameFiber.Sleep(3000);
+                                    MainPlayer.Tasks.Clear();
+                                    GameFiber.Sleep(1000);
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                    if (Pencil.Exists()) { Pencil.Delete(); }
+                                    if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+                                    CheckedForDamage = true;
+                                    Damage = false;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 

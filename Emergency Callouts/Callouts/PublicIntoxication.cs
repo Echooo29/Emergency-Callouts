@@ -132,116 +132,122 @@ namespace EmergencyCallouts.Callouts
         private void Dialogue()
         {
             #region Dialogue
-
-            bool stopDialogue = false;
-
-            string timeOfDay;
-            if (World.TimeOfDay.Hours <= 6 && World.TimeOfDay.Hours >= 12)
+            try
             {
-                timeOfDay = " so early?";
-            }
-            else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 18)
-            {
-                timeOfDay = " in the middle of the day?";
-            }
-            else
-            {
-                timeOfDay = ", shouldn't you go home?";
-            }
+                bool stopDialogue = false;
 
-            string[] dialogue =
-            {
-                "~b~You~s~: Hey you, come here for a second.",
-                "~y~Suspect~s~: Leave...me...ALONE!",
-                $"~b~You~s~: Calm down sir, Just have a talk with me...",
-                "~y~Suspect~s~: FINE!",
-                $"~b~You~s~: So what are you doing here being drunk{timeOfDay}",
-                "~y~Suspect~s~: Who cares what I do here, I'm not harming anyone right?",
-                "~b~You~s~: Well I didn't get any assault calls yet.",
-                "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
-                "~b~You~s~: That wasn't what I meant, sorry.",
-                "~y~Suspect~s~: Well you got of lucky this time haha.",
-                "~r~Arrest~s~ or ~g~dismiss~s~ the person.",
-            };
-
-            int line = 0;
-
-            GameFiber.StartNew(delegate
-            {
-                while (CalloutActive)
+                string timeOfDay;
+                if (World.TimeOfDay.Hours <= 6 && World.TimeOfDay.Hours >= 12)
                 {
-                    GameFiber.Yield();
+                    timeOfDay = " so early?";
+                }
+                else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 18)
+                {
+                    timeOfDay = " in the middle of the day?";
+                }
+                else
+                {
+                    timeOfDay = ", shouldn't you go home?";
+                }
 
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
+                string[] dialogue =
+                {
+                    "~b~You~s~: Hey you, come here for a second.",
+                    "~y~Suspect~s~: Leave...me...ALONE!",
+                    $"~b~You~s~: Calm down sir, Just have a talk with me...",
+                    "~y~Suspect~s~: FINE!",
+                    $"~b~You~s~: So what are you doing here being drunk{timeOfDay}",
+                    "~y~Suspect~s~: Who cares what I do here, I'm not harming anyone right?",
+                    "~b~You~s~: Well I didn't get any assault calls yet.",
+                    "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
+                    "~b~You~s~: That wasn't what I meant, sorry.",
+                    "~y~Suspect~s~: Well you got of lucky this time haha.",
+                    "~r~Arrest~s~ or ~g~dismiss~s~ the person.",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
                     {
-                        if (Game.IsKeyDown(Settings.InteractKey))
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
                         {
-                            if (!DialogueStarted)
+                            if (Game.IsKeyDown(Settings.InteractKey))
                             {
-                                Suspect.Tasks.Clear();
-
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
-                            }
-
-                            DialogueStarted = true;
-
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                            Game.DisplaySubtitle(dialogue[line], 15000);
-                            if (!stopDialogue) { line++; }
-                            
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                            if (line == dialogue.Length)
-                            {
-                                stopDialogue = true;
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-
-                                GameFiber.Sleep(1500);
-
-                                if (HasBottle)
+                                if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp(Localization.InteractionDismissAndConfiscate);
-                                }
-                                else
-                                {
-                                    Game.DisplayHelp(Localization.InteractionDismiss);
+                                    Suspect.Tasks.Clear();
+
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
 
-                                while (CalloutActive)
+                                DialogueStarted = true;
+
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                Game.DisplaySubtitle(dialogue[line], 15000);
+                                if (!stopDialogue) { line++; }
+
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                                if (line == dialogue.Length)
                                 {
-                                    GameFiber.Yield();
-                                    if (Game.IsKeyDown(Keys.N))
+                                    stopDialogue = true;
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                    GameFiber.Sleep(1500);
+
+                                    if (HasBottle)
                                     {
-                                        if (HasBottle)
-                                        {
-                                            MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
-                                            GameFiber.Sleep(500);
-                                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
-                                            MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
+                                        Game.DisplayHelp(Localization.InteractionDismissAndConfiscate);
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp(Localization.InteractionDismiss);
+                                    }
 
-                                            GameFiber.Sleep(1000);
-                                            Suspect.Inventory.Weapons.Clear();
-                                            GameFiber.Sleep(4000);
+                                    while (CalloutActive)
+                                    {
+                                        GameFiber.Yield();
+                                        if (Game.IsKeyDown(Keys.N))
+                                        {
+                                            if (HasBottle)
+                                            {
+                                                MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
+                                                GameFiber.Sleep(500);
+                                                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
+                                                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
+
+                                                GameFiber.Sleep(1000);
+                                                Suspect.Inventory.Weapons.Clear();
+                                                GameFiber.Sleep(4000);
+                                            }
+                                            Handle.AdvancedEndingSequence();
+                                            break;
                                         }
-                                        Handle.AdvancedEndingSequence();
-                                        break;
                                     }
                                 }
-                            }
 
-                            GameFiber.Sleep(500);
-                        }
-                        else
-                        {
-                            if (!DialogueStarted)
+                                GameFiber.Sleep(500);
+                            }
+                            else
                             {
-                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                if (!DialogueStarted)
+                                {
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 
