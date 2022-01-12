@@ -369,7 +369,7 @@ namespace EmergencyCallouts.Callouts
                     "~o~Victim~s~: Thank you for helping me.",
                     "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
                     "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
-                    "~b~You~s~: I'd guess around 10 or 15 years.",
+                    "~b~You~s~: I don't know exactly how long, but it's gonna be long.",
                     "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
                     "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
                     "~m~dialogue ended",
