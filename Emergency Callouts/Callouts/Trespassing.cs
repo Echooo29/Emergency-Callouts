@@ -340,42 +340,7 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                // Callout Accepted
-                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-
-                // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
-                Display.OutdatedReminder();
-
-                // Suspect
-                Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
-
-                SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorRed();
-                SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
-
-                CalloutHandler();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-
-            return base.OnCalloutAccepted();
-        }
-
-        private void CalloutHandler()
-        {
-            #region CalloutHandler
-            try
-            {
-                CalloutActive = true;
-
-                // Main Positioning
+                // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                 {
@@ -409,6 +374,46 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
+
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
+                EntranceBlip.EnableRoute();
+
+                // Suspect
+                Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.SetDefaults();
+                Log.Creation(Suspect, PedCategory.Suspect);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorRed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Disable();
+
+                CalloutHandler();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+            return base.OnCalloutAccepted();
+        }
+
+        private void CalloutHandler()
+        {
+            #region CalloutHandler
+            try
+            {
+                CalloutActive = true;
+
                 // Scenario Deciding
                 switch (CalloutScenario)
                 {
@@ -428,14 +433,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario2();
                         break;
                 }
-
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
-
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
             }
             catch (Exception e)
             {

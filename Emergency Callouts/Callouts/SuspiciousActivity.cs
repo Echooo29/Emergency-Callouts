@@ -182,65 +182,6 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                // Callout Accepted
-                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-
-                // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
-                Display.OutdatedReminder();
-
-                // Suspect
-                Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
-
-                SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorRed();
-                SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
-
-                // Suspect 2
-                Suspect2 = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
-                Suspect2.SetDefaults();
-
-                Suspect2Blip = Suspect2.AttachBlip();
-                Suspect2Blip.SetColorRed();
-                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
-                Suspect2Blip.Disable();
-
-                // SuspectVehicle
-                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
-                SuspectVehicle.IsPersistent = true;
-
-                vehDoors = SuspectVehicle.GetDoors();
-                vehDoors[vehDoors.Length - 1].Open(false);
-
-                // Suspect2Vehicle
-                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
-                Suspect2Vehicle.IsPersistent = true;
-
-                veh2Doors = Suspect2Vehicle.GetDoors();
-                veh2Doors[veh2Doors.Length - 1].Open(false);
-
-                CalloutHandler();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-
-            return base.OnCalloutAccepted();
-        }
-
-        private void CalloutHandler()
-        {
-            #region CalloutHandler
-            try
-            {
-                CalloutActive = true;
-
                 // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // La Puerta
@@ -275,6 +216,73 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
+
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
+                EntranceBlip.EnableRoute();
+
+                // Suspect
+                Suspect = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.SetDefaults();
+                Log.Creation(Suspect, PedCategory.Suspect);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorRed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Disable();
+
+                // Suspect 2
+                Suspect2 = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
+                Suspect2.SetDefaults();
+                Log.Creation(Suspect2, PedCategory.Suspect2);
+
+                Suspect2Blip = Suspect2.AttachBlip();
+                Suspect2Blip.SetColorRed();
+                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
+                Suspect2Blip.Disable();
+
+                // SuspectVehicle
+                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                SuspectVehicle.IsPersistent = true;
+                Log.Creation(SuspectVehicle, PedCategory.Suspect);
+
+                vehDoors = SuspectVehicle.GetDoors();
+                vehDoors[vehDoors.Length - 1].Open(false);
+
+                // Suspect2Vehicle
+                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                Suspect2Vehicle.IsPersistent = true;
+                Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
+
+                veh2Doors = Suspect2Vehicle.GetDoors();
+                veh2Doors[veh2Doors.Length - 1].Open(false);
+
+                CalloutHandler();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+            return base.OnCalloutAccepted();
+        }
+
+        private void CalloutHandler()
+        {
+            #region CalloutHandler
+            try
+            {
+                CalloutActive = true;
+
                 // Scenario Deciding
                 switch (CalloutScenario)
                 {
@@ -285,16 +293,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario2();
                         break;
                 }
-
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
-
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
-                Log.Creation(Suspect2, PedCategory.Suspect2);
-                Log.Creation(SuspectVehicle, PedCategory.Suspect);
-                Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
             }
             catch (Exception e)
             {

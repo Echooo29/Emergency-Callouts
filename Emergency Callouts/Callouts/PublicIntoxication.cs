@@ -83,7 +83,8 @@ namespace EmergencyCallouts.Callouts
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.SetDefaults();
             Suspect.SetIntoxicated();
-            
+            Log.Creation(Suspect, PedCategory.Suspect);
+
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();
             SuspectBlip.Scale = (float)Settings.PedBlipScale;
@@ -98,9 +99,12 @@ namespace EmergencyCallouts.Callouts
 
         private void CalloutHandler()
         {
+            #region CalloutHandler
             try
             {
                 CalloutActive = true;
+
+                // Scenario Deciding
                 switch (CalloutScenario)
                 {
                     case 1:
@@ -119,14 +123,12 @@ namespace EmergencyCallouts.Callouts
                         Scenario5();
                         break;
                 }
-
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
             }
             catch (Exception e)
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+            #endregion
         }
 
         private void Dialogue()

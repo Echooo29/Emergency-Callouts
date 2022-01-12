@@ -174,60 +174,6 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                // Callout Accepted
-                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-
-                // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
-                Display.OutdatedReminder();
-
-                // Suspect
-                Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
-
-                SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorRed();
-                SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
-
-                // Victim
-                Victim = new Ped(Entity.GetRandomFemaleModel(), CalloutPosition, 0f);
-                VictimPersona = Functions.GetPersonaForPed(Victim);
-                Victim.SetDefaults();
-                Victim.SetInjured(135);
-
-                VictimBlip = Victim.AttachBlip();
-                VictimBlip.SetColorOrange();
-                VictimBlip.Scale = (float)Settings.PedBlipScale;
-                VictimBlip.Disable();
-                
-                // 50% Drunk Chance
-                int num = random.Next(2);
-                if (num == 1)
-                {
-                    Suspect.SetIntoxicated();
-                    Game.LogTrivial("[Emergency Callouts]: Set Suspect intoxicated");
-                }
-
-                CalloutHandler();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-
-            return base.OnCalloutAccepted();
-        }
-
-        private void CalloutHandler()
-        {
-            #region CalloutHandler
-            try
-            {
-                CalloutActive = true;
-
                 // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
@@ -260,9 +206,67 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
                     Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
                 }
-
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
                 #endregion
+
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
+
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
+                EntranceBlip.EnableRoute();
+
+                // Victim
+                Victim = new Ped(Entity.GetRandomFemaleModel(), Vector3.Zero, 0f);
+                VictimPersona = Functions.GetPersonaForPed(Victim);
+                Victim.SetDefaults();
+                Victim.SetInjured(135);
+                Log.Creation(Victim, PedCategory.Victim);
+
+                VictimBlip = Victim.AttachBlip();
+                VictimBlip.SetColorOrange();
+                VictimBlip.Scale = (float)Settings.PedBlipScale;
+                VictimBlip.Disable();
+
+                // Suspect
+                Suspect = new Ped(Entity.GetRandomMaleModel(), Victim.GetOffsetPositionFront(1f), 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.SetDefaults();
+                Log.Creation(Suspect, PedCategory.Suspect);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorRed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Disable();
+                
+                // 50% Drunk Chance
+                int num = random.Next(2);
+                if (num == 1)
+                {
+                    Suspect.SetIntoxicated();
+                    Game.LogTrivial("[Emergency Callouts]: Set Suspect intoxicated");
+                }
+
+                CalloutHandler();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+            return base.OnCalloutAccepted();
+        }
+
+        private void CalloutHandler()
+        {
+            #region CalloutHandler
+            try
+            {
+                CalloutActive = true;
 
                 // Scenario Deciding
                 switch (CalloutScenario)
@@ -283,15 +287,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario5();
                         break;
                 }
-
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
-
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
-                Log.Creation(Victim, PedCategory.Victim);
             }
             catch (Exception e)
             {

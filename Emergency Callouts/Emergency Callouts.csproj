@@ -91,6 +91,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Other\Prototype.txt" />
     <Content Include="Other\Release.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
