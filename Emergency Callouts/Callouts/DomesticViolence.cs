@@ -436,11 +436,14 @@ namespace EmergencyCallouts.Callouts
 
                                             foreach (Ped ped in World.GetAllPeds())
                                             {
-                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f && ped != MainPlayer)
                                                 {
                                                     Victim.Tasks.GoStraightToPosition(ped.Position, 2f, 1f, 0f, 0);
                                                 }
                                             }
+
+                                            GameFiber.Sleep(5000);
+                                            Handle.AdvancedEndingSequence();
 
                                             break;
                                         }
@@ -457,11 +460,13 @@ namespace EmergencyCallouts.Callouts
 
                                             foreach (Ped ped in World.GetAllPeds())
                                             {
-                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f)
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f && ped != MainPlayer)
                                                 {
-                                                    Victim.Tasks.GoToOffsetFromEntity(ped, 1f, 0f, 2f);
+                                                    Victim.Tasks.GoToOffsetFromEntity(ped, 0.65f, 0f, 2f);
                                                 }
                                             }
+
+                                            Display.HintEndCallout();
 
                                             break;
                                         }
@@ -610,9 +615,9 @@ namespace EmergencyCallouts.Callouts
                     "~r~Suspect~s~: You wouldn't understand.",
                     "~b~You~s~: You're right, animals can't talk to humans.",
                     "~r~Suspect~s~: Keep your mouth shut.",
-                    "~b~You~s~: You think you're tough but you're not.",
-                    "~r~Suspect~s~: Says the person who needs a gun, tazer, pepperspray and a nightstick.",
-                    "~b~You~s~: Yeah I need those, but never for your kind.",
+                    "~b~You~s~: That attitude isn't gonna help you in prison.",
+                    "~r~Suspect~s~: Your badge isn't gonna stop me from hurting you.",
+                    "~b~You~s~: Yeah I bet you hurt alot of people, or can you only handle females?",
                     "~m~dialogue ended",
                 };
 

@@ -607,13 +607,6 @@ namespace EmergencyCallouts.Callouts
                 CheckForDamage();
                 Dialogue();
 
-                int num = random.Next(2);
-                if (num == 0)
-                {
-                    Suspect.GiveRandomMeleeWeapon(-1, true);
-                }
-                else Suspect.GiveRandomHandgun(-1, true);
-
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -622,6 +615,13 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
+                            int num = random.Next(2);
+                            if (num == 0)
+                            {
+                                Suspect.GiveRandomMeleeWeapon(-1, true);
+                            }
+                            else Suspect.GiveRandomHandgun(-1, true);
+
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             break;
                         }
