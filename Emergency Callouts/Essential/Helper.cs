@@ -172,10 +172,10 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region ContinuePrompt
-            internal static void ContinuePrompt()
+            #region HintEndCallout
+            internal static void HintEndCallout()
             {
-                Game.DisplaySubtitle("~g~Continue~s~ or ~r~end~s~ the callout");
+                Game.DisplayHelp($"You may end the callout with ~y~{Settings.EndCalloutKey}~s~.");
             }
             #endregion
         }
