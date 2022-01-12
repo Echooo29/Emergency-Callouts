@@ -851,7 +851,10 @@ namespace EmergencyCallouts.Callouts
                     //        }
                     //    }
                     //}
+                    if (StopThePed.API.Functions.)
+                    {
 
+                    }
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
                 #endregion

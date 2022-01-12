@@ -36,14 +36,14 @@ namespace EmergencyCallouts.Essential
             var iniFile = new InitializationFile(Project.SettingsPath);
             iniFile.Create();
 
-            // Callout Toggling
+            // Callouts
             PublicIntoxication = iniFile.ReadBoolean("Callouts", "PublicIntoxication", PublicIntoxication);
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
             Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
             SuspiciousActivity = iniFile.ReadBoolean("Callouts", "SuspiciousActivity", SuspiciousActivity);
 
-            // Callout Measurements
+            // Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
             MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
             PedBlipScale = iniFile.ReadDouble("Measurements", "PedBlipScale", PedBlipScale);
