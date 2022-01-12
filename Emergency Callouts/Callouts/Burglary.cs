@@ -456,7 +456,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && FirstTime)
+                                if (Game.IsKeyDown(Settings.InteractKey) && FirstTime)
                                 {
                                     if (!DialogueStarted)
                                     {
@@ -476,7 +476,8 @@ namespace EmergencyCallouts.Callouts
                                     if (line == dialogue.Length)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                        stopDialogue = true;
+                                        Handle.AdvancedEndingSequence();
+                                        break;
                                     }
 
                                     GameFiber.Sleep(500);
@@ -548,7 +549,7 @@ namespace EmergencyCallouts.Callouts
 
                                 // Attach Clipboard
                                 int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.008f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.009f, -90f, 0f, 0f, true, true, false, false, 2, 1);
 
                                 // Attach Pencil
                                 int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
@@ -702,8 +703,8 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Clipping Through Wall Fix
                             Suspect.Tasks.ClearImmediately();
-                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, DamagedPropertyHeading - 180, 0f, 25);
-                            GameFiber.Sleep(25);
+                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, DamagedPropertyHeading - 180, 0f, 30);
+                            GameFiber.Sleep(30);
 
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
