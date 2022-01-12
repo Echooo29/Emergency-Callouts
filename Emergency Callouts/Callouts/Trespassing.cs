@@ -295,6 +295,7 @@ namespace EmergencyCallouts.Callouts
 
         readonly Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
         readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Phone = new Rage.Object(new Model("prop_police_phone"), new Vector3(0, 0, 0));
 
         Vehicle PropertyVehicle;
 
@@ -660,6 +661,192 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
+        private void SuspectDialogue()
+        {
+            #region Dialogue
+            try
+            {
+                bool stopDialogue = false;
+                bool stopDialogue2 = false;
+                bool CompletedSuspectDialogue = false;
+
+                // Get Time Of Day Line
+                string timeOfDay;
+                if (World.TimeOfDay.Hours >= 6 && World.TimeOfDay.Hours < 12)
+                {
+                    timeOfDay = "so early?";
+                }
+                else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 21)
+                {
+                    timeOfDay = "in the middle of the day?";
+                }
+                else
+                {
+                    timeOfDay = "in the middle of the night?";
+                }
+                
+                // Gender pre mention
+                string gender = string.Empty;
+                if (PlayerPersona.Gender == LSPD_First_Response.Gender.Male) { gender = "Mr"; }
+                else gender = "Mrs";
+
+                // Owner Line
+                string lineOwner = string.Empty; 
+                int rand = random.Next(1, 101);
+
+                if (rand <= Settings.ChanceOfPressingCharges)
+                {
+                    lineOwner = $"Him? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
+                }
+                else
+                {
+                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go {gender} {PlayerPersona.Surname}";
+                }
+
+                string[] dialogueSuspect =
+                {
+                    $"~b~You~s~: So, what are you doing here {timeOfDay}",
+                    "~y~Suspect~s~: Man, I'm only looking for some stuff!",
+                    "~b~You~s~: Do you have permission to be here?",
+                    "~y~Suspect~s~: No.. but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
+                    "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
+                    "~y~Suspect~s~: Can't you just call him?",
+                    "~b~You~s~: You know what? Sure.",
+                    "~y~Suspect~s~: Thanks.",
+                };
+
+                string[] dialogueOwner =
+                {
+                    $"~g~Owner~s~: Hello? Who's this?",
+                    $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
+                    "~g~Owner~s~: Again?! What did my son do now?",
+                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property...",
+                    "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
+                    "~g~Owner~s~: What's his name?",
+                    "~b~You~s~: His name is " + SuspectPersona.Forename,
+                    "~g~Owner~s~: " + lineOwner,
+                    "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
+                    $"~g~Owner~s~: You too {gender}... uhh",
+                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}",
+                    $"~g~Owner~s~: Okay, you too have a nice day.",
+                    "~m~Call Ended",
+                };
+
+                int lineSuspectCount = 0;
+                int lineOwnerCount = 0;
+
+                #region Suspect Dialogue
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsCuffed)
+                        {
+                            GameFiber.Sleep(5000);
+                            break;
+                        }
+                    }
+
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && !CompletedSuspectDialogue)
+                        {
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    Suspect.Tasks.Clear();
+
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                }
+
+                                DialogueStarted = true;
+
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                Game.DisplaySubtitle(dialogueSuspect[lineSuspectCount], 15000);
+                                if (!stopDialogue) { lineSuspectCount++; }
+
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineSuspectCount);
+
+                                if (lineSuspectCount == dialogueSuspect.Length)
+                                {
+                                    stopDialogue = true;
+                                    Game.LogTrivial("[Emergency Callouts]: Suspect Dialogue Ended");
+                                    CompletedSuspectDialogue = true;
+                                    DialogueStarted = false;
+                                    break;
+                                }
+
+                                GameFiber.Sleep(500);
+                            }
+                            else
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                }
+                            }
+                        }
+                    }
+                });
+                #endregion
+
+                #region Owner Dialogue
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
+                        {
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    GameFiber.Sleep(4000);
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
+                                    int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                    NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                                    MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                }
+
+                                DialogueStarted = true;
+
+                                Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
+                                if (!stopDialogue2) { lineOwnerCount++; }
+
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
+
+                                if (lineOwnerCount == dialogueOwner.Length)
+                                {
+                                    stopDialogue2 = true;
+                                    Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+                                    MainPlayer.Tasks.Clear();
+                                    //GameFiber.Sleep(1000);
+                                    if (Phone.Exists()) { Phone.Delete(); }
+                                    break;
+                                }
+
+                                GameFiber.Sleep(500);
+                            }
+                        }
+                    }
+                });
+                #endregion
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
         private void Scenario1() // Pursuit
         {
             #region Scenario 1
@@ -706,6 +893,9 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Hiding Position
                 RetrieveHidingPosition(Suspect);
+
+                // Set Dialogue Active
+                SuspectDialogue();
 
                 GameFiber.StartNew(delegate
                 {
@@ -847,7 +1037,7 @@ namespace EmergencyCallouts.Callouts
                                 if (line == dialogue.Length)
                                 {
                                     GameFiber.Sleep(3000);
-                                    Functions.StopCurrentCallout();
+                                    Handle.AdvancedEndingSequence();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -856,7 +1046,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
                                 }
                             }
                         }
@@ -1078,6 +1268,7 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
             if (Clipboard.Exists()) { Clipboard.Delete(); }
+            if (Phone.Exists()) { Phone.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();

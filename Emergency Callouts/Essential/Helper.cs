@@ -175,7 +175,7 @@ namespace EmergencyCallouts.Essential
             #region HintEndCallout
             internal static void HintEndCallout()
             {
-                Game.DisplayHelp($"You may end the callout with ~y~{Settings.EndCalloutKey}~s~.");
+                Game.DisplayHelp($"You may end the callout with the ~y~{Settings.EndCalloutKey}~s~ key.");
             }
             #endregion
         }
@@ -394,7 +394,7 @@ namespace EmergencyCallouts.Essential
                 {
                     int chance = random.Next(0, 101);
 
-                    if (chance <= Settings.ScarePedChance)
+                    if (chance <= Settings.ChanceOfScaringPed)
                     {
                         Game.DisplayHelp(Localization.EndNotificationAlertedPed, 5000);
                         Display.HideSubtitle();

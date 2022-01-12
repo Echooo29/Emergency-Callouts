@@ -139,11 +139,11 @@ namespace EmergencyCallouts.Callouts
                 bool stopDialogue = false;
 
                 string timeOfDay;
-                if (World.TimeOfDay.Hours <= 6 && World.TimeOfDay.Hours >= 12)
+                if (World.TimeOfDay.Hours >= 6 && World.TimeOfDay.Hours < 12)
                 {
                     timeOfDay = " so early?";
                 }
-                else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 18)
+                else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 21)
                 {
                     timeOfDay = " in the middle of the day?";
                 }
