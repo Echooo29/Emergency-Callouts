@@ -250,7 +250,6 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
@@ -364,7 +363,7 @@ namespace EmergencyCallouts.Callouts
         private void RetrieveVehiclePositions()
         {
             #region Positions
-            SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
+            SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), Vector3.Zero, 0f);
             SuspectVehicle.IsPersistent = true;
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
