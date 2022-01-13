@@ -537,7 +537,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect, Suspect2);
                 Handle.PreventPickupCrash(Suspect, Suspect2);
 
                 #region WithinRange

@@ -308,67 +308,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region AutomaticEnding
-            internal static void AutomaticEnding(Ped suspect)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsCuffed || suspect.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                }
-
-                if (MainPlayer.IsDead) { Functions.StopCurrentCallout(); }
-            }
-            internal static void AutomaticEnding(Ped suspect, Ped suspect2)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsCuffed && suspect2.IsCuffed)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsDead && suspect2.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsDead && suspect2.IsCuffed)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && suspect2.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                }
-            }
-
-            internal static void AutomaticEndingVictim(Ped suspect, Ped victim)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && victim.IsDead)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && victim.IsCuffed)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                }
-            }
-            #endregion
-
             #region AdvancedEndingSequence
             internal static void AdvancedEndingSequence()
             {

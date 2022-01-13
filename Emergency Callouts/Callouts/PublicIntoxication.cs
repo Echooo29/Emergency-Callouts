@@ -373,7 +373,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
                 Handle.PreventPickupCrash(Suspect);
 
                 #region PlayerArrived
