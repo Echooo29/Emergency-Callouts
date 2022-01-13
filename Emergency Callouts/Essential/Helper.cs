@@ -742,13 +742,6 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region EnableRoute
-        internal static void EnableRoute(this Blip blip)
-        {
-            if (blip.Exists()) { blip.IsRouteEnabled = true; }
-        }
-        #endregion
-
         #region SetIntoxicated
         internal static void SetIntoxicated(this Ped ped)
         {

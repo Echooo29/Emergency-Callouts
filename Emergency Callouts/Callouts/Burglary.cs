@@ -243,7 +243,7 @@ namespace EmergencyCallouts.Callouts
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
+                if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
                 // Suspect
                 Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
@@ -918,7 +918,7 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip = new Blip(Entrance);
 
                     // Enable Route
-                    EntranceBlip.EnableRoute();
+                    if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
