@@ -89,7 +89,7 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();
             SuspectBlip.Scale = (float)Settings.PedBlipScale;
-            SuspectBlip.Disable();
+            SuspectBlip.Alpha = 0f;
 
             Suspect.Tasks.Wander();
 
@@ -402,7 +402,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Remove SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -432,7 +432,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }

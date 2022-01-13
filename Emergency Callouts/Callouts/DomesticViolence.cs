@@ -231,7 +231,7 @@ namespace EmergencyCallouts.Callouts
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
                 VictimBlip.Scale = (float)Settings.PedBlipScale;
-                VictimBlip.Disable();
+                VictimBlip.Alpha = 0f;
 
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), Victim.GetOffsetPositionFront(1f), 0f);
@@ -243,8 +243,8 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
-                
+                SuspectBlip.Alpha = 0f;
+
                 // 50% Drunk Chance
                 int num = random.Next(2);
                 if (num == 1)
@@ -838,7 +838,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -855,7 +855,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable VictimBlip
-                    VictimBlip.Enable();
+                    if (VictimBlip.Exists()) { VictimBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -884,7 +884,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }

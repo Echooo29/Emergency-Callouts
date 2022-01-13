@@ -742,20 +742,6 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region Enable
-        internal static void Enable(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Alpha = 1f; }
-        }
-        #endregion
-
-        #region Disable
-        internal static void Disable(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Alpha = 0f; }
-        }
-        #endregion
-
         #region EnableRoute
         internal static void EnableRoute(this Blip blip)
         {

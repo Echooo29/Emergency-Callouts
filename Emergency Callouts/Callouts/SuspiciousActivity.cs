@@ -238,7 +238,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                SuspectBlip.Alpha = 0f;
 
                 // Suspect 2
                 Suspect2 = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
@@ -250,7 +250,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColorRed();
                 Suspect2Blip.Scale = (float)Settings.PedBlipScale;
-                Suspect2Blip.Disable();
+                Suspect2Blip.Alpha = 0f;
 
                 // SuspectVehicle
                 SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
@@ -589,7 +589,7 @@ namespace EmergencyCallouts.Callouts
                     PedFound = true;
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -606,7 +606,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable Suspect2Blip
-                    Suspect2Blip.Enable();
+                    if (Suspect2Blip.Exists()) { Suspect2Blip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -635,7 +635,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }

@@ -397,7 +397,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                SuspectBlip.Alpha = 0f;
 
                 CalloutHandler();
             }
@@ -500,7 +500,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
@@ -513,7 +513,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
@@ -528,7 +528,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
                 Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
@@ -541,7 +541,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
@@ -554,7 +554,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
                 Suspect.Position = LoadingDockManagerPositions[ManagerPositionNum];
@@ -567,7 +567,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
                 Suspect.Position = BarnManagerPositions[ManagerPositionNum];
@@ -954,7 +954,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 // Clipboard
                 int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.LeftPhHand);
@@ -1197,7 +1197,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -1225,7 +1225,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
