@@ -839,19 +839,6 @@ namespace EmergencyCallouts.Callouts
                     // Delete Nearby Trailers
                     Handle.DeleteNearbyTrailers(Center);
 
-                    // Delete Barriers
-                    //if (!BarriersDeleted && CalloutPosition == CalloutPositions[0]!!)
-                    //{
-                    //    foreach (Rage.Object obj in World.GetAllObjects())
-                    //    {
-                    //        if (obj.Position.DistanceTo(new Vector3(-708.7535f, -1382.413f, 5.281574f)) <= 15f && (obj.Model.Name == "0x18396ad2" || obj.Model.Name == "0x0e76574c"))
-                    //        {
-                    //            if (obj.Exists()) { obj.Delete(); }
-                    //            GameFiber.Sleep(500);
-                    //            BarriersDeleted = true;
-                    //        }
-                    //    }
-                    //}
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
                 #endregion
