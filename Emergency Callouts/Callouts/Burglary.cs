@@ -564,12 +564,14 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(15000);
                                     Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
+
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
-                                    GameFiber.Sleep(1000);
+
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
                                     CheckedForDamage = true;
                                     DamageFound = true;
                                 }
@@ -577,12 +579,14 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(15000);
                                     Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
+
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
-                                    GameFiber.Sleep(1000);
+
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
                                     CheckedForDamage = true;
                                     DamageFound = false;
                                 }
@@ -825,7 +829,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 //Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventPickupCrash(Suspect);
-                if (Suspect && Suspect.IsDead) { Handle.AdvancedEndingSequence(); }
+                //if (Suspect && Suspect.IsDead) { Handle.AdvancedEndingSequence(); }
                 //if (Suspect && Suspect.IsCuffed && CheckedForDamage && DialogueEnded) { Handle.AdvancedEndingSequence(); }
 
                 #region WithinRange
