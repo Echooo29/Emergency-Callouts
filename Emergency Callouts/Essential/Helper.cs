@@ -78,7 +78,7 @@ namespace EmergencyCallouts.Essential
                     "u_m_y_antonb", "g_m_m_chigoon_02", "csb_chin_goon", "u_m_y_chip", "ig_claypain",
                     "g_m_m_armboss_01", "s_m_m_cntrybar_01", "csb_customer", "a_m_y_cyclist_01", "ig_dale",
                     "g_m_m_armgoon_01", "ig_davenorton", "s_m_y_dealer_01", "ig_devin", "ig_dom",
-                    "g_m_y_armgoon_02", "s_m_y_doorman_01", "a_m_y_downtown_01", "ig_drfriedlander", "a_m_m_eastsa_01",
+                    "g_m_y_armgoon_02", "a_m_y_downtown_01", "ig_drfriedlander", "a_m_m_eastsa_01",
                     "g_m_m_armlieut_01", "a_m_m_eastsa_02", "a_m_y_eastsa_02", "u_m_m_edtoh", "ig_fabien",
                     "s_m_m_autoshop_01", "g_m_y_famca_01", "g_m_y_famdnf_01", "g_m_y_famfor_01", "a_m_m_farmer_01",
                     "ig_money", "a_m_m_fatlatin_01", "ig_lazlow", "s_m_m_hairdress_01", "a_m_o_ktown_01",
