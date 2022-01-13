@@ -21,9 +21,9 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool StopChecking;
         bool WithinRange;
-        bool BarriersDeleted;
         bool VehicleUsed;
         bool DialogueStarted;
+        bool DialogueEnded;
         bool FirstTime;
         bool CheckedForDamage;
         bool Damage;
@@ -478,6 +478,7 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                         Handle.AdvancedEndingSequence();
+                                        DialogueEnded = true;
                                         break;
                                     }
 
@@ -826,6 +827,8 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventPickupCrash(Suspect);
+                if (Suspect && Suspect.IsDead) { Handle.AdvancedEndingSequence(); }
+                if (Suspect && Suspect.IsCuffed && DialogueEnded) { Handle.AdvancedEndingSequence(); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
