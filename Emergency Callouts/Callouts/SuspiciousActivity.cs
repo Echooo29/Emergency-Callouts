@@ -231,7 +231,8 @@ namespace EmergencyCallouts.Callouts
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
                 Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -242,7 +243,8 @@ namespace EmergencyCallouts.Callouts
                 // Suspect 2
                 Suspect2 = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
                 Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
-                Suspect2.SetDefaults();
+                Suspect2.IsPersistent = true;
+                Suspect2.BlockPermanentEvents = true;
                 Log.Creation(Suspect2, PedCategory.Suspect2);
 
                 Suspect2Blip = Suspect2.AttachBlip();

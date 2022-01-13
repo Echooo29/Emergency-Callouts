@@ -831,17 +831,6 @@ namespace EmergencyCallouts.Essential
         }
         #endregion
 
-        #region SetDefaults
-        internal static void SetDefaults(this Ped ped)
-        {
-            if (ped.Exists())
-            {
-                ped.BlockPermanentEvents = true;
-                ped.IsPersistent = true;
-            }
-        }
-        #endregion
-
         #region SetIntoxicated
         internal static void SetIntoxicated(this Ped ped)
         {

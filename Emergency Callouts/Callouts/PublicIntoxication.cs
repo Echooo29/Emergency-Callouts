@@ -81,7 +81,8 @@ namespace EmergencyCallouts.Callouts
             // Suspect
             Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
-            Suspect.SetDefaults();
+            Suspect.IsPersistent = true;
+            Suspect.BlockPermanentEvents = true;
             Suspect.SetIntoxicated();
             Log.Creation(Suspect, PedCategory.Suspect);
 

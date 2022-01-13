@@ -248,7 +248,8 @@ namespace EmergencyCallouts.Callouts
                 // Suspect
                 Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
                 Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();

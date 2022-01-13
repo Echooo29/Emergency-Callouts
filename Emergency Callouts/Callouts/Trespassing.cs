@@ -390,7 +390,8 @@ namespace EmergencyCallouts.Callouts
                 // Suspect
                 Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
                 Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
@@ -495,7 +496,6 @@ namespace EmergencyCallouts.Callouts
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect = new Ped("ig_lifeinvad_01", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -509,7 +509,6 @@ namespace EmergencyCallouts.Callouts
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 Suspect = new Ped("ig_chef", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -523,7 +522,8 @@ namespace EmergencyCallouts.Callouts
             else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
                 Suspect = new Ped("mp_m_boatstaff_01", CalloutPosition, 0f);
-                Suspect.SetDefaults();
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -537,7 +537,6 @@ namespace EmergencyCallouts.Callouts
             else if (CalloutPosition == CalloutPositions[3]) // McKenzie Field
             {
                 Suspect = new Ped("player_two", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -551,7 +550,6 @@ namespace EmergencyCallouts.Callouts
             else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
             {
                 Suspect = new Ped("ig_barry", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -565,7 +563,6 @@ namespace EmergencyCallouts.Callouts
             else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
             {
                 Suspect = new Ped("csb_oscar", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -576,6 +573,9 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = BarnManagerPositions[ManagerPositionNum];
                 Suspect.Heading = BarnManagerHeadings[ManagerPositionNum];
             }
+
+            Suspect.IsPersistent = true;
+            Suspect.BlockPermanentEvents = true;
 
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             #endregion

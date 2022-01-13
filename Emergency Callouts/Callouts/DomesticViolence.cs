@@ -223,7 +223,8 @@ namespace EmergencyCallouts.Callouts
                 // Victim
                 Victim = new Ped(Entity.GetRandomFemaleModel(), Vector3.Zero, 0f);
                 VictimPersona = Functions.GetPersonaForPed(Victim);
-                Victim.SetDefaults();
+                Victim.IsPersistent = true;
+                Victim.BlockPermanentEvents = true;
                 Victim.SetInjured(135);
                 Log.Creation(Victim, PedCategory.Victim);
 
@@ -235,7 +236,8 @@ namespace EmergencyCallouts.Callouts
                 // Suspect
                 Suspect = new Ped(Entity.GetRandomMaleModel(), Victim.GetOffsetPositionFront(1f), 0f);
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
                 Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
