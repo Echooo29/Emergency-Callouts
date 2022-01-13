@@ -1156,7 +1156,8 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
-                
+                Handle.SpookCheck(Entrance, 10f);
+
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
@@ -1179,9 +1180,6 @@ namespace EmergencyCallouts.Callouts
                     SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
-
-                    // SpookCheck
-                    Handle.SpookCheck(Entrance, 10f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
