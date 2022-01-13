@@ -226,6 +226,7 @@ namespace EmergencyCallouts.Callouts
                 Victim.IsPersistent = true;
                 Victim.BlockPermanentEvents = true;
                 Victim.SetInjured(135);
+                Log.Creation(Victim, PedCategory.Victim);
 
                 VictimBlip = Victim.AttachBlip();
                 VictimBlip.SetColorOrange();
@@ -237,6 +238,7 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
+                Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();

@@ -84,6 +84,7 @@ namespace EmergencyCallouts.Callouts
             Suspect.IsPersistent = true;
             Suspect.BlockPermanentEvents = true;
             Suspect.SetIntoxicated();
+            Log.Creation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
             SuspectBlip.SetColorYellow();

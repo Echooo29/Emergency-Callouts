@@ -221,6 +221,17 @@ namespace EmergencyCallouts.Essential
                 }
             }
             #endregion
+
+            #region Creation
+            internal static void Creation(Ped ped, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory} ({ped.Model.Name}) at {ped.Position}");
+            }
+            internal static void Creation(Vehicle vehicle, Enum pedCategory)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created {pedCategory}Vehicle ({vehicle.Model.Name}) at {vehicle.Position}");
+            }
+            #endregion
         }
 
         internal static class Play
