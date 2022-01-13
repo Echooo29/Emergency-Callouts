@@ -392,7 +392,6 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();

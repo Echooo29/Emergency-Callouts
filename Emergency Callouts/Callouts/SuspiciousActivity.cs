@@ -233,7 +233,6 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
@@ -245,7 +244,6 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
                 Suspect2.IsPersistent = true;
                 Suspect2.BlockPermanentEvents = true;
-                Log.Creation(Suspect2, PedCategory.Suspect2);
 
                 Suspect2Blip = Suspect2.AttachBlip();
                 Suspect2Blip.SetColorRed();
@@ -255,7 +253,6 @@ namespace EmergencyCallouts.Callouts
                 // SuspectVehicle
                 SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
                 SuspectVehicle.IsPersistent = true;
-                Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
                 vehDoors = SuspectVehicle.GetDoors();
                 vehDoors[vehDoors.Length - 1].Open(false);
@@ -263,7 +260,6 @@ namespace EmergencyCallouts.Callouts
                 // Suspect2Vehicle
                 Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
                 Suspect2Vehicle.IsPersistent = true;
-                Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
 
                 veh2Doors = Suspect2Vehicle.GetDoors();
                 veh2Doors[veh2Doors.Length - 1].Open(false);

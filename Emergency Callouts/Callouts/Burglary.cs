@@ -250,7 +250,6 @@ namespace EmergencyCallouts.Callouts
                 SuspectPersona = Functions.GetPersonaForPed(Suspect);
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
-                Log.Creation(Suspect, PedCategory.Suspect);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
@@ -355,9 +354,6 @@ namespace EmergencyCallouts.Callouts
 
             // Lockpick Animation
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
-
-            // Log Creation
-            Log.Creation(Suspect, PedCategory.Suspect);
             #endregion
         }
 
@@ -366,7 +362,6 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
             SuspectVehicle.IsPersistent = true;
-            Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
             if (CalloutPosition == CalloutPositions[0]) // Mirror Park
             {
