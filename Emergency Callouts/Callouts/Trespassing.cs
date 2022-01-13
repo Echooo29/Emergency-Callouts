@@ -697,7 +697,7 @@ namespace EmergencyCallouts.Callouts
 
                 if (rand <= Settings.ChanceOfPressingCharges)
                 {
-                    lineOwner = $"Him? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
+                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
                 }
                 else
                 {
