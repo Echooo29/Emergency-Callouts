@@ -56,7 +56,7 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3[] CalloutPositions =
         {
             new Vector3(916.261f, -623.7192f, 58.052020f),  // Mirror Park
-            new Vector3(-663.6192f, -1358.232f, 10.4971f),  // La Puerta
+            new Vector3(-835.1504f, -1275.611f, 4.45892f),  // La Puerta
             new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
             new Vector3(2652.853f, 4308.485f, 44.393880f),  // Grapeseed
             new Vector3(1207.165f, 2694.605f, 37.823690f),  // Harmony
@@ -85,14 +85,20 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] LaPuertaBreakInPositions =
         {
-            new Vector3(-759.6483f, -1515.452f, 4.976925f), // Building Door
-            new Vector3(-721.8896f, -1513.393f, 5.000525f), // Building Door 2
+            new Vector3(-911.7646f, -1269.634f, 5.22196f),  // Maintenance Entrance
+            new Vector3(-880.3901f, -1300.779f, 6.200158f), // Maintenance Entrance 2
+            new Vector3(-914.1393f, -1312.992f, 6.200161f), // Maintenance Entrance 3
+            new Vector3(-925.3542f, -1307.262f, 6.200159f), // Appartement 1
+            new Vector3(-902.8276f, -1298.961f, 9.700095f), // Appartement 2
         };
 
         readonly float[] LaPuertaBreakInHeadings =
         {
-            174.41f,
-            104.47f,
+            285.27f,
+            113.51f,
+            112.19f,
+            205.55f,
+            197.67f,
         };
         #endregion
 
@@ -208,8 +214,8 @@ namespace EmergencyCallouts.Callouts
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // La Puerta
                 {
-                    Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
-                    Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
+                    Center = new Vector3(-923.5932f, -1287.796f, 5.278366f);
+                    Entrance = new Vector3(-835.1504f, -1275.611f, 4.458926f);
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
@@ -411,9 +417,7 @@ namespace EmergencyCallouts.Callouts
             #region Dialogue
             try
             {
-                bool stopDialogue = false;
-
-                if (DamageFound == true)
+                if (DamageFound)
                 {
                     DamageLine = "Anyway, you also left some dagage behind.";
                     DamageLine2 = "Bro that was already there when I came here!";
