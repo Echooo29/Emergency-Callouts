@@ -568,7 +568,7 @@ namespace EmergencyCallouts.Callouts
                     Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
 
                     // Disable route
-                    EntranceBlip.DisableRoute();
+                    if (EntranceBlip.Exists()) { EntranceBlip.DisableRoute(); }
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
