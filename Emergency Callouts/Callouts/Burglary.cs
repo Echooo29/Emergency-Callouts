@@ -21,19 +21,35 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool StopChecking;
         bool WithinRange;
-        bool VehicleUsed;
+        bool VehicleIsUsed;
+        bool FirstTime;
         bool DialogueStarted;
         bool DialogueEnded;
-        bool FirstTime;
         bool CheckedForDamage;
-        bool Damage;
+        bool DamageFound;
 
         string DamageLine;
         string DamageLine2;
 
+        float DamagedPropertyHeading;
+
         Vector3 Entrance;
         Vector3 Center;
         Vector3 DamagedProperty;
+
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
+
+        Vehicle SuspectVehicle;
+
+        Ped Suspect;
+
+        Persona SuspectPersona;
+
+        Blip SuspectBlip;
+        Blip EntranceBlip;
+        Blip SearchArea;
+        Blip DamagedPropertyBlip;
 
         // Main
         #region Positions
@@ -147,22 +163,6 @@ namespace EmergencyCallouts.Callouts
             216.67f,
         };
         #endregion
-
-        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
-        readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
-
-        Vehicle SuspectVehicle;
-
-        Ped Suspect;
-
-        Persona SuspectPersona;
-
-        Blip SuspectBlip;
-        Blip EntranceBlip;
-        Blip SearchArea;
-        Blip DamagedPropertyBlip;
-
-        float DamagedPropertyHeading;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -403,6 +403,8 @@ namespace EmergencyCallouts.Callouts
             vehDoors[2].Open(false);
             vehDoors[3].Open(false);
             #endregion
+
+            VehicleIsUsed = true;
         }
 
         private void Dialogue()
@@ -412,7 +414,7 @@ namespace EmergencyCallouts.Callouts
             {
                 bool stopDialogue = false;
 
-                if (Damage == true)
+                if (DamageFound == true)
                 {
                     DamageLine = "Anyway, you also left some dagage behind.";
                     DamageLine2 = "Bro that was already there when I came here!";
@@ -507,7 +509,7 @@ namespace EmergencyCallouts.Callouts
             {
                 string property;
 
-                if (VehicleUsed)
+                if (VehicleIsUsed)
                 {
                     property = Localization.CheckForDamageVehicle;
                 }
@@ -570,7 +572,7 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                     CheckedForDamage = true;
-                                    Damage = true;
+                                    DamageFound = true;
                                 }
                                 else // No Damage
                                 {
@@ -583,7 +585,7 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
                                     CheckedForDamage = true;
-                                    Damage = false;
+                                    DamageFound = false;
                                 }
                                 break;
                             }
@@ -766,9 +768,6 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Vehicle Positions
                 RetrieveVehiclePositions();
 
-                // Set VehicleUsed
-                VehicleUsed = true;
-
                 // Suspect Resistance Chance
                 Functions.SetPedResistanceChance(Suspect, 40f);
 
@@ -825,10 +824,10 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.SpookCheck(Entrance, 10f);
+                //Handle.SpookCheck(Entrance, 10f);
                 Handle.PreventPickupCrash(Suspect);
                 if (Suspect && Suspect.IsDead) { Handle.AdvancedEndingSequence(); }
-                if (Suspect && Suspect.IsCuffed && DialogueEnded) { Handle.AdvancedEndingSequence(); }
+                if (Suspect && Suspect.IsCuffed && CheckedForDamage && DialogueEnded) { Handle.AdvancedEndingSequence(); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
