@@ -12,7 +12,6 @@ namespace EmergencyCallouts
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
 
             Game.LogTrivial("[Emergency Callouts]: Successfully Loaded v" + Project.LocalVersion);
-            Game.LogTrivial("[Emergency Callouts]: Compiled at " + Project.BuildDate);
         }
 
         public override void Finally()
