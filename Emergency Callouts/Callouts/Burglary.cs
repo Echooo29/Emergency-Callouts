@@ -844,9 +844,6 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
-                    // Remove Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect, 40f);
-
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle(Localization.BurglarySubtitle, 10000);
 
