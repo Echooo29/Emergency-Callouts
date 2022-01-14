@@ -18,7 +18,7 @@ namespace EmergencyCallouts.Essential
 
         internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
 
-        internal static DateTime DateCreated => File.GetCreationTime("Emergency Callouts.dll");
+        internal static DateTime BuildDate = File.GetLastWriteTime("Emergency Callouts.dll");
 
         internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini";
 
