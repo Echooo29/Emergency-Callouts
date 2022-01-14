@@ -724,11 +724,11 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property...",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
-                    "~b~You~s~: His name is " + SuspectPersona.Forename,
+                    $"~b~You~s~: His name is {SuspectPersona.Forename}.",
                     "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                    $"~g~Owner~s~: You too {gender}... uhh",
-                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}",
+                    $"~g~Owner~s~: You too {gender}... uhh...",
+                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}.",
                     $"~g~Owner~s~: Okay, you too have a nice day.",
                     "~m~Call Ended",
                 };
@@ -778,6 +778,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     stopDialogue = true;
                                     Game.LogTrivial("[Emergency Callouts]: Suspect Dialogue Ended");
+
                                     CompletedSuspectDialogue = true;
                                     DialogueStarted = false;
                                     break;
@@ -812,26 +813,28 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     GameFiber.Sleep(4000);
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
+
                                     int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
                                     NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                                     MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                    DialogueStarted = true;
                                 }
-
-                                DialogueStarted = true;
-
-                                Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
-                                if (!stopDialogue2) { lineOwnerCount++; }
-
-                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
-
-                                if (lineOwnerCount == dialogueOwner.Length)
+                                else
                                 {
-                                    stopDialogue2 = true;
-                                    Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
-                                    MainPlayer.Tasks.Clear();
-                                    //GameFiber.Sleep(1000);
-                                    if (Phone.Exists()) { Phone.Delete(); }
-                                    break;
+                                    Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
+                                    if (!stopDialogue2) { lineOwnerCount++; }
+
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
+
+                                    if (lineOwnerCount == dialogueOwner.Length)
+                                    {
+                                        stopDialogue2 = true;
+                                        Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+
+                                        MainPlayer.Tasks.Clear();
+                                        if (Phone.Exists()) { Phone.Delete(); }
+                                        break;
+                                    }
                                 }
 
                                 GameFiber.Sleep(500);
