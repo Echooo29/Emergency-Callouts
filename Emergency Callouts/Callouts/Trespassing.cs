@@ -673,11 +673,11 @@ namespace EmergencyCallouts.Callouts
 
                 // Get Time Of Day Line
                 string timeOfDay;
-                if (World.TimeOfDay.Hours >= 6 && World.TimeOfDay.Hours < 12)
+                if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
                 {
                     timeOfDay = "so early?";
                 }
-                else if (World.TimeOfDay.Hours >= 12 && World.TimeOfDay.Hours <= 21)
+                else if (World.TimeOfDay.TotalHours >= 12 && World.TimeOfDay.TotalHours <= 21)
                 {
                     timeOfDay = "in the middle of the day?";
                 }
@@ -1170,9 +1170,6 @@ namespace EmergencyCallouts.Callouts
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle(Localization.TrespassingSubtitle, 10000);
-
-                    // Disable route
-                    if (EntranceBlip.Exists()) { if (EntranceBlip.Exists()) { EntranceBlip.DisableRoute(); } }
                     
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }

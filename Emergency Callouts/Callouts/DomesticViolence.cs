@@ -814,9 +814,6 @@ namespace EmergencyCallouts.Callouts
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle(Localization.DomesticViolenceSubtitle, 10000);
 
-                    // Disable route
-                    if (EntranceBlip.Exists()) { EntranceBlip.DisableRoute(); }
-
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
