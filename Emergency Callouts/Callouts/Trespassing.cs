@@ -20,6 +20,7 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
         bool StopChecking;
+        bool CheckedForELS = false;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -777,7 +778,7 @@ namespace EmergencyCallouts.Callouts
                                 if (lineSuspectCount == dialogueSuspect.Length)
                                 {
                                     stopDialogue = true;
-                                    Game.LogTrivial("[Emergency Callouts]: Suspect Dialogue Ended");
+                                    Game.LogTrivial("[Emergency Callouts]: Suspect dialogue ended");
 
                                     CompletedSuspectDialogue = true;
                                     DialogueStarted = false;
@@ -1160,7 +1161,6 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
-                Handle.SpookCheck(Entrance, 10f);
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)

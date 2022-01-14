@@ -326,25 +326,6 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region SpookCheck
-            internal static void SpookCheck(Vector3 entrance, float distanceFromEntrance)
-            {
-                if (MainPlayer.Position.DistanceTo(entrance) <= distanceFromEntrance && MainPlayer.CurrentVehicle.IsSirenOn && MainPlayer.IsInAnyPoliceVehicle)
-                {
-                    int chance = random.Next(0, 101);
-
-                    if (chance <= Settings.ChanceOfScaringPed)
-                    {
-                        Game.DisplayHelp(Localization.EndNotificationAlertedPed, 5000);
-                        Display.HideSubtitle();
-                        GameFiber.Sleep(5000);
-                        Functions.StopCurrentCallout();
-                        Game.LogTrivial("[Emergency Callouts]: Scared ped, ended callout");
-                    }
-                }
-            }
-            #endregion
-
             #region BlockPermanentEventsRadius
             internal static void BlockPermanentEventsRadius(Vector3 location, float radius)
             {

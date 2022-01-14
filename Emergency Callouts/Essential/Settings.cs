@@ -22,8 +22,7 @@ namespace EmergencyCallouts.Essential
         internal static Keys EndCalloutKey = Keys.End;
 
         // Chances
-        internal static int ChanceOfScaringPed = 50;
-        internal static int ChanceOfPropertyDamage = 50;
+        internal static int ChanceOfPropertyDamage = 75;
         internal static int ChanceOfPressingCharges = 50;
 
         // Back end
@@ -54,7 +53,6 @@ namespace EmergencyCallouts.Essential
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Chances
-            ChanceOfScaringPed = iniFile.ReadInt32("Chances", "ChanceOfScaringPed", ChanceOfScaringPed);
             ChanceOfPropertyDamage = iniFile.ReadInt32("Chances", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
             ChanceOfPressingCharges = iniFile.ReadInt32("Chances", "ChanceOfPressingCharges", ChanceOfPressingCharges);
 
