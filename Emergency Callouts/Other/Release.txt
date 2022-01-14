@@ -21,8 +21,9 @@ Update Changelog.txt
 
 [DISCORD]
 Update #Changelog
+Remove Early Access files from old version
 
-[GITHUB]
+[GITHUB] 
 Merge Dev to Master branch
 
 [PAGE]
