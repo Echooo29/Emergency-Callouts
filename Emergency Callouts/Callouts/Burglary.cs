@@ -26,7 +26,6 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool DialogueEnded;
         bool CheckedForDamage;
-        bool DamageFound;
 
         string DamageLine;
         string DamageLine2;
@@ -89,7 +88,6 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-880.3901f, -1300.779f, 6.200158f), // Maintenance Entrance 2
             new Vector3(-914.1393f, -1312.992f, 6.200161f), // Maintenance Entrance 3
             new Vector3(-925.3542f, -1307.262f, 6.200159f), // Appartement 1
-            new Vector3(-902.8276f, -1298.961f, 9.700095f), // Appartement 2
         };
 
         readonly float[] LaPuertaBreakInHeadings =
@@ -98,7 +96,6 @@ namespace EmergencyCallouts.Callouts
             113.51f,
             112.19f,
             205.55f,
-            197.67f,
         };
         #endregion
 
@@ -380,8 +377,8 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
-                SuspectVehicle.Position = new Vector3(-723.9453f, -1491.7f, 4.61949f);
-                SuspectVehicle.Heading = 347.67f;
+                SuspectVehicle.Position = new Vector3(-919.3269f, -1289.287f, 4.756772f);
+                SuspectVehicle.Heading = 290.89f;
             }
             else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
@@ -417,16 +414,7 @@ namespace EmergencyCallouts.Callouts
             #region Dialogue
             try
             {
-                if (DamageFound)
-                {
-                    DamageLine = "Anyway, you also left some dagage behind.";
-                    DamageLine2 = "Bro that was already there when I came here!";
-                }
-                else
-                {
-                    DamageLine = "Luckily for you I didn't find any damage.";
-                    DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
-                }
+                int line = 0;
 
                 string[] dialogue =
                 {
@@ -442,8 +430,6 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: Not a problem.",
                     "~m~dialogue ended",
                 };
-
-                int line = 0;
 
                 GameFiber.StartNew(delegate
                 {
@@ -545,7 +531,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f)
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage)
                         {
                             Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
 
@@ -576,8 +562,10 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
 
+                                    DamageLine = "Anyway, you also left some dagage behind.";
+                                    DamageLine2 = "Bro that was already there when I came here!";
+
                                     CheckedForDamage = true;
-                                    DamageFound = true;
                                 }
                                 else // No Damage
                                 {
@@ -591,9 +579,13 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
 
+                                    DamageLine = "Luckily for you I didn't find any damage.";
+                                    DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
+
                                     CheckedForDamage = true;
-                                    DamageFound = false;
                                 }
+
+                                Dialogue();
                                 break;
                             }
                         }
@@ -616,7 +608,6 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
-                Dialogue();
 
                 GameFiber.StartNew(delegate
                 {
@@ -702,7 +693,6 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
-                Dialogue();
 
                 GameFiber.StartNew(delegate
                 {
@@ -714,7 +704,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             // Clipping Through Wall Fix
                             Suspect.Tasks.ClearImmediately();
-                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, DamagedPropertyHeading - 180, 0f, 30);
+                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
                             GameFiber.Sleep(30);
 
                             // Put Suspect's Hands up
@@ -741,7 +731,6 @@ namespace EmergencyCallouts.Callouts
                 RetrievePedPositions();
 
                 CheckForDamage();
-                Dialogue();
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
@@ -854,6 +843,9 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
+
+                    // Remove Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, 40f);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle(Localization.BurglarySubtitle, 10000);
