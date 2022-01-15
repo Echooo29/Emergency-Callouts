@@ -6,8 +6,8 @@ Build in release mode
 Push
 
 [EMERGENCY CALLOUTS ZIP]
-Add the secure .dll to the zip
-Add the vanilla .ini to the zip
+Add the .dll to the zip
+Add the .ini to the zip and check for default settings
 Add possibly new audio files
 Update comment version
 
