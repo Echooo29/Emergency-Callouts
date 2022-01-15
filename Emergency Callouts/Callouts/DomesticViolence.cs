@@ -272,19 +272,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario2();
+                        Scenario1();
                         break;
                     case 2:
                         Scenario2();
                         break;
                     case 3:
-                        Scenario2();
+                        Scenario3();
                         break;
                     case 4:
-                        Scenario2();
+                        Scenario4();
                         break;
                     case 5:
-                        Scenario2();
+                        Scenario5();
                         break;
                 }
             }
@@ -797,19 +797,6 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect, Victim);
-
-                //#region WithinRange
-                //if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
-                //{
-                //    // Set WithinRange
-                //    WithinRange = true;
-
-                //    // Delete Nearby Peds
-                //    Handle.DeleteNearbyPeds(Suspect, 20f);
-
-                //    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
-                //}
-                //#endregion
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
