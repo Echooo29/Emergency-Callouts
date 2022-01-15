@@ -8,6 +8,7 @@ using static EmergencyCallouts.Essential.Helper;
 using System.Net;
 using LSPD_First_Response.Engine.Scripting.Entities;
 using System.Linq;
+using System.IO;
 
 namespace EmergencyCallouts.Essential
 {
@@ -17,7 +18,9 @@ namespace EmergencyCallouts.Essential
 
         internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
 
-        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini"; 
+        internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini";
+
+        internal static string LocalizationPath => "Plugins/LSPDFR/Emergency Callouts/Localization.ini";
     }
 
 
@@ -46,15 +49,6 @@ namespace EmergencyCallouts.Essential
         #endregion
 
         #region Enumerations
-        internal enum DescriptionCategories
-        {
-            Civilian,
-            Suspect,
-            Victim,
-            Officer,
-            Vehicle,
-        }
-
         internal enum PedCategory
         {
             Suspect,
@@ -78,22 +72,22 @@ namespace EmergencyCallouts.Essential
                     "a_m_m_afriamer_01", "ig_barry", "u_m_y_baygor", "a_m_o_beach_01", "a_m_y_beach_01",
                     "u_m_m_aldinapoli", "a_m_y_beach_02", "a_m_y_beachvesp_01", "a_m_y_beachvesp_02", "ig_benny",
                     "s_m_y_ammucity_01", "ig_beverly", "a_m_y_bevhills_01", "a_m_m_bevhills_02", "a_m_y_bevhills_02",
-                    "ig_andreas", "cs_carbuyer", "s_m_o_busker_01", "ig_car3guy1", "g_m_m_chigoon_01",
+                    "cs_carbuyer", "s_m_o_busker_01", "ig_car3guy1", "g_m_m_chigoon_01", "ig_jimmyboston",
                     "u_m_y_antonb", "g_m_m_chigoon_02", "csb_chin_goon", "u_m_y_chip", "ig_claypain",
                     "g_m_m_armboss_01", "s_m_m_cntrybar_01", "csb_customer", "a_m_y_cyclist_01", "ig_dale",
                     "g_m_m_armgoon_01", "ig_davenorton", "s_m_y_dealer_01", "ig_devin", "ig_dom",
-                    "g_m_y_armgoon_02", "s_m_y_doorman_01", "a_m_y_downtown_01", "ig_drfriedlander", "a_m_m_eastsa_01",
+                    "g_m_y_armgoon_02", "a_m_y_downtown_01", "ig_drfriedlander", "a_m_m_eastsa_01",
                     "g_m_m_armlieut_01", "a_m_m_eastsa_02", "a_m_y_eastsa_02", "u_m_m_edtoh", "ig_fabien",
                     "s_m_m_autoshop_01", "g_m_y_famca_01", "g_m_y_famdnf_01", "g_m_y_famfor_01", "a_m_m_farmer_01",
-                    "ig_money", "a_m_m_fatlatin_01", "ig_fbisuit_01", "u_m_y_fibmugger_01",
+                    "ig_money", "a_m_m_fatlatin_01", "ig_lazlow", "s_m_m_hairdress_01", "a_m_o_ktown_01",
                     "g_m_y_azteca_01", "u_m_o_finguru_01", "csb_fos_rep", "player_one", "ig_g",
                     "g_m_y_ballaeast_01", "csb_g", "a_m_m_genfat_01", "a_m_m_genfat_02", "a_m_y_genstreet_01",
-                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "a_m_m_golfer_01", "s_m_m_hairdress_01",
+                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "a_m_m_golfer_01", 
                     "ig_ballasog", "s_m_m_highsec_02", "a_m_y_hipster_02", "csb_hugh", "a_m_m_indian_01",
-                    "g_m_y_ballasout_01", "ig_jay_norris", "u_m_m_jesus_01", "u_m_m_jewelsec_01", "ig_jimmyboston",
+                    "g_m_y_ballasout_01", "ig_jay_norris", "u_m_m_jesus_01", "u_m_m_jewelsec_01", 
                     "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman", "ig_jimmydisanto",
-                    "ig_bankman", "cs_johnnyklebitz", "g_m_y_korean_01", "g_m_y_korlieut_01", "a_m_o_ktown_01",
-                    "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", "ig_lazlow",
+                    "ig_bankman", "cs_johnnyklebitz", "g_m_y_korean_01", "g_m_y_korlieut_01", 
+                    "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", 
                 };
 
                 int num = random.Next(maleModels.Length);
@@ -107,7 +101,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] femaleModels =
                 {
-                    "ig_abigail", "ig_amandatownley", "csb_anita", "ig_ashley", "s_f_y_bartender_01",
+                    "ig_abigail", "ig_amandatownley", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01",
                     "a_f_m_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
                     "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane",
                     "ig_denise", "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02",
@@ -124,7 +118,7 @@ namespace EmergencyCallouts.Essential
                     "ig_tanisha", "a_f_y_tennis_01", "ig_tonya", "a_f_y_tourist_01", "a_f_y_tourist_02",
                     "g_f_y_vagos_01", "a_f_y_vinewood_01", "a_f_y_vinewood_02", "a_f_y_vinewood_03",
                     "a_f_y_vinewood_04", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
-                    "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", "ig_isldj_04_d_01",
+                    "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", 
                     "s_f_y_beachbarstaff_01", "ig_patricia_02"
                 };
 
@@ -141,21 +135,21 @@ namespace EmergencyCallouts.Essential
             #region AcceptNotification
             internal static void AcceptNotification(string details)
             {
-                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", details);
+                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.AcceptNotificationSubtitle, details);
             }
             #endregion
 
             #region AcceptSubtitle
             internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 20000);
+                Game.DisplaySubtitle($"{Localization.AcceptSubtitleIntro} ~r~{calloutMessage}~s~ {Localization.AcceptSubtitleAt} ~y~{calloutArea}~s~.", 10000);
             }
             #endregion
 
             #region OutdatedReminder
             internal static void OutdatedReminder()
             {
-                if (UpdateChecker.OnlineVersion != Project.LocalVersion && !UpdateChecker.EarlyAccess)
+                if (UpdateChecker.OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess)
                 {
                     Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{UpdateChecker.OnlineVersion} ~s~available for you!");
                 }
@@ -165,14 +159,7 @@ namespace EmergencyCallouts.Essential
             #region EndNotification
             internal static void EndNotification()
             {
-                Game.DisplayNotification("dia_police", "dia_police", Settings.DipatchName, $"~{Settings.SubtitleColor}~Notification", "Situation is under control.");
-            }
-            #endregion
-
-            #region HintEndCallout
-            internal static void HintEndCallout()
-            {
-                Game.DisplayHelp("Press ~y~End~s~ to end the callout.", 20000);
+                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.EndNotificationSubtitle, Localization.EndNotificationText);
             }
             #endregion
 
@@ -180,6 +167,13 @@ namespace EmergencyCallouts.Essential
             internal static void HideSubtitle()
             {
                 Game.DisplaySubtitle(string.Empty);
+            }
+            #endregion
+
+            #region HintEndCallout
+            internal static void HintEndCallout()
+            {
+                Game.DisplayHelp($"You may end the callout with the ~y~{Settings.EndCalloutKey}~s~ key.");
             }
             #endregion
         }
@@ -209,16 +203,19 @@ namespace EmergencyCallouts.Essential
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
                 
-                try
+                if (!Settings.EarlyAccess)
                 {
-                    // Send hit to remote exception counter
-                    WebClient hitUpdater = new WebClient();
-                    hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                    Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
-                }
-                catch (WebException webEx)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
+                    try
+                    {
+                        // Send hit to remote exception counter
+                        WebClient hitUpdater = new WebClient();
+                        hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
+                        Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
+                    }
+                    catch (WebException webEx)
+                    {
+                        Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
+                    }
                 }
             }
             #endregion
@@ -309,77 +306,17 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region AutomaticEnding
-            internal static void AutomaticEnding(Ped suspect)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsCuffed || suspect.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                }
-
-                if (MainPlayer.IsDead) { Functions.StopCurrentCallout(); }
-            }
-            internal static void AutomaticEnding(Ped suspect, Ped suspect2)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsCuffed && suspect2.IsCuffed)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsDead && suspect2.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsDead && suspect2.IsCuffed)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && suspect2.IsDead)
-                    {
-                        GameFiber.Sleep(4000);
-                        AdvancedEndingSequence();
-                    }
-                }
-            }
-
-            internal static void AutomaticEndingVictim(Ped suspect, Ped victim)
-            {
-                if (suspect.Exists())
-                {
-                    if (suspect.IsDead && victim.IsDead && MainPlayer.IsInAnyPoliceVehicle)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && victim.IsDead)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                    else if (suspect.IsCuffed && victim.IsCuffed)
-                    {
-                        AdvancedEndingSequence();
-                    }
-                }
-            }
-            #endregion
-
             #region AdvancedEndingSequence
             internal static void AdvancedEndingSequence()
             {
                 if (MainPlayer.IsOnFoot && !MainPlayer.IsAiming)
                 {
-                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("random@arrests"), "generic_radio_chatter", 3000, 2f, -2f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                    LSPD_First_Response.Mod.Menus.EPoliceRadioAction customRadioAction = Functions.GetPlayerRadioAction();
+                    Functions.PlayPlayerRadioAction(customRadioAction, 3000);
                 }
 
                 GameFiber.Sleep(700);
-                Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance is needed.");
+                Game.DisplayNotification(Localization.EndNotificationTransmit);
                 GameFiber.Sleep(2700);
                 Play.CodeFourAudio();
                 GameFiber.Sleep(5000);
@@ -387,42 +324,37 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
-            #region SpookCheck
-            internal static void SpookCheck(Vector3 entrance, float distanceFromEntrance)
+            #region BlockPermanentEventsRadius
+            internal static void BlockPermanentEventsRadius(Vector3 location, float radius)
             {
-                if (Settings.EndOnArrivalWithLights && MainPlayer.Position.DistanceTo(entrance) <= distanceFromEntrance && MainPlayer.CurrentVehicle.IsSirenOn && MainPlayer.IsInAnyPoliceVehicle)
+                foreach (Ped ped in World.GetAllPeds()) // Maybe gang members only?
                 {
-                    int chance = random.Next(0, 101);
-
-                    if (chance <= Settings.EndChance && Settings.EndChance >= 0)
+                    if (ped.Exists() && ped.Position.DistanceTo(location) < radius)
                     {
-                        Game.DisplayHelp("You alerted the ~r~suspect~s~!", 5000);
-                        Display.HideSubtitle();
-                        GameFiber.Sleep(5000);
-                        Functions.StopCurrentCallout();
+                        ped.BlockPermanentEvents = true;
                     }
                 }
             }
             #endregion
 
             #region DeleteNearbyPeds
-            internal static void DeleteNearbyPeds(Ped mainPed)
+            internal static void DeleteNearbyPeds(Ped mainPed, float radius)
             {
                 // Delete Nearby Peds
                 foreach (Ped ped in World.GetAllPeds())
                 {
-                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != MainPlayer)
+                    if (ped && ped.Position.DistanceTo(mainPed) <= radius && ped != mainPed && ped != MainPlayer)
                     {
                         ped.Delete();
                     }
                 }
             }
-            internal static void DeleteNearbyPeds(Ped mainPed, Ped mainPed2)
+            internal static void DeleteNearbyPeds(Ped mainPed, Ped mainPed2, float radius)
             {
                 // Delete Nearby Peds
                 foreach (Ped ped in World.GetAllPeds())
                 {
-                    if (ped && ped.Position.DistanceTo(mainPed) < 30f && ped != mainPed && ped != mainPed2 && ped != MainPlayer)
+                    if (ped && ped.Position.DistanceTo(mainPed) <= radius && ped != mainPed && ped != mainPed2 && ped != MainPlayer)
                     {
                         ped.Delete();
                     }
@@ -786,45 +718,6 @@ namespace EmergencyCallouts.Essential
             }
             SafePosition = TempSpawn;
             return true;
-        }
-        #endregion
-
-        #region Enable
-        internal static void Enable(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Alpha = 1f; }
-        }
-        #endregion
-
-        #region Disable
-        internal static void Disable(this Blip blip)
-        {
-            if (blip.Exists()) { blip.Alpha = 0f; }
-        }
-        #endregion
-
-        #region EnableRoute
-        internal static void EnableRoute(this Blip blip)
-        {
-            if (blip.Exists()) { blip.IsRouteEnabled = true; }
-        }
-        #endregion
-
-        #region DisableRoute
-        internal static void DisableRoute(this Blip blip)
-        {
-            if (blip.Exists()) { blip.DisableRoute(); }
-        }
-        #endregion
-
-        #region SetDefaults
-        internal static void SetDefaults(this Ped ped)
-        {
-            if (ped.Exists())
-            {
-                ped.BlockPermanentEvents = true;
-                ped.IsPersistent = true;
-            }
         }
         #endregion
 

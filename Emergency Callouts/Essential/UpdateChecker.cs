@@ -1,14 +1,12 @@
-﻿using EmergencyCallouts.Essential;
-using Rage;
+﻿using Rage;
 using System;
 using System.Net;
 
-namespace EmergencyCallouts
+namespace EmergencyCallouts.Essential
 {
     internal class UpdateChecker
     {
-        internal static string OnlineVersion = null;
-        internal static bool EarlyAccess = false;
+        internal static string OnlineVersion = string.Empty;
 
         internal static bool UpdateAvailable()
         {
@@ -24,17 +22,17 @@ namespace EmergencyCallouts
             }
             catch (WebException)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~y~Error", "Failed to check for updates; Possible network error.");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates; Possible network error.\nYou can still continue playing LSPDFR.");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
             }
 
-            if (OnlineVersion != Project.LocalVersion && !EarlyAccess)
+            if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
             }
-            else if (EarlyAccess)
+            else if (Settings.EarlyAccess)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
@@ -42,7 +40,7 @@ namespace EmergencyCallouts
             }
             else
             {
-                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~m~by Faya", "~y~Reporting for duty!");
+                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~c~by Faya", "~y~Reporting for duty!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; None available");
                 return false;
             }

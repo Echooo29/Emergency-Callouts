@@ -3,6 +3,7 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -20,16 +21,41 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool StopChecking;
         bool WithinRange;
+        bool VehicleIsUsed;
+        bool FirstTime;
+        bool DialogueStarted;
+        bool DialogueEnded;
+        bool CheckedForDamage;
+
+        string DamageLine;
+        string DamageLine2;
+
+        float DamagedPropertyHeading;
 
         Vector3 Entrance;
         Vector3 Center;
+        Vector3 DamagedProperty;
+
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
+
+        Vehicle SuspectVehicle;
+
+        Ped Suspect;
+
+        Persona SuspectPersona;
+
+        Blip SuspectBlip;
+        Blip EntranceBlip;
+        Blip SearchArea;
+        Blip DamagedPropertyBlip;
 
         // Main
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
             new Vector3(916.261f, -623.7192f, 58.052020f),  // Mirror Park
-            new Vector3(-663.6192f, -1358.232f, 10.4971f),  // La Puerta
+            new Vector3(-835.1504f, -1275.611f, 4.45892f),  // La Puerta
             new Vector3(1300.166f, -1719.278f, 54.04285f),  // El Burro
             new Vector3(2652.853f, 4308.485f, 44.393880f),  // Grapeseed
             new Vector3(1207.165f, 2694.605f, 37.823690f),  // Harmony
@@ -58,14 +84,18 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] LaPuertaBreakInPositions =
         {
-            new Vector3(-759.6483f, -1515.452f, 4.976925f), // Building Door
-            new Vector3(-721.8896f, -1513.393f, 5.000525f), // Building Door 2
+            new Vector3(-911.7646f, -1269.634f, 5.22196f),  // Maintenance Entrance
+            new Vector3(-880.3901f, -1300.779f, 6.200158f), // Maintenance Entrance 2
+            new Vector3(-914.1393f, -1312.992f, 6.200161f), // Maintenance Entrance 3
+            new Vector3(-925.3542f, -1307.262f, 6.200159f), // Appartement 1
         };
 
         readonly float[] LaPuertaBreakInHeadings =
         {
-            174.41f,
-            104.47f,
+            285.27f,
+            113.51f,
+            112.19f,
+            205.55f,
         };
         #endregion
 
@@ -137,16 +167,6 @@ namespace EmergencyCallouts.Callouts
         };
         #endregion
 
-        Vehicle SuspectVehicle;
-
-        Ped Suspect;
-
-        Persona SuspectPersona;
-
-        Blip SuspectBlip;
-        Blip EntranceBlip;
-        Blip SearchArea;
-
         public override bool OnBeforeCalloutDisplayed()
         {
             CalloutPosition = new Vector3(0, 0, 3000);
@@ -161,8 +181,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Burglary";
-            CalloutDetails = "A person has been seen looking through windows, caller states he's now lockpicking a door.";
+            CalloutMessage = Localization.Burglary;
+            CalloutDetails = Localization.BurglaryDetails;
             CalloutScenario = GetRandomScenarioNumber(5);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
@@ -181,7 +201,41 @@ namespace EmergencyCallouts.Callouts
         public override bool OnCalloutAccepted()
         {
             try
-            {
+            {                
+                // Positioning
+                #region Positioning
+                if (CalloutPosition == CalloutPositions[0]) // Mirror Park
+                {
+                    Center = new Vector3(888.6841f, -625.1655f, 58.04898f);
+                    Entrance = new Vector3(916.261f, -623.7192f, 58.05202f);
+                }
+                else if (CalloutPosition == CalloutPositions[1]) // La Puerta
+                {
+                    Center = new Vector3(-923.5932f, -1287.796f, 5.278366f);
+                    Entrance = new Vector3(-835.1504f, -1275.611f, 4.458926f);
+                }
+                else if (CalloutPosition == CalloutPositions[2]) // El Burro
+                {
+                    Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
+                    Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
+                {
+                    Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
+                    Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Harmony
+                {
+                    Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
+                    Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                {
+                    Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
+                    Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
+                }
+                #endregion
+
                 // Callout Accepted
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
@@ -190,16 +244,20 @@ namespace EmergencyCallouts.Callouts
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
-                // Suspect
-                Suspect = new Ped(CalloutPosition);
-                SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
+                if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
-                // SuspectBlip
+                // Suspect
+                Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
+
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorRed();
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
+                SuspectBlip.Alpha = 0f;
 
                 CalloutHandler();
             }
@@ -217,45 +275,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 CalloutActive = true;
-
-                // Positioning
-                #region Positioning
-                if (CalloutPosition == CalloutPositions[0]) // Mirror Park
-                {
-                    Center = new Vector3(888.6841f, -625.1655f, 58.04898f);
-                    Entrance = new Vector3(916.261f, -623.7192f, 58.05202f);
-                    Settings.SearchAreaSize = 40;
-                }
-                else if (CalloutPosition == CalloutPositions[1]) // La Puerta
-                {
-                    Center = new Vector3(-741.3954f, -1453.013f, 5.000523f);
-                    Entrance = new Vector3(-663.6192f, -1358.232f, 10.49708f);
-                    Settings.SearchAreaSize += 80;
-                }
-                else if (CalloutPosition == CalloutPositions[2]) // El Burro
-                {
-                    Center = new Vector3(1281.405f, -1710.742f, 55.05928f);
-                    Entrance = new Vector3(1300.166f, -1719.278f, 54.04285f);
-                    Settings.SearchAreaSize = 40;
-                }
-                else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
-                {
-                    Center = new Vector3(2685.283f, 4256.731f, 45.41756f);
-                    Entrance = new Vector3(2652.853f, 4308.485f, 44.39388f);
-                    Settings.SearchAreaSize = 85;
-                }
-                else if (CalloutPosition == CalloutPositions[4]) // Harmony
-                {
-                    Center = new Vector3(1223.067f, 2719.288f, 38.00484f);
-                    Entrance = new Vector3(1207.165f, 2694.605f, 37.82369f);
-                }
-
-                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
-                {
-                    Center = new Vector3(126.4832f, 6640.071f, 31.81017f);
-                    Entrance = new Vector3(194.8364f, 6576.915f, 31.82028f);
-                }
-                #endregion
 
                 // Scenario Deciding
                 switch (CalloutScenario)
@@ -276,11 +295,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario5();
                         break;
                 }
-
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
             }
             catch (Exception e)
             {
@@ -297,36 +311,48 @@ namespace EmergencyCallouts.Callouts
                 int num = random.Next(MirrorParkBreakInPositions.Length);
                 Suspect.Position = MirrorParkBreakInPositions[num];
                 Suspect.Heading = MirrorParkBreakInHeadings[num];
+                DamagedProperty = MirrorParkBreakInPositions[num];
+                DamagedPropertyHeading = MirrorParkBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
                 int num = random.Next(LaPuertaBreakInPositions.Length);
                 Suspect.Position = LaPuertaBreakInPositions[num];
                 Suspect.Heading = LaPuertaBreakInHeadings[num];
+                DamagedProperty = LaPuertaBreakInPositions[num];
+                DamagedPropertyHeading = LaPuertaBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
                 int num = random.Next(ElBurroBreakInPositions.Length);
                 Suspect.Position = ElBurroBreakInPositions[num];
                 Suspect.Heading = ElBurroBreakInHeadings[num];
+                DamagedProperty = ElBurroBreakInPositions[num];
+                DamagedPropertyHeading = ElBurroBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
             {
                 int num = random.Next(GrapeseedBreakInPositions.Length);
                 Suspect.Position = GrapeseedBreakInPositions[num];
                 Suspect.Heading = GrapeseedBreakInHeadings[num];
+                DamagedProperty = GrapeseedBreakInPositions[num];
+                DamagedPropertyHeading = GrapeseedBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[4]) // Harmony
             {
                 int num = random.Next(HarmonyBreakInPositions.Length);
                 Suspect.Position = HarmonyBreakInPositions[num];
                 Suspect.Heading = HarmonyBreakInHeadings[num];
+                DamagedProperty = HarmonyBreakInPositions[num];
+                DamagedPropertyHeading = HarmonyBreakInHeadings[num];
             }
             else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
             {
                 int num = random.Next(PaletoBayBreakInPositions.Length);
                 Suspect.Position = PaletoBayBreakInPositions[num];
                 Suspect.Heading = PaletoBayBreakInHeadings[num];
+                DamagedProperty = PaletoBayBreakInPositions[num];
+                DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
             }
 
             // Lockpick Animation
@@ -340,7 +366,7 @@ namespace EmergencyCallouts.Callouts
         private void RetrieveVehiclePositions()
         {
             #region Positions
-            SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), CalloutPosition, 0f);
+            SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), Vector3.Zero, 0f);
             SuspectVehicle.IsPersistent = true;
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
@@ -351,8 +377,8 @@ namespace EmergencyCallouts.Callouts
             }
             else if (CalloutPosition == CalloutPositions[1]) // La Puerta
             {
-                SuspectVehicle.Position = new Vector3(-723.9453f, -1491.7f, 4.61949f);
-                SuspectVehicle.Heading = 347.67f;
+                SuspectVehicle.Position = new Vector3(-919.3269f, -1289.287f, 4.756772f);
+                SuspectVehicle.Heading = 290.89f;
             }
             else if (CalloutPosition == CalloutPositions[2]) // El Burro
             {
@@ -379,6 +405,198 @@ namespace EmergencyCallouts.Callouts
             vehDoors[2].Open(false);
             vehDoors[3].Open(false);
             #endregion
+
+            VehicleIsUsed = true;
+        }
+
+        private void Dialogue()
+        {
+            #region Dialogue
+            try
+            {
+                int line = 0;
+
+                string[] dialogue =
+                {
+                    "~b~You~s~: So, why did you do it?",
+                    "~r~Suspect~s~: For the money...",
+                    "~b~You~s~: So you don't have a job?",
+                    "~r~Suspect~s~: Yeah, I don't.",
+                    "~b~You~s~: " + DamageLine,
+                    "~r~Suspect~s~: " + DamageLine2,
+                    "~b~You~s~: You expect me to believe that?",
+                    "~r~Suspect~s~: Nah, cops only hear what they want to hear.",
+                    "~r~Suspect~s~: I'm staying silent until I can speak to my lawyer.",
+                    "~b~You~s~: Not a problem.",
+                    "~m~dialogue ended",
+                };
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
+                        {
+                            if (!DialogueStarted && !FirstTime)
+                            {
+                                GameFiber.Sleep(3000);
+                                Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
+                                FirstTime = true;
+                            }
+
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
+                            {
+                                if (Game.IsKeyDown(Settings.InteractKey) && FirstTime)
+                                {
+                                    if (!DialogueStarted)
+                                    {
+                                        Suspect.Tasks.Clear();
+
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                    }
+
+                                    DialogueStarted = true;
+
+                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                    Game.DisplaySubtitle(dialogue[line], 15000);
+                                    line++;
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+
+                                    if (line == dialogue.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                        Handle.AdvancedEndingSequence();
+                                        DialogueEnded = true;
+                                        break;
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
+                                else if (!DialogueStarted)
+                                {
+                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void CheckForDamage()
+        {
+            #region CheckForDamage
+            try
+            {
+                string property;
+
+                if (VehicleIsUsed)
+                {
+                    property = Localization.CheckForDamageVehicle;
+                }
+                else
+                {
+                    property = Localization.CheckForDamageDoor;
+                }
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsCuffed)
+                        {
+                            GameFiber.Sleep(7500);
+
+                            Game.DisplaySubtitle($"{Localization.CheckForDamageSubtitleIntro} ~p~{property}~s~ {Localization.CheckForDamageSubtitleRest}", 10000);
+
+                            DamagedPropertyBlip = new Blip(DamagedProperty);
+                            DamagedPropertyBlip.SetColorPurple();
+                            DamagedPropertyBlip.Scale = 0.6f;
+                            DamagedPropertyBlip.Flash(500, -1);
+                            break;
+                        }
+                    }
+
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage)
+                        {
+                            Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
+
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                // Play Animation
+                                MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+
+                                // Attach Clipboard
+                                int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, MainPlayer, lhBoneIndex, 0f, 0f, 0.009f, -90f, 0f, 0f, true, true, false, false, 2, 1);
+
+                                // Attach Pencil
+                                int rhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Pencil, MainPlayer, rhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+
+                                // Chance of damage
+                                int chance = random.Next(0, 101);
+                                if (chance <= Settings.ChanceOfPropertyDamage) // Damage
+                                {
+                                    GameFiber.Sleep(15000);
+                                    Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
+
+                                    GameFiber.Sleep(3000);
+                                    MainPlayer.Tasks.Clear();
+
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                    if (Pencil.Exists()) { Pencil.Delete(); }
+                                    if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
+                                    DamageLine = "Anyway, you also left some dagage behind.";
+                                    DamageLine2 = "Bro that was already there when I came here!";
+
+                                    CheckedForDamage = true;
+                                }
+                                else // No Damage
+                                {
+                                    GameFiber.Sleep(15000);
+                                    Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
+
+                                    GameFiber.Sleep(3000);
+                                    MainPlayer.Tasks.Clear();
+
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                    if (Pencil.Exists()) { Pencil.Delete(); }
+                                    if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
+                                    DamageLine = "Luckily for you I didn't find any damage.";
+                                    DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
+
+                                    CheckedForDamage = true;
+                                }
+
+                                Dialogue();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
         }
 
         private void Scenario1() // Attack
@@ -389,12 +607,7 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Position
                 RetrievePedPositions();
 
-                int num = random.Next(2);
-                if (num == 0)
-                {
-                    Suspect.GiveRandomMeleeWeapon(-1, true);
-                }
-                else Suspect.GiveRandomHandgun(-1, true);
+                CheckForDamage();
 
                 GameFiber.StartNew(delegate
                 {
@@ -404,6 +617,13 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
                         {
+                            int num = random.Next(2);
+                            if (num == 0)
+                            {
+                                Suspect.GiveRandomMeleeWeapon(-1, true);
+                            }
+                            else Suspect.GiveRandomHandgun(-1, true);
+
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             break;
                         }
@@ -472,14 +692,21 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrievePedPositions();
 
+                CheckForDamage();
+
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
                         
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
                         {
+                            // Clipping Through Wall Fix
+                            Suspect.Tasks.ClearImmediately();
+                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
+                            GameFiber.Sleep(30);
+
                             // Put Suspect's Hands up
                             Suspect.Tasks.PutHandsUp(-1, MainPlayer);
 
@@ -502,6 +729,8 @@ namespace EmergencyCallouts.Callouts
             {
                 // Retrieve Ped Positions
                 RetrievePedPositions();
+
+                CheckForDamage();
 
                 // Give Weapon
                 Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
@@ -591,8 +820,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect);
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect);
 
                 #region WithinRange
@@ -601,11 +828,11 @@ namespace EmergencyCallouts.Callouts
                     // Set WithinRange
                     WithinRange = true;
 
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, 40f);
+
                     // Delete Nearby Trailers
                     Handle.DeleteNearbyTrailers(Center);
-
-                    // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
@@ -618,21 +845,15 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 20000);
-
-                    // Disable route
-                    EntranceBlip.DisableRoute();
+                    Game.DisplaySubtitle(Localization.BurglarySubtitle, 10000);
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
-
-                    // SpookCheck
-                    Handle.SpookCheck(Entrance, 10f);
                     
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
@@ -648,7 +869,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -677,7 +898,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -686,7 +907,7 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip = new Blip(Entrance);
 
                     // Enable Route
-                    EntranceBlip.EnableRoute();
+                    if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
@@ -708,6 +929,9 @@ namespace EmergencyCallouts.Callouts
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+            if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+            if (Clipboard.Exists()) { Clipboard.Delete(); }
+            if (Pencil.Exists()) { Pencil.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();

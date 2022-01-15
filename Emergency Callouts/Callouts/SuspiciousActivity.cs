@@ -161,8 +161,8 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = "Suspicious Activity";
-            CalloutDetails = "Multiple civilians called about a person handling possible firearms in the trunk of their car.";
+            CalloutMessage = Localization.SuspiciousActivity;
+            CalloutDetails = Localization.SuspiciousActivityDetails;
             CalloutScenario = GetRandomScenarioNumber(2);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
@@ -182,65 +182,6 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                // Callout Accepted
-                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-
-                // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
-                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
-                Display.OutdatedReminder();
-
-                // Suspect
-                Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                SuspectPersona = Functions.GetPersonaForPed(Suspect);
-                Suspect.SetDefaults();
-
-                SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorRed();
-                SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Disable();
-
-                // Suspect 2
-                Suspect2 = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-                Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
-                Suspect2.SetDefaults();
-
-                Suspect2Blip = Suspect2.AttachBlip();
-                Suspect2Blip.SetColorRed();
-                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
-                Suspect2Blip.Disable();
-
-                // SuspectVehicle
-                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
-                SuspectVehicle.IsPersistent = true;
-
-                vehDoors = SuspectVehicle.GetDoors();
-                vehDoors[vehDoors.Length - 1].Open(false);
-
-                // Suspect2Vehicle
-                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), CalloutPosition, 0f);
-                Suspect2Vehicle.IsPersistent = true;
-
-                veh2Doors = Suspect2Vehicle.GetDoors();
-                veh2Doors[veh2Doors.Length - 1].Open(false);
-
-                CalloutHandler();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-
-            return base.OnCalloutAccepted();
-        }
-
-        private void CalloutHandler()
-        {
-            #region CalloutHandler
-            try
-            {
-                CalloutActive = true;
-
                 // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // La Puerta
@@ -275,6 +216,71 @@ namespace EmergencyCallouts.Callouts
                 }
                 #endregion
 
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
+
+                // EntranceBlip
+                EntranceBlip = new Blip(Entrance);
+                if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
+
+                // Suspect
+                Suspect = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorRed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Alpha = 0f;
+
+                // Suspect 2
+                Suspect2 = new Ped(Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                Suspect2Persona = Functions.GetPersonaForPed(Suspect2);
+                Suspect2.IsPersistent = true;
+                Suspect2.BlockPermanentEvents = true;
+
+                Suspect2Blip = Suspect2.AttachBlip();
+                Suspect2Blip.SetColorRed();
+                Suspect2Blip.Scale = (float)Settings.PedBlipScale;
+                Suspect2Blip.Alpha = 0f;
+
+                // SuspectVehicle
+                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                SuspectVehicle.IsPersistent = true;
+
+                vehDoors = SuspectVehicle.GetDoors();
+                vehDoors[vehDoors.Length - 1].Open(false);
+
+                // Suspect2Vehicle
+                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                Suspect2Vehicle.IsPersistent = true;
+
+                veh2Doors = Suspect2Vehicle.GetDoors();
+                veh2Doors[veh2Doors.Length - 1].Open(false);
+
+                CalloutHandler();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+            return base.OnCalloutAccepted();
+        }
+
+        private void CalloutHandler()
+        {
+            #region CalloutHandler
+            try
+            {
+                CalloutActive = true;
+
                 // Scenario Deciding
                 switch (CalloutScenario)
                 {
@@ -285,16 +291,6 @@ namespace EmergencyCallouts.Callouts
                         Scenario2();
                         break;
                 }
-
-                // EntranceBlip
-                EntranceBlip = new Blip(Entrance);
-                EntranceBlip.EnableRoute();
-
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
-                Log.Creation(Suspect2, PedCategory.Suspect2);
-                Log.Creation(SuspectVehicle, PedCategory.Suspect);
-                Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
             }
             catch (Exception e)
             {
@@ -390,6 +386,12 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = PaletoBayVehicle2Position;
                 Suspect2Vehicle.Heading = PaletoBayVehicle2Heading;
             }
+
+            Log.Creation(Suspect, PedCategory.Suspect);
+            Log.Creation(Suspect2, PedCategory.Suspect2);
+            Log.Creation(SuspectVehicle, PedCategory.Suspect);
+            Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
+
             #endregion
         }
 
@@ -489,10 +491,10 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 30f && PlayerArrived && Suspect.Exists())
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && PlayerArrived && Suspect.Exists())
                         {
                             // Start fight
-                            Suspect.Tasks.FightAgainst(Suspect2);
+                            if (Suspect.IsAlive) { Suspect.Tasks.FightAgainst(Suspect2); }
                             break;
                         }
                     }
@@ -537,7 +539,6 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.AutomaticEnding(Suspect, Suspect2);
                 Handle.PreventPickupCrash(Suspect, Suspect2);
 
                 #region WithinRange
@@ -547,10 +548,10 @@ namespace EmergencyCallouts.Callouts
                     WithinRange = true;
 
                     // Delete Nearby Trailers
-                    Handle.DeleteNearbyTrailers(Center);
+                    if (CalloutPosition == CalloutPositions[4]) { Handle.DeleteNearbyTrailers(Center); }
 
                     // Delete Nearby Peds
-                    Handle.DeleteNearbyPeds(Suspect, Suspect2);
+                    Handle.DeleteNearbyPeds(Suspect, Suspect2, 40f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
@@ -562,17 +563,17 @@ namespace EmergencyCallouts.Callouts
                     // Set PlayerArrived
                     PlayerArrived = true;
 
-                    // Display Arriving Subtitle
-                    Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 20000);
+                    // Gang Attack Fix
+                    Handle.BlockPermanentEventsRadius(Center, 60f);
 
-                    // Disable route
-                    EntranceBlip.DisableRoute();
+                    // Display Arriving Subtitle
+                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -587,7 +588,7 @@ namespace EmergencyCallouts.Callouts
                     PedFound = true;
 
                     // Enable SuspectBlip
-                    SuspectBlip.Enable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -604,7 +605,7 @@ namespace EmergencyCallouts.Callouts
                     Display.HideSubtitle();
 
                     // Enable Suspect2Blip
-                    Suspect2Blip.Enable();
+                    if (Suspect2Blip.Exists()) { Suspect2Blip.Alpha = 1f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -633,7 +634,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    SuspectBlip.Disable();
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -642,7 +643,7 @@ namespace EmergencyCallouts.Callouts
                     EntranceBlip = new Blip(Entrance);
 
                     // Enable Route
-                    EntranceBlip.EnableRoute();
+                    if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
                 }
