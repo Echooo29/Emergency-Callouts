@@ -272,19 +272,19 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario2();
                         break;
                     case 2:
                         Scenario2();
                         break;
                     case 3:
-                        Scenario3();
+                        Scenario2();
                         break;
                     case 4:
-                        Scenario4();
+                        Scenario2();
                         break;
                     case 5:
-                        Scenario5();
+                        Scenario2();
                         break;
                 }
             }
@@ -561,6 +561,10 @@ namespace EmergencyCallouts.Callouts
                 // Aim At Victim
                 Suspect.Tasks.AimWeaponAt(Victim, -1);
 
+                // Victim Cowering
+                Victim.Tasks.Clear();
+                Victim.Tasks.Cower(-1);
+
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -575,16 +579,21 @@ namespace EmergencyCallouts.Callouts
                             break;
                         }
                     }
+                });
 
+                GameFiber.StartNew(delegate
+                {
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (Victim.IsDead && Victim.Exists())
+                        if (Victim.IsDead && Suspect.IsAlive)
                         {
+                            Suspect.Tasks.Clear();
+
                             // Husband Fighting Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
-                            
+
                             break;
                         }
                     }
