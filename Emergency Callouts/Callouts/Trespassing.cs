@@ -20,7 +20,6 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
         bool StopChecking;
-        bool CheckedForELS = false;
 
         Vector3 Entrance;
         Vector3 Center;

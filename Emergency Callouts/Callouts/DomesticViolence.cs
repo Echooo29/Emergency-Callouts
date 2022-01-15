@@ -22,7 +22,6 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool DialogueStarted;
         bool FirstTime;
-        bool WithinRange;
 
         Vector3 Entrance;
         Vector3 Center;
