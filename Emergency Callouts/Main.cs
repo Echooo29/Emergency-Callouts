@@ -38,6 +38,15 @@ namespace EmergencyCallouts
             if (Settings.DomesticViolence    && DOMRemoteState)  { Functions.RegisterCallout(typeof(Callouts.DomesticViolence));    }
             if (Settings.Burglary            && BURRemoteState)  { Functions.RegisterCallout(typeof(Callouts.Burglary));            }
             if (Settings.SuspiciousActivity  && SUSRemoteState)  { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity));  }
+
+            if (Settings.EarlyAccess)
+            {
+                if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
+                if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
+                if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
+                if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
+                if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
+            }
         }
     }
 }
