@@ -43,10 +43,10 @@ namespace EmergencyCallouts.Callouts
                 if (count >= 15) { return false; }
             }
 
-            CalloutMessage = Localization.PublicIntoxication;
-            CalloutDetails = Localization.PublicIntoxicationDetails;
+            CalloutMessage = "Public Intoxication";
+            CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
             CalloutArea = World.GetStreetName(CalloutPosition);
-            CalloutScenario = GetRandomScenarioNumber(5);
+            CalloutScenario = GetRandomScenarioNumber(2);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
@@ -113,15 +113,6 @@ namespace EmergencyCallouts.Callouts
                         break;
                     case 2:
                         Scenario2();
-                        break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
                         break;
                 }
             }
@@ -205,11 +196,11 @@ namespace EmergencyCallouts.Callouts
 
                                     if (HasBottle)
                                     {
-                                        Game.DisplayHelp(Localization.InteractionDismissAndConfiscate);
+                                        Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
                                     }
                                     else
                                     {
-                                        Game.DisplayHelp(Localization.InteractionDismiss);
+                                        Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
                                     }
 
                                     while (CalloutActive)
@@ -240,7 +231,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
                         }
@@ -270,94 +261,12 @@ namespace EmergencyCallouts.Callouts
 
         private void Scenario2()
         {
-            #region Hostile
-            try
-            {
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot && PlayerArrived)
-                        {
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario3()
-        {
             #region Bottle
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
                 HasBottle = true;
                 Dialogue();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario4()
-        {
-            #region Bottle & Hostile
-            try
-            {
-                Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-
-                while (CalloutActive)
-                {
-                    GameFiber.Yield();
-
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && MainPlayer.IsOnFoot && PlayerArrived)
-                    {
-                        Suspect.Tasks.FightAgainst(MainPlayer);
-
-                        break;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario5()
-        {
-            #region Pass out
-            try
-            {
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && MainPlayer.IsOnFoot && PlayerArrived)
-                        {
-                            Game.DisplaySubtitle(Localization.PassOutLine, 2500);
-                            GameFiber.Sleep(2500);
-                            if (Suspect.Exists()) { Suspect.Kill(); }
-
-                            break;
-                        }
-                    }
-                });
             }
             catch (Exception e)
             {
@@ -387,7 +296,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     // Display Subtitle
-                    Game.DisplaySubtitle(Localization.PublicIntoxicationSubtitle, 10000);
+                    Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.", 10000);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
@@ -426,7 +335,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived && !PedFound)
                 {
                     // Set OnScene
                     PlayerArrived = false;

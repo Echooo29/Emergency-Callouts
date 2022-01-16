@@ -19,7 +19,6 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
-        bool StopChecking;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -297,8 +296,6 @@ namespace EmergencyCallouts.Callouts
         readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
         readonly Rage.Object Phone = new Rage.Object(new Model("prop_police_phone"), new Vector3(0, 0, 0));
 
-        Vehicle PropertyVehicle;
-
         Ped Suspect;
         Persona SuspectPersona;
 
@@ -320,9 +317,9 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Localization.Trespassing;
-            CalloutDetails = Localization.TrespassingDetails;
-            CalloutScenario = GetRandomScenarioNumber(5);
+            CalloutMessage = "Trespassing";
+            CalloutDetails = "Reports of a person ~y~trespassing~s~ on private property.";
+            CalloutScenario = GetRandomScenarioNumber(2);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -423,15 +420,6 @@ namespace EmergencyCallouts.Callouts
                         break;
                     case 2:
                         Scenario2();
-                        break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
                         break;
                 }
 
@@ -582,86 +570,6 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void RetrieveArsonPosition()
-        {
-            #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
-            {
-                int ArsonPositionNum = random.Next(RailyardArsonPositions.Length);
-                Suspect.Position = RailyardArsonPositions[ArsonPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
-            {
-                int ArsonPositionNum = random.Next(ScrapyardArsonPositions.Length);
-                Suspect.Position = ScrapyardArsonPositions[ArsonPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // Terminal
-            {
-                int ArsonPositionNum = random.Next(TerminalArsonPositions.Length);
-                Suspect.Position = TerminalArsonPositions[ArsonPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
-            {
-                int ArsonPositionNum = random.Next(AirstripArsonPositions.Length);
-                Suspect.Position = AirstripArsonPositions[ArsonPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
-            {
-                int ArsonPositionNum = random.Next(LoadingDockArsonPositions.Length);
-                Suspect.Position = LoadingDockArsonPositions[ArsonPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
-            {
-                Suspect.Position = BarnArsonPosition;
-            }
-            #endregion
-        }
-
-        private void RetrieveWeldingPosition()
-        {
-            #region Positions
-            // Welding Device
-            int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.RightPhHand);
-            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(WeldingDevice, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
-            
-            if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
-            {
-                Suspect.Position = new Vector3(491.9123f, -554.114f, 24.7505f);
-                Suspect.Heading = 212f;
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
-            {
-                Suspect.Position = new Vector3(-1151.357f, -2034.422f, 13.16053f);
-                Suspect.Heading = 306.35f;
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // Terminal
-            {
-                Suspect.Position = new Vector3(1234.051f, -3022.098f, 10.96785f);
-                Suspect.Heading = 279.74f;
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Field
-            {
-                PropertyVehicle = new Vehicle("TOWTRUCK2", new Vector3(2108.898f, 4763.609f, 40.70122f), 276.80f);
-                PropertyVehicle.IsPersistent = true;
-                Suspect.Position = new Vector3(2108.608f, 4764.889f, 41.15301f);
-                Suspect.Heading = 188.73f;
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
-            {
-                Suspect.Position = new Vector3(221.1813f, 2746.937f, 43.3394f);
-                Suspect.Heading = 268.66f;
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
-            {
-                PropertyVehicle = new Vehicle("RUMPO3", new Vector3(414.0602f, 6460.725f, 29.05295f), 44.97f);
-                PropertyVehicle.IsPersistent = true;
-                Suspect.Position = new Vector3(412.6398f, 6459.688f, 28.809f);
-                Suspect.Heading = 314.32f;
-            }
-            #endregion
-        }
-
         private void SuspectDialogue()
         {
             #region Dialogue
@@ -791,7 +699,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
                         }
@@ -855,48 +763,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Pursuit
+        private void Scenario1() // Surrender
         {
             #region Scenario 1
-            try
-            {
-                // Retrieve Hiding Position
-                RetrieveHidingPosition(Suspect);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
-                        {
-                            StopChecking = true;
-
-                            // Delete Blips
-                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-
-                            LHandle pursuit = Functions.CreatePursuit();
-                            Functions.AddPedToPursuit(pursuit, Suspect);
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Lockpick set");
-                            Play.PursuitAudio();
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario2() // Surrender
-        {
-            #region Scenario 2
             try
             {
                 // Retrieve Hiding Position
@@ -931,9 +800,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
        
-        private void Scenario3() // Manager
+        private void Scenario2() // Manager
         {
-            #region Scenario 3
+            #region Scenario 2
             try
             {
                 // Retrieve Manager Position
@@ -1054,98 +923,9 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect2}");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario4() // Attempted Arson
-        {
-            #region Scenario 4
-            try
-            {
-                // Retrieve Fire Position
-                RetrieveArsonPosition();
-
-                // Give Suspect Weapon
-                Suspect.Inventory.GiveNewWeapon("WEAPON_PETROLCAN", -1, true);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
-                        {
-                            // Clear Suspect Tasks
-                            Suspect.Tasks.Clear();
-
-                            // Put Suspect Hands Up
-                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-
-                            break;
-                        }
-                        else
-                        {
-                            Suspect.Tasks.FireWeaponAt(Suspect.Position, -1, FiringPattern.FullAutomatic); // Fires weapon at Suspect Position, might not work.
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario5() // Welder
-        {
-            #region Scenario 5
-            try
-            {
-                // Retrieve Welding Position
-                RetrieveWeldingPosition();
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
-                        {
-                            // Delete SuspectBlip
-                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted suspect's blip");
-
-                            // Delete SearchArea
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted search area");
-
-                            // Delete EntranceBlip
-                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted entrance blip");
-
-                            // Delete Welding Device
-                            if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
-                            Game.LogTrivial("[Emergency Callouts]: Deleted welding device");
-
-                            LHandle pursuit = Functions.CreatePursuit();
-                            Functions.AddPedToPursuit(pursuit, Suspect);
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Play.PursuitAudio();
-                            break;
                         }
                     }
                 });
@@ -1175,7 +955,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyPeds(Suspect, 30f);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.TrespassingSubtitle, 10000);
+                    Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 10000);
                     
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
@@ -1221,7 +1001,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
@@ -1245,7 +1025,7 @@ namespace EmergencyCallouts.Callouts
                 #region PlayerClimbing
                 if (MainPlayer.IsClimbing && !PedFound)
                 {
-                    Game.DisplayHelp(Localization.ClimbClue);
+                    Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not climbed anything");
                     GameFiber.Sleep(5000);
                 }
                 #endregion

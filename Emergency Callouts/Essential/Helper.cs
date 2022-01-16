@@ -135,14 +135,14 @@ namespace EmergencyCallouts.Essential
             #region AcceptNotification
             internal static void AcceptNotification(string details)
             {
-                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.AcceptNotificationSubtitle, details);
+                Game.DisplayNotification("dia_police", "dia_police", "Dispatch", "~y~Notification", details);
             }
             #endregion
 
             #region AcceptSubtitle
             internal static void AcceptSubtitle(string calloutMessage, string calloutArea)
             {
-                Game.DisplaySubtitle($"{Localization.AcceptSubtitleIntro} ~r~{calloutMessage}~s~ {Localization.AcceptSubtitleAt} ~y~{calloutArea}~s~.", 10000);
+                Game.DisplaySubtitle($"Go to the ~r~{calloutMessage}~s~ at ~y~{calloutArea}~s~.", 10000);
             }
             #endregion
 
@@ -159,7 +159,7 @@ namespace EmergencyCallouts.Essential
             #region EndNotification
             internal static void EndNotification()
             {
-                Game.DisplayNotification("dia_police", "dia_police", Localization.DispatchName, Localization.EndNotificationSubtitle, Localization.EndNotificationText);
+                Game.DisplayNotification("dia_police", "dia_police", "Dispatch", "~y~Notification", "Situation is under control.");
             }
             #endregion
 
@@ -316,7 +316,7 @@ namespace EmergencyCallouts.Essential
                 }
 
                 GameFiber.Sleep(700);
-                Game.DisplayNotification(Localization.EndNotificationTransmit);
+                Game.DisplayNotification("~b~You~s~: Dispatch, no further assistance is needed.");
                 GameFiber.Sleep(2700);
                 Play.CodeFourAudio();
                 GameFiber.Sleep(5000);

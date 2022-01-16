@@ -152,9 +152,9 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Localization.DomesticViolence;
-            CalloutDetails = Localization.DomesticViolenceDetails;
-            CalloutScenario = GetRandomScenarioNumber(5);
+            CalloutMessage = "Domestic Violence";
+            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
+            CalloutScenario = GetRandomScenarioNumber(2);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
@@ -276,15 +276,6 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
-                        break;
                 }
             }
             catch (Exception e)
@@ -401,7 +392,7 @@ namespace EmergencyCallouts.Callouts
                             if (!DialogueStarted && !FirstTime)
                             {
                                 GameFiber.Sleep(5000);
-                                Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptVictim, 10000);
+                                Game.DisplaySubtitle("Speak to the ~o~victim~s~.", 10000);
                                 FirstTime = true;
                             }
 
@@ -483,7 +474,7 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                                 {
-                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptVictim}");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~o~victim");
                                 }
                             }
                         }
@@ -545,207 +536,9 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
-
-        private void Scenario2() // Suspect Shoots Victim Then Fights Player
+        private void Scenario2() // Victim at gunpoint, firefight
         {
             #region Scenario 2
-            try
-            {
-                // Retrieve Fight Spot
-                RetrieveFightPosition();
-
-                // Give Random Handgun
-                Suspect.GiveRandomHandgun(-1, true);
-
-                // Aim At Victim
-                Suspect.Tasks.AimWeaponAt(Victim, -1);
-
-                // Victim Cowering
-                Victim.Tasks.Clear();
-                Victim.Tasks.Cower(-1);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (PlayerArrived)
-                        {
-                            // Husband Fighting Wife
-                            Suspect.Tasks.FightAgainst(Victim);
-
-                            break;
-                        }
-                    }
-                });
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (Victim.IsDead && Suspect.IsAlive)
-                        {
-                            Suspect.Tasks.Clear();
-
-                            // Husband Fighting Player
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-
-                            break;
-                        }
-                    }
-                });
-
-                Dialogue();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario3() // Suspect Sitting Next To Dead Victim
-        {
-            #region Scenario 3
-            try
-            {
-                #region Dialogue
-                bool stopDialogue = false;
-
-                string[] dialogueSuspect =
-                {
-                    "~b~You~s~: Why would you do such a thing?",
-                    "~r~Suspect~s~: You wouldn't understand.",
-                    "~b~You~s~: You're right, animals can't talk to humans.",
-                    "~r~Suspect~s~: Keep your mouth shut.",
-                    "~b~You~s~: That attitude isn't gonna help you in prison.",
-                    "~r~Suspect~s~: Your badge isn't gonna stop me from hurting you.",
-                    "~b~You~s~: Yeah I bet you hurt alot of people, or can you only handle females?",
-                    "~m~dialogue ended",
-                };
-
-                int line = 0;
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (!DialogueStarted && !FirstTime && Suspect.IsCuffed && Suspect.IsAlive)
-                        {
-                            GameFiber.Sleep(5000);
-                            Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
-                            FirstTime = true;
-                        }
-
-                        if (Game.IsKeyDown(Settings.InteractKey) && !stopDialogue && Suspect.IsCuffed && MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && FirstTime)
-                        {
-                            if (!DialogueStarted)
-                            {
-                                Suspect.Tasks.Clear();
-
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
-                            }
-
-                            DialogueStarted = true;
-
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-
-                            Game.DisplaySubtitle(dialogueSuspect[line], 15000);
-                            line++;
-                            Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
-
-                            if (line == dialogueSuspect.Length)
-                            {
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
-                                stopDialogue = true;
-                            }
-
-                            GameFiber.Sleep(500);
-                        }
-                        else
-                        {
-                            if (!DialogueStarted && Suspect.IsCuffed)
-                            {
-                                Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
-                            }
-                        }
-                    }
-                });
-                #endregion
-
-                // Retrieve Fight Position
-                RetrieveFightPosition();
-
-                // Kill Victim
-                if (Victim.Exists()) { Victim.Kill(); }
-
-                // Delete VictimBlip
-                if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-                Suspect.Position = Victim.GetOffsetPositionFront(2f);
-
-                // Suspect Sitting
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_no_work@"), "sit_phone_idle_03_nowork", 5f, AnimationFlags.Loop);
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario4() // Victim at gunpoint, surrender
-        {
-            #region Scenario 4
-            try
-            {
-                // Retrieve Fight Position
-                RetrieveFightPosition();
-
-                // Suspect Position
-                Suspect.Position = Victim.GetOffsetPositionFront(2f);
-
-                // Give Random Handgun
-                Suspect.GiveRandomHandgun(-1, true);
-
-                // Aim at Victim
-                Suspect.Tasks.AimWeaponAt(Victim, -1);
-
-                // Victim Cowering
-                Victim.Tasks.Cower(-1);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
-                        {
-                            // Suspect Putting Hands Up
-                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-
-                            break;
-                        }
-                    }
-                });
-
-                Dialogue();
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario5() // Victim at gunpoint, firefight
-        {
-            #region Scenario 5
             try
             {
                 // Retrieve Fight Position
@@ -807,7 +600,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.BlockPermanentEventsRadius(Center, 100f);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.DomesticViolenceSubtitle, 10000);
+                    Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 10000);
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
@@ -871,7 +664,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
