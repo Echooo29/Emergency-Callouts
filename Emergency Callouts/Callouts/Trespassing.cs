@@ -692,7 +692,8 @@ namespace EmergencyCallouts.Callouts
                 else gender = "Mrs";
 
                 // Owner Line
-                string lineOwner = string.Empty; 
+                string lineOwner = string.Empty;
+
                 int rand = random.Next(1, 101);
 
                 if (rand <= Settings.ChanceOfPressingCharges)
@@ -833,6 +834,9 @@ namespace EmergencyCallouts.Callouts
 
                                         MainPlayer.Tasks.Clear();
                                         if (Phone.Exists()) { Phone.Delete(); }
+
+                                        GameFiber.Sleep(3000);
+                                        Handle.AdvancedEndingSequence();
                                         break;
                                     }
                                 }
