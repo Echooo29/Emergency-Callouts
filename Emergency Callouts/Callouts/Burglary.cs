@@ -42,7 +42,6 @@ namespace EmergencyCallouts.Callouts
         Vehicle SuspectVehicle;
 
         Ped Suspect;
-
         Persona SuspectPersona;
 
         Blip SuspectBlip;
