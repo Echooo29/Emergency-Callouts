@@ -155,7 +155,7 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: Well I didn't get any assault calls yet.",
                     "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
                     "~b~You~s~: That wasn't what I meant, sorry.",
-                    "~y~Suspect~s~: Well you got of lucky this time haha.",
+                    "~y~Suspect~s~: Well you got off lucky this time haha.",
                     "~r~Arrest~s~ or ~g~dismiss~s~ the person.",
                 };
 
