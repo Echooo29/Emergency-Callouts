@@ -381,7 +381,7 @@ namespace EmergencyCallouts.Callouts
                     CalloutPosition = Suspect.Position;
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    SearchArea = new Blip(Suspect.Position.Around2D(Settings.SearchAreaSize), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
