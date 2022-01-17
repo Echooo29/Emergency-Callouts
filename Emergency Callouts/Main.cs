@@ -12,6 +12,11 @@ namespace EmergencyCallouts
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
 
             Game.LogTrivial("[Emergency Callouts]: Successfully Loaded v" + Project.LocalVersion);
+
+            if (Functions.GetPlayerRadioAction() == LSPD_First_Response.Mod.Menus.EPoliceRadioAction.None)
+            {
+                Functions.SetPlayerRadioAction(LSPD_First_Response.Mod.Menus.EPoliceRadioAction.Shoulder);
+            }
         }
 
         public override void Finally()
