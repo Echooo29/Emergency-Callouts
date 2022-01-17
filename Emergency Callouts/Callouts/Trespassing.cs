@@ -854,6 +854,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     Suspect.Tasks.Clear();
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
