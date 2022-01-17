@@ -630,7 +630,7 @@ namespace EmergencyCallouts.Callouts
                     $"~g~Owner~s~: Hello? Who's this?",
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
                     "~g~Owner~s~: Again?! What did my son do now?",
-                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property...",
+                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
                     $"~b~You~s~: His name is {SuspectPersona.Forename}.",
