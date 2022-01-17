@@ -46,7 +46,7 @@ namespace EmergencyCallouts.Callouts
             CalloutMessage = "Public Intoxication";
             CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
             CalloutArea = World.GetStreetName(CalloutPosition);
-            CalloutScenario = GetRandomScenarioNumber(2);
+            CalloutScenario = random.Next(1, 3);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
@@ -109,7 +109,7 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario2();
+                        Scenario1();
                         break;
                     case 2:
                         Scenario2();
@@ -225,6 +225,7 @@ namespace EmergencyCallouts.Callouts
                                         }
                                         else if (Suspect.IsCuffed)
                                         {
+                                            GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
                                             break;
                                         }
@@ -297,7 +298,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) {EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around(5f, 30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -380,7 +381,7 @@ namespace EmergencyCallouts.Callouts
                     CalloutPosition = Suspect.Position;
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    SearchArea = new Blip(Suspect.Position.Around(10f, 30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(Settings.SearchAreaSize), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");

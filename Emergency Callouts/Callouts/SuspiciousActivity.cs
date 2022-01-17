@@ -162,7 +162,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Suspicious Activity";
             CalloutDetails = "Multiple civilians called about a person handling possible ~y~firearms~s~ in the trunk of their car.";
-            CalloutScenario = GetRandomScenarioNumber(2);
+            CalloutScenario = random.Next(1, 3);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -570,7 +570,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(45f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 

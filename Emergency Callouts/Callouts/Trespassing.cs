@@ -319,7 +319,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Trespassing";
             CalloutDetails = "Reports of a person ~y~trespassing~s~ on private property.";
-            CalloutScenario = GetRandomScenarioNumber(2);
+            CalloutScenario = random.Next(1, 3);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -962,7 +962,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(45f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
