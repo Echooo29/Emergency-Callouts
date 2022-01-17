@@ -92,18 +92,18 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3[] ScrapyardHidingPositions =
         {
             new Vector3(-1155.449f, -2030.024f, 13.16065f), // Lifter
-            new Vector3(-1179.068f, -2081.575f, 13.83974f), // Red Small Container
+            new Vector3(-1178.147f, -2083.881f, 13.41349f), // Red Small Container
             new Vector3(-1180.712f, -2072.301f, 14.45590f), // Garbage container
-            new Vector3(-1171.513f, -2071.196f, 13.96500f), // Abandoned Train Carrier
-            new Vector3(-1181.182f, -2046.646f, 13.92571f), // Abandoned bus
+            new Vector3(-1168.165f, -2052.083f, 14.43985f), // Inside bus
+            new Vector3(-1181.182f, -2046.646f, 13.92571f), // Outside bus
         };
 
         readonly float[] ScrapyardHidingPositionsHeadings =
         {
-            222f,
+            1.42f,
             346f,
             270f,
-            145f,
+            66.24f,
             156f,
         };
 
