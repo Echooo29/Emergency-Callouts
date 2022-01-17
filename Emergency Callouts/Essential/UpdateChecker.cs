@@ -34,7 +34,7 @@ namespace EmergencyCallouts.Essential
             }
             else if (Settings.EarlyAccess)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
+                Game.DisplayNotification("commonmenu", "dia_police", "dia_police", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
                 return false;
             }
