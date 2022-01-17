@@ -27,13 +27,13 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
-            new Vector3(-1106.7f, -1975.50f, 24.562f),  // LSIA Scrapyard
-            new Vector3(1225.66f, -2923.435f, 9.4783f), // Terminal
-            new Vector3(-1106.7f, -1975.50f, 24.562f),  // County
-            new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
-            new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
-            new Vector3(426.6624f, 6549.066f, 27.601f), // Paleto Barn
+            new Vector3(512.01f, -610.720f, 24.4312f),    // La Mesa Railyard
+            new Vector3(-1106.7f, -1975.50f, 24.562f),    // LSIA Scrapyard
+            new Vector3(1225.66f, -2923.435f, 9.4783f),   // Terminal
+            new Vector3(808.5509f, 1275.401f, 359.9711f), // County
+            new Vector3(2165.78f, 4758.762f, 42.0235f),   // McKenzie Airstrip
+            new Vector3(191.53f, 2840.427f, 44.50375f),   // Joshua Road Loading Dock
+            new Vector3(426.6624f, 6549.066f, 27.601f),   // Paleto Barn
         };
         #endregion
 
@@ -473,14 +473,12 @@ namespace EmergencyCallouts.Callouts
                 int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
                 suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
                 suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
-                Settings.SearchAreaSize -= 15;
             }
             else if (CalloutPosition == CalloutPositions[3]) // County
             {
                 int CountyHidingSpotNum = random.Next(CountyHidingPositions.Length);
                 suspect.Position = CountyHidingPositions[CountyHidingSpotNum];
                 suspect.Heading = CountyHidingPositionsHeadings[CountyHidingSpotNum];
-                Settings.SearchAreaSize -= 15;
             }
             else if (CalloutPosition == CalloutPositions[4]) // McKenzie Airstrip
             {
