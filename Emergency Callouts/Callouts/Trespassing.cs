@@ -813,7 +813,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Person~s~: Can I help you sir? I'm the person in charge.",
                     $"~b~You~s~: Yes, we're looking for a person matching your description, do you have anything to prove that you work here?",
                     "~y~Person~s~: Yes ofcourse, here it is.",
-                    $"~b~You~s~: Okay, looks fine to me, when did you last come here?",
+                    $"~b~You~s~: Okay, looks fine to me, when did you last enter?",
                     "~g~Person~s~: A few minutes ago, when my shift started.",
                     $"~b~You~s~: Then the caller must've made a mistake.",
                     "~g~Person~s~: Well, I'm glad he called, we actually have alot of kids sneaking around here.",
@@ -826,7 +826,7 @@ namespace EmergencyCallouts.Callouts
 
                 int day = random.Next(1, 31);
                 int month = random.Next(1, 13);
-                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
+                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 5);
 
                 SuspectBlip = Suspect.AttachBlip();
                 SuspectBlip.SetColorYellow();
@@ -876,7 +876,7 @@ namespace EmergencyCallouts.Callouts
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("char_chef", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~m~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_chef", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
