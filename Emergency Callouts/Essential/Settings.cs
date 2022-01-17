@@ -1,56 +1,62 @@
-﻿using EmergencyCallouts.Essential;
-using Rage;
+﻿using Rage;
 using System.Windows.Forms;
 
-namespace EmergencyCallouts
+namespace EmergencyCallouts.Essential
 {
     internal static class Settings
     {
-        // Callout Toggling
+        // Callouts
         internal static bool PublicIntoxication = true;
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
         internal static bool Burglary = true;
         internal static bool SuspiciousActivity = true;
 
-        // Callout Measurements
+        // Measurements
         internal static int SearchAreaSize = 60;
-        internal static int CalloutDistance = 1000;
-
-        // Notifications
-        internal static string Callsign = "1-LINCOLN-18";
-        internal static string SubtitleColor = "Blue";
+        internal static int MaxCalloutDistance = 1000;
+        internal static double PedBlipScale = 0.75f;
 
         // Keys
-        internal static Keys Talk = Keys.Y;
+        internal static Keys InteractKey = Keys.Y;
+        internal static Keys EndCalloutKey = Keys.End;
+
+        // Chances
+        internal static int ChanceOfPropertyDamage = 75;
+        internal static int ChanceOfPressingCharges = 50;
+
+        // Back end
+        internal static bool EarlyAccess = true;
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts]: Loading settings.");
+            Game.LogTrivial("[Emergency Callouts]: Loading settings");
 
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
             iniFile.Create();
 
-            // Callout Toggling
-            PublicIntoxication = iniFile.ReadBoolean("Callout Toggling", "PublicIntoxication", PublicIntoxication);
-            Trespassing = iniFile.ReadBoolean("Callout Toggling", "Trespassing", Trespassing);
-            DomesticViolence = iniFile.ReadBoolean("Callout Toggling", "DomesticViolence", DomesticViolence);
-            Burglary = iniFile.ReadBoolean("Callout Toggling", "Burglary", Burglary);
-            SuspiciousActivity = iniFile.ReadBoolean("Callout Toggling", "SuspiciousActivity", SuspiciousActivity);
+            // Callouts
+            PublicIntoxication = iniFile.ReadBoolean("Callouts", "PublicIntoxication", PublicIntoxication);
+            Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
+            DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
+            Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
+            SuspiciousActivity = iniFile.ReadBoolean("Callouts", "SuspiciousActivity", SuspiciousActivity);
 
-            // Callout Measurements
-            SearchAreaSize = iniFile.ReadInt32("Callout Measurements", "SearchAreaSize", SearchAreaSize);
-            CalloutDistance = iniFile.ReadInt32("Callout Measurements", "CalloutDistance", CalloutDistance);
-
-            // Notifications
-            Callsign = iniFile.ReadString("Notifications", "Callsign", Callsign);
-            SubtitleColor = iniFile.ReadString("Notifications", "SubtitleColor", SubtitleColor).Substring(0, 1).ToLower();
+            // Measurements
+            SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
+            MaxCalloutDistance = iniFile.ReadInt32("Measurements", "MaxCalloutDistance", MaxCalloutDistance);
+            PedBlipScale = iniFile.ReadDouble("Measurements", "PedBlipScale", PedBlipScale);
 
             // Keybindings
-            Talk = iniFile.ReadEnum("Keybindings", "Talk", Keys.Y);
+            InteractKey = iniFile.ReadEnum("Keybindings", "InteractKey", InteractKey);
+            EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
-            Game.LogTrivial("[Emergency Callouts]: Loaded settings.");
+            // Chances
+            ChanceOfPropertyDamage = iniFile.ReadInt32("Chances", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
+            ChanceOfPressingCharges = iniFile.ReadInt32("Chances", "ChanceOfPressingCharges", ChanceOfPressingCharges);
+
+            Game.LogTrivial("[Emergency Callouts]: Loaded settings");
         }
     }
 }

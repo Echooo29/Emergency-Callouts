@@ -1,46 +1,46 @@
-﻿using EmergencyCallouts.Essential;
-using Rage;
+﻿using Rage;
 using System;
 using System.Net;
 
-namespace EmergencyCallouts
+namespace EmergencyCallouts.Essential
 {
     internal class UpdateChecker
     {
+        internal static string OnlineVersion = string.Empty;
+
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
-            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=20730&textOnly=1");
-            string OnlineVersion = null;
+            Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
+            string EarlyAccessExtension = "";
 
             try
             {
                 Game.LogTrivial("[Emergency Callouts]: Checking for updates");
 
                 OnlineVersion = webClient.DownloadString(OnlineVersionURI).Trim();
-                OnlineVersion = "0.1.0"; // ! Temp
             }
             catch (WebException)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~y~Error", "Failed to check for updates; Possible network error.");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates; Possible network error.\nYou can still continue playing LSPDFR.");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
             }
 
-            if (OnlineVersion != Project.LocalVersion)
+            if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~{Project.LocalVersion} ~b~by Faya", $"Found update ~g~{OnlineVersion} ~s~available for you!");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
                 return true;
             }
-            else if (OnlineVersion.ToLower() == "file hidden")
+            else if (Settings.EarlyAccess)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~{Project.LocalVersion} ~b~by Faya", "New update is being reviewed by LSPDFR!");
-                Game.LogTrivial("[Emergency Callouts]: Checked for updates; File is hidden");
-                return true;
+                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
+                Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
+                return false;
             }
             else
             {
-                Game.DisplayNotification("commonmenu", "shop_tick_icon", "Emergency Callouts", $"~g~{Project.LocalVersion} ~b~by Faya", "~y~Reporting for duty!");
+                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~c~by Faya", "~y~Reporting for duty!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; None available");
                 return false;
             }

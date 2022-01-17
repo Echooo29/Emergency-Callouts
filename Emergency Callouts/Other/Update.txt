@@ -1,5 +1,0 @@
-﻿1) Add New Pastebin Exception Counter Link.
-2) Update AssemblyFileVersion.
-3) Update 'Emergency Callouts Audio' folder.
-4) Get hits from previous version and say something like: 
-"Hey everyone, thanks for all the different reviews, In update x.x.x there have been *hits* hits sent to me, to see , *hits* x *downloads*, rounding that up would be *outcome*!

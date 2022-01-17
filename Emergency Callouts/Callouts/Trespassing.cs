@@ -1,37 +1,38 @@
 ﻿using EmergencyCallouts.Essential;
-using LSPD_First_Response.Engine.UI;
+using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
-using RAGENativeUI;
+using Rage.Native;
 using System;
+using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
     [CalloutInfo("Trespassing", CalloutProbability.Medium)]
     public class Trespassing : Callout
     {
-        readonly int ScenarioNumber = random.Next(1, 6);
-
         bool CalloutActive;
-        bool OnScene;
+        bool PlayerArrived;
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
 
-        // Main
-        #region Positions
         Vector3 Entrance;
         Vector3 Center;
 
+        // Main
+        #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(512f, -610.72f, 24.43f),   // La Mesa Railyard
-            new Vector3(-1106.7f, -1975.5f, 0f),   // LSIA Scrapyard
-            new Vector3(2165.78f, 4758.762f, 42f), // McKenzie Airstrip 
+            new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
+            new Vector3(-1106.7f, -1975.50f, 24.562f),  // LSIA Scrapyard
+            new Vector3(1225.66f, -2923.435f, 9.4783f), // Terminal
+            new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
+            new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
+            new Vector3(426.6624f, 6549.066f, 27.601f), // Paleto Barn
         };
         #endregion
 
@@ -77,22 +78,12 @@ namespace EmergencyCallouts.Callouts
             112f // Crates
         };
 
-        readonly Vector3[] RailyardFirePositions =
+        readonly Vector3[] RailyardArsonPositions =
         {
             new Vector3(485f, -636.5899f, 25.02777f), // Alley
             new Vector3(522.1501f, -592.4759f, 25f),  // Power Unit
             new Vector3(500f, -609.7313f, 24.75132f), // Building 1
             new Vector3(493f, -573.0732f, 24.59121f)  // Building 2
-        };
-
-        readonly Vector3[] RailyardWeldingPositions =
-        {
-            new Vector3(491.9123f, -554.114f, 24.7505f), // Container
-        };
-
-        readonly float[] RailyardWeldingHeadings =
-        {
-            212f,
         };
         #endregion
 
@@ -101,54 +92,88 @@ namespace EmergencyCallouts.Callouts
         readonly Vector3[] ScrapyardHidingPositions =
         {
             new Vector3(-1155.449f, -2030.024f, 13.16065f), // Lifter
-            new Vector3(-1179.068f, -2081.575f, 13.83974f), // Red Small Container
+            new Vector3(-1178.147f, -2083.881f, 13.41349f), // Red Small Container
             new Vector3(-1180.712f, -2072.301f, 14.45590f), // Garbage container
-            new Vector3(-1171.513f, -2071.196f, 13.96500f), // Abandoned Train Carrier
-            new Vector3(-1181.182f, -2046.646f, 13.92571f), // Abandoned bus
+            new Vector3(-1168.165f, -2052.083f, 14.43985f), // Inside bus
+            new Vector3(-1181.182f, -2046.646f, 13.92571f), // Outside bus
+            new Vector3(-1154.072f, -2049.230f, 13.91198f), // Inside bus water tower
         };
 
         readonly float[] ScrapyardHidingPositionsHeadings =
         {
-            222f,
+            1.42f,
             346f,
             270f,
-            145f,
+            66.24f,
             156f,
+            257.52f,
         };
 
         readonly Vector3[] ScrapyardManagerPositions =
         {
-            new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
-            new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
-            new Vector3(-1180.037f, -2058.742f, 14.09963f), // Casual Spot
+            new Vector3(-1161.296f, -2060.376f, 13.81086f), // Huge Gas Containers
+            new Vector3(-1157.456f, -2033.004f, 13.16054f), // Industrial Crane
+            new Vector3(-1179.293f, -2059.016f, 14.13962f), // Casual Spot
         };
 
         readonly float[] ScrapyardManagerHeadings =
         {
-            224f, 
-            343f, 
-            262f,
+            45.99f,
+            2.16f,
+            74.74f,
         };
 
-        readonly Vector3[] ScrapyardFirePositions =
+        readonly Vector3[] ScrapyardArsonPositions =
         {
             new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
             new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
             new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
         };
+        #endregion
 
-        readonly Vector3[] ScrapyardWeldingPositions =
+        // Terminal
+        #region Positions
+        readonly Vector3[] TerminalHidingPositions =
         {
-            new Vector3(), //
+            new Vector3(1249.729f, -2887.772f, 9.319264f), // Rear
+            new Vector3(1242.891f, -2947.398f, 9.319264f), // Middle
+            new Vector3(1236.903f, -2955.032f, 9.319268f), // Middle 2
+            new Vector3(1238.818f, -3006.345f, 9.319253f), // Front
+            new Vector3(1227.453f, -3009.943f, 9.319252f), // Front 2
         };
 
-        readonly float[] ScrapyardWeldingHeadings =
+        readonly float[] TerminalHidingPositionsHeadings =
         {
-            0f,
+            128.07f,
+            160.45f,
+            2.73f,
+            92.93f,
+            347.75f,
+        };
+
+        readonly Vector3[] TerminalManagerPositions =
+        {
+            new Vector3(1228.202f, -2970.058f, 9.319256f), // Tool Cabinet
+            new Vector3(1238.923f, -2940.416f, 9.319255f), // Tool Cabinet 2
+            new Vector3(1229.698f, -2908.376f, 9.319265f), // Boxes
+        };
+
+        readonly float[] TerminalManagerHeadings =
+        {
+            81.28f,
+            30.57f,
+            310.89f,
+        };
+
+        readonly Vector3[] TerminalArsonPositions =
+        {
+            new Vector3(1240.061f, -2889.315f, 9.319265f), // Pallets
+            new Vector3(1251.003f, -2908.396f, 9.319266f), // Fuel Barrels
+            new Vector3(1243.456f, -2953.213f, 9.319252f), // Fuel Barrels 2
         };
         #endregion
 
-        // McKenzie Airstrip
+        // McKenzie Field
         #region Positions
         readonly Vector3[] AirstripHidingPositions =
         {
@@ -170,41 +195,113 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3[] AirstripManagerPositions =
         {
-            new Vector3(2137.664f, 4791.458f, 40.9702f), // Hangar Table
-            new Vector3(2135.579f, 4772.35f, 40.97029f), // Red Tool Storage
-            new Vector3(2144.962f, 4776.65f, 40.97034f), // Pile of Boxes
+            new Vector3(2139.753f, 4791.316f, 40.97028f), // Pile of Boxes 
+            new Vector3(2135.525f, 4772.93f, 40.97032f),  // Red Tool Storage
+            new Vector3(2144.859f, 4779.579f, 40.97027f), // Pile of Boxes 2
         };
 
         readonly float[] AirstripManagerHeadings =
         {
-            290f,
-            190f,
-            317f,
+            282.48f,
+            187.58f,
+            234.06f,
         };
 
-        readonly Vector3[] AirstripFirePositions =
+        readonly Vector3[] AirstripArsonPositions =
         {
             new Vector3(2144.962f, 4776.65f, 40.97034f), // Pile of Boxes
             new Vector3(2108.356f, 4762.68f, 41.04375f), // Gas Tank
             new Vector3(2125.861f, 4774.83f, 40.97033f), // Pile of Boxes 2
         };
+        #endregion
 
-        readonly Vector3[] AirstripWeldingPositions =
+        // Joshua Road Loading Dock
+        #region Positions
+        readonly Vector3[] LoadingDockHidingPositions =
         {
-            new Vector3(), //
+            new Vector3(216.5567f, 2808.267f, 45.65519f), // Pile Of Pallets
+            new Vector3(223.5032f, 2802.028f, 45.65519f), // Containers
+            new Vector3(167.6332f, 2736.069f, 43.37733f), // Containers 2
+            new Vector3(193.4705f, 2766.353f, 43.42632f), // Truck
+            new Vector3(163.1098f, 2770.249f, 45.69321f), // Red Container
         };
 
-        readonly float[] AirstripWeldingHeadings =
+        readonly float[] LoadingDockHidingHeadings =
         {
-            0f,
+            182.41f,
+            43.53f,
+            7.96f,
+            183.06f,
+            9.44f,
+        };
+
+        readonly Vector3[] LoadingDockManagerPositions =
+        {
+            new Vector3(221.0605f, 2774.253f, 45.65525f), // Barrels
+            new Vector3(221.58971f, 2734.374f, 42.9960f), // Plyboards
+            new Vector3(219.1572f, 2806.581f, 45.65519f), // Barrels 2
+        };
+
+        readonly float[] LoadingDockManagerHeadings =
+        {
+            148.58f,
+            214.67f,
+            36.07f,
+        };
+
+        readonly Vector3[] LoadingDockArsonPositions =
+        {
+            new Vector3(202.8873f, 2776.132f, 45.65527f), // Plyboards
+            new Vector3(164.554f, 2777.1820f, 45.70289f), // Storage Tank
+            new Vector3(197.8674f, 2803.913f, 45.65517f), // Generator
         };
         #endregion
 
+        // Zancudo Grain Growers
+        #region Positions
+        readonly Vector3[] BarnHidingPositions =
+        {
+            new Vector3(435.1073f, 6456.916f, 28.74582f), // Back of the barn
+            new Vector3(426.8463f, 6479.765f, 28.86706f), // Front of the barn
+            new Vector3(436.3864f, 6502.764f, 28.77272f), // Outside overhang
+            new Vector3(399.7721f, 6474.169f, 29.33945f), // Outside Garbage Container
+            new Vector3(432.5182f, 6499.175f, 28.89931f), // Bushes
+        };
+
+        readonly float[] BarnHidingHeadings =
+        {
+            337.39f,
+            185.75f,
+            29.36f,
+            256.73f,
+            121.03f,
+        };
+
+        readonly Vector3[] BarnManagerPositions =
+        {
+            new Vector3(409.8339f, 6493.519f, 28.12436f), // Generator
+            new Vector3(430.6472f, 6502.231f, 28.71397f), // Shed
+            new Vector3(425.288f, 6467.4321f, 28.79181f), // Barn
+        };
+
+        readonly float[] BarnManagerHeadings =
+        {
+            327.94f,
+            97.09f,
+            19.64f,
+        };
+
+        readonly Vector3 BarnArsonPosition = new Vector3(419.651f, 6467.322f, 28.82159f);
+        #endregion
+
+        readonly Rage.Object WeldingDevice = new Rage.Object(new Model("prop_weld_torch"), new Vector3(0, 0, 0));
+        readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Phone = new Rage.Object(new Model("prop_police_phone"), new Vector3(0, 0, 0));
+
         Ped Suspect;
-        Ped Guard;
+        Persona SuspectPersona;
 
         Blip SuspectBlip;
-        Blip GuardBlip;
         Blip EntranceBlip;
         Blip SearchArea;
 
@@ -216,12 +313,15 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
+                    CalloutArea = World.GetStreetName(loc).Replace("Great Ocean Hwy", "Zancudo Grain Growers"); ;
                 }
             }
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Trespassing";
+            CalloutDetails = "Reports of a person ~y~trespassing~s~ on private property.";
+            CalloutScenario = random.Next(1, 3);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
@@ -230,7 +330,7 @@ namespace EmergencyCallouts.Callouts
 
         public override void OnCalloutNotAccepted()
         {
-            Game.LogTrivial("[Emergency Callouts]: Callout not accepted");
+            Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
 
             base.OnCalloutNotAccepted();
@@ -240,31 +340,68 @@ namespace EmergencyCallouts.Callouts
         {
             try
             {
-                // Callout Accepted
-                Log.CalloutAccepted(CalloutMessage, ScenarioNumber);
+                // Positioning
+                #region Positioning
+                if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
+                {
+                    Center = new Vector3(512f, -610.72f, 24.43f);
+                    Entrance = new Vector3(510.59f, -666.95f, 24.40f);
+                }
+                else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
+                {
+                    Center = new Vector3(-1170.024f, -2045.655f, 14.22536f);
+                    Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
+                }
+                else if (CalloutPosition == CalloutPositions[2]) // Terminal
+                {
+                    Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
+                    Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+                {
+                    Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
+                    Entrance = new Vector3(2165.78f, 4758.762f, 42f);
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+                {
+                    Center = new Vector3(195.43f, 2786.759f, 45.65519f);
+                    Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
+                {
+                    Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
+                    Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
+                }
+                #endregion
 
-                // Attach Message
-                Display.AttachMessage("Someone reported a person trespassing on private property.");
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+
+                // Accept Messages
+                Display.AcceptNotification(CalloutDetails);
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
 
                 // EntranceBlip
                 EntranceBlip = new Blip(Entrance);
+                if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
                 // Suspect
-                Suspect = new Ped(CalloutPosition);
-                Suspect.SetDefaults();
-                Game.LogTrivial($"[Emergency Callouts]: Created Suspect ({Suspect.Model.Name}) at " + Suspect.Position);
+                Suspect = new Ped(Helper.Entity.GetRandomMaleModel(), Vector3.Zero, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
 
-                // SuspectBlip
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
-                SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
-               
+                SuspectBlip.SetColorRed();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Alpha = 0f;
+
                 CalloutHandler();
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "OnCalloutAccepted", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
             return base.OnCalloutAccepted();
@@ -277,30 +414,8 @@ namespace EmergencyCallouts.Callouts
             {
                 CalloutActive = true;
 
-                // Positioning
-                #region Positioning
-                if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
-                {
-                    Center = new Vector3(512f, -610.72f, 24.43f);
-                    Entrance = new Vector3(510.59f, -666.95f, 24.40f);
-                    EntranceBlip.Position = Entrance;
-                }
-                else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
-                {
-                    Center = new Vector3(-1170.024f, -2045.655f, 14.22536f);
-                    Entrance = new Vector3(-1156.879f, -1988.801f, 13.16036f);
-                    EntranceBlip.Position = Entrance;
-                }
-                else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
-                {
-                    Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
-                    Entrance = new Vector3(2165.78f, 4758.762f, 42f);
-                    EntranceBlip.Position = Entrance;
-                }
-                #endregion
-
                 // Scenario Deciding
-                switch (ScenarioNumber)
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -308,216 +423,358 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
-                        break;
                 }
 
-                Handle.DecreaseSearchArea(SearchArea, Suspect, 10);
-
-                // Enabling Route
-                Entity.EnableRoute(EntranceBlip);
-                Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+                Log.Creation(Suspect, PedCategory.Suspect);
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "CalloutHandler", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
 
-        private void RetrieveHidingPosition()
+        private void RetrieveHidingPosition(Ped suspect)
         {
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 int RailyardHidingSpotNum = random.Next(RailyardHidingPositions.Length);
-                Suspect.Position = RailyardHidingPositions[RailyardHidingSpotNum];
-                Suspect.Heading = RailyardHidingPositionsHeadings[RailyardHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                suspect.Position = RailyardHidingPositions[RailyardHidingSpotNum];
+                suspect.Heading = RailyardHidingPositionsHeadings[RailyardHidingSpotNum];
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 int ScrapyardHidingSpotNum = random.Next(ScrapyardHidingPositions.Length);
-                Suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
-                Suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                suspect.Position = ScrapyardHidingPositions[ScrapyardHidingSpotNum];
+                suspect.Heading = ScrapyardHidingPositionsHeadings[ScrapyardHidingSpotNum];
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
+            {
+                int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
+                suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
+                suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
+                Settings.SearchAreaSize -= 15;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
             {
                 int AirstripHidingSpotNum = random.Next(AirstripHidingPositions.Length);
-                Suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
-                Suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
+                suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
             }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                int AirstripHidingSpotNum = random.Next(LoadingDockHidingPositions.Length);
+                suspect.Position = LoadingDockHidingPositions[AirstripHidingSpotNum];
+                suspect.Heading = LoadingDockHidingHeadings[AirstripHidingSpotNum];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            {
+                int AirstripHidingSpotNum = random.Next(BarnHidingPositions.Length);
+                suspect.Position = BarnHidingPositions[AirstripHidingSpotNum];
+                suspect.Heading = BarnHidingHeadings[AirstripHidingSpotNum];
+            }
+
+            suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             #endregion
         }
 
         private void RetrieveManagerPosition()
         {
             #region Positions
-            Entity.Delete(Suspect);
+            if (Suspect.Exists()) { Suspect.Delete(); }
 
             if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
             {
                 Suspect = new Ped("ig_lifeinvad_01", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
-                SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(RailyardManagerPositions.Length);
                 Suspect.Position = RailyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = RailyardManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
             else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
             {
                 Suspect = new Ped("ig_chef", CalloutPosition, 0f);
-                Suspect.SetDefaults();
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
-                SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(ScrapyardManagerPositions.Length);
                 Suspect.Position = ScrapyardManagerPositions[ManagerPositionNum];
                 Suspect.Heading = ScrapyardManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[2]) // Terminal
             {
-                Suspect = new Ped("player_two", CalloutPosition, 0f);
-                Suspect.SetDefaults();
+                Suspect = new Ped("mp_m_boatstaff_01", CalloutPosition, 0f);
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
-                SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
+
+                int ManagerPositionNum = random.Next(TerminalManagerPositions.Length);
+                Suspect.Position = TerminalManagerPositions[ManagerPositionNum];
+                Suspect.Heading = TerminalManagerHeadings[ManagerPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Field
+            {
+                Suspect = new Ped("player_two", CalloutPosition, 0f);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                 int ManagerPositionNum = random.Next(AirstripManagerPositions.Length);
                 Suspect.Position = AirstripManagerPositions[ManagerPositionNum];
                 Suspect.Heading = AirstripManagerHeadings[ManagerPositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             }
+            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            {
+                Suspect = new Ped("ig_barry", CalloutPosition, 0f);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
+
+                int ManagerPositionNum = random.Next(LoadingDockManagerPositions.Length);
+                Suspect.Position = LoadingDockManagerPositions[ManagerPositionNum];
+                Suspect.Heading = LoadingDockManagerHeadings[ManagerPositionNum];
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
+            {
+                Suspect = new Ped("csb_oscar", CalloutPosition, 0f);
+
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
+
+                int ManagerPositionNum = random.Next(BarnManagerPositions.Length);
+                Suspect.Position = BarnManagerPositions[ManagerPositionNum];
+                Suspect.Heading = BarnManagerHeadings[ManagerPositionNum];
+            }
+
+            Suspect.IsPersistent = true;
+            Suspect.BlockPermanentEvents = true;
+
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
             #endregion
         }
 
-        private void RetrieveArsonPosition()
+        private void SuspectDialogue()
         {
-            #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
+            #region Dialogue
+            try
             {
-                int FirePositionNum = random.Next(RailyardFirePositions.Length);
-                Suspect.Position = RailyardFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                bool stopDialogue = false;
+                bool stopDialogue2 = false;
+                bool CompletedSuspectDialogue = false;
+
+                // Get Time Of Day Line
+                string timeOfDay;
+                if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
+                {
+                    timeOfDay = "so early?";
+                }
+                else if (World.TimeOfDay.TotalHours >= 12 && World.TimeOfDay.TotalHours <= 21)
+                {
+                    timeOfDay = "in the middle of the day?";
+                }
+                else
+                {
+                    timeOfDay = "in the middle of the night?";
+                }
+                
+                // Gender pre mention
+                string gender = string.Empty;
+                if (PlayerPersona.Gender == LSPD_First_Response.Gender.Male) { gender = "Mr"; }
+                else gender = "Mrs";
+
+                // Owner Line
+                string lineOwner = string.Empty;
+
+                int rand = random.Next(1, 101);
+
+                if (rand <= Settings.ChanceOfPressingCharges)
+                {
+                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
+                }
+                else
+                {
+                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go {gender} {PlayerPersona.Surname}";
+                }
+
+                string[] dialogueSuspect =
+                {
+                    $"~b~You~s~: So, what are you doing here {timeOfDay}",
+                    "~y~Suspect~s~: Man, I'm only looking for some stuff!",
+                    "~b~You~s~: Do you have permission to be here?",
+                    "~y~Suspect~s~: No.. but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
+                    "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
+                    "~y~Suspect~s~: Can't you just call him?",
+                    "~b~You~s~: You know what? Sure.",
+                    "~y~Suspect~s~: Thanks.",
+                };
+
+                string[] dialogueOwner =
+                {
+                    $"~g~Owner~s~: Hello? Who's this?",
+                    $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
+                    "~g~Owner~s~: Again?! What did my son do now?",
+                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
+                    "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
+                    "~g~Owner~s~: What's his name?",
+                    $"~b~You~s~: His name is {SuspectPersona.Forename}.",
+                    "~g~Owner~s~: " + lineOwner,
+                    "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
+                    $"~g~Owner~s~: You too {gender}... uhh...",
+                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}.",
+                    $"~g~Owner~s~: Okay, you too have a nice day.",
+                    "~m~Call Ended",
+                };
+
+                int lineSuspectCount = 0;
+                int lineOwnerCount = 0;
+
+                #region Suspect Dialogue
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsCuffed)
+                        {
+                            GameFiber.Sleep(5000);
+                            break;
+                        }
+                    }
+
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && !CompletedSuspectDialogue)
+                        {
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    Suspect.Tasks.Clear();
+
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                }
+
+                                DialogueStarted = true;
+
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                Game.DisplaySubtitle(dialogueSuspect[lineSuspectCount], 15000);
+                                if (!stopDialogue) { lineSuspectCount++; }
+
+                                Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineSuspectCount);
+
+                                if (lineSuspectCount == dialogueSuspect.Length)
+                                {
+                                    stopDialogue = true;
+                                    Game.LogTrivial("[Emergency Callouts]: Suspect dialogue ended");
+
+                                    CompletedSuspectDialogue = true;
+                                    DialogueStarted = false;
+                                    break;
+                                }
+
+                                GameFiber.Sleep(500);
+                            }
+                            else
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                }
+                            }
+                        }
+                    }
+                });
+                #endregion
+
+                #region Owner Dialogue
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
+                        {
+                            if (Game.IsKeyDown(Settings.InteractKey))
+                            {
+                                if (!DialogueStarted)
+                                {
+                                    GameFiber.Sleep(4000);
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
+
+                                    int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                    NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                                    MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                    DialogueStarted = true;
+                                }
+                                else
+                                {
+                                    Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
+                                    if (!stopDialogue2) { lineOwnerCount++; }
+
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
+
+                                    if (lineOwnerCount == dialogueOwner.Length)
+                                    {
+                                        stopDialogue2 = true;
+                                        Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+
+                                        MainPlayer.Tasks.Clear();
+                                        if (Phone.Exists()) { Phone.Delete(); }
+
+                                        GameFiber.Sleep(3000);
+                                        Handle.AdvancedEndingSequence();
+                                        break;
+                                    }
+                                }
+
+                                GameFiber.Sleep(500);
+                            }
+                        }
+                    }
+                });
+                #endregion
             }
-            else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
+            catch (Exception e)
             {
-                int FirePositionNum = random.Next(ScrapyardFirePositions.Length);
-                Suspect.Position = ScrapyardFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
-            {
-                int FirePositionNum = random.Next(AirstripFirePositions.Length);
-                Suspect.Position = AirstripFirePositions[FirePositionNum];
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@base"), "base", 4f, AnimationFlags.StayInEndFrame);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
 
-        private void RetrieveWeldingPosition()
-        {
-            #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
-            {
-                int WeldingPositionNum = random.Next(RailyardWeldingPositions.Length);
-                Suspect.Position = RailyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = RailyardWeldingHeadings[WeldingPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
-            {
-                int WeldingPositionNum = random.Next(ScrapyardWeldingPositions.Length);
-                Suspect.Position = ScrapyardWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = ScrapyardWeldingHeadings[WeldingPositionNum];
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
-            {
-                int WeldingPositionNum = random.Next(AirstripWeldingPositions.Length);
-                Suspect.Position = AirstripWeldingPositions[WeldingPositionNum];
-                Suspect.Heading = AirstripWeldingHeadings[WeldingPositionNum];
-            }
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_welding@male@base"), "base", 5f, AnimationFlags.Loop);
-            
-            Rage.Object entity = new Rage.Object("prop_weld_torch", Suspect.Position);
-            
-            entity.AttachTo(Suspect, 0, Vector3.Zero, Rotator.Zero);
-
-            #endregion
-        }
-
-        private void Scenario1() // Pursuit
+        private void Scenario1() // Surrender
         {
             #region Scenario 1
             try
             {
                 // Retrieve Hiding Position
-                RetrieveHidingPosition();
+                RetrieveHidingPosition(Suspect);
 
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-                        if (PedFound == true)
-                        {
-                            Entity.Delete(SuspectBlip);
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
-
-                            LHandle pursuit = Functions.CreatePursuit();
-                            Game.LogTrivial("[Emergency Callouts]: Created pursuit");
-
-                            Functions.AddPedToPursuit(pursuit, Suspect);
-                            Game.LogTrivial("[Emergency Callouts]: Added Suspect to pursuit");
-
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                            Game.LogTrivial("[Emergency Callouts]: Set pursuit is active for player");
-
-                            Functions.AddPedContraband(Suspect, LSPD_First_Response.Engine.Scripting.Entities.ContrabandType.Weapon, "Crowbar");
-                            Game.LogTrivial("[Emergency Callouts]: Added \"WEAPON_CROWBAR\" to Suspect contraband");
-
-                            Play.PursuitAudio();
-                            Game.LogTrivial("[Emergency Callouts]: Played pursuit audio");
-
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.CalloutException(this, "Scenario1", e);
-            }
-            #endregion
-        }
-
-        private void Scenario2() // Stop
-        {
-            #region Scenario 2
-            try
-            {
-                // Retrieve Hiding Position
-                RetrieveHidingPosition();
+                // Set Dialogue Active
+                SuspectDialogue();
 
                 GameFiber.StartNew(delegate
                 {
@@ -525,15 +782,13 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (PedFound == true)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && Suspect.Exists() && PlayerArrived)
                         {
                             // Clear Suspect Tasks
                             Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect tasks to null");
 
                             // Suspect Achieve Player Heading
-                            Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to face player");
+                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
 
                             break;
                         }
@@ -542,14 +797,14 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario2", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
        
-        private void Scenario3() // Manager
+        private void Scenario2() // Manager
         {
-            #region Scenario 3
+            #region Scenario 2
             try
             {
                 // Retrieve Manager Position
@@ -560,7 +815,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Person~s~: Can I help you sir? I'm the person in charge.",
                     $"~b~You~s~: Yes, we're looking for a person matching your description, do you have anything to prove that you work here?",
                     "~y~Person~s~: Yes ofcourse, here it is.",
-                    $"~b~You~s~: Okay, looks fine to me, when did you last come here?",
+                    $"~b~You~s~: Okay, looks fine to me, when did you last enter?",
                     "~g~Person~s~: A few minutes ago, when my shift started.",
                     $"~b~You~s~: Then the caller must've made a mistake.",
                     "~g~Person~s~: Well, I'm glad he called, we actually have alot of kids sneaking around here.",
@@ -573,20 +828,21 @@ namespace EmergencyCallouts.Callouts
 
                 int day = random.Next(1, 31);
                 int month = random.Next(1, 13);
-                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 7);
+                int year = random.Next(DateTime.Now.Year, DateTime.Now.Year + 5);
 
                 SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColor(Colors.Yellow);
-                SuspectBlip.ScaleForPed();
-                Entity.Disable(SuspectBlip);
-                Game.LogTrivial("[Emergency Callouts]: Created SuspectBlip");
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
+
+                // Clipboard
+                int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.LeftPhHand);
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Clipboard, Suspect, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
 
                 // Inspect animation
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@inspect@crouch@male_a@idles"), "idle_a", 5f, AnimationFlags.Loop);
-                Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@world_human_clipboard@male@base"), "base", 5f, AnimationFlags.Loop);
 
                 Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
-                Game.LogTrivial("[Emergency Callouts]: Set ped cant be arrested by player (Suspect)");
 
                 GameFiber.StartNew(delegate
                 {
@@ -594,57 +850,74 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
-                            if (Game.IsKeyDown(Settings.Talk))
+                            if (Game.IsKeyDown(Settings.InteractKey))
                             {
-                                Suspect.Tasks.Clear();
-                                Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
+                                if (!DialogueStarted)
+                                {
+                                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                                    Suspect.Tasks.Clear();
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                }
 
                                 DialogueStarted = true;
-                                Game.LogTrivial("[Emergency Callouts]: Dialogue Started");
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180);
-                                Game.LogTrivial("[Emergency Callouts]: Suspect achieved player heading");
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
-                                Game.DisplaySubtitle(dialogue[line], 99999);
+                                Game.DisplaySubtitle(dialogue[line], 15000);
                                 line++;
 
                                 if (line == 3)
                                 {
                                     Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None).WaitForCompletion();
-                                    Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to play animation");
 
                                     if (CalloutPosition == CalloutPositions[0]) // La Mesa Railyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_ric", "Go Loco Railroad", "~y~Richard Lukens", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_rickie", "char_rickie", "Go Loco Railroad", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: La Mesa \n~c~Valid until {month}/{day}/{year}");
                                     }
                                     else if (CalloutPosition == CalloutPositions[1]) // LSC Scrapyard
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_n_che", "Los Santos Customs", "~y~Jimmy Macmillan", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
+                                        Game.DisplayNotification("char_chef", "char_chef", "Los Santos Customs", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Los Santos Int'l \n~c~Valid until {month}/{day}/{year}");
                                     }
-                                    else if (CalloutPosition == CalloutPositions[2]) // McKenzie Airstrip
+                                    else if (CalloutPosition == CalloutPositions[2]) // Terminal
                                     {
-                                        Game.DisplayNotification("heisthud", "hc_trevor", "Trevor Philips Industries", "~y~Trevor Philips", $"~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                        Game.DisplayNotification("char_boatsite2", "char_boatsite2", "Daisy-Lee", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Captain \n~g~Ship~s~: Daisy-Lee \n~c~Valid until {month}/{day}/{year}");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+                                    {
+                                        SuspectPersona.Forename = "Trevor";
+                                        SuspectPersona.Surname = "Philips";
+                                        SuspectPersona.Wanted = true;
+                                        Game.DisplayNotification("hush_trevor", "hush_trevor", "Trevor Philips Industries", $"~y~{SuspectPersona.FullName}", "~b~Position~s~: CEO \n~g~Location~s~: Grapeseed \n~c~The best drugs you can buy!");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+                                    {
+                                        Game.DisplayNotification("char_barry", "char_barry", "VTA Shipping Company", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Manager \n~g~Location~s~: Blaine County \n~c~Valid until {month}/{day}/{year}");
+                                    }
+                                    else if (CalloutPosition == CalloutPositions[5]) // Paleto Barn
+                                    {
+                                        Game.DisplayNotification("char_oscar", "char_oscar", "Wildflower Fields", $"~y~{SuspectPersona.FullName}", $"~b~Position~s~: Owner \n~g~Location~s~: Paleto Bay \n~c~Valid until {month}/{day}/{year}");
                                     }
 
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed ped credentials");
+                                    Game.LogTrivial($"[Emergency Callouts]: Displayed {SuspectPersona.FullName}'s credentials");
                                 }
 
                                 if (line == 4)
                                 {
-                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
-                                    Game.LogTrivial("[Emergency Callouts]: Assigned MainPlayer to play animation");
+                                    MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
+                                    GameFiber.Sleep(500);
 
-                                    SuspectBlip.SetColor(Colors.Green);
-                                    Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to green");
+                                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.None);
+                                    GameFiber.Sleep(2000);
+                                    SuspectBlip.SetColorGreen();
                                 }
 
                                 if (line == dialogue.Length)
                                 {
                                     GameFiber.Sleep(3000);
-
-                                    Handle.CalloutEnding(CalloutMessage);
+                                    Handle.AdvancedEndingSequence();
                                     break;
                                 }
                                 GameFiber.Sleep(500);
@@ -653,7 +926,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp("Press ~y~Y~s~ to talk to the ~y~suspect~s~.");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
                         }
@@ -662,111 +935,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Scenario3", e);
-            }
-            #endregion
-        }
-
-        private void Scenario4() // Attempted Arson
-        {
-            #region Scenario 4
-            try
-            {
-                // Retrieve Fire Position
-                RetrieveArsonPosition();
-
-                // Give Suspect Weapon
-                Suspect.Inventory.GiveNewWeapon("WEAPON_PETROLCAN", -1, true);
-                Game.LogTrivial($"[Emergency Callouts]: Assigned (WEAPON_PETROLCAN) to Suspect inventory");
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (PedFound == true)
-                        {
-                            // Clear Suspect Tasks
-                            Suspect.Tasks.Clear();
-                            Game.LogTrivial("[Emergency Callouts]: Cleared Suspect tasks");
-
-                            // Put Suspect Hands Up
-                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                            Game.LogTrivial("[Emergency Callouts]: Assigned Suspect to put hands up");
-
-                            break;
-                        }
-                        else
-                        {
-                            Suspect.Tasks.FireWeaponAt(Suspect.Position, -1, FiringPattern.FullAutomatic); // Fires weapon at Suspect Position, might not work.
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.CalloutException(this, "Scenario4", e);
-            }
-            #endregion
-        }
-
-        private void Scenario5() // Knocked Out Guard
-        {
-            #region Scenario 5
-            try
-            {
-                // Retrieve Welding Position
-                RetrieveWeldingPosition();
-
-                // Change SuspectBlip color
-                SuspectBlip.SetColor(Colors.Red);
-                Game.LogTrivial("[Emergency Callouts]: Changed SuspectBlip color to red");
-
-                // Guard
-                Guard = new Ped("csb_prolsec", CalloutPosition.Around2D(5f), 0f);
-                Guard.SetDefaults();
-                Game.LogTrivial("[Emergency Callouts]: Created Guard");
-                Game.LogTrivial("[Emergency Callouts]: Guard model: " + Guard.Model.Name);
-                Game.LogTrivial("[Emergency Callouts]: Guard position: " + Guard.Position);
-
-                // Kill Guard
-                Entity.Kill(Guard);
-                Game.LogTrivial("[Emergency Callouts]: Killed Guard");
-
-                // GuardBlip
-                GuardBlip = Guard.AttachBlip();
-                GuardBlip.SetColor(Colors.Blue);
-                GuardBlip.ScaleForPed();
-                Entity.Disable(GuardBlip);
-                Game.LogTrivial("[Emergency Callouts]: Created GuardBlip");
-
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Guard.Position) < 5f && Guard.Exists())
-                        {
-                            // Enable SuspectBlip
-                            Entity.Enable(GuardBlip);
-                            Game.LogTrivial("[Emergency Callouts]: Enabled GuardBlip");
-
-                            // Delete SearchArea
-                            Entity.Delete(SearchArea);
-                            Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
-                            
-                            Game.DisplayHelp("The ~b~guard~s~ appears to be ~r~unconscious~s~.\nrequest an ~g~ambulance~s~.");
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.CalloutException(this, "Scenario5", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -776,99 +945,97 @@ namespace EmergencyCallouts.Callouts
             base.Process();
             try
             {
-                Check.EndKeyDown(CalloutMessage);
-                Check.PreventDistanceCrash(CalloutPosition, OnScene, PedFound);
-                Check.PreventResponderCrash(Suspect, CalloutMessage);
-                Check.PreventResponderCrash(Guard, CalloutMessage);
+                Handle.ManualEnding();
+                Handle.PreventPickupCrash(Suspect);
 
-                #region OnPlayerArrival
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && OnScene == false)
+                #region PlayerArrived
+                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
-                    // Set OnScene
-                    OnScene = true;
-                    Game.LogTrivial("[Emergency Callouts]: Entered scene");
+                    // Set PlayerArrived
+                    PlayerArrived = true;
+
+                    // Delete Nearby Peds
+                    Handle.DeleteNearbyPeds(Suspect, 30f);
 
                     // Display Arriving Subtitle
-                    Display.ArriveSubtitle("Find", "trespasser", 'r');
-
-                    // Disable route
-                    Entity.DisableRoute(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Disabled route");
-
+                    Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 10000);
+                    
                     // Delete EntranceBlip
-                    Entity.Delete(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted EntranceBlip");
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Center, 85f);
-                    SearchArea.SetColor(Colors.Yellow);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
+                    SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
-                    Game.LogTrivial("[Emergency Callouts]: Created SearchArea");
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
 
-                #region OnPedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && PedFound == false && OnScene == true && Suspect.Exists())
+                #region PedFound
+                if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && !PedFound && PlayerArrived && Suspect.Exists())
                 {
                     // Set PedFound
                     PedFound = true;
-                    Game.LogTrivial("[Emergency Callouts]: Found Suspect");
 
                     // Hide Subtitle
                     Display.HideSubtitle();
-                    Game.LogTrivial("[Emergency Callouts]: Hid subtitle");
 
                     // Enable SuspectBlip
-                    Entity.Enable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled SuspectBlip");
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
                 #endregion
 
-                #region OnPedDetained
-                if (Suspect.IsDetained() == true && PedDetained == false && Suspect.Exists())
+                #region PedDetained
+                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Set PedDetained
                     PedDetained = true;
-                    Game.LogTrivial("[Emergency Callouts]: Suspect detained");
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
-                    // Delete SuspectBlip
-                    Entity.Delete(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
+                    // Delete Suspect Blips
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip"); }
                 }
                 #endregion
 
-                #region OnPlayerLeave
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && OnScene == true)
+                #region PlayerLeft
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
-                    // Set OnScene
-                    OnScene = false;
-                    Game.LogTrivial("[Emergency Callouts]: Left scene");
+                    // Set PlayerArrived
+                    PlayerArrived = false;
 
                     // Disable SuspectBlip
-                    Entity.Disable(SuspectBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Disabled SuspectBlip");
+                    if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
 
                     // Delete SearchArea
-                    Entity.Delete(SearchArea);
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SearchArea");
+                    if (SearchArea.Exists()) { SearchArea.Delete(); }
 
                     // Create EntranceBlip
                     EntranceBlip = new Blip(Entrance);
-                    Game.LogTrivial("[Emergency Callouts]: Created EntranceBlip");
 
                     // Enable Route
-                    Entity.EnableRoute(EntranceBlip);
-                    Game.LogTrivial("[Emergency Callouts]: Enabled route to EntranceBlip");
+                    if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has left the scene");
+                }
+                #endregion
+
+                #region PlayerClimbing
+                if (MainPlayer.IsClimbing && !PedFound)
+                {
+                    Game.DisplayHelp("~p~Clue~s~: The ~r~suspect~s~ has not climbed anything");
+                    GameFiber.Sleep(5000);
                 }
                 #endregion
             }
             catch (Exception e)
             {
-                Log.CalloutException(this, "Process", e);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                 End();
             }
         }
@@ -878,16 +1045,19 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
-            Entity.Dismiss(Suspect);
-            Entity.Dismiss(Guard);
-            Entity.Delete(SuspectBlip);
-            Entity.Delete(GuardBlip);
-            Entity.Delete(SearchArea);
-            Entity.Delete(EntranceBlip);
+            Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
+
+            if (Suspect.Exists()) { Suspect.Dismiss(); }
+            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+            if (SearchArea.Exists()) { SearchArea.Delete(); }
+            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+            if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
+            if (Clipboard.Exists()) { Clipboard.Delete(); }
+            if (Phone.Exists()) { Phone.Delete(); }
 
             Display.HideSubtitle();
-            Display.DetachMessage();
-            Log.CalloutEnded(CalloutMessage, ScenarioNumber);
+            Display.EndNotification();
+            Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
         }
     }
 }
