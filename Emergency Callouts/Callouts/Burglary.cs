@@ -532,7 +532,7 @@ namespace EmergencyCallouts.Callouts
 
         private void Scenario1() // Pursuit
         {
-            #region Scenario 2
+            #region Scenario 1
             try
             {
                 // Retrieve Ped Positions
@@ -579,7 +579,7 @@ namespace EmergencyCallouts.Callouts
 
         private void Scenario2() // Surrender
         {
-            #region Scenario 3
+            #region Scenario 2
             try
             {
                 // Retrieve Ped Positions
