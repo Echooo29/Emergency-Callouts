@@ -40,14 +40,6 @@ namespace EmergencyCallouts.Essential
         internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
 
-        #region GetRandomScenarioNumber
-        internal static int GetRandomScenarioNumber(int totalScenarios)
-        {
-            return random.Next(1, totalScenarios + 1);
-
-        }
-        #endregion
-
         #region Enumerations
         internal enum PedCategory
         {
