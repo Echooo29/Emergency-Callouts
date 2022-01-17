@@ -164,7 +164,7 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc);
+                    CalloutArea = World.GetStreetName(loc).Replace("Senora Fwy", "Grand Senora Desert");
                 }
             }
 
@@ -485,7 +485,8 @@ namespace EmergencyCallouts.Callouts
                                                 }
                                             }
 
-                                            Display.HintEndCallout();
+                                            GameFiber.Sleep(5000);
+                                            Handle.AdvancedEndingSequence();
 
                                             break;
                                         }
@@ -567,6 +568,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
+
         private void Scenario2() // Victim at gunpoint, firefight
         {
             #region Scenario 2
