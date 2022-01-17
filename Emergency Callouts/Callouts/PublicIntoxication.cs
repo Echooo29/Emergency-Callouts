@@ -38,7 +38,7 @@ namespace EmergencyCallouts.Callouts
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
-
+                
                 count++;
                 if (count >= 15) { return false; }
             }
@@ -109,7 +109,7 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario2();
                         break;
                     case 2:
                         Scenario2();
@@ -193,6 +193,7 @@ namespace EmergencyCallouts.Callouts
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
 
                                     GameFiber.Sleep(1500);
+                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
 
                                     if (HasBottle)
                                     {
@@ -219,6 +220,11 @@ namespace EmergencyCallouts.Callouts
                                                 Suspect.Inventory.Weapons.Clear();
                                                 GameFiber.Sleep(4000);
                                             }
+                                            Handle.AdvancedEndingSequence();
+                                            break;
+                                        }
+                                        else if (Suspect.IsCuffed)
+                                        {
                                             Handle.AdvancedEndingSequence();
                                             break;
                                         }
