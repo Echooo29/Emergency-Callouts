@@ -413,14 +413,13 @@ namespace EmergencyCallouts.Callouts
                 CalloutActive = true;
 
                 // Scenario Deciding
-                switch (CalloutScenario)
+                if (CalloutScenario == 1)
                 {
-                    case 1:
-                        Scenario1();
-                        break;
-                    case 2:
-                        Scenario2();
-                        break;
+                    Scenario1();
+                }
+                else if (CalloutScenario == 2)
+                {
+                    Scenario2();
                 }
 
                 Log.Creation(Suspect, PedCategory.Suspect);
