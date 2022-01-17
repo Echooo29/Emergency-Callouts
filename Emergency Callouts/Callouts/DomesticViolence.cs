@@ -597,7 +597,7 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Gang Attack Fix
-                    Handle.BlockPermanentEventsRadius(Center, 100f);
+                    Handle.BlockPermanentEventsRadius(Center, 200f);
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~o~victim~s~ and the ~r~suspect~s~ in the ~y~area~s~.", 10000);
