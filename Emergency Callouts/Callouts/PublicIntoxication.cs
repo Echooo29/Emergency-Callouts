@@ -195,7 +195,6 @@ namespace EmergencyCallouts.Callouts
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
 
                                     GameFiber.Sleep(1500);
-                                    Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
 
                                     if (HasBottle)
                                     {
