@@ -431,7 +431,7 @@ namespace EmergencyCallouts.Callouts
                                                 }
                                             }
 
-                                            GameFiber.Sleep(5000);
+                                            GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
 
                                             break;
