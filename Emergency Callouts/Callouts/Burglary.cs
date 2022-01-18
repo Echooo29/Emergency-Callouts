@@ -446,7 +446,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Sleep(7500);
 
-                            Game.DisplaySubtitle("Check the ~p~door~s~ for any ~y~property damage~s~.", 10000);
+                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage~s~.", 10000);
 
                             DamagedPropertyBlip = new Blip(DamagedProperty);
                             DamagedPropertyBlip.SetColorPurple();
