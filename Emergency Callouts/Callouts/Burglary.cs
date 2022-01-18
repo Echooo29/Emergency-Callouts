@@ -482,7 +482,7 @@ namespace EmergencyCallouts.Callouts
                                 if (chance <= Settings.ChanceOfPropertyDamage) // Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp($"You found ~r~damage~s~ on the ~p~{property}~s~.");
+                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door~s~.");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
@@ -499,7 +499,7 @@ namespace EmergencyCallouts.Callouts
                                 else // No Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp($"You found ~g~no damage~s~ on the ~p~{property}~s~.");
+                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door~s~.");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
