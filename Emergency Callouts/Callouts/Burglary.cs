@@ -436,8 +436,6 @@ namespace EmergencyCallouts.Callouts
             #region CheckForDamage
             try
             {
-                string property = "door";
-
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -448,7 +446,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Sleep(7500);
 
-                            Game.DisplaySubtitle($"Check the ~p~{property}~s~ for any ~y~property damage~s~.", 10000);
+                            Game.DisplaySubtitle("Check the ~p~door~s~ for any ~y~property damage~s~.", 10000);
 
                             DamagedPropertyBlip = new Blip(DamagedProperty);
                             DamagedPropertyBlip.SetColorPurple();
