@@ -424,8 +424,14 @@ namespace EmergencyCallouts.Callouts
                                         {
                                             Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
 
-                                            Ped closestOfficer = Handle.GetClosestCop(Victim);
-                                            Victim.Tasks.GoStraightToPosition(closestOfficer.Position, 2f, 1f, 0f, 0);
+
+                                            foreach (Ped ped in World.GetAllPeds())
+                                            {
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 10f && ped != MainPlayer)
+                                                {
+                                                    Victim.Tasks.GoStraightToPosition(ped.Position, 1f, 1f, 0f, 0);
+                                                }
+                                            }
 
                                             GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
