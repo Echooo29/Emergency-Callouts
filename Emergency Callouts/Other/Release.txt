@@ -1,5 +1,6 @@
 ﻿[VISUAL STUDIO]
 Check if all scenarios are enabled
+Enable all remote states
 Update AssemblyFileVersion
 Set EarlyAccess bool to false
 Check Error list
