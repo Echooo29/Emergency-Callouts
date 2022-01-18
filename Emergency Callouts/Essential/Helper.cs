@@ -438,6 +438,14 @@ namespace EmergencyCallouts.Essential
             }
             #endregion
 
+            #region MoveToClosestPed
+            internal static Ped GetClosestCop(Ped victim)
+            {
+                var closestCop = World.GetAllPeds().OrderBy(ped => ped.DistanceTo(victim.Position)).Where(ped => Functions.IsPedACop(ped));
+                return closestCop.Count() > 0 ? closestCop.First() : null;
+            }
+            #endregion
+
             #region RemoteStates
             internal static void RemoteStates()
             {

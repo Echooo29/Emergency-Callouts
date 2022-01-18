@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
+using System.Linq;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
@@ -423,13 +424,8 @@ namespace EmergencyCallouts.Callouts
                                         {
                                             Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
 
-                                            foreach (Ped ped in World.GetAllPeds())
-                                            {
-                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f && ped != MainPlayer)
-                                                {
-                                                    Victim.Tasks.GoStraightToPosition(ped.Position, 2f, 1f, 0f, 0);
-                                                }
-                                            }
+                                            Ped closestOfficer = Handle.GetClosestCop(Victim);
+                                            Victim.Tasks.GoStraightToPosition(closestOfficer.Position, 2f, 1f, 0f, 0);
 
                                             GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
@@ -449,9 +445,9 @@ namespace EmergencyCallouts.Callouts
 
                                             foreach (Ped ped in World.GetAllPeds())
                                             {
-                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 20f && ped != MainPlayer)
+                                                if (Functions.IsPedACop(ped) && ped.IsAlive && Victim.Position.DistanceTo(ped.Position) <= 10f && ped != MainPlayer) // ped.isstill
                                                 {
-                                                    Victim.Tasks.GoToOffsetFromEntity(ped, 0.65f, 0f, 2f);
+                                                    Victim.Tasks.GoToOffsetFromEntity(ped, 2f, 0f, 1f);
                                                 }
                                             }
 
