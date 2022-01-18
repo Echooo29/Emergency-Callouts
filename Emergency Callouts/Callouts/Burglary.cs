@@ -631,7 +631,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyPeds(Suspect, 40f);
 
                     // Delete Nearby Trailers
-                    Handle.DeleteNearbyTrailers(Center);
+                    Handle.DeleteNearbyTrailers(Center, 40f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }

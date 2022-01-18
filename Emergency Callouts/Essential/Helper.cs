@@ -353,7 +353,7 @@ namespace EmergencyCallouts.Essential
             #endregion
 
             #region DeleteNearbyTrailers
-            internal static void DeleteNearbyTrailers(Vector3 position)
+            internal static void DeleteNearbyTrailers(Vector3 position, float radius)
             {
                 string[] trailerList = 
                 { 
@@ -363,7 +363,7 @@ namespace EmergencyCallouts.Essential
 
                 foreach (Vehicle veh in World.GetAllVehicles())
                 {
-                    if (veh.Position.DistanceTo(position) <= 60f && trailerList.Contains(veh.Model.Name))
+                    if (veh.Position.DistanceTo(position) <= radius && trailerList.Contains(veh.Model.Name))
                     {
                         if (veh.Exists()) { veh.Delete(); }
                     }
