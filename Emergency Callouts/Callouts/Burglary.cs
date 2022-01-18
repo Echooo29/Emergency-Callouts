@@ -8,7 +8,6 @@ using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
-using static EmergencyCallouts.Essential.Inventory;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -21,7 +20,6 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool StopChecking;
         bool WithinRange;
-        bool VehicleIsUsed;
         bool FirstTime;
         bool DialogueStarted;
         bool DialogueEnded;
@@ -39,10 +37,7 @@ namespace EmergencyCallouts.Callouts
         readonly Rage.Object Clipboard = new Rage.Object(new Model("p_amb_clipboard_01"), new Vector3(0, 0, 0));
         readonly Rage.Object Pencil = new Rage.Object(new Model("prop_pencil_01"), new Vector3(0, 0, 0));
 
-        Vehicle SuspectVehicle;
-
         Ped Suspect;
-
         Persona SuspectPersona;
 
         Blip SuspectBlip;
@@ -181,9 +176,9 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Localization.Burglary;
-            CalloutDetails = Localization.BurglaryDetails;
-            CalloutScenario = GetRandomScenarioNumber(5);
+            CalloutMessage = "Burglary";
+            CalloutDetails = "A person has been seen looking through windows, caller states he's now ~y~lockpicking~s~ a door.";
+            CalloutScenario = random.Next(1, 3);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -285,15 +280,6 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
-                    case 3:
-                        Scenario3();
-                        break;
-                    case 4:
-                        Scenario4();
-                        break;
-                    case 5:
-                        Scenario5();
-                        break;
                 }
             }
             catch (Exception e)
@@ -363,52 +349,6 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void RetrieveVehiclePositions()
-        {
-            #region Positions
-            SuspectVehicle = new Vehicle(Vehicles.GetRandomVan(), Vector3.Zero, 0f);
-            SuspectVehicle.IsPersistent = true;
-            Log.Creation(SuspectVehicle, PedCategory.Suspect);
-
-            if (CalloutPosition == CalloutPositions[0]) // Mirror Park
-            {
-                SuspectVehicle.Position = new Vector3(909.9557f, -624.8691f, 57.66842f);
-                SuspectVehicle.Heading = 318.71f;
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // La Puerta
-            {
-                SuspectVehicle.Position = new Vector3(-919.3269f, -1289.287f, 4.756772f);
-                SuspectVehicle.Heading = 290.89f;
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // El Burro
-            {
-                SuspectVehicle.Position = new Vector3(1308.245f, -1716.298f, 54.03547f);
-                SuspectVehicle.Heading = 296.54f;
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // Grapeseed
-            {
-                SuspectVehicle.Position = new Vector3(2716.37f, 4263.91f, 46.86611f);
-                SuspectVehicle.Heading = 166.61f;
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Harmony
-            {
-                SuspectVehicle.Position = new Vector3(1234.011f, 2722.458f, 38.02638f);
-                SuspectVehicle.Heading = 137.17f;
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
-            {
-                SuspectVehicle.Position = new Vector3(130.7242f, 6666.58f, 31.65008f);
-                SuspectVehicle.Heading = 158.69f;
-            }
-
-            VehicleDoor[] vehDoors = SuspectVehicle.GetDoors();
-            vehDoors[2].Open(false);
-            vehDoors[3].Open(false);
-            #endregion
-
-            VehicleIsUsed = true;
-        }
-
         private void Dialogue()
         {
             #region Dialogue
@@ -442,7 +382,7 @@ namespace EmergencyCallouts.Callouts
                             if (!DialogueStarted && !FirstTime)
                             {
                                 GameFiber.Sleep(3000);
-                                Game.DisplaySubtitle(Localization.InteractionDialogueSubtitlePromptSuspect, 10000);
+                                Game.DisplaySubtitle("Speak to the ~r~suspect~s~.", 10000);
                                 FirstTime = true;
                             }
 
@@ -477,7 +417,7 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.InteractionDialoguePromptSuspect}");
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect");
                                 }
                             }
                         }
@@ -496,17 +436,6 @@ namespace EmergencyCallouts.Callouts
             #region CheckForDamage
             try
             {
-                string property;
-
-                if (VehicleIsUsed)
-                {
-                    property = Localization.CheckForDamageVehicle;
-                }
-                else
-                {
-                    property = Localization.CheckForDamageDoor;
-                }
-
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -517,7 +446,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Sleep(7500);
 
-                            Game.DisplaySubtitle($"{Localization.CheckForDamageSubtitleIntro} ~p~{property}~s~ {Localization.CheckForDamageSubtitleRest}", 10000);
+                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage~s~.", 10000);
 
                             DamagedPropertyBlip = new Blip(DamagedProperty);
                             DamagedPropertyBlip.SetColorPurple();
@@ -533,7 +462,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage)
                         {
-                            Game.DisplayHelp($"{Localization.InteractionDialogueIntro} ~y~{Settings.InteractKey}~s~ {Localization.CheckForDamagePrompt}");
+                            Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
 
                             if (Game.IsKeyDown(Settings.InteractKey))
                             {
@@ -553,7 +482,7 @@ namespace EmergencyCallouts.Callouts
                                 if (chance <= Settings.ChanceOfPropertyDamage) // Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp($"{Localization.CheckForDamageFound} ~p~{property}~s~.");
+                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door~s~.");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
@@ -570,7 +499,7 @@ namespace EmergencyCallouts.Callouts
                                 else // No Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp($"{Localization.CheckForDamageNotFound} ~p~{property}~s~.");
+                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door~s~.");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
@@ -599,47 +528,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Attack
+        private void Scenario1() // Pursuit
         {
             #region Scenario 1
-            try
-            {
-                // Retrieve Ped Position
-                RetrievePedPositions();
-
-                CheckForDamage();
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
-                        {
-                            int num = random.Next(2);
-                            if (num == 0)
-                            {
-                                Suspect.GiveRandomMeleeWeapon(-1, true);
-                            }
-                            else Suspect.GiveRandomHandgun(-1, true);
-
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-        
-        private void Scenario2() // Pursuit
-        {
-            #region Scenario 2
             try
             {
                 // Retrieve Ped Positions
@@ -651,7 +542,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && Suspect.Exists() && PlayerArrived)
                         {
                             StopChecking = true;
 
@@ -684,9 +575,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3() // Surrender
+        private void Scenario2() // Surrender
         {
-            #region Scenario 3
+            #region Scenario 2
             try
             {
                 // Retrieve Ped Positions
@@ -722,98 +613,6 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario4() // Attack
-        {
-            #region Scenario 4
-            try
-            {
-                // Retrieve Ped Positions
-                RetrievePedPositions();
-
-                CheckForDamage();
-
-                // Give Weapon
-                Suspect.Inventory.GiveNewWeapon("WEAPON_CROWBAR", -1, true);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
-                        {
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario5() // Putting Items In Vehicle
-        {
-            #region Scenario 5
-            try
-            {
-                // Retrieve Vehicle Positions
-                RetrieveVehiclePositions();
-
-                // Suspect Resistance Chance
-                Functions.SetPedResistanceChance(Suspect, 40f);
-
-                // Suspect Position
-                Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + 1.9f);
-
-                // Suspect Heading
-                Suspect.Heading = SuspectVehicle.Heading;
-
-                // Search Animation
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@gangops@facility@servers@bodysearch@"), "player_search", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.Loop);
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
-                    {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && Suspect.Exists() && PlayerArrived)
-                        {
-                            StopChecking = true;
-
-                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-
-                            // Create Pursuit
-                            LHandle pursuit = Functions.CreatePursuit();
-
-                            // Add Suspect to pursuit
-                            Functions.AddPedToPursuit(pursuit, Suspect);
-
-                            // Set Pursuit Active
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-
-                            // Play pursuit audio
-                            Play.PursuitAudio();
-
-                            break;
-                        }
-                    }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
         public override void Process() 
         {
             base.Process();
@@ -832,7 +631,7 @@ namespace EmergencyCallouts.Callouts
                     Handle.DeleteNearbyPeds(Suspect, 40f);
 
                     // Delete Nearby Trailers
-                    Handle.DeleteNearbyTrailers(Center);
+                    Handle.DeleteNearbyTrailers(Center, 40f);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} is within 200 meters");
                 }
@@ -845,13 +644,13 @@ namespace EmergencyCallouts.Callouts
                     PlayerArrived = true;
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.BurglarySubtitle, 10000);
+                    Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 10000);
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
                     
@@ -892,7 +691,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;

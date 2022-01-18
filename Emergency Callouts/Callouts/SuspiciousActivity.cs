@@ -19,7 +19,6 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool Ped2Found;
         bool PedDetained;
-        bool StopChecking;
         bool WithinRange;
 
         Vector3 Entrance;
@@ -161,9 +160,9 @@ namespace EmergencyCallouts.Callouts
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
-            CalloutMessage = Localization.SuspiciousActivity;
-            CalloutDetails = Localization.SuspiciousActivityDetails;
-            CalloutScenario = GetRandomScenarioNumber(2);
+            CalloutMessage = "Suspicious Activity";
+            CalloutDetails = "Multiple civilians called about a person handling possible ~y~firearms~s~ in the trunk of their car.";
+            CalloutScenario = random.Next(1, 3);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -421,8 +420,6 @@ namespace EmergencyCallouts.Callouts
                             Suspect.Tasks.FightAgainst(MainPlayer);
                             Suspect2.Tasks.ClearImmediately();
 
-                            StopChecking = true;
-
                             pursuit = Functions.CreatePursuit();
 
                             Functions.AddPedToPursuit(pursuit, Suspect2);
@@ -548,7 +545,7 @@ namespace EmergencyCallouts.Callouts
                     WithinRange = true;
 
                     // Delete Nearby Trailers
-                    if (CalloutPosition == CalloutPositions[4]) { Handle.DeleteNearbyTrailers(Center); }
+                    Handle.DeleteNearbyTrailers(Center, 100f);
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect, Suspect2, 40f);
@@ -567,13 +564,13 @@ namespace EmergencyCallouts.Callouts
                     Handle.BlockPermanentEventsRadius(Center, 60f);
 
                     // Display Arriving Subtitle
-                    Game.DisplaySubtitle(Localization.SuspiciousActivitySubtitle, 10000);
+                    Game.DisplaySubtitle("Find the ~r~suspect~s~ in the ~y~area~s~.", 10000);
 
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(5f, 20f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -628,7 +625,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !StopChecking)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;

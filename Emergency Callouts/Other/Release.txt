@@ -37,4 +37,5 @@ Clear Known Issues
 Remove the next update changelog trello link
 
 [POST-UPDATE]
+Enable all remote states
 Change build mode to Debug
