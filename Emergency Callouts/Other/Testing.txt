@@ -1,0 +1,6 @@
+﻿Check how far you can go from the ped before ped invalid exception(Cuffed, Dead, Alive)
+What happens when the player dies
+Check what happens if the ped gets escorted by an ambulance
+Check what happens when you uncuff the ped
+Check what happens when you request transport for the arrested suspect
+Check what happens when you kill the ped before you arrive on scene
