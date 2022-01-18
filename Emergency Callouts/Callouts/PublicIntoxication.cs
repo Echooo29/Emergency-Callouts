@@ -35,12 +35,13 @@ namespace EmergencyCallouts.Callouts
         public override bool OnBeforeCalloutDisplayed()
         {
             int count = 0;
+
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
-                
+
                 count++;
-                if (count >= 15) { return false; }
+                if (count >= 15) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
             }
 
             CalloutMessage = "Public Intoxication";
@@ -211,6 +212,8 @@ namespace EmergencyCallouts.Callouts
                                         {
                                             if (HasBottle)
                                             {
+                                                Game.DisplaySubtitle("~b~You~s~: I'm letting you go, I will need that bottle from you though.");
+                                                GameFiber.Sleep(3000);
                                                 MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
                                                 GameFiber.Sleep(500);
                                                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask);
