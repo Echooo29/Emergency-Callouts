@@ -75,7 +75,7 @@ namespace EmergencyCallouts.Essential
                     "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "a_m_m_golfer_01", 
                     "ig_ballasog", "s_m_m_highsec_02", "a_m_y_hipster_02", "csb_hugh", "a_m_m_indian_01",
                     "g_m_y_ballasout_01", "ig_jay_norris", "u_m_m_jesus_01", "u_m_m_jewelsec_01", 
-                    "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman", "ig_jimmydisanto",
+                    "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman",
                     "ig_bankman", "cs_johnnyklebitz", "g_m_y_korean_01", "g_m_y_korlieut_01", 
                     "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", 
                 };
