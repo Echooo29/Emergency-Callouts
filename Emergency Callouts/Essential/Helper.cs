@@ -28,12 +28,6 @@ namespace EmergencyCallouts.Essential
         internal static Persona PlayerPersona = Functions.GetPersonaForPed(MainPlayer);
         internal static Random random = new Random();
 
-        internal static bool PUBRemoteState;
-        internal static bool TRERemoteState;
-        internal static bool BURRemoteState;
-        internal static bool DOMRemoteState;
-        internal static bool SUSRemoteState;
-
         internal static string CalloutDetails { get; set; }
         internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
@@ -434,108 +428,6 @@ namespace EmergencyCallouts.Essential
                             Functions.StopCurrentCallout();
                         }
                     }
-                }
-            }
-            #endregion
-
-            #region RemoteStates
-            internal static void RemoteStates()
-            {
-                try
-                {
-                    WebClient client = new WebClient();
-
-                    string states = client.DownloadString("https://pastebin.com/raw/hS4WP9w6");
-
-                    Game.LogTrivial("[Emergency Callouts]: Downloaded remote callout states");
-
-                    if (!Settings.EarlyAccess)
-                    {
-                        // Public Intoxication
-                        #region StateCheck
-                        if (states.Contains("PUB"))
-                        {
-                            PUBRemoteState = true;
-                            Game.LogTrivial("[Emergency Callouts]: PUBRemoteState = true");
-                        }
-                        else
-                        {
-                            PUBRemoteState = false;
-                            Game.LogTrivial("[Emergency Callouts]: PUBRemoteState = false");
-                            Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Public Intoxication", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
-                        }
-                        #endregion
-
-                        // Burglary
-                        #region StateCheck
-                        if (states.Contains("BUR"))
-                        {
-                            BURRemoteState = true;
-                            Game.LogTrivial("[Emergency Callouts]: BURRemoteState = true");
-                        }
-                        else
-                        {
-                            BURRemoteState = false;
-                            Game.LogTrivial("[Emergency Callouts]: BURRemoteState = false");
-                            Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Burglary In Progress", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
-                        }
-                        #endregion
-
-                        // Trespassing
-                        #region StateCheck
-                        if (states.Contains("TRE"))
-                        {
-                            TRERemoteState = true;
-                            Game.LogTrivial("[Emergency Callouts]: TRERemoteState = true");
-                        }
-                        else
-                        {
-                            TRERemoteState = false;
-                            Game.LogTrivial("[Emergency Callouts]: TRERemoteState = false");
-                            Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Trespassing", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
-                        }
-                        #endregion
-
-                        // Domestic Violence
-                        #region StateCheck
-                        if (states.Contains("DOM"))
-                        {
-                            DOMRemoteState = true;
-                            Game.LogTrivial("[Emergency Callouts]: DOMRemoteState = true");
-                        }
-                        else
-                        {
-                            DOMRemoteState = false;
-                            Game.LogTrivial("[Emergency Callouts]: DOMRemoteState = false");
-                            Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Domestic Violence", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
-                        }
-                        #endregion
-
-                        // Suspicious Activity
-                        #region StateCheck
-                        if (states.Contains("SUS"))
-                        {
-                            SUSRemoteState = true;
-                            Game.LogTrivial("[Emergency Callouts]: SUSRemoteState = true");
-                        }
-                        else
-                        {
-                            SUSRemoteState = false;
-                            Game.LogTrivial("[Emergency Callouts]: SUSRemoteState = false");
-                            Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~b~Suspicious Activity", "has been ~y~remotely disabled~s~.\nThis was ~g~intentionally done~s~ by the developer.");
-                        }
-                        #endregion
-                    }
-                }
-                catch (WebException)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: Could not check online callout states, callout states are set to true");
-
-                    PUBRemoteState = true;
-                    BURRemoteState = true;
-                    TRERemoteState = true;
-                    DOMRemoteState = true;
-                    SUSRemoteState = true;
                 }
             }
             #endregion

@@ -24,7 +24,6 @@ namespace EmergencyCallouts
             if (OnDuty)
             {
                 Settings.Initialize();
-                //Handle.RemoteStates();
                 RegisterCallouts();
                 UpdateChecker.UpdateAvailable();
 
@@ -37,22 +36,11 @@ namespace EmergencyCallouts
 
         private static void RegisterCallouts()
         {
-            if (!Settings.EarlyAccess)
-            {
-                if (Settings.PublicIntoxication && PUBRemoteState) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
-                if (Settings.Trespassing && TRERemoteState) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
-                if (Settings.DomesticViolence && DOMRemoteState) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
-                if (Settings.Burglary && BURRemoteState) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
-                if (Settings.SuspiciousActivity && SUSRemoteState) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
-            }
-            else
-            {
-                if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
-                if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
-                if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
-                if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
-                if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
-            }
+            if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
+            if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
+            if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
+            if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
+            if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
         }
     }
 }
