@@ -24,7 +24,7 @@ namespace EmergencyCallouts
             if (OnDuty)
             {
                 Settings.Initialize();
-                Handle.RemoteStates();
+                //Handle.RemoteStates();
                 RegisterCallouts();
                 UpdateChecker.UpdateAvailable();
 
