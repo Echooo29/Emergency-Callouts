@@ -275,10 +275,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();////////////////////////////////////////////////////////////////////////////////
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -442,7 +445,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed)
+                        if (Suspect.IsCuffed && Suspect.IsAlive)
                         {
                             GameFiber.Sleep(7500);
 
@@ -460,7 +463,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage)
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive)
                         {
                             Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
 
@@ -528,7 +531,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Pursuit
+        private void Scenario1() // Pursuit 
         {
             #region Scenario 1
             try
@@ -610,6 +613,36 @@ namespace EmergencyCallouts.Callouts
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+            #endregion
+        }
+
+        private void Scenario3()
+        {
+            #region Scenario 3
+            RetrievePedPositions();
+            
+            CheckForDamage();
+
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
+                    {
+                        Suspect.Tasks.ClearImmediately();
+                        Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
+
+                        Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                        GameFiber.Sleep(1000);
+                        Suspect.GiveRandomHandgun(-1, true);
+                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+                        break;
+                    }          
+                }
+            });
             #endregion
         }
 
