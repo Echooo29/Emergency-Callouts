@@ -178,7 +178,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Burglary";
             CalloutDetails = "A person has been seen looking through windows, caller states he's now ~y~lockpicking~s~ a door.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
 
