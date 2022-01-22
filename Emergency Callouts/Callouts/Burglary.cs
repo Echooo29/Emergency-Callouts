@@ -457,13 +457,17 @@ namespace EmergencyCallouts.Callouts
                             DamagedPropertyBlip.Flash(500, -1);
                             break;
                         }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive)
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
                         {
                             Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
 
@@ -520,6 +524,10 @@ namespace EmergencyCallouts.Callouts
                                 Dialogue();
                                 break;
                             }
+                        }
+                        else if (Suspect.IsDead)
+                        {
+                            break;
                         }
                     }
                 });
