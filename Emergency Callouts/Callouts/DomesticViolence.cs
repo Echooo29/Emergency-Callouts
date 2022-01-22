@@ -156,7 +156,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Domestic Violence";
             CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
@@ -273,10 +273,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -539,6 +542,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
+
         private void Scenario2() // Victim at gunpoint, firefight
         {
             #region Scenario 2
@@ -581,6 +585,44 @@ namespace EmergencyCallouts.Callouts
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+            #endregion
+        }
+
+        private void Scenario3()
+        {
+            #region Scenario 3
+            RetrieveFightPosition();
+
+            Suspect.Position = Victim.GetOffsetPositionFront(2f);
+
+            Victim.Kill();
+
+            // Give Random Handgun
+            Suspect.GiveRandomHandgun(-1, true);
+
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                    {
+                        Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
+                        GameFiber.Sleep(2000);
+                        // Fight Player
+                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
+                        GameFiber.Sleep(700);
+                        if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
+                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav");
+                        player.Play();
+                        break;
+                    }
+                }
+            });
+
             #endregion
         }
 
