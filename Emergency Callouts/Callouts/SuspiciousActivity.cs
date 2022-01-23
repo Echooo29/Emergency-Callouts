@@ -32,6 +32,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1283.511f, -811.2982f, 17.32025f), // Del Perro
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
+            new Vector3(808.5509f, 1275.401f, 359.9711f),   // County
             new Vector3(2165.78f, 4758.762f, 42f),          // Grapeseed
             new Vector3(1485.026f, 6412.347f, 22.35379f),   // Paleto Bay
         };
@@ -95,6 +96,21 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3 ElBurroVehicle2Position = new Vector3(1233.492f, -2355.017f, 49.81187f);
         readonly float ElBurroVehicle2Heading = 242.13f;
+        #endregion
+
+        // County
+        #region Positions
+        readonly Vector3 CountySuspectPosition = new Vector3(745.3344f, 1305.453f, 360.2965f);
+        readonly float CountySuspectHeading = 110.52f;
+
+        readonly Vector3 CountySuspect2Position = new Vector3(741.4516f, 1304.321f, 360.2965f);
+        readonly float CountySuspect2Heading = 288.07f;
+
+        readonly Vector3 CountyVehiclePosition = new Vector3(745.2075f, 1301.47f, 359.9155f);
+        readonly float CountyVehicleHeading = 181.38f;
+
+        readonly Vector3 CountyVehicle2Position = new Vector3(740.5121f, 1300.163f, 359.916f);
+        readonly float CountyVehicle2Heading = 215.00f;
         #endregion
 
         // McKenzie Field
@@ -203,12 +219,17 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(1243.041f, -2395.421f, 47.91381f);
                     Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
                 }
-                else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
+                else if (CalloutPosition == CalloutPositions[4]) // County
+                {
+                    Center = new Vector3(737.6351f, 1285.04f, 359.7698f);
+                    Entrance = new Vector3(808.5509f, 1275.401f, 359.9711f);
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
                 }
-                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
                 {
                     Center = new Vector3(1477.096f, 6343.949f, 22.35379f);
                     Entrance = new Vector3(1485.026f, 6412.347f, 22.35379f);
@@ -357,7 +378,21 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = ElBurroVehicle2Position;
                 Suspect2Vehicle.Heading = ElBurroVehicle2Heading;
             }
-            else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
+            else if (CalloutPosition == CalloutPositions[4]) // County
+            {
+                Suspect.Position = CountySuspectPosition;
+                Suspect.Heading = CountySuspectHeading;
+
+                Suspect2.Position = CountySuspect2Position;
+                Suspect2.Heading = CountySuspect2Heading;
+
+                SuspectVehicle.Position = CountyVehiclePosition;
+                SuspectVehicle.Heading = CountyVehicleHeading;
+
+                Suspect2Vehicle.Position = CountyVehicle2Position;
+                Suspect2Vehicle.Heading = CountyVehicle2Heading;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
             {
                 Suspect.Position = McKenzieFieldSuspectPosition;
                 Suspect.Heading = McKenzieFieldSuspectHeading;
@@ -371,7 +406,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = McKenzieFieldVehicle2Position;
                 Suspect2Vehicle.Heading = McKenzieFieldVehicle2Heading;
             }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
             {
                 Suspect.Position = PaletoBaySuspectPosition;
                 Suspect.Heading = PaletoBaySuspectHeading;
