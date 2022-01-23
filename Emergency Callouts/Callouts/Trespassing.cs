@@ -437,10 +437,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();////////////////////////////
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
 
@@ -953,6 +956,51 @@ namespace EmergencyCallouts.Callouts
                                     Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3() // Pursuit
+        {
+            #region Scenario 3
+            try
+            {
+                // Retrieve Hiding Position
+                RetrieveHidingPosition(Suspect);
+
+                // Set Dialogue Active
+                SuspectDialogue();
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.Exists() && PlayerArrived)
+                        {
+                            // Clear Suspect Tasks
+                            Suspect.Tasks.Clear();
+
+                            // Start Pursuit
+                            LHandle pursuit = Functions.CreatePursuit();
+                            Functions.AddPedToPursuit(pursuit, Suspect);
+                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                            Play.PursuitAudio();
+
+                            // Delete blips
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+
+                            break;
                         }
                     }
                 });

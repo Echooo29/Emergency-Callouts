@@ -296,7 +296,7 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();
+                        Scenario3();///////////////////////
                         break;
                     case 2:
                         Scenario3();
