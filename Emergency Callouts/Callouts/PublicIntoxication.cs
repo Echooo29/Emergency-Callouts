@@ -110,10 +110,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();////////////////////
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -277,6 +280,36 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
                 HasBottle = true;
                 Dialogue();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3()
+        {
+            #region Pass out
+            try
+            {
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive)
+                        {
+                            Game.DisplaySubtitle("~y~Suspect~s~: I'm drunk, sooo wha...", 10000);
+                            GameFiber.Sleep(2000);
+                            if (Suspect.Exists()) { Suspect.Kill(); }
+                            GameFiber.Sleep(5000);
+                            Game.DisplaySubtitle("Request an ~g~ambulance~s~.", 7500);
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
