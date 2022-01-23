@@ -656,7 +656,6 @@ namespace EmergencyCallouts.Callouts
 
                 string[] dialogueOwner =
                 {
-                    $"~g~Owner~s~: Hello? Who's this?",
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
                     "~g~Owner~s~: Again?! What did my son do now?",
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
@@ -755,6 +754,10 @@ namespace EmergencyCallouts.Callouts
                                     int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
                                     NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                                     MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                    System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav");
+                                    player.Play();
+                                    GameFiber.Sleep(12000);
+                                    Game.DisplaySubtitle($"~g~Owner~s~: Hello? Who's this?", 15000);
                                     DialogueStarted = true;
                                 }
                                 else
