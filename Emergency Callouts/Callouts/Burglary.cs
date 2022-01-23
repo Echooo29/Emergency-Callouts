@@ -661,7 +661,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3()
+        private void Scenario3() // Cower with gun
         {
             #region Scenario 3
             RetrievePedPositions();

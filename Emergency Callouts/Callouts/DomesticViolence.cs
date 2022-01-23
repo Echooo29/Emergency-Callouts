@@ -530,7 +530,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Suspect Keeps Fighting Victim
+        private void Scenario1() // Assault
         {
             #region Scenario 1
             try
@@ -575,7 +575,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Victim at gunpoint, firefight
+        private void Scenario2() // Firefight
         {
             #region Scenario 2
             try
@@ -620,7 +620,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3()
+        private void Scenario3() // Suicide
         {
             #region Scenario 3
             RetrieveFightPosition();
