@@ -638,7 +638,7 @@ namespace EmergencyCallouts.Callouts
                 if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
                     playerAnswer = "Of course not, what are you thinking?";
-                    suspectAnswer = "Scew you man, we'll see in court if he presses charges.";
+                    suspectAnswer = "Screw you man, we'll see in court if he presses charges.";
                     acceptsSuggestion = false;
                 }
                 else
@@ -672,6 +672,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Can't you just call him?",
                     "~b~You~s~: " + playerAnswer,
                     "~y~Suspect~s~: " + suspectAnswer,
+                    "~m~Dialogue Ended",
                 };
 
                 string[] dialogueOwner =
