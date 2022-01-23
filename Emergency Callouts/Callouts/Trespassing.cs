@@ -628,12 +628,32 @@ namespace EmergencyCallouts.Callouts
                 if (PlayerPersona.Gender == LSPD_First_Response.Gender.Male) { gender = "Mr"; }
                 else gender = "Mrs";
 
+                // Chance of declining to call property owner
+                string playerAnswer = string.Empty;
+                string suspectAnswer = string.Empty;
+                bool acceptsSuggestion = false;
+
+                int chanceAllow = random.Next(1, 101);
+
+                if (chanceAllow <= Settings.ChanceOfCallingOwner)
+                {
+                    playerAnswer = "Of course not, what are you thinking?";
+                    suspectAnswer = "Scew you man, we'll see in court if he presses charges.";
+                    acceptsSuggestion = false;
+                }
+                else
+                {
+                    playerAnswer = "Hmm... okay then.";
+                    suspectAnswer = "We need more officers like you sir!";
+                    acceptsSuggestion = true;
+                }
+
                 // Owner Line
                 string lineOwner = string.Empty;
 
-                int rand = random.Next(1, 101);
+                int chanceCharges = random.Next(1, 101);
 
-                if (rand <= Settings.ChanceOfPressingCharges)
+                if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
                     lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
                 }
@@ -650,8 +670,8 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: No.. but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
                     "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
                     "~y~Suspect~s~: Can't you just call him?",
-                    "~b~You~s~: You know what? Sure.",
-                    "~y~Suspect~s~: Thanks.",
+                    "~b~You~s~: " + playerAnswer,
+                    "~y~Suspect~s~: " + suspectAnswer,
                 };
 
                 string[] dialogueOwner =
@@ -742,47 +762,56 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
+                        if (acceptsSuggestion)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
                             {
-                                if (!DialogueStarted)
+                                if (Game.IsKeyDown(Settings.InteractKey))
                                 {
-                                    GameFiber.Sleep(4000);
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
-
-                                    int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
-                                    NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-                                    MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
-                                    System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav");
-                                    player.Play();
-                                    GameFiber.Sleep(12000);
-                                    Game.DisplaySubtitle($"~g~Owner~s~: Hello? Who's this?", 15000);
-                                    DialogueStarted = true;
-                                }
-                                else
-                                {
-                                    Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
-                                    if (!stopDialogue2) { lineOwnerCount++; }
-
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
-
-                                    if (lineOwnerCount == dialogueOwner.Length)
+                                    if (!DialogueStarted)
                                     {
-                                        stopDialogue2 = true;
-                                        Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+                                        GameFiber.Sleep(4000);
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
 
-                                        MainPlayer.Tasks.Clear();
-                                        if (Phone.Exists()) { Phone.Delete(); }
-
-                                        GameFiber.Sleep(3000);
-                                        Handle.AdvancedEndingSequence();
-                                        break;
+                                        int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                        NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                                        MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav");
+                                        player.Play();
+                                        GameFiber.Sleep(12000);
+                                        Game.DisplaySubtitle($"~g~Owner~s~: Hello? Who's this?", 15000);
+                                        DialogueStarted = true;
                                     }
-                                }
+                                    else
+                                    {
+                                        Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
+                                        if (!stopDialogue2) { lineOwnerCount++; }
 
-                                GameFiber.Sleep(500);
+                                        Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
+
+                                        if (lineOwnerCount == dialogueOwner.Length)
+                                        {
+                                            stopDialogue2 = true;
+                                            Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+
+                                            MainPlayer.Tasks.Clear();
+                                            if (Phone.Exists()) { Phone.Delete(); }
+
+                                            GameFiber.Sleep(3000);
+                                            Handle.AdvancedEndingSequence();
+                                            break;
+                                        }
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
                             }
+                        }
+                        else if (CompletedSuspectDialogue)
+                        {
+                            GameFiber.Sleep(3000);
+                            Handle.AdvancedEndingSequence();
+                            break;
                         }
                     }
                 });
