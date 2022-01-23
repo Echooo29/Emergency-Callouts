@@ -623,38 +623,44 @@ namespace EmergencyCallouts.Callouts
         private void Scenario3() // Suicide
         {
             #region Scenario 3
-            RetrieveFightPosition();
-
-            Suspect.Position = Victim.GetOffsetPositionFront(2f);
-
-            Victim.Kill();
-
-            // Give Random Handgun
-            Suspect.GiveRandomHandgun(0, true);
-
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
-
-            GameFiber.StartNew(delegate
+            try
             {
-                while (CalloutActive)
+                RetrieveFightPosition();
+
+                Suspect.Position = Victim.GetOffsetPositionFront(2f);
+
+                Victim.Kill();
+
+                // Give Random Handgun
+                Suspect.GiveRandomHandgun(0, true);
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+                GameFiber.StartNew(delegate
                 {
-                    GameFiber.Yield();
-
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 8f && PlayerArrived)
+                    while (CalloutActive)
                     {
-                        Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
-                        GameFiber.Sleep(3000);
-                        // Fight Player
-                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
-                        GameFiber.Sleep(700);
-                        if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
-                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav");
-                        player.Play();
-                        break;
-                    }
-                }
-            });
+                        GameFiber.Yield();
 
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 8f && PlayerArrived)
+                        {
+                            Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
+                            GameFiber.Sleep(3000);
+                            // Fight Player
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
+                            GameFiber.Sleep(700);
+                            if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
+                            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav");
+                            player.Play();
+                            break;
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 
