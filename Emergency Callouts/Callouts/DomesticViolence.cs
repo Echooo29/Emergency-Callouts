@@ -630,7 +630,7 @@ namespace EmergencyCallouts.Callouts
             Victim.Kill();
 
             // Give Random Handgun
-            Suspect.GiveRandomHandgun(-1, true);
+            Suspect.GiveRandomHandgun(0, true);
 
             Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
 
