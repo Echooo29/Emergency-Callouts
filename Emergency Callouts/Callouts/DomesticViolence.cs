@@ -608,7 +608,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                    if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                     {
                         Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
                         GameFiber.Sleep(2000);
