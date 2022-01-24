@@ -673,7 +673,7 @@ namespace EmergencyCallouts.Callouts
 
                 string[] dialogueSuspect =
                 {
-                    $"~b~You~s~: So, what are you doing here {timeOfDay}",
+                    "~b~You~s~: So, what are you doing here " + timeOfDay,
                     "~y~Suspect~s~: Man, I'm only looking for some stuff!",
                     "~b~You~s~: Do you have permission to be here?",
                     "~y~Suspect~s~: No.. but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
@@ -691,14 +691,14 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
-                    $"~b~You~s~: Give me a second. Hey you, what's your name?",
+                    "~b~You~s~: Give me a second. Hey you, what's your name?",
                     $"~r~Suspect~s~: It's {SuspectPersona.Forename}.",
                     $"~b~You~s~: His name is {SuspectPersona.Forename}.",
                     "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                   $"~g~Owner~s~: You too Officer... uhh...",
+                    "~g~Owner~s~: You too Officer... uhh...",
                     $"~b~You~s~: It's Officer {PlayerPersona.Surname}.",
-                    $"~g~Owner~s~: Okay, you too have a nice day.",
+                    "~g~Owner~s~: Okay, you too have a nice day.",
                     "~m~Call Ended",
                 };
 
