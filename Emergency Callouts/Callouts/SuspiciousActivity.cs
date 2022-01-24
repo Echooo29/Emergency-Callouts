@@ -26,8 +26,8 @@ namespace EmergencyCallouts.Callouts
         Vector3 Entrance;
         Vector3 Center;
 
-        readonly Rage.Object Box = new Rage.Object(new Model("prop_cs_cardbox_01"), new Vector3(0, 0, 0));
-        readonly Rage.Object OpenBox = new Rage.Object(new Model("prop_tshirt_box_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object Box = new Rage.Object(new Model("prop_paper_box_05"), new Vector3(0, 0, 0));
+        readonly Rage.Object OpenBox = new Rage.Object(new Model("prop_paper_box_01"), new Vector3(0, 0, 0));
 
         // Main
         #region Positions
@@ -442,17 +442,11 @@ namespace EmergencyCallouts.Callouts
             #region Positions
             if (CalloutPosition == CalloutPositions[0]) // La Puerta
             {
-                //Suspect.Position = new Vector3(-630.9208f, -1637.541f, 25.97495f);
-                //Suspect.Heading = 246.22f;
-
-                SuspectVehicle.Position = new Vector3(-627.4247f, -1639.517f, 25.44179f);
-                SuspectVehicle.Heading = 238.83f;
+                SuspectVehicle.Position = new Vector3(-624.1057f, -1641.472f, 25.53772f);
+                SuspectVehicle.Heading = 238.88f;
             }
             else if (CalloutPosition == CalloutPositions[1]) // Del Perro
             {
-                //Suspect.Position = new Vector3(-1266.043f, -821.1293f, 17.09916f);
-                //Suspect.Heading = 131.59f;
-
                 SuspectVehicle.Position = new Vector3(-1269.257f, -823.7877f, 16.71213f);
                 SuspectVehicle.Heading = 128.39f;
             }
@@ -481,8 +475,11 @@ namespace EmergencyCallouts.Callouts
                 SuspectVehicle.Position = new Vector3(1430.501f, 6350.87f, 23.5983f);
                 SuspectVehicle.Heading = 99.83f;
             }
+            Log.Creation(Suspect, PedCategory.Suspect);
+            Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
-            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(SuspectVehicle.Length - 1f);
+            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + 2f);
+            Suspect.Heading = SuspectVehicle.Heading;
             #endregion
         }
 
@@ -631,18 +628,28 @@ namespace EmergencyCallouts.Callouts
                 RetrieveFriendlyPosition();
 
                 // Delete Suspect2
-                if (Suspect2.Exists()) { Suspect2.Delete(); }
-                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+                //if (Suspect2.Exists()) { Suspect2.Delete(); }
+                //if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+                //if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+
+                // Carry Box
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
                 // Attach Box
-                int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.Spine);
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, Suspect, BoneIndex, 0f, 0.45f, 0f, 180f, 270f, 180f, true, true, false, false, 2, 1);
 
                 // Get suspect gender
                 string gender = string.Empty;
-                if (Suspect.IsMale) { gender = "Sir"; }
-                else { gender = "Ma'am"; }
+
+                if (SuspectPersona.Gender == LSPD_First_Response.Gender.Male)
+                {
+                    gender = "Sir";
+                }
+                else
+                {
+                    gender = "Ma'am";
+                }
 
                 // Get random box contents
                 string[] boxContents = { "a dozen magazines", "a pair of shoes", "printer ink cartridges", "PC hardware" };
@@ -652,10 +659,10 @@ namespace EmergencyCallouts.Callouts
                 {
                     $"~b~You~s~: Hello {gender}, how are you doing today?",
                     "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, are you here for me?",
-                    "~b~You~s~: We got a call of a person acting suspicious, you matched the description.",
+                    "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
                     "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
                     "~b~You~s~: I understand, what's in the box?",
-                    $"~y~Suspect~s~: Oh, it's ${boxContents[randomContent]}.",
+                    $"~y~Suspect~s~: Oh, it's {boxContents[randomContent]}.",
                     "~b~You~s~: Can I take a look?",
                     "~y~Suspect~s~: Sure go ahead.",
                     "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
@@ -671,7 +678,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsAlive)
+                        if (Suspect.IsAlive && Suspect.Exists())
                         {
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
                             {
@@ -688,26 +695,18 @@ namespace EmergencyCallouts.Callouts
                                     Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
                                     Game.DisplaySubtitle(dialogueSuspect[line], 15000);
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line + 1);
                                     line++;
                                     if (line == 8)
                                     {
                                         if (Box.Exists()) { Box.Delete(); }
 
                                         // Attach Box
-                                        int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
-                                        NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(OpenBox, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                                        NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(OpenBox, Suspect, BoneIndex, 0f, 0.45f, 0f, 180f, 270f, 180f, true, true, false, false, 2, 1);
 
-                                        Vector3 oldPos = MainPlayer.Position;
-
-                                        // Walk to suspect to check
-                                        MainPlayer.Tasks.GoStraightToPosition(Suspect.Position, 1f, 1f, 0f, 0);
-
-                                        GameFiber.Sleep(3000);
+                                        GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
 
-                                        // Walk to back to old spot
-                                        MainPlayer.Tasks.GoStraightToPosition(oldPos, 1f, Suspect.Heading - 180, 0f, 0);
                                     }
 
                                     if (line == dialogueSuspect.Length)
@@ -870,6 +869,8 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
+            Suspect.Tasks.Clear();
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Suspect2.Exists()) { Suspect2.Dismiss(); }
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
@@ -880,7 +881,7 @@ namespace EmergencyCallouts.Callouts
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (Box.Exists()) { Box.Delete(); }
             if (OpenBox.Exists()) { OpenBox.Delete(); }
-
+            
             Display.HideSubtitle();
             Display.EndNotification();
             Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
