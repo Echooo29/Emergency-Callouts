@@ -3,6 +3,7 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -20,9 +21,13 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool WithinRange;
+        bool DialogueStarted;
 
         Vector3 Entrance;
         Vector3 Center;
+
+        readonly Rage.Object Box = new Rage.Object(new Model("prop_cs_cardbox_01"), new Vector3(0, 0, 0));
+        readonly Rage.Object OpenBox = new Rage.Object(new Model("prop_tshirt_box_01"), new Vector3(0, 0, 0));
 
         // Main
         #region Positions
@@ -305,10 +310,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();//////////////////////////////////////////////
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -426,6 +434,55 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
             Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
 
+            #endregion
+        }
+
+        private void RetrieveFriendlyPosition()
+        {
+            #region Positions
+            if (CalloutPosition == CalloutPositions[0]) // La Puerta
+            {
+                //Suspect.Position = new Vector3(-630.9208f, -1637.541f, 25.97495f);
+                //Suspect.Heading = 246.22f;
+
+                SuspectVehicle.Position = new Vector3(-627.4247f, -1639.517f, 25.44179f);
+                SuspectVehicle.Heading = 238.83f;
+            }
+            else if (CalloutPosition == CalloutPositions[1]) // Del Perro
+            {
+                //Suspect.Position = new Vector3(-1266.043f, -821.1293f, 17.09916f);
+                //Suspect.Heading = 131.59f;
+
+                SuspectVehicle.Position = new Vector3(-1269.257f, -823.7877f, 16.71213f);
+                SuspectVehicle.Heading = 128.39f;
+            }
+            else if (CalloutPosition == CalloutPositions[2]) // Harmony
+            {
+                SuspectVehicle.Position = new Vector3(573.72f, 2796.019f, 41.69397f);
+                SuspectVehicle.Heading = 279.09f;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // El Burro
+            {
+                SuspectVehicle.Position = new Vector3(1119.511f, -2379.631f, 30.521f);
+                SuspectVehicle.Heading = 5.75f;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // County
+            {
+                SuspectVehicle.Position = new Vector3(783.7767f, 1281.481f, 359.9094f);
+                SuspectVehicle.Heading = 358.61f;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
+            {
+                SuspectVehicle.Position = new Vector3(2148.915f, 4796.483f, 40.75656f);
+                SuspectVehicle.Heading = 243.75f;
+            }
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
+            {
+                SuspectVehicle.Position = new Vector3(1430.501f, 6350.87f, 23.5983f);
+                SuspectVehicle.Heading = 99.83f;
+            }
+
+            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(SuspectVehicle.Length - 1f);
             #endregion
         }
 
@@ -553,6 +610,126 @@ namespace EmergencyCallouts.Callouts
                         if (Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                         {
                             Suspect2.Tasks.PutHandsUp(-1, MainPlayer);
+                            break;
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3() // Conversation
+        {
+            #region Scenario 3
+            try
+            {
+                // Retrieve Ped Positions
+                RetrieveFriendlyPosition();
+
+                // Delete Suspect2
+                if (Suspect2.Exists()) { Suspect2.Delete(); }
+                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+
+                // Attach Box
+                int lhBoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+
+                // Get suspect gender
+                string gender = string.Empty;
+                if (Suspect.IsMale) { gender = "Sir"; }
+                else { gender = "Ma'am"; }
+
+                // Get random box contents
+                string[] boxContents = { "a dozen magazines", "a pair of shoes", "printer ink cartridges", "PC hardware" };
+                int randomContent = random.Next(boxContents.Length);
+
+                string[] dialogueSuspect =
+                {
+                    $"~b~You~s~: Hello {gender}, how are you doing today?",
+                    "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, are you here for me?",
+                    "~b~You~s~: We got a call of a person acting suspicious, you matched the description.",
+                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
+                    "~b~You~s~: I understand, what's in the box?",
+                    $"~y~Suspect~s~: Oh, it's ${boxContents[randomContent]}.",
+                    "~b~You~s~: Can I take a look?",
+                    "~y~Suspect~s~: Sure go ahead.",
+                    "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
+                    "~y~Suspect~s~: Okay.",
+                    "~m~dialogue ended",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsAlive)
+                        {
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
+                            {
+                                if (Game.IsKeyDown(Settings.InteractKey))
+                                {
+                                    if (!DialogueStarted)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+                                    }
+
+                                    DialogueStarted = true;
+
+                                    // Face the player
+                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                    Game.DisplaySubtitle(dialogueSuspect[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line);
+                                    line++;
+                                    if (line == 8)
+                                    {
+                                        if (Box.Exists()) { Box.Delete(); }
+
+                                        // Attach Box
+                                        int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.LeftPhHand);
+                                        NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(OpenBox, MainPlayer, lhBoneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+
+                                        Vector3 oldPos = MainPlayer.Position;
+
+                                        // Walk to suspect to check
+                                        MainPlayer.Tasks.GoStraightToPosition(Suspect.Position, 1f, 1f, 0f, 0);
+
+                                        GameFiber.Sleep(3000);
+                                        Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
+
+                                        // Walk to back to old spot
+                                        MainPlayer.Tasks.GoStraightToPosition(oldPos, 1f, Suspect.Heading - 180, 0f, 0);
+                                    }
+
+                                    if (line == dialogueSuspect.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                        GameFiber.Sleep(3000);
+                                        Handle.AdvancedEndingSequence();
+
+                                        break;
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
+                                else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
+                                {
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect~s~.");
+                                }
+                            }
+                        }
+                        else if (Suspect.IsDead) // Suspect is dead
+                        {
                             break;
                         }
                     }
@@ -701,6 +878,8 @@ namespace EmergencyCallouts.Callouts
             if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+            if (Box.Exists()) { Box.Delete(); }
+            if (OpenBox.Exists()) { OpenBox.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();
