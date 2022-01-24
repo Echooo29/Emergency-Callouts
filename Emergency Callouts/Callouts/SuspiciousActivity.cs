@@ -693,12 +693,13 @@ namespace EmergencyCallouts.Callouts
                                     // Face the player
                                     Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
 
-                                    Game.DisplayHelp("Looking...");
                                     Game.DisplaySubtitle(dialogueSuspect[line], 15000);
                                     Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line + 1);
                                     line++;
+
                                     if (line == 8)
                                     {
+                                        Game.DisplayHelp("Looking...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
 
