@@ -643,18 +643,32 @@ namespace EmergencyCallouts.Callouts
                     acceptsSuggestion = true;
                 }
 
-                // Owner Line
+                // Owner response line 2
                 string lineOwner = string.Empty;
+
+                int chance = random.Next(1, 101);
+
+                if (chance <= 50)
+                {
+                    lineOwner = "Again?! What did my son do now?";
+                }
+                else
+                {
+                    lineOwner = "Oh oh... Did I do something wrong?";
+                }
+
+                // Owner Line
+                string lineOwner2 = string.Empty;
 
                 int chanceCharges = random.Next(1, 101);
 
                 if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
-                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
+                    lineOwner2 = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
                 }
                 else
                 {
-                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go Officer {PlayerPersona.Surname}";
+                    lineOwner2 = $"Haha, he must be pissing his pants right now, you may let the person go Officer {PlayerPersona.Surname}";
                 }
 
                 string[] dialogueSuspect =
@@ -673,7 +687,7 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueOwner =
                 {
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
-                    "~g~Owner~s~: Again?! What did my son do now?",
+                    "~g~Owner~s~: " + lineOwner2,
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
