@@ -692,7 +692,7 @@ namespace EmergencyCallouts.Callouts
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
                     $"~b~You~s~: Give me a second. Hey you, what's your name?",
-                    $"~b~Suspect~s~: It's {SuspectPersona.Forename}.",
+                    $"~r~Suspect~s~: It's {SuspectPersona.Forename}.",
                     $"~b~You~s~: His name is {SuspectPersona.Forename}.",
                     "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
