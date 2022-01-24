@@ -622,11 +622,6 @@ namespace EmergencyCallouts.Callouts
                 {
                     timeOfDay = "in the middle of the night?";
                 }
-                
-                // Gender pre mention
-                string gender = string.Empty;
-                if (PlayerPersona.Gender == LSPD_First_Response.Gender.Male) { gender = "Mr"; }
-                else gender = "Mrs";
 
                 // Chance of declining to call property owner
                 string playerAnswer = string.Empty;
@@ -655,11 +650,11 @@ namespace EmergencyCallouts.Callouts
 
                 if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
-                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
+                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
                 }
                 else
                 {
-                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go {gender} {PlayerPersona.Surname}";
+                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go Officer {PlayerPersona.Surname}";
                 }
 
                 string[] dialogueSuspect =
@@ -687,8 +682,8 @@ namespace EmergencyCallouts.Callouts
                     $"~b~You~s~: His name is {SuspectPersona.Forename}.",
                     "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                    $"~g~Owner~s~: You too {gender}... uhh...",
-                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}.",
+                   $"~g~Owner~s~: You too Officer... uhh...",
+                    $"~b~You~s~: It's Officer {PlayerPersona.Surname}.",
                     $"~g~Owner~s~: Okay, you too have a nice day.",
                     "~m~Call Ended",
                 };
