@@ -876,7 +876,6 @@ namespace EmergencyCallouts.Callouts
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
             if (Box.Exists()) { Box.Delete(); }
-            if (OpenBox.Exists()) { OpenBox.Delete(); }
             
             Display.HideSubtitle();
             Display.EndNotification();

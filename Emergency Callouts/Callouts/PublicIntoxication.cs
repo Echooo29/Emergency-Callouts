@@ -36,16 +36,17 @@ namespace EmergencyCallouts.Callouts
         {
             int count = 0;
 
+            CalloutMessage = "Public Intoxication";
+            CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
+            
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
 
                 count++;
-                if (count >= 15) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
+                if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
             }
 
-            CalloutMessage = "Public Intoxication";
-            CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
             CalloutArea = World.GetStreetName(CalloutPosition);
             CalloutScenario = random.Next(1, 3);
 
@@ -110,10 +111,10 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();////////////////////
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario3();
+                        Scenario2();
                         break;
                     case 3:
                         Scenario3();
