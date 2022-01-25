@@ -657,7 +657,7 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueSuspect =
                 {
                     $"~b~You~s~: Hello {gender}, how are you doing today?",
-                    "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, are you here for me?",
+                    "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, did I do something wrong?",
                     "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
                     "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
                     "~b~You~s~: I understand, what's in the box?",
