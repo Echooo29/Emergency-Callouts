@@ -235,16 +235,14 @@ namespace EmergencyCallouts.Essential
 
         internal static class Vehicles
         {
-            #region GetRandomFourDoor
-            internal static string GetRandomFourDoor()
+            #region GetRandomSedan
+            internal static string GetRandomSedan()
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", 
-                    "GRESLEY", "HABANERO", "BJXL", "CAVALCADE", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO", "FQ2",
-                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
-                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "BUFFALO2", "ASEA", "RANCHERXL", "SULTAN", "DILETTANTE",
-                    "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
+                    "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
+                    "WARRENER", "DUKES", "BUFFALO", "BUFFALO2", "ASEA", "SULTAN", "DILETTANTE",
+                    "SULTAN", "ASTEROPE", "WASHINGTON", "HABANERO", "PRIMO",
                 };
 
                 int num = random.Next(vehicles.Length);
