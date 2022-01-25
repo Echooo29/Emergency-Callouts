@@ -53,7 +53,7 @@ namespace EmergencyCallouts.Essential
             {
                 string[] maleModels =
                 {
-                    "a_m_m_afriamer_01", "ig_barry", "u_m_y_baygor", "a_m_o_beach_01", "a_m_y_beach_01", "a_f_y_bevhills_02", "a_m_y_ktown_02", "ig_ortega", "a_m_m_salton_04", "g_m_y_salvagoon_02", "a_m_y_stlat_01", "a_m_m_stlat_02",
+                    "a_m_m_afriamer_01", "ig_barry", "u_m_y_baygor", "a_m_o_beach_01", "a_m_y_beach_01", "a_m_y_ktown_02", "ig_ortega", "a_m_m_salton_04", "g_m_y_salvagoon_02", "a_m_y_stlat_01", "a_m_m_stlat_02",
                     "u_m_m_aldinapoli", "a_m_y_beach_02", "a_m_y_beachvesp_01", "a_m_y_beachvesp_02", "u_m_m_bikehire_01", "a_m_y_ktown_01", "csb_oscar", "ig_paper", "a_m_m_salton_03", "g_m_y_salvagoon_03", "a_m_y_stbla_02",
                     "s_m_y_ammucity_01", "a_m_y_bevhills_01", "a_m_m_bevhills_02", "a_m_y_bevhills_02", "ig_brad", "a_m_y_busicas_01", "ig_manuel", "u_m_y_paparazzi", "a_m_m_salton_02", "u_m_y_sbike", "a_m_y_stbla_01",
                     "cs_carbuyer", "s_m_o_busker_01", "ig_car3guy2", "g_m_m_chigoon_01", "ig_jimmyboston", "a_m_m_business_01", "g_m_y_lost_01", "a_m_m_paparazzi_01", "a_m_y_salton_01", "a_m_m_skater_01", "a_m_m_trampbeac_01",
@@ -85,21 +85,21 @@ namespace EmergencyCallouts.Essential
             {
                 string[] femaleModels =
                 {
-                    "ig_abigail", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01",
-                    "a_f_m_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
-                    "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane",
-                    "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02",
-                    "a_f_y_epsilon_01", "a_f_m_fatwhite_01", "s_f_m_fembarber", "a_f_y_fitness_01", "a_f_y_fitness_02",
-                    "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02",
-                    "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01",
-                    "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta",
-                    "u_f_y_mistress", "ig_molly", "ig_mrsphillips",
-                    "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess",
+                    "ig_abigail", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01", "ig_ashley", "a_f_y_bevhills_02", "u_f_y_bikerchic",
+                    "a_f_m_bevhills_01", "a_f_y_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
+                    "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane", "a_f_m_eastsa_02",
+                    "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02", "a_f_y_business_03", "a_f_y_eastsa_01",
+                    "a_f_y_epsilon_01", "a_f_m_fatwhite_01", "s_f_m_fembarber", "a_f_y_fitness_01", "a_f_y_fitness_02", "a_f_y_hipster_01",
+                    "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02", "s_f_y_hooker_03",
+                    "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01", "a_f_y_indian_01",
+                    "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta", "u_f_o_moviestar",
+                    "u_f_y_mistress", "ig_molly", "ig_mrsphillips", "a_f_y_eastsa_03", "a_f_y_hiker_01", "a_f_m_trampbeac_01",
+                    "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess", "a_f_m_skidrow_01",
                     "a_f_m_salton_01", "a_f_o_salton_01", "a_f_y_rurmeth_01", "a_f_y_runner_01", "a_f_y_scdressy_01",
                     "ig_screen_writer", "s_f_m_shop_high", "s_f_y_shop_low", "s_f_y_shop_mid", "a_f_y_skater_01",
                     "a_f_o_soucent_01", "a_f_y_soucent_01", "a_f_m_soucent_02", "a_f_o_soucent_02", "a_f_y_soucent_02",
                     "a_f_y_soucent_03", "a_f_m_soucentmc_01", "u_f_y_spyactress", "s_f_m_sweatshop_01", "s_f_y_sweatshop_01",
-                    "a_f_y_tennis_01", "a_f_y_tourist_01", "a_f_y_tourist_02",
+                    "a_f_y_tennis_01", "a_f_y_tourist_01", "a_f_y_tourist_02", "a_f_m_soucent_01",
                     "g_f_y_vagos_01", "a_f_y_vinewood_01", "a_f_y_vinewood_02", "a_f_y_vinewood_03",
                     "a_f_y_vinewood_04", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
                     "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", 
