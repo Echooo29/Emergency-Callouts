@@ -275,14 +275,14 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Blip.Alpha = 0f;
 
                 // SuspectVehicle
-                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                SuspectVehicle = new Vehicle(Vehicles.GetRandomSedan(), Vector3.Zero, 0f);
                 SuspectVehicle.IsPersistent = true;
 
                 vehDoors = SuspectVehicle.GetDoors();
                 vehDoors[vehDoors.Length - 1].Open(false);
 
                 // Suspect2Vehicle
-                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomSedan(), Vector3.Zero, 0f);
                 Suspect2Vehicle.IsPersistent = true;
 
                 veh2Doors = Suspect2Vehicle.GetDoors();
@@ -477,7 +477,7 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(Suspect, PedCategory.Suspect);
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
-            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + 2f);
+            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + SuspectVehicle.Length / 2.7f);
             Suspect.Heading = SuspectVehicle.Heading;
             #endregion
         }
