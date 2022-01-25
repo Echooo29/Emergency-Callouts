@@ -584,6 +584,7 @@ namespace EmergencyCallouts.Callouts
                 RetrieveFightPosition();
 
                 // Suspect Position
+                GameFiber.Sleep(100);
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Give Random Handgun
@@ -597,6 +598,16 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                        {
+                            Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
+                            break;
+                        }
+                    }
+
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
