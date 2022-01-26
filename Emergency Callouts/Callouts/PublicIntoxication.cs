@@ -45,9 +45,9 @@ namespace EmergencyCallouts.Callouts
 
                 count++;
                 if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
+                CalloutArea = World.GetStreetName(CalloutPosition);
             }
 
-            CalloutArea = World.GetStreetName(CalloutPosition);
             CalloutScenario = random.Next(1, 4);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
