@@ -182,7 +182,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Suspicious Activity";
             CalloutDetails = "Multiple civilians called about a person handling possible ~y~firearms~s~ in the trunk of their car.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 

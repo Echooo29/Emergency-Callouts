@@ -335,7 +335,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Trespassing";
             CalloutDetails = "Reports of a person ~y~trespassing~s~ on private property.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 

@@ -48,7 +48,7 @@ namespace EmergencyCallouts.Callouts
             }
 
             CalloutArea = World.GetStreetName(CalloutPosition);
-            CalloutScenario = random.Next(1, 3);
+            CalloutScenario = random.Next(1, 4);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
