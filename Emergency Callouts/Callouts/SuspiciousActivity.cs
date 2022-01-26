@@ -477,7 +477,7 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(Suspect, PedCategory.Suspect);
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
 
-            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + SuspectVehicle.Length / 2.8f);
+            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + SuspectVehicle.Length / 2.85f);
             Suspect.Heading = SuspectVehicle.Heading;
             #endregion
         }
