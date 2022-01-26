@@ -240,8 +240,8 @@ namespace EmergencyCallouts.Essential
             {
                 string[] vehicles = 
                 {  
-                    "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
-                    "WARRENER", "DUKES", "BUFFALO", "BUFFALO2", "ASEA", "SULTAN", "DILETTANTE",
+                    "FUGITIVE", "INTRUDER", "PREMIER", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
+                    "WARRENER", "DUKES", "BUFFALO", "BUFFALO2", "ASEA", "DILETTANTE",
                     "SULTAN", "ASTEROPE", "WASHINGTON", "HABANERO", "PRIMO",
                 };
 
