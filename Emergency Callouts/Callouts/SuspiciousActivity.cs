@@ -626,6 +626,8 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
+                SuspectBlip.SetColorYellow();
+
                 // Delete Suspect2
                 //if (Suspect2.Exists()) { Suspect2.Delete(); }
                 //if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
@@ -703,7 +705,6 @@ namespace EmergencyCallouts.Callouts
                                         Game.DisplayHelp("Looking...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
-
                                     }
 
                                     if (line == dialogueSuspect.Length)
