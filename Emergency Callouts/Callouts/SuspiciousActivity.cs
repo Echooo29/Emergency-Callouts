@@ -699,6 +699,7 @@ namespace EmergencyCallouts.Callouts
 
                                     if (line == 8)
                                     {
+                                        GameFiber.Sleep(2000);
                                         Game.DisplayHelp("Looking...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
