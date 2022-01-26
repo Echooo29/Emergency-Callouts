@@ -629,9 +629,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2
-                //if (Suspect2.Exists()) { Suspect2.Delete(); }
-                //if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-                //if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+                if (Suspect2.Exists()) { Suspect2.Dismiss(); }
+                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
 
                 // Carry Box
                 Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
