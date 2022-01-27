@@ -384,7 +384,7 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueArrested =
                 {
                     "~b~You~s~: Ma'am, are you injured?",
-                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~o~Victim~s~: Yes, only a few bruises but that's nothing new.",
                     "~b~You~s~: Okay, is this your property?",
                     "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
                     "~b~You~s~: I assume you want to press charges?",
@@ -402,13 +402,13 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueDeceased =
                 {
                     "~b~You~s~: Ma'am, are you hurt?",
-                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~o~Victim~s~: Uh, yes I think so...",
                     "~b~You~s~: Okay, is this property yours?",
                     "~o~Victim~s~: Yes it is.",
-                    "~b~You~s~: The body will get moved soon.",
-                    "~o~Victim~s~: Good, what about the blood?",
+                    "~b~You~s~: Okay, this is now a crime scene, it will take some time before you enter your house again.",
+                    "~o~Victim~s~: Oh, what about the blood?",
                     "~b~You~s~: That will be taken care of by crime scene cleaners.",
-                    "~o~Victim~s~: Okay, thanks",
+                    "~o~Victim~s~: Okay, that's good",
                     "~b~You~s~: Here is my card if you have any questions or need any help.",
                     "~o~Victim~s~: Thanks.",
                     "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
@@ -504,8 +504,8 @@ namespace EmergencyCallouts.Callouts
                                         MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
 
                                         Victim.Tasks.ClearImmediately();
-                                        Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                        Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                                     }
 
                                     GameFiber.Sleep(500);
