@@ -181,7 +181,7 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Suspicious Activity";
-            CalloutDetails = "Multiple civilians called about a person handling possible ~y~firearms~s~ in the trunk of their car.";
+            CalloutDetails = "Multiple civilians called about a behaving suspicious near their car.";
             CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
@@ -628,8 +628,7 @@ namespace EmergencyCallouts.Callouts
 
                 SuspectBlip.SetColorYellow();
 
-                // Delete Suspect2
-                if (Suspect2.Exists()) { Suspect2.Dismiss(); }
+                // Delete Suspect2 Things
                 if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
                 if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
 
@@ -701,7 +700,7 @@ namespace EmergencyCallouts.Callouts
 
                                     if (line == 8)
                                     {
-                                        GameFiber.Sleep(2000);
+                                        GameFiber.Sleep(3000);
                                         Game.DisplayHelp("Looking...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
