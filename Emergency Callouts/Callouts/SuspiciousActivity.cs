@@ -626,6 +626,7 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
+                Functions.SetPedAsStopped(Suspect, true);
                 SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2 Things
@@ -667,7 +668,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Sure go ahead.",
                     "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
                     "~y~Suspect~s~: Okay.",
-                    "~m~dialogue ended",
+                    "~y~Detain the ~y~suspect~s~.",
                 };
 
                 int line = 0;
@@ -687,6 +688,9 @@ namespace EmergencyCallouts.Callouts
                                     if (!DialogueStarted)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+
+                                        // Carry Box
+                                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
                                     }
 
                                     DialogueStarted = true;
