@@ -61,7 +61,7 @@ namespace EmergencyCallouts.Callouts
         {
             if (Other.PluginChecker.IsCalloutInterfaceRunning)
             {
-                CalloutInterface.API.Functions.SendCalloutDetails(this, "Code 2", "");
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE 2", "");
             }
             base.OnCalloutDisplayed();
         }

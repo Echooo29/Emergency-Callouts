@@ -213,7 +213,7 @@ namespace EmergencyCallouts.Callouts
         {
             if (Other.PluginChecker.IsCalloutInterfaceRunning)
             {
-                CalloutInterface.API.Functions.SendCalloutDetails(this, "CODE-2-HIGH", "");
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE-2-HIGH", "");
             }
 
             base.OnCalloutDisplayed();

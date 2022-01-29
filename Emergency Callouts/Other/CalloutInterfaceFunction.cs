@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static EmergencyCallouts.Essential.Helper;
+﻿using Rage;
 
 namespace EmergencyCallouts.Other
 {
-    internal class CalloutInterfaceExtension
+    /// <summary>
+    /// Functions for CalloutInterface.
+    /// </summary>
+    internal static class CalloutInterfaceFunctions
     {
         /// <summary>
         /// Send details about the callout to the MDT.  Call this in OnCalloutDisplayed.
@@ -22,9 +19,9 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendCalloutDetails(sender, priority, agency);
             }
-            catch (Exception e)
+            catch (System.Exception ex)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Game.LogTrivial(ex.Message);
             }
         }
 
@@ -39,9 +36,9 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendMessage(sender, message);
             }
-            catch (Exception e)
+            catch (System.Exception ex)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Game.LogTrivial(ex.Message);
             }
         }
     }
