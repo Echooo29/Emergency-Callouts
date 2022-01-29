@@ -757,7 +757,7 @@ namespace EmergencyCallouts.Callouts
                     WithinRange = true;
 
                     // Delete Nearby Trailers
-                    Handle.DeleteNearbyTrailers(Center, 100f);
+                    Handle.DeleteNearbyTrailers(Entrance, 100f);
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect, Suspect2, 40f);
