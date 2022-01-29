@@ -173,8 +173,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutScenario = random.Next(1, 4);
             CalloutAdvisory = "Passersby report a male continuingly hitting a female.";
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
@@ -198,6 +198,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
             }
+
             base.OnCalloutNotAccepted();
         }
 

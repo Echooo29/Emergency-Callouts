@@ -38,6 +38,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Public Intoxication";
             CalloutAdvisory = "Reports of a person under the influence of alcohol.";
+            CalloutScenario = random.Next(1, 4);
 
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
@@ -48,7 +49,6 @@ namespace EmergencyCallouts.Callouts
                 CalloutArea = World.GetStreetName(CalloutPosition);
             }
 
-            CalloutScenario = random.Next(1, 4);
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
 

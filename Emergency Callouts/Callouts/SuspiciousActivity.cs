@@ -181,8 +181,8 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Suspicious Activity";
-            CalloutScenario = random.Next(1, 4);
             CalloutAdvisory = "Passersby called regarding a person acting suspicious.";
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
@@ -205,6 +205,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
             }
+
             base.OnCalloutNotAccepted();
         }
 

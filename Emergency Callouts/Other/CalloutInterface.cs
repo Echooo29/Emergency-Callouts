@@ -22,7 +22,7 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendCalloutDetails(sender, priority, agency);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
@@ -39,7 +39,7 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendMessage(sender, message);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
