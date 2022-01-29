@@ -2,7 +2,6 @@
 Check if all scenarios are enabled
 Update AssemblyFileVersion
 Set EarlyAccess bool to false
-Merge feature to dev branch
 Check Error list
 Build in release mode
 Push
@@ -25,7 +24,8 @@ Update Changelog.txt
 Update #Changelog
 Remove Early Access files from old version
 
-[GITHUB] 
+[GITHUB]
+Make sure you pushed
 Merge Dev to Master branch
 
 [PAGE]
@@ -38,5 +38,4 @@ Clear Known Issues
 Remove the next update changelog trello link
 
 [POST-UPDATE]
-Enable all remote states
 Change build mode to Debug
