@@ -173,12 +173,22 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
             CalloutScenario = random.Next(1, 4);
+            CalloutAdvisory = "Passersby report a male continuingly hitting a female.";
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
+        }
+
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                CalloutInterface.API.Functions.SendCalloutDetails(this, "Code 3", "");
+            }
+
+            base.OnCalloutDisplayed();
         }
 
         public override void OnCalloutNotAccepted()

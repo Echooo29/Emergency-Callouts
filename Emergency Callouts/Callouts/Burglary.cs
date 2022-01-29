@@ -201,12 +201,21 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Burglary";
-            CalloutDetails = "A person has been seen looking through windows, caller states he's now ~y~lockpicking~s~ a door.";
             CalloutScenario = random.Next(1, 4);
-
+            CalloutAdvisory = "Reports of a person attempting to break into property.";
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
+        }
+
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                CalloutInterface.API.Functions.SendCalloutDetails(this, "CODE-2-HIGH", "");
+            }
+
+            base.OnCalloutDisplayed();
         }
 
         public override void OnCalloutNotAccepted()
@@ -264,7 +273,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accepting Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 

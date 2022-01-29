@@ -28,7 +28,6 @@ namespace EmergencyCallouts.Essential
         internal static Persona PlayerPersona = Functions.GetPersonaForPed(MainPlayer);
         internal static Random random = new Random();
 
-        internal static string CalloutDetails { get; set; }
         internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
 

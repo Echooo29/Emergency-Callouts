@@ -37,8 +37,8 @@ namespace EmergencyCallouts.Callouts
             int count = 0;
 
             CalloutMessage = "Public Intoxication";
-            CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
-            
+            CalloutAdvisory = "Reports of a person under the influence of alcohol.";
+
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
@@ -49,7 +49,6 @@ namespace EmergencyCallouts.Callouts
             }
 
             CalloutScenario = random.Next(1, 4);
-
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
 
@@ -58,10 +57,20 @@ namespace EmergencyCallouts.Callouts
             return base.OnBeforeCalloutDisplayed();
         }
 
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                CalloutInterface.API.Functions.SendCalloutDetails(this, "Code 2", "");
+            }
+            base.OnCalloutDisplayed();
+        }
+
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
             Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            CalloutAdvisory = "There are multiple reports of a person under the influence of alcohol.";
 
             base.OnCalloutNotAccepted();
         }

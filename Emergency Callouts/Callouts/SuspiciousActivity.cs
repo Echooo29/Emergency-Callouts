@@ -181,12 +181,21 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Suspicious Activity";
-            CalloutDetails = "Multiple civilians called about a behaving suspicious near their car.";
             CalloutScenario = random.Next(1, 4);
+            CalloutAdvisory = "Multiple civilians called regarding a suspicious person near a vehicle.";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
+        }
+
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                CalloutInterface.API.Functions.SendCalloutDetails(this, "CODE-2-HIGH", "");
+            }
+            base.OnCalloutDisplayed();
         }
 
         public override void OnCalloutNotAccepted()
@@ -244,7 +253,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
