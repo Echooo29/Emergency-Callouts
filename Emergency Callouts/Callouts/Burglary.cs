@@ -201,7 +201,7 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Burglary";
-            CalloutAdvisory = "Reports of a person attempting to break into property.";
+            CalloutAdvisory = "Reports of a person attempting to break into a building.";
             CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_BURGLARY IN_OR_ON_POSITION", CalloutPosition);
