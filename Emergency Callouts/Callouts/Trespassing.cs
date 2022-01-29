@@ -406,7 +406,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 

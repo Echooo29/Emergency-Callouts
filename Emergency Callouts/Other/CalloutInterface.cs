@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static EmergencyCallouts.Essential.Helper;
 
 namespace EmergencyCallouts.Other
 {
@@ -20,9 +22,9 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendCalloutDetails(sender, priority, agency);
             }
-            catch (System.Exception ex)
+            catch (System.Exception e)
             {
-                // insert logging here
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -37,9 +39,9 @@ namespace EmergencyCallouts.Other
             {
                 CalloutInterface.API.Functions.SendMessage(sender, message);
             }
-            catch (System.Exception ex)
+            catch (System.Exception e)
             {
-                // insert logging here
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
     }

@@ -182,7 +182,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Suspicious Activity";
             CalloutScenario = random.Next(1, 4);
-            CalloutAdvisory = "Multiple civilians called regarding a suspicious person near a vehicle.";
+            CalloutAdvisory = "Passersby called regarding a person acting suspicious.";
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
