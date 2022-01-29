@@ -28,7 +28,6 @@ namespace EmergencyCallouts.Essential
         internal static Persona PlayerPersona = Functions.GetPersonaForPed(MainPlayer);
         internal static Random random = new Random();
 
-        internal static string CalloutDetails { get; set; }
         internal static string CalloutArea { get; set; }
         internal static int CalloutScenario { get; set; }
 
@@ -53,25 +52,25 @@ namespace EmergencyCallouts.Essential
             {
                 string[] maleModels =
                 {
-                    "a_m_m_afriamer_01", "ig_barry", "u_m_y_baygor", "a_m_o_beach_01", "a_m_y_beach_01",
-                    "u_m_m_aldinapoli", "a_m_y_beach_02", "a_m_y_beachvesp_01", "a_m_y_beachvesp_02", "ig_benny",
-                    "s_m_y_ammucity_01", "ig_beverly", "a_m_y_bevhills_01", "a_m_m_bevhills_02", "a_m_y_bevhills_02",
-                    "cs_carbuyer", "s_m_o_busker_01", "ig_car3guy1", "g_m_m_chigoon_01", "ig_jimmyboston",
-                    "u_m_y_antonb", "g_m_m_chigoon_02", "csb_chin_goon", "u_m_y_chip", "ig_claypain",
-                    "g_m_m_armboss_01", "s_m_m_cntrybar_01", "csb_customer", "a_m_y_cyclist_01", "ig_dale",
-                    "g_m_m_armgoon_01", "ig_davenorton", "s_m_y_dealer_01", "ig_devin", "ig_dom",
-                    "g_m_y_armgoon_02", "a_m_y_downtown_01", "ig_drfriedlander", "a_m_m_eastsa_01",
-                    "g_m_m_armlieut_01", "a_m_m_eastsa_02", "a_m_y_eastsa_02", "u_m_m_edtoh", "ig_fabien",
-                    "s_m_m_autoshop_01", "g_m_y_famca_01", "g_m_y_famdnf_01", "g_m_y_famfor_01", "a_m_m_farmer_01",
-                    "ig_money", "a_m_m_fatlatin_01", "ig_lazlow", "s_m_m_hairdress_01", "a_m_o_ktown_01",
-                    "g_m_y_azteca_01", "u_m_o_finguru_01", "csb_fos_rep", "player_one", "ig_g",
-                    "g_m_y_ballaeast_01", "csb_g", "a_m_m_genfat_01", "a_m_m_genfat_02", "a_m_y_genstreet_01",
-                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "a_m_m_golfer_01", 
-                    "ig_ballasog", "s_m_m_highsec_02", "a_m_y_hipster_02", "csb_hugh", "a_m_m_indian_01",
-                    "g_m_y_ballasout_01", "ig_jay_norris", "u_m_m_jesus_01", "u_m_m_jewelsec_01", 
-                    "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman",
-                    "ig_bankman", "cs_johnnyklebitz", "g_m_y_korean_01", "g_m_y_korlieut_01", 
-                    "s_m_y_barman_01", "a_m_y_ktown_02", "ig_lamardavis", "a_m_y_latino_01", 
+                    "a_m_m_afriamer_01", "ig_barry", "u_m_y_baygor", "a_m_o_beach_01", "a_m_y_beach_01", "a_m_y_ktown_02", "ig_ortega", "a_m_m_salton_04", "g_m_y_salvagoon_02", "a_m_y_stlat_01", "a_m_m_stlat_02",
+                    "u_m_m_aldinapoli", "a_m_y_beach_02", "a_m_y_beachvesp_01", "a_m_y_beachvesp_02", "u_m_m_bikehire_01", "a_m_y_ktown_01", "csb_oscar", "ig_paper", "a_m_m_salton_03", "g_m_y_salvagoon_03", "a_m_y_stbla_02",
+                    "s_m_y_ammucity_01", "a_m_y_bevhills_01", "a_m_m_bevhills_02", "a_m_y_bevhills_02", "ig_brad", "a_m_y_busicas_01", "ig_manuel", "u_m_y_paparazzi", "a_m_m_salton_02", "u_m_y_sbike", "a_m_y_stbla_01",
+                    "cs_carbuyer", "s_m_o_busker_01", "ig_car3guy2", "g_m_m_chigoon_01", "ig_jimmyboston", "a_m_m_business_01", "g_m_y_lost_01", "a_m_m_paparazzi_01", "a_m_y_salton_01", "a_m_m_skater_01", "a_m_m_trampbeac_01",
+                    "u_m_y_antonb", "g_m_m_chigoon_02", "csb_chin_goon", "u_m_y_chip", "ig_claypain", "a_m_y_business_01", "a_m_m_hillbilly_02", "a_m_m_mexcntry_01", "s_m_y_robber_01", "a_m_y_skater_01", "u_m_m_spyactor",
+                    "g_m_m_armboss_01", "s_m_m_cntrybar_01", "csb_customer", "a_m_y_cyclist_01", "a_m_y_business_02", "a_m_m_hasjew_01", "g_m_y_lost_03", "g_m_y_pologoon_01", "g_m_y_salvagoon_01", "a_m_y_soucent_04", "s_m_m_trucker_01",
+                    "g_m_m_armgoon_01", "s_m_y_dealer_01", "g_m_m_korboss_01", "s_m_m_lathandy_01", "a_m_y_business_03", "a_m_m_hillbilly_01", "g_m_m_mexboss_01", "csb_reporter", "a_m_y_skater_02", "a_m_m_soucent_04", "csb_undercover",
+                    "g_m_y_armgoon_02", "a_m_y_downtown_01" , "a_m_m_eastsa_01", "s_m_m_linecook", "ig_clay", "ig_cletus", "a_m_y_hippy_01", "g_m_m_mexboss_02", "u_m_m_rivalpap", "a_m_m_skidrow_01", "a_m_y_soucent_03", "a_m_y_vinewood_01",
+                    "g_m_m_armlieut_01", "a_m_m_eastsa_02", "a_m_y_eastsa_02", "u_m_m_edtoh", "ig_fabien", "u_m_y_cyclist_01", "a_m_y_hipster_01", "u_m_y_party_01", "csb_roccopelosi", "a_m_m_socenlat_01", "ig_stretch", "a_m_y_vinewood_02",
+                    "s_m_m_autoshop_01", "g_m_y_famca_01", "g_m_y_famdnf_01", "g_m_y_famfor_01", "a_m_m_farmer_01", "mp_m_exarmy_01", "a_m_y_methhead_01", "u_m_m_partytarget", "g_m_y_salvaboss_01", "a_m_o_soucent_03", "s_m_y_winclean_01",
+                    "ig_money", "a_m_m_fatlatin_01", "ig_lazlow", "s_m_m_hairdress_01", "a_m_o_ktown_01", "s_m_y_dealer_01", "u_m_y_hippie_01", "a_m_m_og_boss_01", "a_m_y_runner_02", "ig_solomon", "a_m_m_soucent_03", "a_m_m_tourist_01",
+                    "g_m_y_azteca_01", "u_m_o_finguru_01", "csb_fos_rep", "player_one", "ig_g", "a_m_y_cyclist_01", "u_m_y_fibmugger_01", "a_m_m_mexlabor_01", "ig_popov", "a_m_o_salton_01", "a_m_y_soucent_02", "ig_talina",
+                    "g_m_y_ballaeast_01", "csb_g", "a_m_m_genfat_01", "a_m_m_genfat_02", "a_m_y_genstreet_01", "u_m_m_filmdirector", "g_m_y_lost_02", "ig_oneil", "u_m_m_promourn_01", "a_m_o_soucent_01", "a_m_y_sunbathe_01",
+                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "csb_fos_rep", "s_m_m_gentransport", "csb_imran", "u_m_y_mani", "a_m_y_polynesian_01", "a_m_m_salton_01", "a_m_o_soucent_02", "ig_tomepsilon",
+                    "ig_ballasog", "s_m_m_highsec_02", "a_m_y_hipster_02", "csb_hugh", "a_m_m_indian_01", "a_m_o_genstreet_01", "a_m_m_ktown_01", "ig_nigel", "a_m_m_prolhost_01", "a_m_y_soucent_01", "a_m_y_stwhi_02", "a_m_m_tramp_01",
+                    "g_m_y_ballasout_01", "u_m_m_jewelsec_01", "a_m_m_malibu_01", "g_m_y_mexgoon_02", "g_m_y_mexgoon_03", "a_m_y_hiker_01", "ig_mrk", "a_m_m_polynesian_01", "ig_russiandrunk", "a_m_y_stwhi_01", "ig_terry",
+                    "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman", "g_m_y_mexgoon_01", "g_m_y_mexgang_01", "g_m_y_korean_02", "g_m_y_pologoon_02", "a_m_m_rurmeth_01", "s_m_y_strvend_01", "u_m_y_tattoo_01",
+                    "ig_bankman", "g_m_y_korean_01", "g_m_y_korlieut_01", "a_m_y_mexthug_01", "s_m_m_migrant_01", "ig_milton", "cs_josef", "mp_g_m_pros_01", "u_m_y_proldriver_01", "s_m_m_strvend_01", "u_m_o_taphillbilly",
+                    "s_m_y_barman_01", "a_m_y_ktown_02", "a_m_y_latino_01", "u_m_y_militarybum", "csb_agent", "hc_hacker", "ig_hao", "s_m_m_movprem_01", "csb_porndudes", "g_m_y_strpunk_01", "g_m_y_strpunk_02", "u_m_o_tramp_01",
                 };
 
                 int num = random.Next(maleModels.Length);
@@ -85,21 +84,21 @@ namespace EmergencyCallouts.Essential
             {
                 string[] femaleModels =
                 {
-                    "ig_abigail", "ig_amandatownley", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01",
-                    "a_f_m_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
-                    "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane",
-                    "ig_denise", "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02",
-                    "a_f_y_epsilon_01", "a_f_m_fatwhite_01", "s_f_m_fembarber", "a_f_y_fitness_01", "a_f_y_fitness_02",
-                    "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02",
-                    "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01",
-                    "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta",
-                    "ig_maryann", "u_f_y_mistress", "ig_molly", "ig_mrsphillips",
-                    "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess",
+                    "ig_abigail", "csb_anita", "s_f_y_bartender_01", "ig_isldj_04_d_01", "ig_ashley", "a_f_y_bevhills_02", "u_f_y_bikerchic",
+                    "a_f_m_bevhills_01", "a_f_y_bevhills_01", "a_f_m_bevhills_02", "a_f_y_bevhills_03", "a_f_y_bevhills_04", "mp_f_boatstaff_01",
+                    "a_f_y_business_02", "a_f_m_business_02", "a_f_y_business_01", "a_f_y_business_04", "u_f_y_comjane", "a_f_m_eastsa_02",
+                    "csb_denise_friend", "cs_debra", "a_f_m_eastsa_01", "a_f_y_eastsa_02", "a_f_y_business_03", "a_f_y_eastsa_01",
+                    "a_f_y_epsilon_01", "a_f_m_fatwhite_01", "s_f_m_fembarber", "a_f_y_fitness_01", "a_f_y_fitness_02", "a_f_y_hipster_01",
+                    "a_f_y_genhot_01", "a_f_o_genstreet_01", "a_f_y_golfer_01", "cs_guadalope", "a_f_y_hipster_02", "s_f_y_hooker_03",
+                    "a_f_y_hipster_03", "a_f_y_hipster_04", "a_f_o_indian_01", "ig_janet", "u_f_y_jewelass_01", "a_f_y_indian_01",
+                    "ig_jewelass", "ig_kerrymcintosh", "a_f_o_ktown_01", "a_f_m_ktown_02", "ig_magenta", "u_f_o_moviestar",
+                    "u_f_y_mistress", "ig_molly", "ig_mrsphillips", "a_f_y_eastsa_03", "a_f_y_hiker_01", "a_f_m_trampbeac_01",
+                    "ig_mrs_thornhill", "ig_natalia", "ig_paige", "ig_patricia", "u_f_y_princess", "a_f_m_skidrow_01",
                     "a_f_m_salton_01", "a_f_o_salton_01", "a_f_y_rurmeth_01", "a_f_y_runner_01", "a_f_y_scdressy_01",
                     "ig_screen_writer", "s_f_m_shop_high", "s_f_y_shop_low", "s_f_y_shop_mid", "a_f_y_skater_01",
                     "a_f_o_soucent_01", "a_f_y_soucent_01", "a_f_m_soucent_02", "a_f_o_soucent_02", "a_f_y_soucent_02",
                     "a_f_y_soucent_03", "a_f_m_soucentmc_01", "u_f_y_spyactress", "s_f_m_sweatshop_01", "s_f_y_sweatshop_01",
-                    "ig_tanisha", "a_f_y_tennis_01", "ig_tonya", "a_f_y_tourist_01", "a_f_y_tourist_02",
+                    "a_f_y_tennis_01", "a_f_y_tourist_01", "a_f_y_tourist_02", "a_f_m_soucent_01",
                     "g_f_y_vagos_01", "a_f_y_vinewood_01", "a_f_y_vinewood_02", "a_f_y_vinewood_03",
                     "a_f_y_vinewood_04", "a_f_y_yoga_01", "a_f_y_femaleagent", "mp_f_chbar_01",
                     "mp_f_counterfeit_01", "mp_f_execpa_01", "mp_f_execpa_02", "ig_jackie", 
@@ -235,16 +234,14 @@ namespace EmergencyCallouts.Essential
 
         internal static class Vehicles
         {
-            #region GetRandomFourDoor
-            internal static string GetRandomFourDoor()
+            #region GetRandomSedan
+            internal static string GetRandomSedan()
             {
                 string[] vehicles = 
                 {  
-                    "BISON", "BISON2", "BALLER", "BALLER2", "BALLER3", "BALLER4", "CAVALCADE", "CAVALCADE2", "CONTENDER", "DUBSTA", 
-                    "GRESLEY", "HABANERO", "BJXL", "CAVALCADE", "HUNTLEY", "LANDSTALKER", "LANDSTALKER2", "MESA", "PRIMO", "FQ2",
-                    "EMPEROR", "FUGITIVE", "INTRUDER", "PREMIER", "SURGE", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
-                    "WARRENER", "DUKES", "VIRGO", "BUFFALO", "BUFFALO2", "ASEA", "RANCHERXL", "SULTAN", "DILETTANTE",
-                    "SULTAN", "ASTEROPE", "WASHINGTON", "XLS", "REBLA", 
+                    "FUGITIVE", "INTRUDER", "PREMIER", "TAILGATER", "TAILGATER2", "EMPEROR2", "GLENDALE",  
+                    "WARRENER", "DUKES", "BUFFALO", "BUFFALO2", "ASEA", "DILETTANTE",
+                    "SULTAN", "ASTEROPE", "WASHINGTON", "HABANERO", "PRIMO",
                 };
 
                 int num = random.Next(vehicles.Length);

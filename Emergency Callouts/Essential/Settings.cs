@@ -24,6 +24,7 @@ namespace EmergencyCallouts.Essential
         // Chances
         internal static int ChanceOfPropertyDamage = 75;
         internal static int ChanceOfPressingCharges = 50;
+        internal static int ChanceOfCallingOwner = 50;
 
         // Back end
         internal static bool EarlyAccess = false;
@@ -55,7 +56,8 @@ namespace EmergencyCallouts.Essential
             // Chances
             ChanceOfPropertyDamage = iniFile.ReadInt32("Chances", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
             ChanceOfPressingCharges = iniFile.ReadInt32("Chances", "ChanceOfPressingCharges", ChanceOfPressingCharges);
-
+            ChanceOfCallingOwner = iniFile.ReadInt32("Chances", "ChanceOfCallingOwner", ChanceOfCallingOwner);
+            
             Game.LogTrivial("[Emergency Callouts]: Loaded settings");
         }
     }

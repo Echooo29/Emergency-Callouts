@@ -36,18 +36,18 @@ namespace EmergencyCallouts.Callouts
         {
             int count = 0;
 
+            CalloutMessage = "Public Intoxication";
+            CalloutAdvisory = "Reports of a person under the influence of alcohol.";
+            CalloutScenario = random.Next(1, 4);
+
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
 
                 count++;
-                if (count >= 15) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
+                if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
+                CalloutArea = World.GetStreetName(CalloutPosition);
             }
-
-            CalloutMessage = "Public Intoxication";
-            CalloutDetails = "There are multiple reports of a person under the influence of ~y~alcohol~s~.";
-            CalloutArea = World.GetStreetName(CalloutPosition);
-            CalloutScenario = random.Next(1, 3);
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
@@ -57,10 +57,22 @@ namespace EmergencyCallouts.Callouts
             return base.OnBeforeCalloutDisplayed();
         }
 
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE 2", "");
+            }
+            base.OnCalloutDisplayed();
+        }
+
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
-            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            if (!Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            }
 
             base.OnCalloutNotAccepted();
         }
@@ -71,7 +83,6 @@ namespace EmergencyCallouts.Callouts
             Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
             
             // Accept Messages
-            Display.AcceptNotification(CalloutDetails);
             Display.AcceptSubtitle(CalloutMessage, CalloutArea);
             Display.OutdatedReminder();
             
@@ -114,6 +125,9 @@ namespace EmergencyCallouts.Callouts
                         break;
                     case 2:
                         Scenario2();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -255,9 +269,9 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1()
+        private void Scenario1() // Standard
         {
-            #region Default
+            #region Scenario 1
             try
             {
                 Dialogue();
@@ -269,14 +283,44 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2()
+        private void Scenario2() // Bottle
         {
-            #region Bottle
+            #region Scenario 2
             try
             {
                 Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
                 HasBottle = true;
                 Dialogue();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3() // Pass out
+        {
+            #region Scenario 3
+            try
+            {
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsOnFoot && PlayerArrived)
+                        {
+                            Game.DisplaySubtitle("~y~Suspect~s~: I'm drunk, sooo wha...", 10000);
+                            GameFiber.Sleep(1250);
+                            if (Suspect.Exists()) { Suspect.Kill(); }
+                            GameFiber.Sleep(5000);
+                            Game.DisplaySubtitle("Request an ~g~ambulance~s~.", 7500);
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {

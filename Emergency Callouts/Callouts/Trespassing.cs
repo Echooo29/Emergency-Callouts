@@ -27,12 +27,13 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3[] CalloutPositions =
         {
-            new Vector3(512.01f, -610.720f, 24.4312f),  // La Mesa Railyard
-            new Vector3(-1106.7f, -1975.50f, 24.562f),  // LSIA Scrapyard
-            new Vector3(1225.66f, -2923.435f, 9.4783f), // Terminal
-            new Vector3(2165.78f, 4758.762f, 42.0235f), // McKenzie Airstrip
-            new Vector3(191.53f, 2840.427f, 44.50375f), // Joshua Road Loading Dock
-            new Vector3(426.6624f, 6549.066f, 27.601f), // Paleto Barn
+            new Vector3(512.01f, -610.720f, 24.4312f),    // La Mesa Railyard
+            new Vector3(-1106.7f, -1975.50f, 24.562f),    // LSIA Scrapyard
+            new Vector3(1225.66f, -2923.435f, 9.4783f),   // Terminal
+            new Vector3(808.5509f, 1275.401f, 359.9711f), // County
+            new Vector3(2165.78f, 4758.762f, 42.0235f),   // McKenzie Airstrip
+            new Vector3(191.53f, 2840.427f, 44.50375f),   // Joshua Road Loading Dock
+            new Vector3(426.6624f, 6549.066f, 27.601f),   // Paleto Barn
         };
         #endregion
 
@@ -77,14 +78,6 @@ namespace EmergencyCallouts.Callouts
             55f, // Boxes 2
             112f // Crates
         };
-
-        readonly Vector3[] RailyardArsonPositions =
-        {
-            new Vector3(485f, -636.5899f, 25.02777f), // Alley
-            new Vector3(522.1501f, -592.4759f, 25f),  // Power Unit
-            new Vector3(500f, -609.7313f, 24.75132f), // Building 1
-            new Vector3(493f, -573.0732f, 24.59121f)  // Building 2
-        };
         #endregion
 
         // LSC Scrapyard
@@ -122,13 +115,6 @@ namespace EmergencyCallouts.Callouts
             2.16f,
             74.74f,
         };
-
-        readonly Vector3[] ScrapyardArsonPositions =
-        {
-            new Vector3(-1157.412f, -2032.295f, 13.16054f), // Industrial Crane
-            new Vector3(-1161.378f, -2061.15f, 13.77043f),  // Huge Gas Containers
-            new Vector3(-1167.67f, -2044.833f, 14.02154f),  // Small Boxes
-        };
         #endregion
 
         // Terminal
@@ -164,12 +150,40 @@ namespace EmergencyCallouts.Callouts
             30.57f,
             310.89f,
         };
+        #endregion
 
-        readonly Vector3[] TerminalArsonPositions =
+        // County
+        #region Positions
+        readonly Vector3[] CountyHidingPositions =
         {
-            new Vector3(1240.061f, -2889.315f, 9.319265f), // Pallets
-            new Vector3(1251.003f, -2908.396f, 9.319266f), // Fuel Barrels
-            new Vector3(1243.456f, -2953.213f, 9.319252f), // Fuel Barrels 2
+            new Vector3(762.8389f, 1316.628f, 359.9371f),  // Boards
+            new Vector3(752.77f, 1317.433f, 359.8556f),    // Behind Container
+            new Vector3(720.8849f, 1296.344f, 360.2961f),  // Office
+            new Vector3(664.7129f, 1287.845f, 360.2961f),  // Back Boards
+            new Vector3(757.0978f, 1265.797f, 360.2964f),  // Middle
+        };
+
+        readonly float[] CountyHidingPositionsHeadings =
+        {
+            104.90f,
+            101.08f,
+            63.67f,
+            163.50f,
+            259.55f,
+        };
+
+        readonly Vector3[] CountyManagerPositions =
+        {
+            new Vector3(744.5788f, 1306.545f, 360.0878f),  // Office
+            new Vector3(718.0433f, 1291.299f, 360.2962f),  // Office 2
+            new Vector3(686.3436f, 1285.599f, 360.2962f),  // Back
+        };
+
+        readonly float[] CountyManagerHeadings =
+        {
+            190.66f,
+            188.67f,
+            88.56f,
         };
         #endregion
 
@@ -320,18 +334,31 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Trespassing";
-            CalloutDetails = "Reports of a person ~y~trespassing~s~ on private property.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutAdvisory = "Reports of a person trespassing on private property.";
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_TRESPASSING IN_OR_ON_POSITION", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
 
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE 2", "");
+            }
+
+            base.OnCalloutDisplayed();
+        }
+
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
-            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            if (!Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            }
 
             base.OnCalloutNotAccepted();
         }
@@ -357,17 +384,22 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(1254.056f, -2948.477f, 9.319256f);
                     Entrance = new Vector3(1218.99f, -2915.958f, 5.866064f);
                 }
-                else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+                else if (CalloutPosition == CalloutPositions[3]) // County
+                {
+                    Center = new Vector3(737.6351f, 1285.04f, 359.7698f);
+                    Entrance = new Vector3(808.5509f, 1275.401f, 359.9711f);
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // McKenzie Airstrip
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
                 }
-                else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+                else if (CalloutPosition == CalloutPositions[5]) // Joshua Road Loading Dock
                 {
                     Center = new Vector3(195.43f, 2786.759f, 45.65519f);
                     Entrance = new Vector3(191.53f, 2840.427f, 44.50375f);
                 }
-                else if (CalloutPosition == CalloutPositions[5]) // Zancudo Grain Growers
+                else if (CalloutPosition == CalloutPositions[6]) // Zancudo Grain Growers
                 {
                     Center = new Vector3(424.5334f, 6508.625f, 27.75672f);
                     Entrance = new Vector3(426.6624f, 6549.066f, 27.6012f);
@@ -378,7 +410,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
@@ -423,6 +454,9 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
+                    case 3:
+                        Scenario3();
+                        break;
                 }
 
                 Log.Creation(Suspect, PedCategory.Suspect);
@@ -454,21 +488,26 @@ namespace EmergencyCallouts.Callouts
                 int AirstripHidingSpotNum = random.Next(TerminalHidingPositions.Length);
                 suspect.Position = TerminalHidingPositions[AirstripHidingSpotNum];
                 suspect.Heading = TerminalHidingPositionsHeadings[AirstripHidingSpotNum];
-                Settings.SearchAreaSize -= 15;
             }
-            else if (CalloutPosition == CalloutPositions[3]) // McKenzie Airstrip
+            else if (CalloutPosition == CalloutPositions[3]) // County
+            {
+                int CountyHidingSpotNum = random.Next(CountyHidingPositions.Length);
+                suspect.Position = CountyHidingPositions[CountyHidingSpotNum];
+                suspect.Heading = CountyHidingPositionsHeadings[CountyHidingSpotNum];
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // McKenzie Airstrip
             {
                 int AirstripHidingSpotNum = random.Next(AirstripHidingPositions.Length);
                 suspect.Position = AirstripHidingPositions[AirstripHidingSpotNum];
                 suspect.Heading = AirstripHidingPositionsHeadings[AirstripHidingSpotNum];
             }
-            else if (CalloutPosition == CalloutPositions[4]) // Joshua Road Loading Dock
+            else if (CalloutPosition == CalloutPositions[5]) // Joshua Road Loading Dock
             {
                 int AirstripHidingSpotNum = random.Next(LoadingDockHidingPositions.Length);
                 suspect.Position = LoadingDockHidingPositions[AirstripHidingSpotNum];
                 suspect.Heading = LoadingDockHidingHeadings[AirstripHidingSpotNum];
             }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay Barn
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay Barn
             {
                 int AirstripHidingSpotNum = random.Next(BarnHidingPositions.Length);
                 suspect.Position = BarnHidingPositions[AirstripHidingSpotNum];
@@ -595,52 +634,83 @@ namespace EmergencyCallouts.Callouts
                 {
                     timeOfDay = "in the middle of the night?";
                 }
-                
-                // Gender pre mention
-                string gender = string.Empty;
-                if (PlayerPersona.Gender == LSPD_First_Response.Gender.Male) { gender = "Mr"; }
-                else gender = "Mrs";
 
-                // Owner Line
-                string lineOwner = string.Empty;
+                // Chance of declining to call property owner
+                string playerAnswer = string.Empty;
+                string suspectAnswer = string.Empty;
+                bool acceptsSuggestion = false;
 
-                int rand = random.Next(1, 101);
+                int chanceAllow = random.Next(1, 101);
 
-                if (rand <= Settings.ChanceOfPressingCharges)
+                if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
-                    lineOwner = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person {gender} {PlayerPersona.Surname}";
+                    playerAnswer = "Of course not, what are you thinking?";
+                    suspectAnswer = "Screw you man, we'll see in court if he presses charges.";
+                    acceptsSuggestion = false;
                 }
                 else
                 {
-                    lineOwner = $"Haha, he must be pissing his pants right now, you may let the person go {gender} {PlayerPersona.Surname}";
+                    playerAnswer = "Hmm... okay then.";
+                    suspectAnswer = "We need more officers like you sir!";
+                    acceptsSuggestion = true;
+                }
+
+                // Owner response line 2
+                string lineOwner = string.Empty;
+
+                int chance = random.Next(1, 101);
+
+                if (chance <= 50)
+                {
+                    lineOwner = "Again?! What did my son do now?";
+                }
+                else
+                {
+                    lineOwner = "Oh oh... Did I do something wrong?";
+                }
+
+                // Owner Line
+                string lineOwner2 = string.Empty;
+
+                int chanceCharges = random.Next(1, 101);
+
+                if (chanceCharges <= Settings.ChanceOfPressingCharges)
+                {
+                    lineOwner2 = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
+                }
+                else
+                {
+                    lineOwner2 = $"Haha, he must be pissing his pants right now, you may let the person go Officer {PlayerPersona.Surname}";
                 }
 
                 string[] dialogueSuspect =
                 {
-                    $"~b~You~s~: So, what are you doing here {timeOfDay}",
+                    "~b~You~s~: So, what are you doing here " + timeOfDay,
                     "~y~Suspect~s~: Man, I'm only looking for some stuff!",
                     "~b~You~s~: Do you have permission to be here?",
                     "~y~Suspect~s~: No.. but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
                     "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
                     "~y~Suspect~s~: Can't you just call him?",
-                    "~b~You~s~: You know what? Sure.",
-                    "~y~Suspect~s~: Thanks.",
+                    "~b~You~s~: " + playerAnswer,
+                    "~y~Suspect~s~: " + suspectAnswer,
+                    "~m~Dialogue Ended",
                 };
 
                 string[] dialogueOwner =
                 {
-                    $"~g~Owner~s~: Hello? Who's this?",
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
-                    "~g~Owner~s~: Again?! What did my son do now?",
+                    "~g~Owner~s~: " + lineOwner2,
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
+                    "~b~You~s~: Give me a second. Hey you, what's your name?",
+                    $"~r~Suspect~s~: It's {SuspectPersona.Forename}.",
                     $"~b~You~s~: His name is {SuspectPersona.Forename}.",
                     "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                    $"~g~Owner~s~: You too {gender}... uhh...",
-                    $"~b~You~s~: It's {gender} {PlayerPersona.Surname}.",
-                    $"~g~Owner~s~: Okay, you too have a nice day.",
+                    "~g~Owner~s~: You too Officer... uhh...",
+                    $"~b~You~s~: It's Officer {PlayerPersona.Surname}.",
+                    "~g~Owner~s~: Okay, you too have a nice day.",
                     "~m~Call Ended",
                 };
 
@@ -716,43 +786,56 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
+                        if (acceptsSuggestion)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && CompletedSuspectDialogue)
                             {
-                                if (!DialogueStarted)
+                                if (Game.IsKeyDown(Settings.InteractKey))
                                 {
-                                    GameFiber.Sleep(4000);
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
-
-                                    int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
-                                    NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
-                                    MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
-                                    DialogueStarted = true;
-                                }
-                                else
-                                {
-                                    Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
-                                    if (!stopDialogue2) { lineOwnerCount++; }
-
-                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
-
-                                    if (lineOwnerCount == dialogueOwner.Length)
+                                    if (!DialogueStarted)
                                     {
-                                        stopDialogue2 = true;
-                                        Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+                                        GameFiber.Sleep(4000);
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
 
-                                        MainPlayer.Tasks.Clear();
-                                        if (Phone.Exists()) { Phone.Delete(); }
-
-                                        GameFiber.Sleep(3000);
-                                        Handle.AdvancedEndingSequence();
-                                        break;
+                                        int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
+                                        NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
+                                        MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav");
+                                        player.Play();
+                                        GameFiber.Sleep(12000);
+                                        Game.DisplaySubtitle($"~g~Owner~s~: Hello? Who's this?", 15000);
+                                        DialogueStarted = true;
                                     }
-                                }
+                                    else
+                                    {
+                                        Game.DisplaySubtitle(dialogueOwner[lineOwnerCount], 15000);
+                                        if (!stopDialogue2) { lineOwnerCount++; }
 
-                                GameFiber.Sleep(500);
+                                        Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + lineOwnerCount);
+
+                                        if (lineOwnerCount == dialogueOwner.Length)
+                                        {
+                                            stopDialogue2 = true;
+                                            Game.LogTrivial("[Emergency Callouts]: Owner Dialogue Ended");
+
+                                            MainPlayer.Tasks.Clear();
+                                            if (Phone.Exists()) { Phone.Delete(); }
+
+                                            GameFiber.Sleep(3000);
+                                            Handle.AdvancedEndingSequence();
+                                            break;
+                                        }
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
                             }
+                        }
+                        else if (CompletedSuspectDialogue)
+                        {
+                            GameFiber.Sleep(3000);
+                            Handle.AdvancedEndingSequence();
+                            break;
                         }
                     }
                 });
@@ -929,6 +1012,51 @@ namespace EmergencyCallouts.Callouts
                                     Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
                                 }
                             }
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3() // Pursuit
+        {
+            #region Scenario 3
+            try
+            {
+                // Retrieve Hiding Position
+                RetrieveHidingPosition(Suspect);
+
+                // Set Dialogue Active
+                SuspectDialogue();
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.Exists() && PlayerArrived)
+                        {
+                            // Clear Suspect Tasks
+                            Suspect.Tasks.Clear();
+
+                            // Start Pursuit
+                            LHandle pursuit = Functions.CreatePursuit();
+                            Functions.AddPedToPursuit(pursuit, Suspect);
+                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                            Play.PursuitAudio();
+
+                            // Delete blips
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                            if (SearchArea.Exists()) { SearchArea.Delete(); }
+                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+
+                            break;
                         }
                     }
                 });

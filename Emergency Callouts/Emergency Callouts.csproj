@@ -45,6 +45,9 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CalloutInterface">
+      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\CalloutInterface.dll</HintPath>
+    </Reference>
     <Reference Include="LSPD First Response, Version=0.4.8021.24468, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\LSPD First Response.dll</HintPath>
@@ -78,6 +81,8 @@
     <Compile Include="Main.cs" />
     <Compile Include="Essential\Settings.cs" />
     <Compile Include="Essential\UpdateChecker.cs" />
+    <Compile Include="Other\CalloutInterfaceFunction.cs" />
+    <Compile Include="Other\PluginChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Other\Release.txt" />
-    <Content Include="Other\Testing.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

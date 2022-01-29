@@ -3,6 +3,7 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -20,9 +21,12 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool PedDetained;
         bool WithinRange;
+        bool DialogueStarted;
 
         Vector3 Entrance;
         Vector3 Center;
+
+        readonly Rage.Object Box = new Rage.Object(new Model("prop_cs_cardbox_01"), new Vector3(0, 0, 0));
 
         // Main
         #region Positions
@@ -32,6 +36,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1283.511f, -811.2982f, 17.32025f), // Del Perro
             new Vector3(651.5822f, 2762.731f, 41.94574f),   // Harmony
             new Vector3(1243.041f, -2395.421f, 47.91381f),  // El Burro
+            new Vector3(808.5509f, 1275.401f, 359.9711f),   // County
             new Vector3(2165.78f, 4758.762f, 42f),          // Grapeseed
             new Vector3(1485.026f, 6412.347f, 22.35379f),   // Paleto Bay
         };
@@ -95,6 +100,21 @@ namespace EmergencyCallouts.Callouts
 
         readonly Vector3 ElBurroVehicle2Position = new Vector3(1233.492f, -2355.017f, 49.81187f);
         readonly float ElBurroVehicle2Heading = 242.13f;
+        #endregion
+
+        // County
+        #region Positions
+        readonly Vector3 CountySuspectPosition = new Vector3(745.3344f, 1305.453f, 360.2965f);
+        readonly float CountySuspectHeading = 110.52f;
+
+        readonly Vector3 CountySuspect2Position = new Vector3(741.4516f, 1304.321f, 360.2965f);
+        readonly float CountySuspect2Heading = 288.07f;
+
+        readonly Vector3 CountyVehiclePosition = new Vector3(745.2075f, 1301.47f, 359.9155f);
+        readonly float CountyVehicleHeading = 181.38f;
+
+        readonly Vector3 CountyVehicle2Position = new Vector3(740.5121f, 1300.163f, 359.916f);
+        readonly float CountyVehicle2Heading = 215.00f;
         #endregion
 
         // McKenzie Field
@@ -161,18 +181,30 @@ namespace EmergencyCallouts.Callouts
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Suspicious Activity";
-            CalloutDetails = "Multiple civilians called about a person handling possible ~y~firearms~s~ in the trunk of their car.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutAdvisory = "Passersby called regarding a person acting suspicious.";
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_SUSPICIOUS_ACTIVITY IN_OR_ON_POSITION", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
 
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE-2-HIGH", "");
+            }
+            base.OnCalloutDisplayed();
+        }
+
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
-            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            if (!Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            }
 
             base.OnCalloutNotAccepted();
         }
@@ -203,12 +235,17 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(1243.041f, -2395.421f, 47.91381f);
                     Entrance = new Vector3(1115.294f, -2555.428f, 31.27009f);
                 }
-                else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
+                else if (CalloutPosition == CalloutPositions[4]) // County
+                {
+                    Center = new Vector3(737.6351f, 1285.04f, 359.7698f);
+                    Entrance = new Vector3(808.5509f, 1275.401f, 359.9711f);
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
                 {
                     Center = new Vector3(2118.948f, 4802.422f, 41.19594f);
                     Entrance = new Vector3(2165.78f, 4758.762f, 42f);
                 }
-                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
                 {
                     Center = new Vector3(1477.096f, 6343.949f, 22.35379f);
                     Entrance = new Vector3(1485.026f, 6412.347f, 22.35379f);
@@ -219,7 +256,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
@@ -250,14 +286,14 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Blip.Alpha = 0f;
 
                 // SuspectVehicle
-                SuspectVehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                SuspectVehicle = new Vehicle(Vehicles.GetRandomSedan(), Vector3.Zero, 0f);
                 SuspectVehicle.IsPersistent = true;
 
                 vehDoors = SuspectVehicle.GetDoors();
                 vehDoors[vehDoors.Length - 1].Open(false);
 
                 // Suspect2Vehicle
-                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomFourDoor(), Vector3.Zero, 0f);
+                Suspect2Vehicle = new Vehicle(Vehicles.GetRandomSedan(), Vector3.Zero, 0f);
                 Suspect2Vehicle.IsPersistent = true;
 
                 veh2Doors = Suspect2Vehicle.GetDoors();
@@ -284,10 +320,13 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario1();
+                        Scenario3();//////////////////////////////////////////////
                         break;
                     case 2:
-                        Scenario2();
+                        Scenario3();
+                        break;
+                    case 3:
+                        Scenario3();
                         break;
                 }
             }
@@ -357,7 +396,21 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = ElBurroVehicle2Position;
                 Suspect2Vehicle.Heading = ElBurroVehicle2Heading;
             }
-            else if (CalloutPosition == CalloutPositions[4]) // McKenzie Field
+            else if (CalloutPosition == CalloutPositions[4]) // County
+            {
+                Suspect.Position = CountySuspectPosition;
+                Suspect.Heading = CountySuspectHeading;
+
+                Suspect2.Position = CountySuspect2Position;
+                Suspect2.Heading = CountySuspect2Heading;
+
+                SuspectVehicle.Position = CountyVehiclePosition;
+                SuspectVehicle.Heading = CountyVehicleHeading;
+
+                Suspect2Vehicle.Position = CountyVehicle2Position;
+                Suspect2Vehicle.Heading = CountyVehicle2Heading;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
             {
                 Suspect.Position = McKenzieFieldSuspectPosition;
                 Suspect.Heading = McKenzieFieldSuspectHeading;
@@ -371,7 +424,7 @@ namespace EmergencyCallouts.Callouts
                 Suspect2Vehicle.Position = McKenzieFieldVehicle2Position;
                 Suspect2Vehicle.Heading = McKenzieFieldVehicle2Heading;
             }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
             {
                 Suspect.Position = PaletoBaySuspectPosition;
                 Suspect.Heading = PaletoBaySuspectHeading;
@@ -391,6 +444,52 @@ namespace EmergencyCallouts.Callouts
             Log.Creation(SuspectVehicle, PedCategory.Suspect);
             Log.Creation(Suspect2Vehicle, PedCategory.Suspect2);
 
+            #endregion
+        }
+
+        private void RetrieveFriendlyPosition()
+        {
+            #region Positions
+            if (CalloutPosition == CalloutPositions[0]) // La Puerta
+            {
+                SuspectVehicle.Position = new Vector3(-624.1057f, -1641.472f, 25.53772f);
+                SuspectVehicle.Heading = 238.88f;
+            }
+            else if (CalloutPosition == CalloutPositions[1]) // Del Perro
+            {
+                SuspectVehicle.Position = new Vector3(-1269.257f, -823.7877f, 16.71213f);
+                SuspectVehicle.Heading = 128.39f;
+            }
+            else if (CalloutPosition == CalloutPositions[2]) // Harmony
+            {
+                SuspectVehicle.Position = new Vector3(573.72f, 2796.019f, 41.69397f);
+                SuspectVehicle.Heading = 279.09f;
+            }
+            else if (CalloutPosition == CalloutPositions[3]) // El Burro
+            {
+                SuspectVehicle.Position = new Vector3(1119.511f, -2379.631f, 30.521f);
+                SuspectVehicle.Heading = 5.75f;
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // County
+            {
+                SuspectVehicle.Position = new Vector3(783.7767f, 1281.481f, 359.9094f);
+                SuspectVehicle.Heading = 358.61f;
+            }
+            else if (CalloutPosition == CalloutPositions[5]) // McKenzie Field
+            {
+                SuspectVehicle.Position = new Vector3(2148.915f, 4796.483f, 40.75656f);
+                SuspectVehicle.Heading = 243.75f;
+            }
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
+            {
+                SuspectVehicle.Position = new Vector3(1430.501f, 6350.87f, 23.5983f);
+                SuspectVehicle.Heading = 99.83f;
+            }
+            Log.Creation(Suspect, PedCategory.Suspect);
+            Log.Creation(SuspectVehicle, PedCategory.Suspect);
+
+            Suspect.Position = SuspectVehicle.GetOffsetPositionFront(-SuspectVehicle.Length + SuspectVehicle.Length / 2.85f);
+            Suspect.Heading = SuspectVehicle.Heading;
             #endregion
         }
 
@@ -530,6 +629,130 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
+        private void Scenario3() // Conversation
+        {
+            #region Scenario 3
+            try
+            {
+                // Retrieve Ped Positions
+                RetrieveFriendlyPosition();
+
+                Functions.SetPedAsStopped(Suspect, true);
+                SuspectBlip.SetColorYellow();
+
+                // Delete Suspect2 Things
+                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+
+                // Carry Box
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+
+                // Attach Box
+                int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.Spine);
+                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, Suspect, BoneIndex, 0f, 0.45f, 0f, 180f, 270f, 180f, true, true, false, false, 2, 1);
+
+                // Get suspect gender
+                string gender = string.Empty;
+
+                if (SuspectPersona.Gender == LSPD_First_Response.Gender.Male)
+                {
+                    gender = "Sir";
+                }
+                else
+                {
+                    gender = "Ma'am";
+                }
+
+                // Get random box contents
+                string[] boxContents = { "a dozen magazines", "a pair of shoes", "printer ink cartridges", "PC hardware" };
+                int randomContent = random.Next(boxContents.Length);
+
+                string[] dialogueSuspect =
+                {
+                    $"~b~You~s~: Hello {gender}, how are you doing today?",
+                    "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, did I do something wrong?",
+                    "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
+                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
+                    "~b~You~s~: I understand, what's in the box?",
+                    $"~y~Suspect~s~: Oh, it's {boxContents[randomContent]}.",
+                    "~b~You~s~: Can I take a look?",
+                    "~y~Suspect~s~: Sure go ahead.",
+                    "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
+                    "~y~Suspect~s~: Okay.",
+                    "~y~Detain the ~y~suspect~s~.",
+                };
+
+                int line = 0;
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.IsAlive && Suspect.Exists())
+                        {
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
+                            {
+                                if (Game.IsKeyDown(Settings.InteractKey))
+                                {
+                                    if (!DialogueStarted)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
+
+                                        // Carry Box
+                                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+                                    }
+
+                                    DialogueStarted = true;
+
+                                    // Face the player
+                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+
+                                    Game.DisplaySubtitle(dialogueSuspect[line], 15000);
+                                    Game.LogTrivial("[Emergency Callouts]: Displayed dialogue line " + line + 1);
+                                    line++;
+
+                                    if (line == 8)
+                                    {
+                                        GameFiber.Sleep(3000);
+                                        Game.DisplayHelp("Looking...");
+                                        GameFiber.Sleep(5000);
+                                        Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
+                                    }
+
+                                    if (line == dialogueSuspect.Length)
+                                    {
+                                        Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                        GameFiber.Sleep(3000);
+                                        Handle.AdvancedEndingSequence();
+
+                                        break;
+                                    }
+
+                                    GameFiber.Sleep(500);
+                                }
+                                else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
+                                {
+                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect~s~.");
+                                }
+                            }
+                        }
+                        else if (Suspect.IsDead) // Suspect is dead
+                        {
+                            break;
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
         public override void Process()
         {
             base.Process();
@@ -545,7 +768,7 @@ namespace EmergencyCallouts.Callouts
                     WithinRange = true;
 
                     // Delete Nearby Trailers
-                    Handle.DeleteNearbyTrailers(Center, 100f);
+                    Handle.DeleteNearbyTrailers(Entrance, 100f);
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect, Suspect2, 40f);
@@ -658,6 +881,8 @@ namespace EmergencyCallouts.Callouts
             base.End();
             CalloutActive = false;
 
+            Suspect.Tasks.Clear();
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Suspect2.Exists()) { Suspect2.Dismiss(); }
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
@@ -666,7 +891,8 @@ namespace EmergencyCallouts.Callouts
             if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-
+            if (Box.Exists()) { Box.Delete(); }
+            
             Display.HideSubtitle();
             Display.EndNotification();
             Log.OnCalloutEnded(CalloutMessage, CalloutScenario);

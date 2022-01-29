@@ -35,6 +35,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(11.3652f, 545.7453f, 175.8412f),    // Vinewood Hills
             new Vector3(222.883f, -1726.32f, 28.87364f),    // Davis
             new Vector3(-1048.924f, -1018.362f, 2.150359f), // Vespucci
+            new Vector3(1504.92f, 2203.887f, 79.99944f),    // County
             new Vector3(224.5887f, 3162.886f, 42.3335f),    // Sandy Shores
             new Vector3(1687.845f, 4680.918f, 43.02761f),   // Grapeseed
             new Vector3(-394.975f, 6276.961f, 29.67487f),   // Paleto Bay
@@ -75,6 +76,23 @@ namespace EmergencyCallouts.Callouts
         #region Positions
         readonly Vector3 VespucciFightPosition = new Vector3(-1058.305f, -995.6418f, 6.410485f); // Front
         readonly float VespucciFightHeading = 205.96f;
+        #endregion
+
+        // County
+        #region Positions
+        readonly Vector3[] CountyFightPositions =
+        {
+            new Vector3(1534.577f, 2228.416f, 77.69907f), // Front Door
+            new Vector3(1551.911f, 2228.493f, 77.83331f), // Rear Garden
+            new Vector3(1538.637f, 2238.759f, 77.69897f), // Side House
+        };
+
+        readonly float[] CountyFightHeadings =
+        {
+            359.88f,
+            3.25f,
+            271.88f,
+        };
         #endregion
 
         // Sandy Shores
@@ -148,25 +166,38 @@ namespace EmergencyCallouts.Callouts
                 if (Vector3.Distance(MainPlayer.Position, loc) < Vector3.Distance(MainPlayer.Position, CalloutPosition))
                 {
                     CalloutPosition = loc;
-                    CalloutArea = World.GetStreetName(loc);
+                    CalloutArea = World.GetStreetName(loc).Replace("Senora Fwy", "Grand Senora Desert");
                 }
             }
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
             CalloutMessage = "Domestic Violence";
-            CalloutDetails = "A ~o~wife~s~ called about her ~r~husband~s~, claims she's continuingly being ~y~assaulted~s~.";
-            CalloutScenario = random.Next(1, 3);
+            CalloutAdvisory = "Passersby report a male continuingly hitting a female.";
+            CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("WE_HAVE CRIME_DOMESTIC_VIOLENCE IN_OR_ON_POSITION UNITS_RESPOND_CODE_03", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
 
+        public override void OnCalloutDisplayed()
+        {
+            if (Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Other.CalloutInterfaceFunctions.SendCalloutDetails(this, "CODE 3", "");
+            }
+
+            base.OnCalloutDisplayed();
+        }
+
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
-            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            if (!Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            }
 
             base.OnCalloutNotAccepted();
         }
@@ -192,17 +223,22 @@ namespace EmergencyCallouts.Callouts
                     Center = new Vector3(-1058.305f, -995.6418f, 6.410485f);
                     Entrance = new Vector3(-1048.924f, -1018.362f, 2.150359f);
                 }
-                else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
+                else if (CalloutPosition == CalloutPositions[3]) // County
+                {
+                    Center = new Vector3(1550.415f, 2203.19f, 78.74243f);
+                    Entrance = new Vector3(1504.92f, 2203.887f, 79.99944f);
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Sandy Shores
                 {
                     Center = new Vector3(247.4916f, 3169.519f, 42.7863f);
                     Entrance = new Vector3(224.5887f, 3162.886f, 42.3335f);
                 }
-                else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
+                else if (CalloutPosition == CalloutPositions[5]) // Grapeseed
                 {
                     Center = new Vector3(1672.969f, 4670.249f, 43.40202f);
                     Entrance = new Vector3(1687.845f, 4680.918f, 43.02761f);
                 }
-                else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+                else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
                 {
                     Center = new Vector3(-374.2228f, 6259.589f, 31.48723f);
                     Entrance = new Vector3(-394.975f, 6276.961f, 29.67487f);
@@ -213,7 +249,6 @@ namespace EmergencyCallouts.Callouts
                 Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
                 // Accept Messages
-                Display.AcceptNotification(CalloutDetails);
                 Display.AcceptSubtitle(CalloutMessage, CalloutArea);
                 Display.OutdatedReminder();
 
@@ -278,6 +313,9 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
+                    case 3:
+                        Scenario3();
+                        break;
                 }
             }
             catch (Exception e)
@@ -312,7 +350,15 @@ namespace EmergencyCallouts.Callouts
                 Victim.Heading = VespucciFightHeading;
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
-            else if (CalloutPosition == CalloutPositions[3]) // Sandy Shores
+            else if (CalloutPosition == CalloutPositions[3]) // County
+            {
+                int num = random.Next(CountyFightPositions.Length);
+
+                Victim.Position = CountyFightPositions[num];
+                Victim.Heading = CountyFightHeadings[num];
+                Suspect.Position = Victim.GetOffsetPositionFront(1f);
+            }
+            else if (CalloutPosition == CalloutPositions[4]) // Sandy Shores
             {
                 int num = random.Next(SandyShoresFightPositions.Length);
 
@@ -320,7 +366,7 @@ namespace EmergencyCallouts.Callouts
                 Victim.Heading = SandyShoresFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
-            else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
+            else if (CalloutPosition == CalloutPositions[5]) // Grapeseed
             {
                 int num = random.Next(GrapeseedFightPositions.Length);
 
@@ -328,7 +374,7 @@ namespace EmergencyCallouts.Callouts
                 Victim.Heading = GrapeseedFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
-            else if (CalloutPosition == CalloutPositions[5]) // Paleto Bay
+            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
             {
                 int num = random.Next(PaletoBayFightPositions.Length);
 
@@ -350,7 +396,7 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueArrested =
                 {
                     "~b~You~s~: Ma'am, are you injured?",
-                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~o~Victim~s~: Yes, only a few bruises but that's nothing new.",
                     "~b~You~s~: Okay, is this your property?",
                     "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
                     "~b~You~s~: I assume you want to press charges?",
@@ -368,13 +414,13 @@ namespace EmergencyCallouts.Callouts
                 string[] dialogueDeceased =
                 {
                     "~b~You~s~: Ma'am, are you hurt?",
-                    "~o~Victim~s~: He hit me multiple times, but no need for an ambulance.",
+                    "~o~Victim~s~: Uh, yes I think so...",
                     "~b~You~s~: Okay, is this property yours?",
                     "~o~Victim~s~: Yes it is.",
-                    "~b~You~s~: The body will get moved soon.",
-                    "~o~Victim~s~: Good, what about the blood?",
+                    "~b~You~s~: Okay, this is now a crime scene, it will take some time before you enter your house again.",
+                    "~o~Victim~s~: Oh, what about the blood?",
                     "~b~You~s~: That will be taken care of by crime scene cleaners.",
-                    "~o~Victim~s~: Okay, thanks",
+                    "~o~Victim~s~: Okay, that's good",
                     "~b~You~s~: Here is my card if you have any questions or need any help.",
                     "~o~Victim~s~: Thanks.",
                     "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
@@ -457,7 +503,8 @@ namespace EmergencyCallouts.Callouts
                                                 }
                                             }
 
-                                            Display.HintEndCallout();
+                                            GameFiber.Sleep(5000);
+                                            Handle.AdvancedEndingSequence();
 
                                             break;
                                         }
@@ -469,8 +516,8 @@ namespace EmergencyCallouts.Callouts
                                         MainPlayer.Tasks.GoToOffsetFromEntity(Victim, 1f, 0f, 2f);
 
                                         Victim.Tasks.ClearImmediately();
-                                        Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
-                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.SecondaryTask | AnimationFlags.UpperBodyOnly);
+                                        Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
+                                        MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                                     }
 
                                     GameFiber.Sleep(500);
@@ -495,7 +542,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Suspect Keeps Fighting Victim
+        private void Scenario1() // Assault
         {
             #region Scenario 1
             try
@@ -539,7 +586,8 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
-        private void Scenario2() // Victim at gunpoint, firefight
+
+        private void Scenario2() // Firefight
         {
             #region Scenario 2
             try
@@ -548,6 +596,7 @@ namespace EmergencyCallouts.Callouts
                 RetrieveFightPosition();
 
                 // Suspect Position
+                GameFiber.Sleep(100);
                 Suspect.Position = Victim.GetOffsetPositionFront(2f);
 
                 // Give Random Handgun
@@ -564,6 +613,16 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                        {
+                            Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
+                            break;
+                        }
+                    }
+
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
@@ -576,6 +635,50 @@ namespace EmergencyCallouts.Callouts
                 });
 
                 Dialogue();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            #endregion
+        }
+
+        private void Scenario3() // Suicide
+        {
+            #region Scenario 3
+            try
+            {
+                RetrieveFightPosition();
+
+                Suspect.Position = Victim.GetOffsetPositionFront(2f);
+
+                Victim.Kill();
+
+                // Give Random Handgun
+                Suspect.GiveRandomHandgun(0, true);
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                        {
+                            Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
+                            GameFiber.Sleep(3000);
+                            // Fight Player
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
+                            GameFiber.Sleep(700);
+                            if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
+                            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav");
+                            player.Play();
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
