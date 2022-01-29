@@ -194,8 +194,10 @@ namespace EmergencyCallouts.Callouts
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
-            Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
-
+            if (!Other.PluginChecker.IsCalloutInterfaceRunning)
+            {
+                Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
+            }
             base.OnCalloutNotAccepted();
         }
 
