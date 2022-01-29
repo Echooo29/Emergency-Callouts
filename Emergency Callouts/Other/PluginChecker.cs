@@ -3,9 +3,6 @@ using System.Linq;
 
 namespace EmergencyCallouts.Other
 {
-    /// <summary>
-    /// Checks to see if external plugins are available.
-    /// </summary>
     internal static class PluginChecker
     {
 
