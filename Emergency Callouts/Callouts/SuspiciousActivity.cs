@@ -681,7 +681,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect.IsAlive && Suspect.Exists())
                         {
-                            if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
+                            if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
                             {
                                 if (Game.IsKeyDown(Settings.InteractKey))
                                 {
