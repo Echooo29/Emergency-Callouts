@@ -797,11 +797,20 @@ namespace EmergencyCallouts.Callouts
                                         GameFiber.Sleep(4000);
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
 
+                                        // Attach phone to player's hand
                                         int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
                                         NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
                                         MainPlayer.Tasks.PlayAnimation("cellphone@", "cellphone_call_listen_base", -1, 2f, -2f, 0, AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
-                                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav");
-                                        player.Play();
+
+                                        // Play phone ringing sound
+                                        string path = @"lspdfr\audio\scanner\Emergency Callouts Audio\PHONE_RINGING.wav";
+                                        System.Media.SoundPlayer player = new System.Media.SoundPlayer(path);
+                                        if (System.IO.File.Exists(path))
+                                        {
+                                            player.Load();
+                                            player.Play();
+                                        }
+
                                         GameFiber.Sleep(12000);
                                         Game.DisplaySubtitle($"~g~Owner~s~: Hello? Who's this?", 15000);
                                         DialogueStarted = true;
@@ -1075,6 +1084,13 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+
+                if (Suspect.IsDead || Functions.IsPedStoppedByPlayer(Suspect))
+                {
+                    if (Phone.Exists()) { Phone.Delete(); }
+                    if (Clipboard.Exists()) { Clipboard.Delete(); }
+                    if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
+                }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)

@@ -669,12 +669,20 @@ namespace EmergencyCallouts.Callouts
                         {
                             Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
                             GameFiber.Sleep(3000);
+
                             // Fight Player
                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
                             GameFiber.Sleep(700);
                             if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
-                            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav");
-                            player.Play();
+
+                            // Play gun shot
+                            string path = @"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav";
+                            System.Media.SoundPlayer player = new System.Media.SoundPlayer(path);
+                            if (System.IO.File.Exists(path))
+                            {
+                                player.Load();
+                                player.Play();
+                            }
                             break;
                         }
                     }
