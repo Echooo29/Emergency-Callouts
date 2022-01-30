@@ -105,6 +105,11 @@ namespace EmergencyCallouts.Callouts
 
             Suspect.Tasks.Wander();
 
+            if (Other.PluginChecker.IsStopThePedRunning)
+            {
+                StopThePed.API.Functions.setPedAlcoholOverLimit(Suspect, true);
+            }
+
             CalloutHandler();
 
             return base.OnCalloutAccepted();
