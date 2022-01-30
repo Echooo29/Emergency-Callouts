@@ -637,6 +637,8 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
+                bool MustCarryBox = true;
+
                 Functions.SetPedAsStopped(Suspect, true);
                 SuspectBlip.SetColorYellow();
 
@@ -743,6 +745,21 @@ namespace EmergencyCallouts.Callouts
                         {
                             break;
                         }
+                    }
+                });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+                        if (Functions.IsPedGettingArrested(Suspect))
+                        {
+                            if (Box.Exists()) { Box.Delete(); }
+                            MustCarryBox = false;
+                            break;
+                        }
+
                     }
                 });
             }
