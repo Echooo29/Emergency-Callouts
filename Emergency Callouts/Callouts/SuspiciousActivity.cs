@@ -681,7 +681,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Sure go ahead.",
                     "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
                     "~y~Suspect~s~: Okay.",
-                    "~y~Detain the ~y~suspect~s~.",
+                    "Detain the ~y~suspect~s~.",
                 };
 
                 int line = 0;
