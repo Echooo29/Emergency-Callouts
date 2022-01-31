@@ -693,13 +693,13 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Can't you just call him?",
                     "~b~You~s~: " + playerAnswer,
                     "~y~Suspect~s~: " + suspectAnswer,
-                    "~m~Dialogue Ended",
+                    "~m~Suspect Dialogue Ended",
                 };
 
                 string[] dialogueOwner =
                 {
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
-                    "~g~Owner~s~: " + lineOwner2,
+                    "~g~Owner~s~: " + lineOwner,
                     "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
                     "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
                     "~g~Owner~s~: What's his name?",
@@ -1084,13 +1084,6 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
-
-                if (Suspect.IsDead || Functions.IsPedStoppedByPlayer(Suspect))
-                {
-                    if (Phone.Exists()) { Phone.Delete(); }
-                    if (Clipboard.Exists()) { Clipboard.Delete(); }
-                    if (WeldingDevice.Exists()) { WeldingDevice.Delete(); }
-                }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
