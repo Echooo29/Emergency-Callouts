@@ -637,9 +637,8 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
-                bool MustCarryBox = true;
+                Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
 
-                Functions.SetPedAsStopped(Suspect, true);
                 SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2 Things
@@ -753,10 +752,10 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        if (Functions.IsPedGettingArrested(Suspect))
+                        if (Suspect.IsCuffed)
                         {
+                            Suspect.Tasks.Clear();
                             if (Box.Exists()) { Box.Delete(); }
-                            MustCarryBox = false;
                             break;
                         }
 
@@ -899,7 +898,7 @@ namespace EmergencyCallouts.Callouts
             CalloutActive = false;
 
             Suspect.Tasks.Clear();
-
+            Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Suspect2.Exists()) { Suspect2.Dismiss(); }
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
