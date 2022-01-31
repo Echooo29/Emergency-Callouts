@@ -1024,6 +1024,20 @@ namespace EmergencyCallouts.Callouts
                         }
                     }
                 });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+
+                        if (Functions.IsPedStoppedByPlayer(Suspect) || Suspect.IsCuffed)
+                        {
+                            if (Clipboard.Exists()) { Clipboard.Delete(); }
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
