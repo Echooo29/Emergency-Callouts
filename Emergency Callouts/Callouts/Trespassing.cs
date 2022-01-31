@@ -452,10 +452,10 @@ namespace EmergencyCallouts.Callouts
                         Scenario1();
                         break;
                     case 2:
-                        Scenario1();
+                        Scenario2();
                         break;
                     case 3:
-                        Scenario1();
+                        Scenario3();
                         break;
                 }
 
