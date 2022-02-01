@@ -11,7 +11,7 @@ using static EmergencyCallouts.Essential.Helper;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Burglary", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Burglary", CalloutProbability.Medium)]
     public class Burglary : Callout
     {
         bool CalloutActive;

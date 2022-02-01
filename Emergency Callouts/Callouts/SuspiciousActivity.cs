@@ -12,7 +12,7 @@ using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Suspicious Activity", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Suspicious Activity", CalloutProbability.Medium)]
     public class SuspiciousActivity : Callout
     {
         bool CalloutActive;

@@ -13,7 +13,7 @@ using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Domestic Violence", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Domestic Violence", CalloutProbability.Medium)]
     public class DomesticViolence : Callout
     {
         bool CalloutActive;
