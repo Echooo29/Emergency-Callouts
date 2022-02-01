@@ -29,7 +29,9 @@ namespace EmergencyCallouts
 
                 if (Functions.GetPlayerRadioAction() == LSPD_First_Response.Mod.Menus.EPoliceRadioAction.None)
                 {
+                    Game.LogTrivial("[Emergency Callouts]: User didn't set a radio action");
                     Functions.SetPlayerRadioAction(LSPD_First_Response.Mod.Menus.EPoliceRadioAction.Chest);
+                    Game.LogTrivial("[Emergency Callouts]: Set a radio action for user");
                 }
             }
         }
