@@ -752,7 +752,7 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        if (Suspect.IsCuffed)
+                        if (Suspect.IsCuffed || Suspect.IsDead)
                         {
                             Suspect.Tasks.Clear();
                             if (Box.Exists()) { Box.Delete(); }
