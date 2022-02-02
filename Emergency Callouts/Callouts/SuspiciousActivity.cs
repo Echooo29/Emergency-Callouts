@@ -673,7 +673,7 @@ namespace EmergencyCallouts.Callouts
                     $"~b~You~s~: Hello {gender}, how are you doing today?",
                     "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, did I do something wrong?",
                     "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
-                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
+                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get hurt here.",
                     "~b~You~s~: I understand, what's in the box?",
                     $"~y~Suspect~s~: Oh, it's {boxContents[randomContent]}.",
                     "~b~You~s~: Can I take a look?",
@@ -717,7 +717,7 @@ namespace EmergencyCallouts.Callouts
                                     if (line == 8)
                                     {
                                         GameFiber.Sleep(3000);
-                                        Game.DisplayHelp("Looking...");
+                                        Game.DisplayHelp("~y~Looking...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
                                     }
