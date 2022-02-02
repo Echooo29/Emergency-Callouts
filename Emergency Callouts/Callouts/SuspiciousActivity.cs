@@ -637,8 +637,6 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
-                Functions.SetPedCantBeArrestedByPlayer(Suspect, true);
-
                 SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2 Things
@@ -717,7 +715,7 @@ namespace EmergencyCallouts.Callouts
                                     if (line == 8)
                                     {
                                         GameFiber.Sleep(3000);
-                                        Game.DisplayHelp("~y~Looking...");
+                                        Game.DisplayHelp("~y~Looking~s~...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
                                     }
@@ -725,6 +723,10 @@ namespace EmergencyCallouts.Callouts
                                     if (line == dialogueSuspect.Length)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                        Functions.SetPedAsStopped(Suspect, true);
+                                        Suspect.Tasks.Clear();
+                                        if (Box.Exists()) { Box.Delete(); }
 
                                         GameFiber.Sleep(3000);
                                         Handle.AdvancedEndingSequence();
@@ -758,7 +760,6 @@ namespace EmergencyCallouts.Callouts
                             if (Box.Exists()) { Box.Delete(); }
                             break;
                         }
-
                     }
                 });
             }
