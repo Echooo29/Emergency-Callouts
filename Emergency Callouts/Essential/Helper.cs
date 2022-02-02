@@ -194,6 +194,27 @@ namespace EmergencyCallouts.Essential
                         WebClient hitUpdater = new WebClient();
                         hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
                         Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
+
+                        if (_class == "SuspiciousActivity")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/cAKt2CaV");
+                        }
+                        else if (_class == "Burglary")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/ja2iCGJB");
+                        }
+                        else if(_class == "Trespassing")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/GfvM3z0k");
+                        }
+                        else if(_class == "DomesticViolence")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/WFMpcYvS");
+                        }
+                        else if(_class == "PublicIntoxication")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/ZUyrpd1k");
+                        }
                     }
                     catch (WebException webEx)
                     {
