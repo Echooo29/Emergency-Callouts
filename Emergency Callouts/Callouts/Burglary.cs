@@ -505,10 +505,6 @@ namespace EmergencyCallouts.Callouts
                             DamagedPropertyBlip.Flash(500, -1);
                             break;
                         }
-                        else
-                        {
-                            break;
-                        }
                     }
 
                     while (CalloutActive)
