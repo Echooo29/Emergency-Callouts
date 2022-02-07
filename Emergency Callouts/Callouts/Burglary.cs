@@ -11,7 +11,7 @@ using static EmergencyCallouts.Essential.Helper;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Burglary", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Burglary", CalloutProbability.Medium)]
     public class Burglary : Callout
     {
         bool CalloutActive;
@@ -503,10 +503,6 @@ namespace EmergencyCallouts.Callouts
                             DamagedPropertyBlip.SetColorPurple();
                             DamagedPropertyBlip.Scale = 0.6f;
                             DamagedPropertyBlip.Flash(500, -1);
-                            break;
-                        }
-                        else
-                        {
                             break;
                         }
                     }

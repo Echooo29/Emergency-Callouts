@@ -63,9 +63,9 @@ namespace EmergencyCallouts.Essential
                     "g_m_m_armlieut_01", "a_m_m_eastsa_02", "a_m_y_eastsa_02", "u_m_m_edtoh", "ig_fabien", "u_m_y_cyclist_01", "a_m_y_hipster_01", "u_m_y_party_01", "csb_roccopelosi", "a_m_m_socenlat_01", "ig_stretch", "a_m_y_vinewood_02",
                     "s_m_m_autoshop_01", "g_m_y_famca_01", "g_m_y_famdnf_01", "g_m_y_famfor_01", "a_m_m_farmer_01", "mp_m_exarmy_01", "a_m_y_methhead_01", "u_m_m_partytarget", "g_m_y_salvaboss_01", "a_m_o_soucent_03", "s_m_y_winclean_01",
                     "ig_money", "a_m_m_fatlatin_01", "ig_lazlow", "s_m_m_hairdress_01", "a_m_o_ktown_01", "s_m_y_dealer_01", "u_m_y_hippie_01", "a_m_m_og_boss_01", "a_m_y_runner_02", "ig_solomon", "a_m_m_soucent_03", "a_m_m_tourist_01",
-                    "g_m_y_azteca_01", "u_m_o_finguru_01", "csb_fos_rep", "player_one", "ig_g", "a_m_y_cyclist_01", "u_m_y_fibmugger_01", "a_m_m_mexlabor_01", "ig_popov", "a_m_o_salton_01", "a_m_y_soucent_02", "ig_talina",
+                    "g_m_y_azteca_01", "u_m_o_finguru_01", "csb_fos_rep", "ig_g", "a_m_y_cyclist_01", "u_m_y_fibmugger_01", "a_m_m_mexlabor_01", "ig_popov", "a_m_o_salton_01", "a_m_y_soucent_02", "ig_talina",
                     "g_m_y_ballaeast_01", "csb_g", "a_m_m_genfat_01", "a_m_m_genfat_02", "a_m_y_genstreet_01", "u_m_m_filmdirector", "g_m_y_lost_02", "ig_oneil", "u_m_m_promourn_01", "a_m_o_soucent_01", "a_m_y_sunbathe_01",
-                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "u_m_m_glenstank_01", "csb_fos_rep", "s_m_m_gentransport", "csb_imran", "u_m_y_mani", "a_m_y_polynesian_01", "a_m_m_salton_01", "a_m_o_soucent_02", "ig_tomepsilon",
+                    "g_m_y_ballaorig_01", "a_m_y_genstreet_02", "csb_fos_rep", "s_m_m_gentransport", "csb_imran", "u_m_y_mani", "a_m_y_polynesian_01", "a_m_m_salton_01", "a_m_o_soucent_02", "ig_tomepsilon",
                     "ig_ballasog", "s_m_m_highsec_02", "a_m_y_hipster_02", "csb_hugh", "a_m_m_indian_01", "a_m_o_genstreet_01", "a_m_m_ktown_01", "ig_nigel", "a_m_m_prolhost_01", "a_m_y_soucent_01", "a_m_y_stwhi_02", "a_m_m_tramp_01",
                     "g_m_y_ballasout_01", "u_m_m_jewelsec_01", "a_m_m_malibu_01", "g_m_y_mexgoon_02", "g_m_y_mexgoon_03", "a_m_y_hiker_01", "ig_mrk", "a_m_m_polynesian_01", "ig_russiandrunk", "a_m_y_stwhi_01", "ig_terry",
                     "u_m_m_bankman", "u_m_m_jewelthief", "ig_josh", "ig_joeminuteman", "g_m_y_mexgoon_01", "g_m_y_mexgang_01", "g_m_y_korean_02", "g_m_y_pologoon_02", "a_m_m_rurmeth_01", "s_m_y_strvend_01", "u_m_y_tattoo_01",
@@ -194,6 +194,27 @@ namespace EmergencyCallouts.Essential
                         WebClient hitUpdater = new WebClient();
                         hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
                         Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
+
+                        if (_class == "SuspiciousActivity")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/cAKt2CaV");
+                        }
+                        else if (_class == "Burglary")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/ja2iCGJB");
+                        }
+                        else if(_class == "Trespassing")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/GfvM3z0k");
+                        }
+                        else if(_class == "DomesticViolence")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/WFMpcYvS");
+                        }
+                        else if(_class == "PublicIntoxication")
+                        {
+                            hitUpdater.DownloadString("https://pastebin.com/raw/ZUyrpd1k");
+                        }
                     }
                     catch (WebException webEx)
                     {

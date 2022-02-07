@@ -12,7 +12,7 @@ using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Public Intoxication", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Public Intoxication", CalloutProbability.Medium)]
     public class PublicIntoxication : Callout
     {
         bool PlayerArrived;

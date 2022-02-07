@@ -12,7 +12,7 @@ using Entity = EmergencyCallouts.Essential.Helper.Entity;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("Suspicious Activity", CalloutProbability.Medium)]
+    [CalloutInfo("[EC] Suspicious Activity", CalloutProbability.Medium)]
     public class SuspiciousActivity : Callout
     {
         bool CalloutActive;
@@ -320,10 +320,10 @@ namespace EmergencyCallouts.Callouts
                 switch (CalloutScenario)
                 {
                     case 1:
-                        Scenario3();//////////////////////////////////////////////
+                        Scenario1();
                         break;
                     case 2:
-                        Scenario3();
+                        Scenario2();
                         break;
                     case 3:
                         Scenario3();
@@ -637,7 +637,6 @@ namespace EmergencyCallouts.Callouts
                 // Retrieve Ped Positions
                 RetrieveFriendlyPosition();
 
-                Functions.SetPedAsStopped(Suspect, true);
                 SuspectBlip.SetColorYellow();
 
                 // Delete Suspect2 Things
@@ -672,14 +671,14 @@ namespace EmergencyCallouts.Callouts
                     $"~b~You~s~: Hello {gender}, how are you doing today?",
                     "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, did I do something wrong?",
                     "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
-                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get killed here.",
+                    "~y~Suspect~s~: Yeah well this part here is kinda sketchy, I don't wanna get hurt here.",
                     "~b~You~s~: I understand, what's in the box?",
                     $"~y~Suspect~s~: Oh, it's {boxContents[randomContent]}.",
                     "~b~You~s~: Can I take a look?",
                     "~y~Suspect~s~: Sure go ahead.",
                     "~b~You~s~: Okay, I'm gonna check you in the system real quick and then you'll be free to go.",
                     "~y~Suspect~s~: Okay.",
-                    "~y~Detain the ~y~suspect~s~.",
+                    "Detain the ~y~suspect~s~.",
                 };
 
                 int line = 0;
@@ -716,7 +715,7 @@ namespace EmergencyCallouts.Callouts
                                     if (line == 8)
                                     {
                                         GameFiber.Sleep(3000);
-                                        Game.DisplayHelp("Looking...");
+                                        Game.DisplayHelp("~y~Looking~s~...");
                                         GameFiber.Sleep(5000);
                                         Game.DisplayHelp($"You found ~g~{boxContents[randomContent]}~s~.");
                                     }
@@ -724,6 +723,10 @@ namespace EmergencyCallouts.Callouts
                                     if (line == dialogueSuspect.Length)
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+
+                                        Functions.SetPedAsStopped(Suspect, true);
+                                        Suspect.Tasks.Clear();
+                                        if (Box.Exists()) { Box.Delete(); }
 
                                         GameFiber.Sleep(3000);
                                         Handle.AdvancedEndingSequence();
@@ -741,6 +744,20 @@ namespace EmergencyCallouts.Callouts
                         }
                         else if (Suspect.IsDead) // Suspect is dead
                         {
+                            break;
+                        }
+                    }
+                });
+
+                GameFiber.StartNew(delegate
+                {
+                    while (CalloutActive)
+                    {
+                        GameFiber.Yield();
+                        if (Suspect.IsCuffed || Suspect.IsDead)
+                        {
+                            Suspect.Tasks.Clear();
+                            if (Box.Exists()) { Box.Delete(); }
                             break;
                         }
                     }
@@ -882,7 +899,7 @@ namespace EmergencyCallouts.Callouts
             CalloutActive = false;
 
             Suspect.Tasks.Clear();
-
+            Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Suspect2.Exists()) { Suspect2.Dismiss(); }
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
