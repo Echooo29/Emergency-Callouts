@@ -301,7 +301,7 @@ namespace EmergencyCallouts.Callouts
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
-            return base.OnCalloutAccepted();
+            return base.OnCalloutAccepted();//
         }
 
         private void CalloutHandler()
