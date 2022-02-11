@@ -294,6 +294,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Alpha = 0f;
 
+                Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Lockpick set");
+                Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Car window breaker");
+
                 CalloutHandler();
             }
             catch (Exception e)
