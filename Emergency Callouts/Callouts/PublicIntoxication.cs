@@ -454,7 +454,7 @@ namespace EmergencyCallouts.Callouts
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
             if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
-            if (blip.Exists()) { blip.Delete(); }
+
             Display.HideSubtitle();
             Display.EndNotification();
             Log.OnCalloutEnded(CalloutMessage, CalloutScenario);
