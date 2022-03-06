@@ -576,6 +576,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give new random shotgun
                 Suspect.GiveRandomShotgun(-1, true);
+                Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Shotgun");
 
                 // Change Suspect health
                 Suspect2.Health = 110;
