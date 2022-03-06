@@ -764,8 +764,6 @@ namespace EmergencyCallouts.Callouts
                                     DialogueStarted = false;
                                     break;
                                 }
-
-                                GameFiber.Sleep(500);
                             }
                             else
                             {
@@ -835,8 +833,6 @@ namespace EmergencyCallouts.Callouts
                                             break;
                                         }
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                             }
                         }
@@ -1012,7 +1008,6 @@ namespace EmergencyCallouts.Callouts
                                     Handle.AdvancedEndingSequence();
                                     break;
                                 }
-                                GameFiber.Sleep(500);
                             }
                             else
                             {

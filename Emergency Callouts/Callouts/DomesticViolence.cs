@@ -519,8 +519,6 @@ namespace EmergencyCallouts.Callouts
                                         Victim.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                                         MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                                 {

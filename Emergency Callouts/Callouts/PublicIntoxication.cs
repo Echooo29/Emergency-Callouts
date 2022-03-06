@@ -248,8 +248,6 @@ namespace EmergencyCallouts.Callouts
                                         }
                                     }
                                 }
-
-                                GameFiber.Sleep(500);
                             }
                             else
                             {

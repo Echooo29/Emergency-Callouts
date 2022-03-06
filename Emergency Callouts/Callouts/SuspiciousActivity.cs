@@ -733,8 +733,6 @@ namespace EmergencyCallouts.Callouts
 
                                         break;
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                                 {

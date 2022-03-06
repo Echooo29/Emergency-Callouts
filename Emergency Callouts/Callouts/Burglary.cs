@@ -466,8 +466,6 @@ namespace EmergencyCallouts.Callouts
                                         DialogueEnded = true;
                                         break;
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                                 else if (!DialogueStarted)
                                 {
