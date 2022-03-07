@@ -89,7 +89,7 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-1180.712f, -2072.301f, 14.45590f), // Garbage container
             new Vector3(-1168.165f, -2052.083f, 14.43985f), // Inside bus
             new Vector3(-1181.182f, -2046.646f, 13.92571f), // Outside bus
-            new Vector3(-1154.072f, -2049.230f, 13.91198f), // Inside bus water tower
+            new Vector3(-1154.528f, -2052.879f, 13.91131f), // Inside bus water tower
         };
 
         readonly float[] ScrapyardHidingPositionsHeadings =
@@ -99,7 +99,7 @@ namespace EmergencyCallouts.Callouts
             270f,
             66.24f,
             156f,
-            257.52f,
+            102.71f,
         };
 
         readonly Vector3[] ScrapyardManagerPositions =
@@ -764,8 +764,6 @@ namespace EmergencyCallouts.Callouts
                                     DialogueStarted = false;
                                     break;
                                 }
-
-                                GameFiber.Sleep(500);
                             }
                             else
                             {
@@ -835,8 +833,6 @@ namespace EmergencyCallouts.Callouts
                                             break;
                                         }
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                             }
                         }
@@ -1012,7 +1008,6 @@ namespace EmergencyCallouts.Callouts
                                     Handle.AdvancedEndingSequence();
                                     break;
                                 }
-                                GameFiber.Sleep(500);
                             }
                             else
                             {

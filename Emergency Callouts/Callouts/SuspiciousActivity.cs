@@ -576,6 +576,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Give new random shotgun
                 Suspect.GiveRandomShotgun(-1, true);
+                Functions.AddPedContraband(Suspect, ContrabandType.Weapon, "Shotgun");
 
                 // Change Suspect health
                 Suspect2.Health = 110;
@@ -733,8 +734,6 @@ namespace EmergencyCallouts.Callouts
 
                                         break;
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                                 {

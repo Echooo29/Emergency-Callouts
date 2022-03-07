@@ -7,12 +7,13 @@ namespace EmergencyCallouts.Essential
     internal class UpdateChecker
     {
         internal static string OnlineVersion = string.Empty;
+        private static bool ExceptionOccured;
+        private static string EarlyAccessExtension = "";
 
         internal static bool UpdateAvailable()
         {
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
-            string EarlyAccessExtension = "";
 
             try
             {
@@ -22,11 +23,12 @@ namespace EmergencyCallouts.Essential
             }
             catch (WebException)
             {
-                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates; Possible network error.\nYou can still continue playing LSPDFR.");
+                Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates, ~y~Possible network error.");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
+                ExceptionOccured = true;
             }
 
-            if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess)
+            if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess && !ExceptionOccured)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
                 Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");

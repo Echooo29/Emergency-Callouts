@@ -9,7 +9,7 @@ Push
 [EMERGENCY CALLOUTS ZIP]
 Add the .dll to the zip
 Add the .ini to the zip and check for default settings
-Add possibly new audio files
+Add possible new audio files
 Update comment version
 
 [TRELLO]

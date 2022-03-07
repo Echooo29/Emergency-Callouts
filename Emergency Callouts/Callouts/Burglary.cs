@@ -294,6 +294,9 @@ namespace EmergencyCallouts.Callouts
                 SuspectBlip.Scale = (float)Settings.PedBlipScale;
                 SuspectBlip.Alpha = 0f;
 
+                Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Lockpick set");
+                Functions.AddPedContraband(Suspect, ContrabandType.Misc, "Car window breaker");
+
                 CalloutHandler();
             }
             catch (Exception e)
@@ -463,8 +466,6 @@ namespace EmergencyCallouts.Callouts
                                         DialogueEnded = true;
                                         break;
                                     }
-
-                                    GameFiber.Sleep(500);
                                 }
                                 else if (!DialogueStarted)
                                 {
@@ -668,7 +669,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3() // Cower with gun
+        private void Scenario3() // Cower with a gun
         {
             #region Scenario 3
             RetrievePedPositions();
