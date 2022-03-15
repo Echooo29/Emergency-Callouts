@@ -79,7 +79,6 @@
     <Compile Include="Callouts\PublicIntoxication.cs" />
     <Compile Include="Callouts\Trespassing.cs" />
     <Compile Include="Callouts\Burglary.cs" />
-    <Compile Include="Callouts\SuspiciousActivity.cs" />
     <Compile Include="Essential\Helper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Essential\Settings.cs" />

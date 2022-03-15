@@ -1,7 +1,6 @@
 ﻿using EmergencyCallouts.Essential;
 using LSPD_First_Response.Mod.API;
 using Rage;
-using static EmergencyCallouts.Essential.Helper;
 
 namespace EmergencyCallouts
 {
@@ -44,7 +43,6 @@ namespace EmergencyCallouts
             if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
             if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
             if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
-            if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
 
             Game.LogTrivial("[Emergency Callouts]: Registered callouts");
         }
