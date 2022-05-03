@@ -25,6 +25,7 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool DialogueEnded;
         bool CheckedForDamage;
+        bool CopWalkStyle;
 
         string DamageLine;
         string DamageLine2;
@@ -539,6 +540,13 @@ namespace EmergencyCallouts.Callouts
 
                             if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
                             {
+                                
+                                if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)
+                                {
+                                    CopWalkStyle = true;
+                                    Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
+                                }
+
                                 // Play Animation
                                 MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
@@ -564,6 +572,8 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
 
+                                    Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
+
                                     DamageLine = "Anyway, you also left some dagage behind.";
                                     DamageLine2 = "Bro that was already there when I came here!";
 
@@ -581,6 +591,11 @@ namespace EmergencyCallouts.Callouts
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
+                                    if (CopWalkStyle)
+                                    {
+                                        Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop);
+                                    }
 
                                     DamageLine = "Luckily for you I didn't find any damage.";
                                     DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
