@@ -145,9 +145,10 @@ namespace EmergencyCallouts.Callouts
             #region Dialogue
             try
             {
-                bool stopDialogue = false;
-
                 string timeOfDay;
+                bool stopDialogue = false;
+                int line = 0;
+
                 if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
                 {
                     timeOfDay = "so early?";
@@ -161,23 +162,37 @@ namespace EmergencyCallouts.Callouts
                     timeOfDay = "right now, shouldn't you go home?";
                 }
 
+                string[] line1 = { "Hey you, come here for a second.", "Hey, why don't you come over here?", "Hello, let's have a talk okay?", "Hi sir how are you doing today?" };
+                string[] line2 = { "Leave me alone.", "Let me be!", "Gimme some privacy you piggy.", "I clearly don't want to!", "You people always harassing me out here!", "Nuh-uh, stranger danger!", "Hell no, stranger equals danger remember!?", "No thanks and... do you guys live in piggy banks by any chance?", "Unless you have some beer we have nothing to talk about" };
+                string[] line3 = { "Calm down sir, just have talk with me okay?", "Calm down sir, we don't want things to escalate.", "Sir, if you keep this up it will be annoying for both of us.", "Let's just get this over with okay?" };
+                string[] line4 = { "FINE!", "Alrighty!", "Alright then", "OK!", "Okay", "Sure", "Okay buddy", "Yes sir!", "Yes mom" };
+                string[] line5 = { "So what are you doing here being drunk ", "Why are you drunk ", "You shouldn't be drunk ", "Now is not the time to be roaming the streets " };
+                string[] line6 = { "Who cares what or when I do things?", "Who cares? I aint hurting people!", "Who gives a damn!", "Who cares?" };
+                string[] line7 = { "I do", "I care", "I care about what you do", "I just don't want anyone to get hurt sir" };
+                string[] line8 = { "Okay, what now?", "Sure, so what now?", "Alright, what now?", "Ok so... what do we do now?", "Okay, and what exactly are we going to do now?" };
+
+                int line1Random = random.Next(0, line1.Length);
+                int line2Random = random.Next(0, line2.Length);
+                int line3Random = random.Next(0, line3.Length);
+                int line4Random = random.Next(0, line4.Length);
+                int line5Random = random.Next(0, line5.Length);
+                int line6Random = random.Next(0, line6.Length);
+                int line7Random = random.Next(0, line7.Length);
+                int line8Random = random.Next(0, line8.Length);
+
                 string[] dialogue =
                 {
-                    "~b~You~s~: Hey you, come here for a second.",
-                    "~y~Suspect~s~: Leave...me...ALONE!",
-                    $"~b~You~s~: Calm down sir, Just have a talk with me...",
-                    "~y~Suspect~s~: FINE!",
-                    $"~b~You~s~: So what are you doing here being drunk {timeOfDay}",
-                    "~y~Suspect~s~: Who cares what I do here, I'm not harming anyone right?",
-                    "~b~You~s~: Well I didn't get any assault calls yet.",
-                    "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
-                    "~b~You~s~: That wasn't what I meant, sorry.",
-                    "~y~Suspect~s~: Well you got off lucky this time haha.",
-                    "~b~You~s~: Uhuh...",
+                    "~b~You~s~: " + line1[line1Random],
+                    "~y~Suspect~s~: " + line2[line2Random],
+                    $"~b~You~s~: " + line3[line3Random],
+                    "~y~Suspect~s~: " + line4[line4Random],
+                    $"~b~You~s~: " + line5[line5Random] + timeOfDay,
+                    "~y~Suspect~s~: " + line6[line6Random],
+                    "~b~You~s~: " + line7[line7Random],
+                    "~y~Suspect~s~: " + line8[line8Random],
                     "~r~Arrest~s~ or ~g~dismiss~s~ the person.",
                 };
 
-                int line = 0;
 
                 GameFiber.StartNew(delegate
                 {
