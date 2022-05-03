@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -737,7 +738,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && !CompletedSuspectDialogue)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -769,7 +770,14 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
@@ -889,7 +897,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
-       
+
         private void Scenario2() // Manager
         {
             #region Scenario 2
@@ -1013,7 +1021,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                    Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
                                 }
                             }
                         }
@@ -1079,6 +1087,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -1091,7 +1100,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 10000);
-                    
+
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 

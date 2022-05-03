@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
+using RAGENativeUI;
+using Rage.Native;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -81,11 +83,11 @@ namespace EmergencyCallouts.Callouts
         {
             // Callout Accepted
             Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
-            
+
             // Accept Messages
             Display.AcceptSubtitle(CalloutMessage, CalloutArea);
             Display.OutdatedReminder();
-            
+
             // EntranceBlip
             EntranceBlip = new Blip(CalloutPosition);
             if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
@@ -148,15 +150,15 @@ namespace EmergencyCallouts.Callouts
                 string timeOfDay;
                 if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
                 {
-                    timeOfDay = " so early?";
+                    timeOfDay = "so early?";
                 }
                 else if (World.TimeOfDay.TotalHours >= 12 && World.TimeOfDay.TotalHours <= 21)
                 {
-                    timeOfDay = " in the middle of the day?";
+                    timeOfDay = "in the middle of the day?";
                 }
                 else
                 {
-                    timeOfDay = ", shouldn't you go home?";
+                    timeOfDay = "right now, shouldn't you go home?";
                 }
 
                 string[] dialogue =
@@ -165,7 +167,7 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Leave...me...ALONE!",
                     $"~b~You~s~: Calm down sir, Just have a talk with me...",
                     "~y~Suspect~s~: FINE!",
-                    $"~b~You~s~: So what are you doing here being drunk{timeOfDay}",
+                    $"~b~You~s~: So what are you doing here being drunk {timeOfDay}",
                     "~y~Suspect~s~: Who cares what I do here, I'm not harming anyone right?",
                     "~b~You~s~: Well I didn't get any assault calls yet.",
                     "~y~Suspect~s~: You assume I did something? So much for innocent until proven guilty...",
@@ -185,7 +187,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -206,23 +208,37 @@ namespace EmergencyCallouts.Callouts
                                 if (line == dialogue.Length)
                                 {
                                     stopDialogue = true;
-                                    Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
+                                    Game.LogTrivial("[Emergency Callouts]: Dialogue ended");
 
                                     GameFiber.Sleep(1500);
 
                                     if (HasBottle)
                                     {
-                                        Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                        if (Settings.AllowController && Game.IsControllerConnected)
+                                        {
+                                            Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                        }
+                                        else
+                                        {
+                                            Game.DisplayHelp($"Press ~{Keys.N.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
+                                        }
                                     }
                                     else
                                     {
-                                        Game.DisplayHelp("Press ~y~N~s~ to ~g~dismiss~s~ the ~y~suspect");
+                                        if (Settings.AllowController && Game.IsControllerConnected)
+                                        {
+                                            Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect");
+                                        }
+                                        else
+                                        {
+                                            Game.DisplayHelp($"Press ~{Keys.N.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect");
+                                        }
                                     }
 
                                     while (CalloutActive)
                                     {
                                         GameFiber.Yield();
-                                        if (Game.IsKeyDown(Keys.N))
+                                        if (Game.IsKeyDown(Keys.N) || (Game.IsControllerButtonDown(ControllerButtons.DPadLeft) && Settings.AllowController && Game.IsControllerConnected))
                                         {
                                             if (HasBottle)
                                             {
@@ -253,7 +269,14 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
@@ -335,12 +358,13 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
                 {
                     // Remove EntranceBlip
-                    if (EntranceBlip.Exists()) {EntranceBlip.Delete(); }
+                    if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
                     SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
@@ -378,7 +402,7 @@ namespace EmergencyCallouts.Callouts
                 if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
                 {
                     // Remove SuspectBlip
-                    if (SuspectBlip.Exists()) {SuspectBlip.Delete(); }
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 

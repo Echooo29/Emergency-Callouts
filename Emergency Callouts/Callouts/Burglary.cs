@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -44,6 +45,7 @@ namespace EmergencyCallouts.Callouts
         Blip EntranceBlip;
         Blip SearchArea;
         Blip DamagedPropertyBlip;
+        Blip PursuitBlip;
 
         // Main
         #region Positions
@@ -232,7 +234,7 @@ namespace EmergencyCallouts.Callouts
         public override bool OnCalloutAccepted()
         {
             try
-            {                
+            {
                 // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // Mirror Park
@@ -436,17 +438,17 @@ namespace EmergencyCallouts.Callouts
                             if (!DialogueStarted && !FirstTime)
                             {
                                 GameFiber.Sleep(3000);
-                                Game.DisplaySubtitle("Speak to the ~r~suspect~s~.", 10000);
+                                Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
                                 FirstTime = true;
                             }
 
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey) && FirstTime)
+                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected)) && FirstTime)
                                 {
                                     if (!DialogueStarted)
                                     {
-                                        Suspect.Tasks.Clear();
+                                        if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                     }
@@ -469,7 +471,14 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect");
+                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~r~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~r~suspect");
+                                    }
                                 }
                             }
                         }
@@ -494,17 +503,21 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed && Suspect.IsAlive)
+                        if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f)
                         {
                             GameFiber.Sleep(7500);
 
-                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage~s~.", 10000);
+                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage", 10000);
 
                             DamagedPropertyBlip = new Blip(DamagedProperty);
                             DamagedPropertyBlip.SetColorPurple();
                             DamagedPropertyBlip.Scale = 0.6f;
                             DamagedPropertyBlip.Flash(500, -1);
                             break;
+                        }
+                        else if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) >= 100f)
+                        {
+                            Handle.AdvancedEndingSequence();
                         }
                     }
 
@@ -514,9 +527,16 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
                         {
-                            Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
+                            if (Settings.AllowController && Game.IsControllerConnected)
+                            {
+                                Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
+                            }
+                            else
+                            {
+                                Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
+                            }
 
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
                             {
                                 // Play Animation
                                 MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
@@ -534,7 +554,7 @@ namespace EmergencyCallouts.Callouts
                                 if (chance <= Settings.ChanceOfPropertyDamage) // Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door~s~.");
+                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
@@ -551,11 +571,12 @@ namespace EmergencyCallouts.Callouts
                                 else // No Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door~s~.");
+                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
 
+                                    GameFiber.Sleep(1000);
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
@@ -589,6 +610,9 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 1
             try
             {
+                // Check For Damages
+                CheckForDamage();
+
                 // Retrieve Ped Positions
                 RetrievePedPositions();
 
@@ -646,7 +670,7 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        
+
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Clipping Through Wall Fix
@@ -673,7 +697,7 @@ namespace EmergencyCallouts.Callouts
         {
             #region Scenario 3
             RetrievePedPositions();
-            
+
             CheckForDamage();
 
             GameFiber.StartNew(delegate
@@ -693,19 +717,20 @@ namespace EmergencyCallouts.Callouts
                         Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
 
                         break;
-                    }          
+                    }
                 }
             });
             #endregion
         }
 
-        public override void Process() 
+        public override void Process()
         {
             base.Process();
             try
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
@@ -739,7 +764,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
-                    
+
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
@@ -808,6 +833,7 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
             CalloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
@@ -817,6 +843,7 @@ namespace EmergencyCallouts.Callouts
             if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
             if (Clipboard.Exists()) { Clipboard.Delete(); }
             if (Pencil.Exists()) { Pencil.Delete(); }
+            if (PursuitBlip.Exists()) { PursuitBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();

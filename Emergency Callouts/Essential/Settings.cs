@@ -31,8 +31,6 @@ namespace EmergencyCallouts.Essential
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts]: Loading settings");
-
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
             iniFile.Create();
