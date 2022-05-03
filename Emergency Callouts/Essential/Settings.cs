@@ -19,10 +19,9 @@ namespace EmergencyCallouts.Essential
 
         // Keys
         internal static Keys InteractKey = Keys.Y;
-        internal static Keys EndCalloutKey = Keys.End;
-
-        internal static bool AllowController = true;
         internal static ControllerButtons ControllerInteractKey = ControllerButtons.DPadLeft;
+        internal static Keys EndCalloutKey = Keys.End;
+        internal static bool AllowController = true;
 
         // Chances
         internal static int ChanceOfPropertyDamage = 75;
