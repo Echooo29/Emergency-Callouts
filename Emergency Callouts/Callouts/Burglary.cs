@@ -46,7 +46,6 @@ namespace EmergencyCallouts.Callouts
         Blip EntranceBlip;
         Blip SearchArea;
         Blip DamagedPropertyBlip;
-        Blip PursuitBlip;
 
         // Main
         #region Positions
@@ -859,7 +858,6 @@ namespace EmergencyCallouts.Callouts
             if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
             if (Clipboard.Exists()) { Clipboard.Delete(); }
             if (Pencil.Exists()) { Pencil.Delete(); }
-            if (PursuitBlip.Exists()) { PursuitBlip.Delete(); }
 
             Display.HideSubtitle();
             Display.EndNotification();
