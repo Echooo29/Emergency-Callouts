@@ -414,18 +414,36 @@ namespace EmergencyCallouts.Callouts
             {
                 int line = 0;
 
+                string[] line1 = { "So, why did you do it?", "Why would you do this?", "Why are you stealing from other people", "So... what's your reason?" };
+                string[] line2 = { "For the money!", "Easy cash!", "My family man, we're broke!", "Child alimony sucks dude!", "Getting evicted tomorrow if I don't pay them right now.", "Hospital bills!" };
+                string[] line3 = { "So you don't have a job?", "I'm assuming you don't have a job then?", "So no work for you?" };
+                string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me.", "Correct", "That's right" };
+                string[] line7 = { "You expect me to believe that?", "I don't believe a word of it.", "I don't buy it." };
+                string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep", "Maybe", "Your choice", "No", "Not up to me isn't it?" };
+                string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I'll want my attorney ASAP.", "I'm going to use my right to remain silent." };
+                string[] line10 = { "No problem.", "Works for me!", "Perfect.", "Sure.", "Copy that.", "Okay.", "Great.", "Win-win situation." };
+
+                int line1Random = random.Next(0, line1.Length);
+                int line2Random = random.Next(0, line2.Length);
+                int line3Random = random.Next(0, line3.Length);
+                int line4Random = random.Next(0, line4.Length);
+                int line7Random = random.Next(0, line7.Length);
+                int line8Random = random.Next(0, line8.Length);
+                int line9Random = random.Next(0, line9.Length);
+                int line10Random = random.Next(0, line10.Length);
+
                 string[] dialogue =
                 {
-                    "~b~You~s~: So, why did you do it?",
-                    "~r~Suspect~s~: For the money...",
-                    "~b~You~s~: So you don't have a job?",
-                    "~r~Suspect~s~: Yeah, I don't.",
+                    "~b~You~s~: " + line1[line1Random],
+                    "~r~Suspect~s~: " + line2[line2Random],
+                    "~b~You~s~: " + line3[line3Random],
+                    "~r~Suspect~s~: " + line4[line4Random],
                     "~b~You~s~: " + DamageLine,
                     "~r~Suspect~s~: " + DamageLine2,
-                    "~b~You~s~: You expect me to believe that?",
-                    "~r~Suspect~s~: Nah, cops only hear what they want to hear.",
-                    "~r~Suspect~s~: I'm staying silent until I can speak to my lawyer.",
-                    "~b~You~s~: Not a problem.",
+                    "~b~You~s~: " + line7[line7Random],
+                    "~r~Suspect~s~: " + line8[line8Random],
+                    "~r~Suspect~s~: " + line9[line9Random],
+                    "~b~You~s~: " + line10[line10Random],
                     "~m~dialogue ended",
                 };
 
