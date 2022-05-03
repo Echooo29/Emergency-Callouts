@@ -224,10 +224,12 @@ namespace EmergencyCallouts.Callouts
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
+
             if (!Other.PluginChecker.IsCalloutInterfaceRunning)
             {
                 Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
             }
+
             base.OnCalloutNotAccepted();
         }
 
@@ -454,8 +456,7 @@ namespace EmergencyCallouts.Callouts
                                     }
 
                                     DialogueStarted = true;
-
-                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                     Game.DisplaySubtitle(dialogue[line], 15000);
                                     line++;
