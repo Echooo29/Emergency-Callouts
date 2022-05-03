@@ -164,6 +164,11 @@ namespace EmergencyCallouts.Essential
         internal class Log
         {
             #region OnCalloutAccepted
+            internal static void OnCalloutAccepted(string CalloutMessage)
+            {
+                Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}");
+            }
+
             internal static void OnCalloutAccepted(string CalloutMessage, int ScenarioNumber)
             {
                 Game.LogTrivial($"[Emergency Callouts]: Created callout ({CalloutMessage}, Scenario {ScenarioNumber})");
