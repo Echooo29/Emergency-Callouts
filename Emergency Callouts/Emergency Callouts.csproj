@@ -97,4 +97,11 @@
     <Content Include="Other\Release.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET GTA="C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V"
+
+if exist %25GTA%25 (
+  copy /Y "$(TargetDir)$(ProjectName).dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\Plugins\LSPDFR\$(ProjectName).dll"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
