@@ -9,6 +9,7 @@ using System.Net;
 using LSPD_First_Response.Engine.Scripting.Entities;
 using System.Linq;
 using System.IO;
+using System.Media;
 
 namespace EmergencyCallouts.Essential
 {
