@@ -637,83 +637,124 @@ namespace EmergencyCallouts.Callouts
                 }
 
                 // Chance of declining to call property owner
-                string playerAnswer = string.Empty;
-                string suspectAnswer = string.Empty;
+                string[] playerAnswer;
+                string[] suspectAnswer;
+
                 bool acceptsSuggestion = false;
 
                 int chanceAllow = random.Next(1, 101);
 
                 if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
-                    playerAnswer = "Of course not, what are you thinking?";
-                    suspectAnswer = "Screw you man, we'll see in court if he presses charges.";
+                    playerAnswer = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
+                    suspectAnswer = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer", "Ughhhhhh" };
+                    
                     acceptsSuggestion = false;
                 }
                 else
                 {
-                    playerAnswer = "Hmm... okay then.";
-                    suspectAnswer = "We need more officers like you sir!";
+                    playerAnswer = new[] { "Hmm... okay then.", "You know what? Fine.", "No?", "Uhm, I'm not even gonna answer that." };
+                    suspectAnswer = new[] { "We need more officers like you sir!", "Hell yeah!", "Thank god that you are the responding officer!", "I knew it :)", "YESSS!" };
+
                     acceptsSuggestion = true;
                 }
 
-                // Owner response line 2
-                string lineOwner = string.Empty;
+                #region Suspect's Dialogue
+                string[] suspectLine1 = { "So, what are you doing here ", "What were you doing here ", "Why are you here " };
+                string[] suspectLine2 = { "Do you have permission to be here?", "Are you allowed to be here?", "You're not supposed to be here are you?", "You're obviously not allowed to trespass", "You have no business here right?" };
+                string[] suspectLine3 = { "No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!", "Hey please, I know the owner I'm sure he and I can work something out", "Hey man, I know I messed up but I know the owner and we're pretty chill! Can he and I figure something out?" };
+                string[] suspectLine4 = { "I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.", "I'll obviously be contacting the owner and it's up to him.", "It's up to the owner if he wants to press charges.", "It's not up to me to decide that." };
+                string[] suspectLine5 = { "Can't you just call him?", "Please just call him!", "Oh no... can you please call him for me?", "Please call him for me!" };
 
-                int chance = random.Next(1, 101);
+                int suspectLine1Random = random.Next(0, suspectLine1.Length);
+                int suspectLine2Random = random.Next(0, suspectLine2.Length);
+                int suspectLine3Random = random.Next(0, suspectLine3.Length);
+                int suspectLine4Random = random.Next(0, suspectLine4.Length);
+                int suspectLine5Random = random.Next(0, suspectLine5.Length);
 
-                if (chance <= 50)
+
+                string[] dialogueSuspect =
                 {
-                    lineOwner = "Again?! What did my son do now?";
-                }
-                else
-                {
-                    lineOwner = "Oh oh... Did I do something wrong?";
-                }
+                    "~b~You~s~: " + suspectLine1[suspectLine1Random] + timeOfDay,
+                    "~b~You~s~: " + suspectLine2[suspectLine2Random],
+                    "~y~Suspect~s~: " + suspectLine3[suspectLine3Random],
+                    "~b~You~s~: " + suspectLine4[suspectLine4Random],
+                    "~y~Suspect~s~: " + suspectLine5[suspectLine5Random],
+                    "~b~You~s~: " + playerAnswer,
+                    "~y~Suspect~s~: " + suspectAnswer,
+                    "~m~Suspect Dialogue Ended",
+                };
+                #endregion
 
-                // Owner Line
-                string lineOwner2 = string.Empty;
+                #region Owner's Dialogue
+                string[] ownerDialogueLine2 = { "Hello, how can I help?", "Good day officer, how can I help you?", "Uh-oh, uhmm... what is it?", "Oh that's not good, what happened?", "Police on the line is never good, what happened?", "Hello, what happened?", "Hi, so what happened?" };
+                string[] ownerDialogueLine3 = { "Hi, we caught a person trespassing on your property.", "Hello, I just caught a person trespassing on your property.", "Hello, I just apprehended someone trespassing on your property." };
+                string[] ownerDialogueLine4 = { "I don't know what his intentions were, but the suspect says he knows you.", "He says that he knows you.", "The person said that you might help him get out of this." };
+                string[] ownerDialogueLine5 = { "What's his name?", "Okay uhm, what's his name?", "What's the name of the person?", "Do you have a name for me?" };
+                string[] ownerDialogueLine6 = { "Give me a second. Hey you, what's your name?", "I'll ask him. Hey what's your name?", "I'll get his name real quick..." };
+                string[] ownerDialogueLine7 = { "It's ", "My name is ", "The name is ", "That would be " };
+                string[] ownerDialogueLine8 = { "His name is ", "The name is ", "It's " };
+                string[] ownerDialogueLine9 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
+                string[] ownerDialogueLine10 = { "You too Officer... uhh...", "You too, and what was your name again?", "Thanks, what was your name again?" };
+                string[] ownerDialogueLine11 = { "It's Officer", "I'm Officer" };
+                string[] ownerDialogueLine12 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
+
+                int ownerLine2Random = random.Next(0, ownerDialogueLine2.Length);
+                int ownerLine3Random = random.Next(0, ownerDialogueLine3.Length);
+                int ownerLine4Random = random.Next(0, ownerDialogueLine4.Length);
+                int ownerLine5Random = random.Next(0, ownerDialogueLine5.Length);
+                int ownerLine6Random = random.Next(0, ownerDialogueLine6.Length);
+                int ownerLine7Random = random.Next(0, ownerDialogueLine7.Length);
+                int ownerLine8Random = random.Next(0, ownerDialogueLine8.Length);
+                int ownerLine9Random = random.Next(0, ownerDialogueLine9.Length);
+                int ownerLine10Random = random.Next(0, ownerDialogueLine10.Length);
+                int ownerLine11Random = random.Next(0, ownerDialogueLine11.Length);
+                int ownerLine12Random = random.Next(0, ownerDialogueLine12.Length);
+
+                #region Owner Answer
+                string[] ownerAnswer;
 
                 int chanceCharges = random.Next(1, 101);
 
                 if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
-                    lineOwner2 = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
+                    ownerAnswer = new[] {
+                        $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}.",
+                        "He got caught this time! Good job, have fun with him!",
+                        $"{SuspectPersona.Forename}? Doesn't ring a bell, I'd like to press charges, I'll come by the station ASAP.",
+                        "Damn it! Let him rot please.",
+                    };
                 }
                 else
                 {
-                    lineOwner2 = $"Ugh, I don't have time for this, you may let the person go Officer {PlayerPersona.Surname}";
-                }
+                    ownerAnswer = new[] {
+                        $"Ugh, I don't have time for this, you can let that person go Officer {PlayerPersona.Surname}",
+                        "I made a few mistakes in the past too, I'll give him a second chance.",
+                        "I used to be like him back in the day, turned my life around, you can let him go officer.",
+                        $"{SuspectPersona.Forename}? You know what? I'll let it slide this time.",
+                    };
 
-                string[] dialogueSuspect =
-                {
-                    "~b~You~s~: So, what are you doing here " + timeOfDay,
-                    "~y~Suspect~s~: Man, I'm only looking for some stuff!",
-                    "~b~You~s~: Do you have permission to be here?",
-                    "~y~Suspect~s~: No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
-                    "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
-                    "~y~Suspect~s~: Can't you just call him?",
-                    "~b~You~s~: " + playerAnswer,
-                    "~y~Suspect~s~: " + suspectAnswer,
-                    "~m~Suspect Dialogue Ended",
-                };
+                }
+                #endregion
 
                 string[] dialogueOwner =
                 {
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
-                    "~g~Owner~s~: " + lineOwner,
-                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
-                    "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
-                    "~g~Owner~s~: What's his name?",
-                    "~b~You~s~: Give me a second. Hey you, what's your name?",
-                    $"~r~Suspect~s~: It's {SuspectPersona.Forename}.",
-                    $"~b~You~s~: His name is {SuspectPersona.Forename}.",
-                    "~g~Owner~s~: " + lineOwner2,
-                    "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                    "~g~Owner~s~: You too Officer... uhh...",
-                    $"~b~You~s~: It's Officer {PlayerPersona.Surname}.",
-                    "~g~Owner~s~: Okay, you too have a nice day.",
+                    "~g~Owner~s~: " + ownerDialogueLine2[ownerLine2Random],
+                    "~b~You~s~: " + ownerDialogueLine3[ownerLine3Random],
+                    "~b~You~s~: " + ownerDialogueLine4[ownerLine4Random],
+                    "~g~Owner~s~: " + ownerDialogueLine5[ownerLine5Random],
+                    "~b~You~s~: " + ownerDialogueLine6[ownerLine6Random],
+                    $"~r~Suspect~s~: " + ownerDialogueLine7[ownerLine7Random] + SuspectPersona.Forename,
+                    $"~b~You~s~: " + ownerDialogueLine8[ownerLine8Random] + SuspectPersona.Forename,
+                    "~g~Owner~s~: " + ownerAnswer,
+                    "~b~You~s~: " + ownerDialogueLine11[ownerLine11Random],
+                    "~g~Owner~s~: " + ownerDialogueLine11[ownerLine11Random],
+                    $"~b~You~s~: " + ownerDialogueLine11[ownerLine11Random] + PlayerPersona.Surname,
+                    "~g~Owner~s~: " + ownerDialogueLine12[ownerLine12Random],
                     "~m~Call Ended",
                 };
+                #endregion
 
                 int lineSuspectCount = 0;
                 int lineOwnerCount = 0;
