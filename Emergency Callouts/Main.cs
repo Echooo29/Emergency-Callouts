@@ -43,7 +43,7 @@ namespace EmergencyCallouts
             if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
             if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
             if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
-            if (Settings.HijackedAmbulance) { Functions.RegisterCallout(typeof(Callouts.HijackedAmbulance)); }
+            //if (Settings.HijackedAmbulance) { Functions.RegisterCallout(typeof(Callouts.HijackedAmbulance)); }
 
             Game.LogTrivial("[Emergency Callouts]: Registered callouts");
         }
