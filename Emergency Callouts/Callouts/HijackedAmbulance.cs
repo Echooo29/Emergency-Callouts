@@ -212,7 +212,7 @@
 
 //                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
 //                        {
-//                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
+//                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
 //                            {
 //                                if (!DialogueStarted)
 //                                {
@@ -239,7 +239,7 @@
 
 //                                    if (HasBottle)
 //                                    {
-//                                        if (Settings.AllowController && Game.IsControllerConnected)
+//                                        if (Settings.AllowController && UIMenu.IsUsingController)
 //                                        {
 //                                            Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
 //                                        }
@@ -250,7 +250,7 @@
 //                                    }
 //                                    else
 //                                    {
-//                                        if (Settings.AllowController && Game.IsControllerConnected)
+//                                        if (Settings.AllowController && UIMenu.IsUsingController)
 //                                        {
 //                                            Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect");
 //                                        }
@@ -263,7 +263,7 @@
 //                                    while (CalloutActive)
 //                                    {
 //                                        GameFiber.Yield();
-//                                        if (Game.IsKeyDown(Keys.N) || (Game.IsControllerButtonDown(ControllerButtons.DPadLeft) && Settings.AllowController && Game.IsControllerConnected))
+//                                        if (Game.IsKeyDown(Keys.N) || (Game.IsControllerButtonDown(ControllerButtons.DPadLeft) && Settings.AllowController && UIMenu.IsUsingController))
 //                                        {
 //                                            if (HasBottle)
 //                                            {
@@ -294,7 +294,7 @@
 //                            {
 //                                if (!DialogueStarted)
 //                                {
-//                                    if (Settings.AllowController && Game.IsControllerConnected)
+//                                    if (Settings.AllowController && UIMenu.IsUsingController)
 //                                    {
 //                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
 //                                    }

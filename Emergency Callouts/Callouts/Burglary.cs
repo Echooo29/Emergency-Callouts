@@ -464,7 +464,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected)) && FirstTime)
+                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController)) && FirstTime)
                                 {
                                     if (!DialogueStarted)
                                     {
@@ -490,7 +490,7 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted)
                                 {
-                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
                                     {
                                         Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~r~suspect");
                                     }
@@ -546,7 +546,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
                         {
-                            if (Settings.AllowController && Game.IsControllerConnected)
+                            if (Settings.AllowController && UIMenu.IsUsingController)
                             {
                                 Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
                             }
@@ -555,7 +555,7 @@ namespace EmergencyCallouts.Callouts
                                 Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
                             }
 
-                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                             {
                                 
                                 if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)

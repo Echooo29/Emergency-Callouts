@@ -448,7 +448,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
+                                if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                                 {
                                     if (!DialogueStarted)
                                     {
@@ -524,7 +524,7 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                                 {
-                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
                                     {
                                         Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~o~victim");
                                     }
