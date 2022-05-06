@@ -163,12 +163,12 @@ namespace EmergencyCallouts.Callouts
                 }
 
                 string[] line1 = { "Hey you, come here for a second.", "Hey, why don't you come over here?", "Hello, let's have a talk okay?", "Hi sir how are you doing today?" };
-                string[] line2 = { "Leave me alone.", "Let me be!", "Gimme some privacy you piggy.", "I clearly don't want to!", "You people always harassing me out here!", "Nuh-uh, stranger danger!", "Hell no, stranger equals danger remember!?", "No thanks and... do you guys live in piggy banks by any chance?", "Unless you have some beer we have nothing to talk about" };
+                string[] line2 = { "Leave me alone.", "Let me be!", "Gimme some privacy you piggy.", "I clearly don't want to!", "You people always harassing me out here!", "Nuh-uh, stranger danger!", "Hell no, stranger equals danger remember!?", "No thanks and... do you guys live in piggy banks by any chance?", "Unless you have some beer we have nothing to talk about!" };
                 string[] line3 = { "Calm down sir, just have talk with me okay?", "Calm down sir, we don't want things to escalate.", "Sir, if you keep this up it will be annoying for both of us.", "Let's just get this over with okay?" };
-                string[] line4 = { "FINE!", "Alrighty!", "Alright then", "OK!", "Okay", "Sure", "Okay buddy", "Yes sir!", "Yes mom" };
-                string[] line5 = { "So what are you doing here being drunk ", "Why are you drunk ", "You shouldn't be drunk ", "Now is not the time to be roaming the streets " };
+                string[] line4 = { "FINE!", "Alrighty!", "Alright then.", "OK!", "Okay.", "Sure.", "Okay buddy, fine.", "Yes sir!", "Yes mom!" };
+                string[] line5 = { "So what are you doing here being drunk ", "Why are you drunk ", "Now is not the time to be roaming the streets " };
                 string[] line6 = { "Who cares what or when I do things?", "Who cares? I aint hurting people!", "Who gives a damn!", "Who cares?" };
-                string[] line7 = { "I do", "I care", "I care about what you do", "I just don't want anyone to get hurt sir" };
+                string[] line7 = { "I do.", "I care.", "I care about what you do here sir.", "I just don't want anyone to get hurt sir." };
                 string[] line8 = { "Okay, what now?", "Sure, so what now?", "Alright, what now?", "Ok so... what do we do now?", "Okay, and what exactly are we going to do now?" };
 
                 int line1Random = random.Next(0, line1.Length);
@@ -202,7 +202,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsAlive && MainPlayer.IsOnFoot)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && Game.IsControllerConnected))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -229,7 +229,7 @@ namespace EmergencyCallouts.Callouts
 
                                     if (HasBottle)
                                     {
-                                        if (Settings.AllowController && Game.IsControllerConnected)
+                                        if (Settings.AllowController && UIMenu.IsUsingController)
                                         {
                                             Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect~s~ and ~o~confiscate~s~ the bottle");
                                         }
@@ -240,7 +240,7 @@ namespace EmergencyCallouts.Callouts
                                     }
                                     else
                                     {
-                                        if (Settings.AllowController && Game.IsControllerConnected)
+                                        if (Settings.AllowController && UIMenu.IsUsingController)
                                         {
                                             Game.DisplayHelp($"Press ~{ControllerButtons.DPadLeft.GetInstructionalId()}~ to ~g~dismiss~s~ the ~y~suspect");
                                         }
@@ -253,11 +253,12 @@ namespace EmergencyCallouts.Callouts
                                     while (CalloutActive)
                                     {
                                         GameFiber.Yield();
-                                        if (Game.IsKeyDown(Keys.N) || (Game.IsControllerButtonDown(ControllerButtons.DPadLeft) && Settings.AllowController && Game.IsControllerConnected))
+
+                                        if (Game.IsKeyDown(Keys.N) || (Game.IsControllerButtonDown(ControllerButtons.DPadLeft) && Settings.AllowController && UIMenu.IsUsingController))
                                         {
                                             if (HasBottle)
                                             {
-                                                Game.DisplaySubtitle("~b~You~s~: I'm letting you go, I will need that bottle from you though.");
+                                                Game.DisplaySubtitle("~b~You~s~: I'm letting you go, I will need that bottle from you though. You will also head straight to home.");
                                                 GameFiber.Sleep(3000);
                                                 MainPlayer.Tasks.GoToOffsetFromEntity(Suspect, 1f, 0f, 2f);
                                                 GameFiber.Sleep(500);
@@ -268,7 +269,13 @@ namespace EmergencyCallouts.Callouts
                                                 Suspect.Inventory.Weapons.Clear();
                                                 GameFiber.Sleep(4000);
                                             }
+                                            else
+                                            {
+                                                Game.DisplaySubtitle("~b~You~s~: So this is what you're going to do, you're gonna head straight to home.");
+                                            }
+
                                             Handle.AdvancedEndingSequence();
+
                                             break;
                                         }
                                         else if (Suspect.IsCuffed)
@@ -284,7 +291,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    if (Settings.AllowController && Game.IsControllerConnected)
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
                                     {
                                         Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
                                     }
