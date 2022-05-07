@@ -637,8 +637,8 @@ namespace EmergencyCallouts.Callouts
                 }
 
                 // Chance of declining to call property owner
-                string[] playerAnswer;
-                string[] suspectAnswer;
+                string playerAnswer = string.Empty;
+                string suspectAnswer = string.Empty;
 
                 bool acceptsSuggestion = false;
 
@@ -646,15 +646,21 @@ namespace EmergencyCallouts.Callouts
 
                 if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
-                    playerAnswer = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
-                    suspectAnswer = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer", "Ughhhhhh" };
+                    string[] playerAnswers = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
+                    string[] suspectAnswers = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer", "Ughhhhhh" };
                     
                     acceptsSuggestion = false;
                 }
                 else
                 {
-                    playerAnswer = new[] { "Hmm... okay then.", "You know what? Fine.", "No?", "Uhm, I'm not even gonna answer that." };
-                    suspectAnswer = new[] { "We need more officers like you sir!", "Hell yeah!", "Thank god that you are the responding officer!", "I knew it :)", "YESSS!" };
+                    string[] playerAnswers = new[] { "Hmm... okay then.", "You know what? Fine.", "No?", "Uhm, I'm not even gonna answer that." };
+                    string[] suspectAnswers = new[] { "We need more officers like you sir!", "Hell yeah!", "Thank god that you are the responding officer!", "I knew it :)", "YESSS!" };
+
+                    int playerAnswerRandom = random.Next(playerAnswers.Length);
+                    int suspectAnswerRandom = random.Next(suspectAnswers.Length);
+
+                    playerAnswer = playerAnswers[playerAnswerRandom];
+                    suspectAnswer = suspectAnswers[suspectAnswerRandom];
 
                     acceptsSuggestion = true;
                 }
@@ -696,7 +702,7 @@ namespace EmergencyCallouts.Callouts
                 string[] ownerDialogueLine8 = { "His name is ", "The name is ", "It's " };
                 string[] ownerDialogueLine9 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
                 string[] ownerDialogueLine10 = { "You too Officer... uhh...", "You too, and what was your name again?", "Thanks, what was your name again?" };
-                string[] ownerDialogueLine11 = { "It's Officer", "I'm Officer" };
+                string[] ownerDialogueLine11 = { "It's Officer ", "I'm Officer " };
                 string[] ownerDialogueLine12 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
 
                 int ownerLine2Random = random.Next(0, ownerDialogueLine2.Length);
@@ -748,8 +754,8 @@ namespace EmergencyCallouts.Callouts
                     $"~r~Suspect~s~: " + ownerDialogueLine7[ownerLine7Random] + SuspectPersona.Forename,
                     $"~b~You~s~: " + ownerDialogueLine8[ownerLine8Random] + SuspectPersona.Forename,
                     "~g~Owner~s~: " + ownerAnswer,
-                    "~b~You~s~: " + ownerDialogueLine11[ownerLine11Random],
-                    "~g~Owner~s~: " + ownerDialogueLine11[ownerLine11Random],
+                    "~b~You~s~: " + ownerDialogueLine9[ownerLine9Random],
+                    "~g~Owner~s~: " + ownerDialogueLine10[ownerLine10Random],
                     $"~b~You~s~: " + ownerDialogueLine11[ownerLine11Random] + PlayerPersona.Surname,
                     "~g~Owner~s~: " + ownerDialogueLine12[ownerLine12Random],
                     "~m~Call Ended",
@@ -783,14 +789,15 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Suspect.Tasks.Clear();
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                
+                                if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                 Game.DisplaySubtitle(dialogueSuspect[lineSuspectCount], 15000);
                                 if (!stopDialogue) { lineSuspectCount++; }
@@ -994,13 +1001,14 @@ namespace EmergencyCallouts.Callouts
                                 if (!DialogueStarted)
                                 {
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
-                                    Suspect.Tasks.Clear();
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
+
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                 Game.DisplaySubtitle(dialogue[line], 15000);
                                 line++;
