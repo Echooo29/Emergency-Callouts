@@ -970,8 +970,9 @@ namespace EmergencyCallouts.Callouts
                     "~g~Person~s~: A few minutes ago, when my shift started.",
                     $"~b~You~s~: Then the caller must've made a mistake.",
                     "~g~Person~s~: Well, I'm glad he called, we actually have alot of kids sneaking around here.",
-                    $"~b~You~s~: Okay, well, I'm going back out on patrol, see you later!",
-                    "~g~Person~s~: Goodbye!",
+                    $"~b~You~s~: Okay, I'm going to have a look around and make sure there is no-one else.",
+                    "~g~Person~s~: Okay, bye.",
+                    $"~b~You~s~: Goodbye."
                 };
 
                 int line = 0;
