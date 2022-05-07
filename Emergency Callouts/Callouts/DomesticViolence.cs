@@ -452,7 +452,7 @@ namespace EmergencyCallouts.Callouts
                                 {
                                     if (!DialogueStarted)
                                     {
-                                        Victim.Tasks.Clear();
+                                        if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.Clear(); }
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
                                     }
 
@@ -831,6 +831,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
             CalloutActive = false;
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Victim.Exists()) { Victim.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }

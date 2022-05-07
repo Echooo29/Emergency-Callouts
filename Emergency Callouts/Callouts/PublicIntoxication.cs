@@ -206,7 +206,7 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Suspect.Tasks.Clear();
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
