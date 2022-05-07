@@ -417,11 +417,11 @@ namespace EmergencyCallouts.Callouts
                 string[] line1 = { "So, why did you do it?", "Why would you do this?", "Why are you stealing from other people", "So... what's your reason?" };
                 string[] line2 = { "For the money!", "Easy cash!", "My family man, we're broke!", "Child alimony sucks dude!", "Getting evicted tomorrow if I don't pay them right now.", "Hospital bills!" };
                 string[] line3 = { "So you don't have a job?", "I'm assuming you don't have a job then?", "So no work for you?" };
-                string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me.", "Correct", "That's right" };
+                string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me as an employee.", "Correct.", "That's right." };
                 string[] line7 = { "You expect me to believe that?", "I don't believe a word of it.", "I don't buy it." };
-                string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep", "Maybe", "Your choice", "No", "Not up to me isn't it?" };
-                string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I'll want my attorney ASAP.", "I'm going to use my right to remain silent." };
-                string[] line10 = { "No problem.", "Works for me!", "Perfect.", "Sure.", "Copy that.", "Okay.", "Great.", "Win-win situation." };
+                string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep.", "Maybe.", "Your choice.", "No.", "Not up to me isn't it?" };
+                string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I want my attorney ASAP.", "I'm going to use my right to remain silent." };
+                string[] line10 = { "No problem.", "Works for me.", "Perfect.", "Sure.", "Copy that...", "Okay.", "Great.", "Win-win situation." };
 
                 int line1Random = random.Next(0, line1.Length);
                 int line2Random = random.Next(0, line2.Length);
