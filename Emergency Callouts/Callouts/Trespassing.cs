@@ -648,7 +648,7 @@ namespace EmergencyCallouts.Callouts
                 if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
                     string[] playerAnswers = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
-                    string[] suspectAnswers = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer", "Ughhhhhh" };
+                    string[] suspectAnswers = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer!", "Ughhhhhh." };
 
                     int playerAnswerRandom = random.Next(playerAnswers.Length);
                     int suspectAnswerRandom = random.Next(suspectAnswers.Length);
