@@ -640,6 +640,7 @@ namespace EmergencyCallouts.Callouts
                 string playerAnswer = string.Empty;
                 string suspectAnswer = string.Empty;
 
+
                 bool acceptsSuggestion = false;
 
                 int chanceAllow = random.Next(1, 101);
@@ -648,7 +649,13 @@ namespace EmergencyCallouts.Callouts
                 {
                     string[] playerAnswers = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
                     string[] suspectAnswers = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer", "Ughhhhhh" };
-                    
+
+                    int playerAnswerRandom = random.Next(playerAnswers.Length);
+                    int suspectAnswerRandom = random.Next(suspectAnswers.Length);
+
+                    playerAnswer = playerAnswers[playerAnswerRandom];
+                    suspectAnswer = suspectAnswers[suspectAnswerRandom];
+
                     acceptsSuggestion = false;
                 }
                 else
@@ -667,9 +674,9 @@ namespace EmergencyCallouts.Callouts
 
                 #region Suspect's Dialogue
                 string[] suspectLine1 = { "So, what are you doing here ", "What were you doing here ", "Why are you here " };
-                string[] suspectLine2 = { "Do you have permission to be here?", "Are you allowed to be here?", "You're not supposed to be here are you?", "You're obviously not allowed to trespass", "You have no business here right?" };
-                string[] suspectLine3 = { "No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!", "Hey please, I know the owner I'm sure he and I can work something out", "Hey man, I know I messed up but I know the owner and we're pretty chill! Can he and I figure something out?" };
-                string[] suspectLine4 = { "I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.", "I'll obviously be contacting the owner and it's up to him.", "It's up to the owner if he wants to press charges.", "It's not up to me to decide that." };
+                string[] suspectLine2 = { "Do you have permission to be here?", "Are you allowed to be here?", "You're not supposed to be here are you?", "You're obviously not allowed to trespass.", "You have no business here right?" };
+                string[] suspectLine3 = { "No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!", "Hey please, I know the owner I'm sure he and I can work something out!", "Hey man, I know I messed up but I know the owner and we're pretty chill! Can he and I figure something out?" };
+                string[] suspectLine4 = { "I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.", "I'll obviously be contacting the owner and it's up to him.", "It's up to the owner if he wants to press charges, not me.", "It's not up to me to decide that." };
                 string[] suspectLine5 = { "Can't you just call him?", "Please just call him!", "Oh no... can you please call him for me?", "Please call him for me!" };
 
                 int suspectLine1Random = random.Next(0, suspectLine1.Length);
@@ -996,7 +1003,7 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                             {
                                 if (!DialogueStarted)
                                 {
@@ -1070,7 +1077,14 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
