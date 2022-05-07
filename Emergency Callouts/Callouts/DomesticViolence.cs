@@ -459,7 +459,7 @@ namespace EmergencyCallouts.Callouts
                                     DialogueStarted = true;
 
                                     // Face the player
-                                    Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                    if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                     // Victim dialogue
                                     if (Suspect.IsCuffed)

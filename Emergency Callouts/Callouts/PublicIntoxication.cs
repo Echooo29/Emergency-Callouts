@@ -213,7 +213,7 @@ namespace EmergencyCallouts.Callouts
 
                                 DialogueStarted = true;
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                 Game.DisplaySubtitle(dialogue[line], 15000);
                                 if (!stopDialogue) { line++; }
