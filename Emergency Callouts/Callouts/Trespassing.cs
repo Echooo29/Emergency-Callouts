@@ -706,7 +706,7 @@ namespace EmergencyCallouts.Callouts
                 string[] ownerDialogueLine3 = { "Hi, we caught a person trespassing on your property.", "Hello, I just caught a person trespassing on your property.", "Hello, I just apprehended someone trespassing on your property." };
                 string[] ownerDialogueLine4 = { "I don't know what his intentions were, but the suspect says he knows you.", "He says that he knows you.", "The person said that you might help him get out of this." };
                 string[] ownerDialogueLine5 = { "What's his name?", "Okay uhm, what's his name?", "What's the name of the person?", "Do you have a name for me?" };
-                string[] ownerDialogueLine6 = { "Give me a second. Hey you, what's your name?", "I'll ask him. Hey what's your name?", "I'll get his name real quick..." };
+                string[] ownerDialogueLine6 = { "Give me a second. ~m~Hey you, what's your name?", "I'll ask him. ~m~Hey what's your name?", "I'll get his name real quick..." };
                 string[] ownerDialogueLine7 = { "It's ", "My name is ", "The name is ", "That would be " };
                 string[] ownerDialogueLine8 = { "His name is ", "The name is ", "It's " };
                 string[] ownerDialogueLine9 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
