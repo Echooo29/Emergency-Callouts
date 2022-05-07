@@ -20,6 +20,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
+        bool CopWalkStyle;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -621,7 +622,7 @@ namespace EmergencyCallouts.Callouts
                 bool stopDialogue2 = false;
                 bool CompletedSuspectDialogue = false;
 
-                // Get Time Of Day Line
+                #region Get Time Of Day Line
                 string timeOfDay;
                 if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
                 {
@@ -635,11 +636,11 @@ namespace EmergencyCallouts.Callouts
                 {
                     timeOfDay = "in the middle of the night?";
                 }
+                #endregion
 
-                // Chance of declining to call property owner
+                #region Chance Handling
                 string playerAnswer = string.Empty;
                 string suspectAnswer = string.Empty;
-
 
                 bool acceptsSuggestion = false;
 
@@ -656,7 +657,7 @@ namespace EmergencyCallouts.Callouts
                     playerAnswer = playerAnswers[playerAnswerRandom];
                     suspectAnswer = suspectAnswers[suspectAnswerRandom];
 
-                    acceptsSuggestion = false;
+                    acceptsSuggestion = true;
                 }
                 else
                 {
@@ -669,8 +670,9 @@ namespace EmergencyCallouts.Callouts
                     playerAnswer = playerAnswers[playerAnswerRandom];
                     suspectAnswer = suspectAnswers[suspectAnswerRandom];
 
-                    acceptsSuggestion = true;
+                    acceptsSuggestion = false;
                 }
+                #endregion
 
                 #region Suspect's Dialogue
                 string[] suspectLine1 = { "So, what are you doing here ", "What were you doing here ", "Why are you here " };
@@ -725,28 +727,35 @@ namespace EmergencyCallouts.Callouts
                 int ownerLine12Random = random.Next(0, ownerDialogueLine12.Length);
 
                 #region Owner Answer
-                string[] ownerAnswer;
+                string ownerAnswer;
 
                 int chanceCharges = random.Next(1, 101);
 
                 if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
-                    ownerAnswer = new[] {
+                    string[] ownerAnswers = new[] {
                         $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}.",
                         "He got caught this time! Good job, have fun with him!",
                         $"{SuspectPersona.Forename}? Doesn't ring a bell, I'd like to press charges, I'll come by the station ASAP.",
                         "Damn it! Let him rot please.",
                     };
+
+                    int ownerAnswersRandom = random.Next(ownerAnswers.Length);
+
+                    ownerAnswer = ownerAnswers[ownerAnswersRandom];
                 }
                 else
                 {
-                    ownerAnswer = new[] {
+                    string[] ownerAnswers = new[] {
                         $"Ugh, I don't have time for this, you can let that person go Officer {PlayerPersona.Surname}",
                         "I made a few mistakes in the past too, I'll give him a second chance.",
                         "I used to be like him back in the day, turned my life around, you can let him go officer.",
                         $"{SuspectPersona.Forename}? You know what? I'll let it slide this time.",
                     };
 
+                    int ownerAnswersRandom = random.Next(ownerAnswers.Length);
+
+                    ownerAnswer = ownerAnswers[ownerAnswersRandom];
                 }
                 #endregion
 
@@ -858,6 +867,13 @@ namespace EmergencyCallouts.Callouts
                                         GameFiber.Sleep(4000);
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
 
+                                        if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)
+                                        {
+                                            CopWalkStyle = true;
+                                            Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
+                                        }
+
+
                                         // Attach phone to player's hand
                                         int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
                                         NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Phone, MainPlayer, boneIndex, 0f, 0f, 0f, 0f, 0f, 0f, true, true, false, false, 2, 1);
@@ -890,6 +906,11 @@ namespace EmergencyCallouts.Callouts
 
                                             MainPlayer.Tasks.Clear();
                                             if (Phone.Exists()) { Phone.Delete(); }
+
+                                            if (CopWalkStyle)
+                                            {
+                                                Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop);
+                                            }
 
                                             GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
