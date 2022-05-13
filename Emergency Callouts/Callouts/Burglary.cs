@@ -522,7 +522,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f)
+                        if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f && Suspect.Exists())
                         {
                             GameFiber.Sleep(7500);
 
@@ -544,7 +544,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed && Suspect.Exists())
                         {
                             if (Settings.AllowController && UIMenu.IsUsingController)
                             {
