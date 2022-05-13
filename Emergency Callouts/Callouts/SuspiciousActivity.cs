@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -694,7 +695,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey))
+                                if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                                 {
                                     if (!DialogueStarted)
                                     {
@@ -737,7 +738,14 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect~s~.");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
