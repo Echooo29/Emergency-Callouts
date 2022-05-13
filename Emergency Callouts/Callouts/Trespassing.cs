@@ -712,7 +712,7 @@ namespace EmergencyCallouts.Callouts
                 string[] ownerDialogueLine9 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
                 string[] ownerDialogueLine10 = { "You too Officer... uhh...", "You too, and what was your name again?", "Thanks, what was your name again?" };
                 string[] ownerDialogueLine11 = { "It's Officer ", "I'm Officer " };
-                string[] ownerDialogueLine12 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
+                string[] ownerDialogueLine12 = { "Okay, goodbye officer.", "Okay, have a nice day.", "Okay then, have a good day sir." };
 
                 int ownerLine2Random = random.Next(0, ownerDialogueLine2.Length);
                 int ownerLine3Random = random.Next(0, ownerDialogueLine3.Length);
