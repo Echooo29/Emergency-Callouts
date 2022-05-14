@@ -13,16 +13,14 @@ Add possible new audio files
 Update comment version
 
 [TRELLO]
-Check if changelog is correct with what's in the Finished section
+Check Github for completed errors and recent commits
 Archive all cards in Finished list
 
 [DEVELOPING FOLDER]
 Add the new ZIP file to the versions folder
-Update Changelog.txt
 
 [DISCORD]
-Update #Changelog
-Remove Early Access files from old version
+Prepare #updates
 
 [GITHUB]
 Make sure you pushed
@@ -34,8 +32,6 @@ Update the version textbox
 Update the changelog
 Publish
 Update Patch Notes
-Clear Known Issues
-Remove the next update changelog trello link
 
 [POST-UPDATE]
 Change build mode to Debug
