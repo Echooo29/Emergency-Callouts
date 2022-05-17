@@ -10,7 +10,7 @@ namespace EmergencyCallouts.Essential
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
         internal static bool Burglary = true;
-        internal static bool HostageSitation = true;
+        internal static bool SuspiciousActivity = true;
 
         // Measurements
         internal static int SearchAreaSize = 60;
@@ -19,7 +19,9 @@ namespace EmergencyCallouts.Essential
 
         // Keys
         internal static Keys InteractKey = Keys.Y;
+        internal static ControllerButtons ControllerInteractKey = ControllerButtons.DPadLeft;
         internal static Keys EndCalloutKey = Keys.End;
+        internal static bool AllowController = true;
 
         // Chances
         internal static int ChanceOfPropertyDamage = 75;
@@ -31,8 +33,6 @@ namespace EmergencyCallouts.Essential
 
         internal static void Initialize()
         {
-            Game.LogTrivial("[Emergency Callouts]: Loading settings");
-
             // Create the INI file
             var iniFile = new InitializationFile(Project.SettingsPath);
             iniFile.Create();
@@ -42,7 +42,7 @@ namespace EmergencyCallouts.Essential
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
             Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
-            HostageSitation = iniFile.ReadBoolean("Callouts", "HostageSitation", HostageSitation);
+            SuspiciousActivity = iniFile.ReadBoolean("Callouts", "SuspiciousActivity", SuspiciousActivity);
 
             // Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);

@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -24,6 +25,7 @@ namespace EmergencyCallouts.Callouts
         bool DialogueStarted;
         bool DialogueEnded;
         bool CheckedForDamage;
+        bool CopWalkStyle;
 
         string DamageLine;
         string DamageLine2;
@@ -222,17 +224,19 @@ namespace EmergencyCallouts.Callouts
         public override void OnCalloutNotAccepted()
         {
             Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} ignored the callout");
+
             if (!Other.PluginChecker.IsCalloutInterfaceRunning)
             {
                 Functions.PlayScannerAudio("PED_RESPONDING_DISPATCH");
             }
+
             base.OnCalloutNotAccepted();
         }
 
         public override bool OnCalloutAccepted()
         {
             try
-            {                
+            {
                 // Positioning
                 #region Positioning
                 if (CalloutPosition == CalloutPositions[0]) // Mirror Park
@@ -410,18 +414,36 @@ namespace EmergencyCallouts.Callouts
             {
                 int line = 0;
 
+                string[] line1 = { "So, why did you do it?", "Why would you do this?", "Why are you stealing from other people", "So... what's your reason?" };
+                string[] line2 = { "For the money!", "Easy cash!", "My family man, we're broke!", "Child alimony sucks dude!", "Getting evicted tomorrow if I don't pay them right now.", "Hospital bills!" };
+                string[] line3 = { "So you don't have a job?", "I'm assuming you don't have a job then?", "So no work for you?" };
+                string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me as an employee.", "Correct.", "That's right." };
+                string[] line7 = { "You expect me to believe that?", "I don't believe a word of it.", "I don't buy it." };
+                string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep.", "Maybe.", "Your choice.", "No.", "Not up to me isn't it?" };
+                string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I want my attorney ASAP.", "I'm going to use my right to remain silent." };
+                string[] line10 = { "No problem.", "Works for me.", "Perfect.", "Sure.", "Copy that...", "Okay.", "Great.", "Win-win situation." };
+
+                int line1Random = random.Next(0, line1.Length);
+                int line2Random = random.Next(0, line2.Length);
+                int line3Random = random.Next(0, line3.Length);
+                int line4Random = random.Next(0, line4.Length);
+                int line7Random = random.Next(0, line7.Length);
+                int line8Random = random.Next(0, line8.Length);
+                int line9Random = random.Next(0, line9.Length);
+                int line10Random = random.Next(0, line10.Length);
+
                 string[] dialogue =
                 {
-                    "~b~You~s~: So, why did you do it?",
-                    "~r~Suspect~s~: For the money...",
-                    "~b~You~s~: So you don't have a job?",
-                    "~r~Suspect~s~: Yeah, I don't.",
+                    "~b~You~s~: " + line1[line1Random],
+                    "~r~Suspect~s~: " + line2[line2Random],
+                    "~b~You~s~: " + line3[line3Random],
+                    "~r~Suspect~s~: " + line4[line4Random],
                     "~b~You~s~: " + DamageLine,
                     "~r~Suspect~s~: " + DamageLine2,
-                    "~b~You~s~: You expect me to believe that?",
-                    "~r~Suspect~s~: Nah, cops only hear what they want to hear.",
-                    "~r~Suspect~s~: I'm staying silent until I can speak to my lawyer.",
-                    "~b~You~s~: Not a problem.",
+                    "~b~You~s~: " + line7[line7Random],
+                    "~r~Suspect~s~: " + line8[line8Random],
+                    "~r~Suspect~s~: " + line9[line9Random],
+                    "~b~You~s~: " + line10[line10Random],
                     "~m~dialogue ended",
                 };
 
@@ -436,24 +458,23 @@ namespace EmergencyCallouts.Callouts
                             if (!DialogueStarted && !FirstTime)
                             {
                                 GameFiber.Sleep(3000);
-                                Game.DisplaySubtitle("Speak to the ~r~suspect~s~.", 10000);
+                                Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
                                 FirstTime = true;
                             }
 
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey) && FirstTime)
+                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController)) && FirstTime)
                                 {
                                     if (!DialogueStarted)
                                     {
-                                        Suspect.Tasks.Clear();
+                                        if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                     }
 
                                     DialogueStarted = true;
-
-                                    Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                     Game.DisplaySubtitle(dialogue[line], 15000);
                                     line++;
@@ -469,7 +490,14 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~r~suspect");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~r~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~r~suspect");
+                                    }
                                 }
                             }
                         }
@@ -494,11 +522,11 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed && Suspect.IsAlive)
+                        if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f && Suspect.Exists())
                         {
                             GameFiber.Sleep(7500);
 
-                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage~s~.", 10000);
+                            Game.DisplaySubtitle("Inspect the ~p~door~s~ for any ~y~property damage", 10000);
 
                             DamagedPropertyBlip = new Blip(DamagedProperty);
                             DamagedPropertyBlip.SetColorPurple();
@@ -506,18 +534,36 @@ namespace EmergencyCallouts.Callouts
                             DamagedPropertyBlip.Flash(500, -1);
                             break;
                         }
+                        else if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) >= 100f)
+                        {
+                            Handle.AdvancedEndingSequence();
+                        }
                     }
 
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
+                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed && Suspect.Exists())
                         {
-                            Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to look for any ~y~property damage~s~.");
-
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Settings.AllowController && UIMenu.IsUsingController)
                             {
+                                Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
+                            }
+                            else
+                            {
+                                Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to look for any ~y~property damage");
+                            }
+
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
+                            {
+                                
+                                if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)
+                                {
+                                    CopWalkStyle = true;
+                                    Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
+                                }
+
                                 // Play Animation
                                 MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("anim@amb@business@bgen@bgen_inspecting@"), "inspecting_high_idle_02_inspector", -1, 2f, -1f, 0, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
 
@@ -534,7 +580,7 @@ namespace EmergencyCallouts.Callouts
                                 if (chance <= Settings.ChanceOfPropertyDamage) // Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door~s~.");
+                                    Game.DisplayHelp("You found ~r~damage~s~ on the ~p~door");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
@@ -542,6 +588,8 @@ namespace EmergencyCallouts.Callouts
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
+                                    Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
 
                                     DamageLine = "Anyway, you also left some dagage behind.";
                                     DamageLine2 = "Bro that was already there when I came here!";
@@ -551,14 +599,20 @@ namespace EmergencyCallouts.Callouts
                                 else // No Damage
                                 {
                                     GameFiber.Sleep(15000);
-                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door~s~.");
+                                    Game.DisplayHelp("You found ~g~no damage~s~ on the ~p~door");
 
                                     GameFiber.Sleep(3000);
                                     MainPlayer.Tasks.Clear();
 
+                                    GameFiber.Sleep(1000);
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
+
+                                    if (CopWalkStyle)
+                                    {
+                                        Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop);
+                                    }
 
                                     DamageLine = "Luckily for you I didn't find any damage.";
                                     DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
@@ -589,6 +643,9 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 1
             try
             {
+                // Check For Damages
+                CheckForDamage();
+
                 // Retrieve Ped Positions
                 RetrievePedPositions();
 
@@ -646,7 +703,7 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        
+
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
                         {
                             // Clipping Through Wall Fix
@@ -673,7 +730,7 @@ namespace EmergencyCallouts.Callouts
         {
             #region Scenario 3
             RetrievePedPositions();
-            
+
             CheckForDamage();
 
             GameFiber.StartNew(delegate
@@ -693,19 +750,20 @@ namespace EmergencyCallouts.Callouts
                         Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
 
                         break;
-                    }          
+                    }
                 }
             });
             #endregion
         }
 
-        public override void Process() 
+        public override void Process()
         {
             base.Process();
             try
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
@@ -739,7 +797,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
-                    
+
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
                 }
                 #endregion
@@ -808,6 +866,7 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
             CalloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }

@@ -3,6 +3,8 @@ using LSPD_First_Response.Engine.Scripting.Entities;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -331,7 +333,7 @@ namespace EmergencyCallouts.Callouts
             if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
             {
                 int num = random.Next(VinewoodHillsFightPositions.Length);
-                
+
                 Victim.Position = VinewoodHillsFightPositions[num];
                 Victim.Heading = VinewoodHillsFightHeadings[num];
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
@@ -440,24 +442,24 @@ namespace EmergencyCallouts.Callouts
                             if (!DialogueStarted && !FirstTime)
                             {
                                 GameFiber.Sleep(5000);
-                                Game.DisplaySubtitle("Speak to the ~o~victim~s~.", 10000);
+                                Game.DisplaySubtitle("Speak to the ~o~victim", 10000);
                                 FirstTime = true;
                             }
 
                             if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
                             {
-                                if (Game.IsKeyDown(Settings.InteractKey))
+                                if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                                 {
                                     if (!DialogueStarted)
                                     {
-                                        Victim.Tasks.Clear();
+                                        if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.Clear(); }
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
                                     }
 
                                     DialogueStarted = true;
 
                                     // Face the player
-                                    Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                    if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                     // Victim dialogue
                                     if (Suspect.IsCuffed)
@@ -522,7 +524,14 @@ namespace EmergencyCallouts.Callouts
                                 }
                                 else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~o~victim");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~o~victim");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~o~victim");
+                                    }
                                 }
                             }
                         }
@@ -553,7 +562,7 @@ namespace EmergencyCallouts.Callouts
 
                 // Victim Cowering
                 Victim.Tasks.Cower(-1);
-                
+
                 // Suspect Fighting Victim
                 Suspect.Tasks.FightAgainst(Victim);
 
@@ -701,6 +710,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.ManualEnding();
                 Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
                 Handle.PreventPickupCrash(Suspect, Victim);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
@@ -821,6 +831,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
             CalloutActive = false;
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Victim.Exists()) { Victim.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }

@@ -60,9 +60,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\RagePluginHookSDK.dll</HintPath>
     </Reference>
-    <Reference Include="StopThePed">
-      <HintPath>..\..\..\..\..\Documents\Visual Studio 2022\References\StopThePed.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -76,8 +73,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callouts\DomesticViolence.cs" />
-    <Compile Include="Callouts\HostageSituation.cs" />
     <Compile Include="Callouts\PublicIntoxication.cs" />
+    <Compile Include="Callouts\SuspiciousActivity.cs" />
     <Compile Include="Callouts\Trespassing.cs" />
     <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Essential\Helper.cs" />
@@ -95,6 +92,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Other\Release.txt" />
+    <Content Include="Other\Testing.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET GTA="C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V"
+
+if exist %25GTA%25 (
+  copy /Y "$(TargetDir)$(ProjectName).dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\Plugins\LSPDFR\$(ProjectName).dll"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -4,6 +4,7 @@ using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using Rage.Native;
+using RAGENativeUI;
 using System;
 using System.Reflection;
 using static EmergencyCallouts.Essential.Color;
@@ -19,6 +20,7 @@ namespace EmergencyCallouts.Callouts
         bool PedFound;
         bool PedDetained;
         bool DialogueStarted;
+        bool CopWalkStyle;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -620,7 +622,7 @@ namespace EmergencyCallouts.Callouts
                 bool stopDialogue2 = false;
                 bool CompletedSuspectDialogue = false;
 
-                // Get Time Of Day Line
+                #region Get Time Of Day Line
                 string timeOfDay;
                 if (World.TimeOfDay.TotalHours >= 6 && World.TimeOfDay.TotalHours < 12)
                 {
@@ -634,85 +636,147 @@ namespace EmergencyCallouts.Callouts
                 {
                     timeOfDay = "in the middle of the night?";
                 }
+                #endregion
 
-                // Chance of declining to call property owner
+                #region Chance Handling
                 string playerAnswer = string.Empty;
                 string suspectAnswer = string.Empty;
+
                 bool acceptsSuggestion = false;
 
                 int chanceAllow = random.Next(1, 101);
 
                 if (chanceAllow <= Settings.ChanceOfCallingOwner)
                 {
-                    playerAnswer = "Of course not, what are you thinking?";
-                    suspectAnswer = "Screw you man, we'll see in court if he presses charges.";
-                    acceptsSuggestion = false;
-                }
-                else
-                {
-                    playerAnswer = "Hmm... okay then.";
-                    suspectAnswer = "We need more officers like you sir!";
+                    string[] playerAnswers = new[] { "Hmm... okay then.", "You know what? Fine.", "Sure.", "Seems like it's your lucky day." };
+                    string[] suspectAnswers = new[] { "We need more officers like you sir!", "Hell yeah!", "Thank god that you are the responding officer!", "I knew it! Thank you!", "YESSS!" };
+
+                    int playerAnswerRandom = random.Next(playerAnswers.Length);
+                    int suspectAnswerRandom = random.Next(suspectAnswers.Length);
+
+                    playerAnswer = playerAnswers[playerAnswerRandom];
+                    suspectAnswer = suspectAnswers[suspectAnswerRandom];
+
                     acceptsSuggestion = true;
                 }
-
-                // Owner response line 2
-                string lineOwner = string.Empty;
-
-                int chance = random.Next(1, 101);
-
-                if (chance <= 50)
-                {
-                    lineOwner = "Again?! What did my son do now?";
-                }
                 else
                 {
-                    lineOwner = "Oh oh... Did I do something wrong?";
-                }
+                    string[] playerAnswers = new[] { "Ofcourse not, what are you thinking?", "No that'd be unprofessional.", "No?", "Uhm, I'm not even gonna answer that." };
+                    string[] suspectAnswers = new[] { "Screw you man, we'll see in court if he presses charges.", "Well I guess that's that.", "That's just great.", "Ofcourse that's your answer!", "Ughhhhhh." };
 
-                // Owner Line
-                string lineOwner2 = string.Empty;
+                    int playerAnswerRandom = random.Next(playerAnswers.Length);
+                    int suspectAnswerRandom = random.Next(suspectAnswers.Length);
+
+                    playerAnswer = playerAnswers[playerAnswerRandom];
+                    suspectAnswer = suspectAnswers[suspectAnswerRandom];
+
+                    acceptsSuggestion = false;
+                }
+                #endregion
+
+                #region Suspect's Dialogue
+                string[] suspectLine1 = { "So, what are you doing here ", "What were you doing here ", "Why are you here " };
+                string[] suspectLine2 = { "Do you have permission to be here?", "Are you allowed to be here?", "You're not supposed to be here are you?", "You're obviously not allowed to trespass.", "You have no business here right?" };
+                string[] suspectLine3 = { "No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!", "Hey please, I know the owner I'm sure he and I can work something out!", "Hey man, I know I messed up but I know the owner and we're pretty chill! Can he and I figure something out?" };
+                string[] suspectLine4 = { "I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.", "I'll obviously be contacting the owner and it's up to him.", "It's up to the owner if he wants to press charges, not me.", "It's not up to me to decide that." };
+                string[] suspectLine5 = { "Can't you just call him?", "Please just call him!", "Oh no... can you please call him for me?", "Please call him for me!" };
+
+                int suspectLine1Random = random.Next(0, suspectLine1.Length);
+                int suspectLine2Random = random.Next(0, suspectLine2.Length);
+                int suspectLine3Random = random.Next(0, suspectLine3.Length);
+                int suspectLine4Random = random.Next(0, suspectLine4.Length);
+                int suspectLine5Random = random.Next(0, suspectLine5.Length);
+
+
+                string[] dialogueSuspect =
+                {
+                    "~b~You~s~: " + suspectLine1[suspectLine1Random] + timeOfDay,
+                    "~b~You~s~: " + suspectLine2[suspectLine2Random],
+                    "~y~Suspect~s~: " + suspectLine3[suspectLine3Random],
+                    "~b~You~s~: " + suspectLine4[suspectLine4Random],
+                    "~y~Suspect~s~: " + suspectLine5[suspectLine5Random],
+                    "~b~You~s~: " + playerAnswer,
+                    "~y~Suspect~s~: " + suspectAnswer,
+                    "~m~Suspect Dialogue Ended",
+                };
+                #endregion
+
+                #region Owner's Dialogue
+                string[] ownerDialogueLine2 = { "Hello, how can I help?", "Good day officer, how can I help you?", "Uh-oh, uhmm... what is it?", "Oh that's not good, what happened?", "Police on the line is never good, what happened?", "Hello, what happened?", "Hi, so what happened?" };
+                string[] ownerDialogueLine3 = { "Hi, we caught a person trespassing on your property.", "Hello, I just caught a person trespassing on your property.", "Hello, I just apprehended someone trespassing on your property." };
+                string[] ownerDialogueLine4 = { "I don't know what his intentions were, but the suspect says he knows you.", "He says that he knows you.", "The person said that you might help him get out of this." };
+                string[] ownerDialogueLine5 = { "What's his name?", "Okay uhm, what's his name?", "What's the name of the person?", "Do you have a name for me?" };
+                string[] ownerDialogueLine6 = { "Give me a second. ~m~Hey you, what's your name?", "I'll ask him. ~m~Hey what's your name?", "I'll get his name real quick..." };
+                string[] ownerDialogueLine7 = { "It's ", "My name is ", "The name is ", "That would be " };
+                string[] ownerDialogueLine8 = { "His name is ", "The name is ", "It's " };
+                string[] ownerDialogueLine9 = { "Okay, then I'm going ahead and do that, have a nice day sir.", "I'll go do that then, have a nice day sir.", "Okay then, have a good day sir." };
+                string[] ownerDialogueLine10 = { "You too Officer... uhh...", "You too, and what was your name again?", "Thanks, what was your name again?" };
+                string[] ownerDialogueLine11 = { "It's Officer ", "I'm Officer " };
+                string[] ownerDialogueLine12 = { "Okay, goodbye officer.", "Okay, have a nice day.", "Okay then, have a good day sir." };
+
+                int ownerLine2Random = random.Next(0, ownerDialogueLine2.Length);
+                int ownerLine3Random = random.Next(0, ownerDialogueLine3.Length);
+                int ownerLine4Random = random.Next(0, ownerDialogueLine4.Length);
+                int ownerLine5Random = random.Next(0, ownerDialogueLine5.Length);
+                int ownerLine6Random = random.Next(0, ownerDialogueLine6.Length);
+                int ownerLine7Random = random.Next(0, ownerDialogueLine7.Length);
+                int ownerLine8Random = random.Next(0, ownerDialogueLine8.Length);
+                int ownerLine9Random = random.Next(0, ownerDialogueLine9.Length);
+                int ownerLine10Random = random.Next(0, ownerDialogueLine10.Length);
+                int ownerLine11Random = random.Next(0, ownerDialogueLine11.Length);
+                int ownerLine12Random = random.Next(0, ownerDialogueLine12.Length);
+
+                #region Owner Answer
+                string ownerAnswer;
 
                 int chanceCharges = random.Next(1, 101);
 
                 if (chanceCharges <= Settings.ChanceOfPressingCharges)
                 {
-                    lineOwner2 = $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}";
+                    string[] ownerAnswers = new[] {
+                        $"{SuspectPersona.Forename}? Yeah screw that guy, you can arrest that person Officer {PlayerPersona.Surname}.",
+                        "He got caught this time! Good job, have fun with him!",
+                        $"{SuspectPersona.Forename}? Doesn't ring a bell, I'd like to press charges, I'll come by the station ASAP.",
+                        "Damn it! Let him rot please.",
+                    };
+
+                    int ownerAnswersRandom = random.Next(ownerAnswers.Length);
+
+                    ownerAnswer = ownerAnswers[ownerAnswersRandom];
                 }
                 else
                 {
-                    lineOwner2 = $"Ugh, I don't have time for this, you may let the person go Officer {PlayerPersona.Surname}";
-                }
+                    string[] ownerAnswers = new[] {
+                        $"Ugh, I don't have time for this, you can let that person go Officer {PlayerPersona.Surname}",
+                        "I made a few mistakes in the past too, I'll give him a second chance.",
+                        "I used to be like him back in the day, turned my life around, you can let him go officer.",
+                        $"{SuspectPersona.Forename}? You know what? I'll let it slide this time.",
+                    };
 
-                string[] dialogueSuspect =
-                {
-                    "~b~You~s~: So, what are you doing here " + timeOfDay,
-                    "~y~Suspect~s~: Man, I'm only looking for some stuff!",
-                    "~b~You~s~: Do you have permission to be here?",
-                    "~y~Suspect~s~: No, but I know the owner.. we chill man, don't ruin my friendship, at least don't tell him!",
-                    "~b~You~s~: I'll be notifying the owner soon, I can tell he's not gonna be happy to hear that you're stealing from him.",
-                    "~y~Suspect~s~: Can't you just call him?",
-                    "~b~You~s~: " + playerAnswer,
-                    "~y~Suspect~s~: " + suspectAnswer,
-                    "~m~Suspect Dialogue Ended",
-                };
+                    int ownerAnswersRandom = random.Next(ownerAnswers.Length);
+
+                    ownerAnswer = ownerAnswers[ownerAnswersRandom];
+                }
+                #endregion
 
                 string[] dialogueOwner =
                 {
                     $"~b~You~s~: Hello sir, my name is {PlayerPersona.FullName}, I'm with the police department.",
-                    "~g~Owner~s~: " + lineOwner,
-                    "~b~You~s~: Nothing sir, we caught a person trespassing on your property.",
-                    "~b~You~s~: I don't know what his intentions were, but he says he knows you.",
-                    "~g~Owner~s~: What's his name?",
-                    "~b~You~s~: Give me a second. Hey you, what's your name?",
-                    $"~r~Suspect~s~: It's {SuspectPersona.Forename}.",
-                    $"~b~You~s~: His name is {SuspectPersona.Forename}.",
-                    "~g~Owner~s~: " + lineOwner2,
-                    "~b~You~s~: Okay, then I'm going ahead and do that, have a nice day sir.",
-                    "~g~Owner~s~: You too Officer... uhh...",
-                    $"~b~You~s~: It's Officer {PlayerPersona.Surname}.",
-                    "~g~Owner~s~: Okay, you too have a nice day.",
+                    "~g~Owner~s~: " + ownerDialogueLine2[ownerLine2Random],
+                    "~b~You~s~: " + ownerDialogueLine3[ownerLine3Random],
+                    "~b~You~s~: " + ownerDialogueLine4[ownerLine4Random],
+                    "~g~Owner~s~: " + ownerDialogueLine5[ownerLine5Random],
+                    "~b~You~s~: " + ownerDialogueLine6[ownerLine6Random],
+                    $"~r~Suspect~s~: " + ownerDialogueLine7[ownerLine7Random] + SuspectPersona.Forename,
+                    $"~b~You~s~: " + ownerDialogueLine8[ownerLine8Random] + SuspectPersona.Forename,
+                    "~g~Owner~s~: " + ownerAnswer,
+                    "~b~You~s~: " + ownerDialogueLine9[ownerLine9Random],
+                    "~g~Owner~s~: " + ownerDialogueLine10[ownerLine10Random],
+                    $"~b~You~s~: " + ownerDialogueLine11[ownerLine11Random] + PlayerPersona.Surname,
+                    "~g~Owner~s~: " + ownerDialogueLine12[ownerLine12Random],
                     "~m~Call Ended",
                 };
+                #endregion
 
                 int lineSuspectCount = 0;
                 int lineOwnerCount = 0;
@@ -737,18 +801,19 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.IsOnFoot && !CompletedSuspectDialogue)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Suspect.Tasks.Clear();
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                
+                                if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                 Game.DisplaySubtitle(dialogueSuspect[lineSuspectCount], 15000);
                                 if (!stopDialogue) { lineSuspectCount++; }
@@ -769,7 +834,14 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (!DialogueStarted)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
@@ -794,6 +866,13 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         GameFiber.Sleep(4000);
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with Owner");
+
+                                        if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)
+                                        {
+                                            CopWalkStyle = true;
+                                            Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
+                                        }
+
 
                                         // Attach phone to player's hand
                                         int boneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(MainPlayer, (int)PedBoneId.RightPhHand);
@@ -827,6 +906,11 @@ namespace EmergencyCallouts.Callouts
 
                                             MainPlayer.Tasks.Clear();
                                             if (Phone.Exists()) { Phone.Delete(); }
+
+                                            if (CopWalkStyle)
+                                            {
+                                                Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop);
+                                            }
 
                                             GameFiber.Sleep(3000);
                                             Handle.AdvancedEndingSequence();
@@ -889,7 +973,7 @@ namespace EmergencyCallouts.Callouts
             }
             #endregion
         }
-       
+
         private void Scenario2() // Manager
         {
             #region Scenario 2
@@ -907,8 +991,9 @@ namespace EmergencyCallouts.Callouts
                     "~g~Person~s~: A few minutes ago, when my shift started.",
                     $"~b~You~s~: Then the caller must've made a mistake.",
                     "~g~Person~s~: Well, I'm glad he called, we actually have alot of kids sneaking around here.",
-                    $"~b~You~s~: Okay, well, I'm going back out on patrol, see you later!",
-                    "~g~Person~s~: Goodbye!",
+                    $"~b~You~s~: Okay, I'm going to have a look around and make sure there is no-one else.",
+                    "~g~Person~s~: Okay, bye.",
+                    $"~b~You~s~: Goodbye."
                 };
 
                 int line = 0;
@@ -940,18 +1025,19 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) < 3f && PlayerArrived && Suspect.IsAlive)
                         {
-                            if (Game.IsKeyDown(Settings.InteractKey))
+                            if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                             {
                                 if (!DialogueStarted)
                                 {
                                     if (Clipboard.Exists()) { Clipboard.Delete(); }
-                                    Suspect.Tasks.Clear();
+                                    if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
+
                                     Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                 }
 
                                 DialogueStarted = true;
 
-                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                 Game.DisplaySubtitle(dialogue[line], 15000);
                                 line++;
@@ -1013,7 +1099,14 @@ namespace EmergencyCallouts.Callouts
                             {
                                 if (DialogueStarted == false)
                                 {
-                                    Game.DisplayHelp($"Press ~y~{Settings.InteractKey}~s~ to talk to the ~y~suspect");
+                                    if (Settings.AllowController && UIMenu.IsUsingController)
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.ControllerInteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
+                                    else
+                                    {
+                                        Game.DisplayHelp($"Press ~{Settings.InteractKey.GetInstructionalId()}~ to talk to the ~y~suspect");
+                                    }
                                 }
                             }
                         }
@@ -1079,6 +1172,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
+                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
@@ -1091,7 +1185,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~trespasser~s~ in the ~y~area~s~.", 10000);
-                    
+
                     // Delete EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
