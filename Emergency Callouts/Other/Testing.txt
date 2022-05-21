@@ -1,3 +1,0 @@
-﻿Go far away from callout
-Test arresting with vanilla and StopThePed
-Test what happens when suspect is dead

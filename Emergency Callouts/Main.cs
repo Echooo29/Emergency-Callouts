@@ -1,4 +1,5 @@
-﻿using EmergencyCallouts.Essential;
+﻿using static EmergencyCallouts.Essential.Helper;
+using EmergencyCallouts.Essential;
 using LSPD_First_Response.Mod.API;
 using Rage;
 
@@ -10,12 +11,12 @@ namespace EmergencyCallouts
         {
             Functions.OnOnDutyStateChanged += OnOnDutyStateChangedHandler;
 
-            Game.LogTrivial("[Emergency Callouts]: Successfully Loaded v" + Project.LocalVersion);
+            Game.LogTrivial("[Emergency Callouts]: Successfully loaded v" + LocalVersion);
         }
 
         public override void Finally()
         {
-            Game.LogTrivial("[Emergency Callouts]: Successfully Unloaded");
+            Game.LogTrivial("[Emergency Callouts]: Successfully unloaded");
         }
 
         private static void OnOnDutyStateChangedHandler(bool OnDuty)
@@ -23,26 +24,14 @@ namespace EmergencyCallouts
             if (OnDuty)
             {
                 Settings.Initialize();
+                UpdateChecker.IsUpdateAvailable();
                 RegisterCallouts();
-                UpdateChecker.UpdateAvailable();
-
-                if (Functions.GetPlayerRadioAction() == LSPD_First_Response.Mod.Menus.EPoliceRadioAction.None)
-                {
-                    Game.LogTrivial("[Emergency Callouts]: User didn't set a radio action");
-                    Functions.SetPlayerRadioAction(LSPD_First_Response.Mod.Menus.EPoliceRadioAction.Chest);
-                    Game.LogTrivial("[Emergency Callouts]: Set a radio action for user");
-                }
             }
         }
 
         private static void RegisterCallouts()
         {
-            if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
-            if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
-            if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
-            if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
-
-            Game.LogTrivial("[Emergency Callouts]: Registered 4 callouts");
+            Game.LogTrivial("[Emergency Callouts]: Registered x callouts");
         }
     }
 }
