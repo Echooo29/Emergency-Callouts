@@ -72,17 +72,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Callouts\DomesticViolence.cs" />
+    <Compile Include="Callouts\PublicIntoxication.cs" />
+    <Compile Include="Callouts\Trespassing.cs" />
+    <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Essential\Helper.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Essential\Settings.cs" />
     <Compile Include="Essential\UpdateChecker.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Other\CalloutInterfaceFunction.cs" />
+    <Compile Include="Other\PluginChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\Emergency Callouts.ini" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Callouts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Other\Release.txt" />
+    <Content Include="Other\Testing.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
