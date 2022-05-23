@@ -192,7 +192,7 @@ namespace EmergencyCallouts.Essential
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
                 
-                if (!Settings.EarlyAccess)
+                if (!Settings.EarlyAccess && !UpdateChecker.UpdateAvailable())
                 {
                     try
                     {
