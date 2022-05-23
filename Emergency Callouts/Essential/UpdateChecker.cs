@@ -17,33 +17,31 @@ namespace EmergencyCallouts.Essential
 
             try
             {
-                Game.LogTrivial("[Emergency Callouts]: Checking for updates");
-
                 OnlineVersion = webClient.DownloadString(OnlineVersionURI).Trim();
             }
             catch (WebException)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates, ~y~Possible network error.");
-                Game.LogTrivial("[Emergency Callouts]: Checked for updates; Failed to check");
+                Game.LogTrivial("[Emergency Callouts]: Failed to check for updates");
                 ExceptionOccured = true;
             }
 
             if (OnlineVersion != Project.LocalVersion && !Settings.EarlyAccess && !ExceptionOccured)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", $"~r~v{Project.LocalVersion} ~c~by Faya", $"Found update ~g~v{OnlineVersion} ~s~available for you!");
-                Game.LogTrivial("[Emergency Callouts]: Checked for updates; Found an update");
+                Game.LogTrivial("[Emergency Callouts]: Found an update available");
                 return true;
             }
             else if (Settings.EarlyAccess)
             {
                 Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
-                Game.LogTrivial("[Emergency Callouts]: Checked for updates; Early Access Loaded");
+                Game.LogTrivial("[Emergency Callouts]: Loaded early access");
                 return false;
             }
             else
             {
                 Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~c~by Faya", "~y~Reporting for duty!");
-                Game.LogTrivial("[Emergency Callouts]: Checked for updates; None available");
+                Game.LogTrivial("[Emergency Callouts]: No updates available");
                 return false;
             }
         }
