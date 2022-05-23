@@ -8,7 +8,6 @@ namespace EmergencyCallouts.Essential
     {
         internal static string OnlineVersion = string.Empty;
         private static bool ExceptionOccured;
-        private static string EarlyAccessExtension = "";
 
         internal static bool UpdateAvailable()
         {
@@ -34,7 +33,7 @@ namespace EmergencyCallouts.Essential
             }
             else if (Settings.EarlyAccess)
             {
-                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion}-beta{EarlyAccessExtension} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
+                Game.DisplayNotification("dia_police", "dia_police", "Emergency Callouts", $"~g~v{Project.LocalVersion} ~c~by Faya", $"~y~Early Access~s~ ready for use!");
                 Game.LogTrivial("[Emergency Callouts]: Loaded early access");
                 return false;
             }
