@@ -172,6 +172,7 @@ namespace EmergencyCallouts.Callouts
                 EntranceBlip.SetColorYellow();
                 EntranceBlip.IsRouteEnabled = true;
 
+                // Tasks
                 Manager.Tasks.FightAgainst(Customer);
                 Customer.Tasks.FightAgainst(Manager);
 
