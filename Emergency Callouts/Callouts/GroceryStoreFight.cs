@@ -96,7 +96,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutArea = World.GetStreetName(CalloutPosition);
             CalloutMessage = "Grocery Store Fight";
-            CalloutAdvisory = "The cashier called for a fight between a customer and the manager.";
+            CalloutAdvisory = "The cashier reported a fight between a customer and the manager.";
             CalloutScenario = random.Next(1, 4);
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_ASSAULT IN_OR_ON_POSITION", CalloutPosition);
