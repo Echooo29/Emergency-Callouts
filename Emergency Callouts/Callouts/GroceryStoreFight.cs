@@ -32,6 +32,7 @@ namespace EmergencyCallouts.Callouts
         Vector3 FightPosition;
         Vector3 CashierPosition;
 
+        #region Positions
         private Vector3[] CalloutPositions = new Vector3[] 
         {
             new Vector3(-711.9525f, -921.0374f, 18.60401f), 
@@ -62,9 +63,11 @@ namespace EmergencyCallouts.Callouts
             new Vector3(-90.5f, 6416.4f, 31f),
             new Vector3(2566f, 384f, 108.5f)
         };
+        #endregion
 
         public override bool OnBeforeCalloutDisplayed()
         {
+            #region Position Retrieval
             CalloutPosition = new Vector3(0, 0, 3000);
             foreach (Vector3 loc in CalloutPositions)
             {
@@ -91,6 +94,7 @@ namespace EmergencyCallouts.Callouts
                     CashierPosition = loc;
                 }
             }
+            #endregion
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
 
@@ -192,6 +196,8 @@ namespace EmergencyCallouts.Callouts
             {
                 CalloutActive = true;
 
+                Interaction();
+
                 // Scenario Deciding
                 switch (CalloutScenario)
                 {
@@ -211,6 +217,25 @@ namespace EmergencyCallouts.Callouts
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
+        }
+
+        private void Interaction()
+        {
+            GameFiber.StartNew(delegate
+            {
+                while (true)
+                {
+                    GameFiber.Yield();
+
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.K))
+                    {
+                        foreach (Ped ped in World.GetAllPeds())
+                        {
+                            if (!ped.IsPlayer) { ped.Delete(); }
+                        }
+                    }
+                }
+            });
         }
 
         private void Scenario1()
