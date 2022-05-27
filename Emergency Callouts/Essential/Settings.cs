@@ -29,7 +29,7 @@ namespace EmergencyCallouts.Essential
         internal static int ChanceOfCallingOwner = 50;
 
         // Back end
-        internal static bool EarlyAccess = false;
+        internal static bool EarlyAccess = true;
 
         internal static void Initialize()
         {
