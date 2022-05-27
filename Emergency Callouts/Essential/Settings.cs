@@ -10,6 +10,7 @@ namespace EmergencyCallouts.Essential
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
         internal static bool GroceryStoreFight = true;
+        internal static bool Kidnapping = true;
 
         // Measurements
         internal static int SearchAreaSize = 60;
@@ -40,6 +41,7 @@ namespace EmergencyCallouts.Essential
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
             GroceryStoreFight = iniFile.ReadBoolean("Callouts", "GroceryStoreFight", GroceryStoreFight);
+            Kidnapping = iniFile.ReadBoolean("Callouts", "Kidnapping", Kidnapping);
 
             // Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);

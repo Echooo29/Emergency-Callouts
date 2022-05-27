@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Callouts\DomesticViolence.cs" />
     <Compile Include="Callouts\GroceryStoreFight.cs" />
+    <Compile Include="Callouts\Kidnapping.cs" />
     <Compile Include="Callouts\PublicIntoxication.cs" />
     <Compile Include="Callouts\Trespassing.cs" />
     <Compile Include="Essential\Helper.cs" />
