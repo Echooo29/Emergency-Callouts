@@ -9,7 +9,6 @@ namespace EmergencyCallouts.Essential
         internal static bool PublicIntoxication = true;
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
-        internal static bool Burglary = true;
         internal static bool GroceryStoreFight = true;
 
         // Measurements
@@ -24,7 +23,6 @@ namespace EmergencyCallouts.Essential
         internal static bool AllowController = true;
 
         // Chances
-        internal static int ChanceOfPropertyDamage = 75;
         internal static int ChanceOfPressingCharges = 50;
         internal static int ChanceOfCallingOwner = 50;
 
@@ -41,7 +39,6 @@ namespace EmergencyCallouts.Essential
             PublicIntoxication = iniFile.ReadBoolean("Callouts", "PublicIntoxication", PublicIntoxication);
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
-            Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
             GroceryStoreFight = iniFile.ReadBoolean("Callouts", "GroceryStoreFight", GroceryStoreFight);
 
             // Measurements
@@ -54,7 +51,6 @@ namespace EmergencyCallouts.Essential
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Chances
-            ChanceOfPropertyDamage = iniFile.ReadInt32("Chances", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
             ChanceOfPressingCharges = iniFile.ReadInt32("Chances", "ChanceOfPressingCharges", ChanceOfPressingCharges);
             ChanceOfCallingOwner = iniFile.ReadInt32("Chances", "ChanceOfCallingOwner", ChanceOfCallingOwner);
             
