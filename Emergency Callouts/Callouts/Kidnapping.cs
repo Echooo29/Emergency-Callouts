@@ -16,7 +16,6 @@ namespace EmergencyCallouts.Callouts
     public class Kidnapping : Callout
     {
         bool CalloutActive;
-        bool PlayerArrived;
         bool PedFound;
         bool Ped2Found;
         bool PedDetained;
@@ -31,8 +30,6 @@ namespace EmergencyCallouts.Callouts
         Ped Victim;
 
         Blip SearchArea;
-        Blip SuspectBlip;
-        Blip VictimBlip;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -91,20 +88,10 @@ namespace EmergencyCallouts.Callouts
                 Suspect.IsPersistent = true;
                 Suspect.BlockPermanentEvents = true;
 
-                SuspectBlip = Suspect.AttachBlip();
-                SuspectBlip.SetColorRed();
-                SuspectBlip.Scale = (float)Settings.PedBlipScale;
-                SuspectBlip.Alpha = 1f;
-
                 // Victim
                 Victim = new Ped(CalloutPosition);
                 Victim.IsPersistent = true;
                 Victim.BlockPermanentEvents = true;
-
-                VictimBlip = Victim.AttachBlip();
-                VictimBlip.SetColorGreen();
-                VictimBlip.Scale = (float)Settings.PedBlipScale;
-                VictimBlip.Alpha = 0f;
 
                 // Search Area
                 SearchArea = new Blip(CalloutPosition, Settings.SearchAreaSize * 2);
@@ -113,8 +100,8 @@ namespace EmergencyCallouts.Callouts
                 SearchArea.IsRouteEnabled = true;
 
                 Suspect.WarpIntoVehicle(SuspectVehicle, -1);
+                Victim.WarpIntoVehicle(SuspectVehicle, 2);
                 Suspect.Tasks.CruiseWithVehicle(10f);
-                Victim.WarpIntoVehicle(SuspectVehicle, 3);
 
                 CalloutHandler();
             }
@@ -207,63 +194,26 @@ namespace EmergencyCallouts.Callouts
                     LHandle pursuit = Functions.CreatePursuit();
                     Functions.AddPedToPursuit(pursuit, Suspect);
                     Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+
+                    Play.PursuitAudio();
                     PullingOver = true;
                 }
                 #endregion
 
-                #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
-                {
-                    // Set PedFound
-                    PedFound = true;
-
-                    // Enable SuspectBlip
-                    if (Suspect.Exists()) { SuspectBlip.Alpha = 1f; }
-                }
-
-                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
-                {
-                    // Set Ped2Found
-                    Ped2Found = true;
-
-                    // Enable VictimBlip
-                    if (Victim.Exists()) { VictimBlip.Alpha = 1f; }
-                }
-                #endregion
-
-                #region PedDetained
-                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
-                {
-                    // Set PedDetained
-                    PedDetained = true;
-
-                    // Delete SuspectBlip
-                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                    Game.LogTrivial("[Emergency Callouts]: Deleted SuspectBlip");
-                }
-
-                if (Functions.IsPedStoppedByPlayer(Victim) && !Ped2Detained && Victim.Exists())
-                {
-                    // Set Ped2Detained
-                    Ped2Detained = true;
-
-                    // Delete VictimBlip
-                    if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-                    Game.LogTrivial("[Emergency Callouts]: Deleted VictimBlip");
-                }
-                #endregion
-
                 #region Search Area Refresh
-                if (Suspect.Position.DistanceTo(SearchArea.Position) > Settings.SearchAreaSize * 2)
+                if (Suspect.Exists() && Suspect.IsAlive && Suspect.Position.DistanceTo(SearchArea.Position) > Settings.SearchAreaSize * 2)
                 {
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
-                    SearchArea.Position = Suspect.Position.Around2D(10, Settings.SearchAreaSize);
+
                     CalloutPosition = Suspect.Position;
 
                     SearchArea = new Blip(CalloutPosition, Settings.SearchAreaSize * 2);
                     SearchArea.Alpha = 0.5f;
                     SearchArea.SetColorYellow();
                     SearchArea.IsRouteEnabled = true;
+
+                    SearchArea.Position = Suspect.Position.Around2D(10, Settings.SearchAreaSize);
+
                 }
                 #endregion
             }
@@ -282,9 +232,7 @@ namespace EmergencyCallouts.Callouts
 
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
             if (Suspect.Exists()) { Suspect.Dismiss(); }
-            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
             if (Victim.Exists()) { Victim.Delete(); }
-            if (VictimBlip.Exists()) { VictimBlip.Delete(); }
             if (SearchArea.Exists()) { SearchArea.Delete(); }
 
             Display.HideSubtitle();

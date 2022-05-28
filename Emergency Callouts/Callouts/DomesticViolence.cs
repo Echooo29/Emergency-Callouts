@@ -680,7 +680,7 @@ namespace EmergencyCallouts.Callouts
                             // Fight Player
                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
                             GameFiber.Sleep(700);
-                            if (Suspect.IsAlive && Suspect.Exists()) { Suspect.Kill(); }
+                            if (Suspect.Exists() && Suspect.IsAlive) { Suspect.Kill(); }
 
                             // Play gun shot
                             string path = @"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav";
@@ -750,7 +750,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
                 {
                     // Set PedFound
                     PedFound = true;
