@@ -9,8 +9,8 @@ namespace EmergencyCallouts.Essential
         internal static bool PublicIntoxication = true;
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
-        internal static bool GroceryStoreFight = true;
-        internal static bool Kidnapping = true;
+        internal static bool Burglary = true;
+        internal static bool SuspiciousActivity = true;
 
         // Measurements
         internal static int SearchAreaSize = 60;
@@ -24,11 +24,12 @@ namespace EmergencyCallouts.Essential
         internal static bool AllowController = true;
 
         // Chances
+        internal static int ChanceOfPropertyDamage = 75;
         internal static int ChanceOfPressingCharges = 50;
         internal static int ChanceOfCallingOwner = 50;
 
         // Back end
-        internal static bool EarlyAccess = true;
+        internal static bool EarlyAccess = false;
 
         internal static void Initialize()
         {
@@ -40,8 +41,8 @@ namespace EmergencyCallouts.Essential
             PublicIntoxication = iniFile.ReadBoolean("Callouts", "PublicIntoxication", PublicIntoxication);
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
-            GroceryStoreFight = iniFile.ReadBoolean("Callouts", "GroceryStoreFight", GroceryStoreFight);
-            Kidnapping = iniFile.ReadBoolean("Callouts", "Kidnapping", Kidnapping);
+            Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);
+            SuspiciousActivity = iniFile.ReadBoolean("Callouts", "SuspiciousActivity", SuspiciousActivity);
 
             // Measurements
             SearchAreaSize = iniFile.ReadInt32("Measurements", "SearchAreaSize", SearchAreaSize);
@@ -53,6 +54,7 @@ namespace EmergencyCallouts.Essential
             EndCalloutKey = iniFile.ReadEnum("Keybindings", "EndCalloutKey", EndCalloutKey);
 
             // Chances
+            ChanceOfPropertyDamage = iniFile.ReadInt32("Chances", "ChanceOfPropertyDamage", ChanceOfPropertyDamage);
             ChanceOfPressingCharges = iniFile.ReadInt32("Chances", "ChanceOfPressingCharges", ChanceOfPressingCharges);
             ChanceOfCallingOwner = iniFile.ReadInt32("Chances", "ChanceOfCallingOwner", ChanceOfCallingOwner);
             

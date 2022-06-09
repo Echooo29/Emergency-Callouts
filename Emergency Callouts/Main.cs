@@ -40,10 +40,10 @@ namespace EmergencyCallouts
             if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
             if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
             if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
-            if (Settings.Kidnapping) { Functions.RegisterCallout(typeof(Callouts.Kidnapping)); }
-            if (Settings.GroceryStoreFight) { Functions.RegisterCallout(typeof(Callouts.GroceryStoreFight)); }
+            if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
+            if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
 
-            Game.LogTrivial("[Emergency Callouts]: Registered 5 callouts");
+            Game.LogTrivial("[Emergency Callouts]: Registered 4 callouts");
         }
     }
 }
