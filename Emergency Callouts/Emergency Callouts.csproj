@@ -72,9 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Callouts\DomesticViolence.cs" />
-    <Compile Include="Callouts\GroceryStoreFight.cs" />
-    <Compile Include="Callouts\Kidnapping.cs" />
     <Compile Include="Callouts\PublicIntoxication.cs" />
     <Compile Include="Callouts\SuspiciousActivity.cs" />
     <Compile Include="Callouts\Trespassing.cs" />
