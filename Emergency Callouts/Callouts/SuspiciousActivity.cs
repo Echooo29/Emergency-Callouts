@@ -304,7 +304,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
             }
 
             return base.OnCalloutAccepted();
@@ -333,7 +333,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
             }
             #endregion
         }
@@ -555,7 +555,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
             }
             #endregion
         }
@@ -626,7 +626,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
             }
             #endregion
         }
@@ -771,7 +771,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
             }
             #endregion
         }
@@ -894,7 +894,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
                 End();
             }
         }

@@ -20,6 +20,10 @@ namespace EmergencyCallouts.Essential
         internal static string LocalVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
 
         internal static string SettingsPath => "Plugins/LSPDFR/Emergency Callouts.ini";
+
+        internal static string CurrentClass => MethodBase.GetCurrentMethod().DeclaringType.Name;
+
+        internal static string CurrentMethod => MethodBase.GetCurrentMethod().Name;
     }
 
 
