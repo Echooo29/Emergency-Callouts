@@ -35,7 +35,7 @@ namespace EmergencyCallouts.Callouts
         Blip SearchArea;
         Blip SuspectBlip;
 
-        SoundPlayer fuckYouSoundPlayer;
+        SoundPlayer soundPlayer;
 
 
         public override bool OnBeforeCalloutDisplayed()
@@ -330,14 +330,28 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Bottle
+        private void Scenario2() // Crazy
         {
             #region Scenario 2
             try
             {
-                Suspect.Inventory.GiveNewWeapon("WEAPON_BOTTLE", -1, true);
-                HasBottle = true;
-                Dialogue();
+                GameFiber.StartNew(delegate
+                {
+                    while (true)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsAlive)
+                        {
+                            // Do backflip
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary(""), "", 5f, AnimationFlags.None);
+
+                            // Scream Frantically
+                            soundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FRANTIC_SCREAM_01");
+                            soundPlayer.Play();
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -365,8 +379,8 @@ namespace EmergencyCallouts.Callouts
 
                             // Play FUCK_YOU audio file
                             int rand = new Random().Next(1, 3);
-                            fuckYouSoundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FUCK_YOU_0{rand}.wav");
-                            fuckYouSoundPlayer.Play();
+                            soundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FUCK_YOU_0{rand}.wav");
+                            soundPlayer.Play();
 
                             break;
                         }
