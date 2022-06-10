@@ -1172,7 +1172,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
-                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
+                if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region PlayerArrived
                 if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)

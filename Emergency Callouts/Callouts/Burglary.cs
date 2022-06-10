@@ -763,7 +763,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 Handle.PreventPickupCrash(Suspect);
-                if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
+                if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region WithinRange
                 if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
