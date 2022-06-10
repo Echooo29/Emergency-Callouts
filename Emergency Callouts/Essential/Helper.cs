@@ -191,42 +191,6 @@ namespace EmergencyCallouts.Essential
 
                 // Refer to bug report form
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Issue detected!", "Please fill in a ~g~bug report form~s~.\nThat can be found on the ~y~Emergency Callouts Page~s~.");
-                
-                if (!Settings.EarlyAccess && !UpdateChecker.UpdateAvailable())
-                {
-                    try
-                    {
-                        // Send hit to remote exception counter
-                        WebClient hitUpdater = new WebClient();
-                        hitUpdater.DownloadString("https://pastebin.com/raw/Li5KFks3");
-                        Game.LogTrivial("[Emergency Callouts]: Sent hit to the remote exception counter");
-
-                        if (_class == "SuspiciousActivity")
-                        {
-                            hitUpdater.DownloadString("https://pastebin.com/raw/cAKt2CaV");
-                        }
-                        else if (_class == "Burglary")
-                        {
-                            hitUpdater.DownloadString("https://pastebin.com/raw/ja2iCGJB");
-                        }
-                        else if(_class == "Trespassing")
-                        {
-                            hitUpdater.DownloadString("https://pastebin.com/raw/GfvM3z0k");
-                        }
-                        else if(_class == "DomesticViolence")
-                        {
-                            hitUpdater.DownloadString("https://pastebin.com/raw/WFMpcYvS");
-                        }
-                        else if(_class == "PublicIntoxication")
-                        {
-                            hitUpdater.DownloadString("https://pastebin.com/raw/ZUyrpd1k");
-                        }
-                    }
-                    catch (WebException webEx)
-                    {
-                        Game.LogTrivial("[Emergency Callouts]: v" + webEx.Message);
-                    }
-                }
             }
             #endregion
 
