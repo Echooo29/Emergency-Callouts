@@ -37,7 +37,6 @@ namespace EmergencyCallouts.Callouts
 
         SoundPlayer soundPlayer;
 
-
         public override bool OnBeforeCalloutDisplayed()
         {
             int count = 0;
@@ -51,8 +50,11 @@ namespace EmergencyCallouts.Callouts
                 GameFiber.Yield();
 
                 count++;
-                if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
-                CalloutArea = World.GetStreetName(CalloutPosition);
+                if (count >= 10) 
+                { 
+                    CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); 
+                    CalloutArea = World.GetStreetName(CalloutPosition); 
+                }
             }
 
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
