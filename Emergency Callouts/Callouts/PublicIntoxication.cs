@@ -11,6 +11,7 @@ using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 using RAGENativeUI;
 using Rage.Native;
+using System.Media;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -33,6 +34,9 @@ namespace EmergencyCallouts.Callouts
         Blip EntranceBlip;
         Blip SearchArea;
         Blip SuspectBlip;
+
+        SoundPlayer fuckYouSoundPlayer;
+
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -342,11 +346,13 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3() // Pass out
+        private void Scenario3() // Throw Baseball
         {
             #region Scenario 3
             try
             {
+                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BASEBALL", 3, true); }
+
                 GameFiber.StartNew(delegate
                 {
                     while (CalloutActive)
@@ -355,11 +361,13 @@ namespace EmergencyCallouts.Callouts
 
                         if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsOnFoot && PlayerArrived)
                         {
-                            Game.DisplaySubtitle("~y~Suspect~s~: I'm drunk, sooo wha...", 10000);
-                            GameFiber.Sleep(1250);
-                            if (Suspect.Exists()) { Suspect.Kill(); }
-                            GameFiber.Sleep(5000);
-                            Game.DisplaySubtitle("Request an ~g~ambulance~s~.", 7500);
+                            Suspect.Tasks.FightAgainst(MainPlayer);
+
+                            // Play FUCK_YOU audio file
+                            int rand = new Random().Next(1, 3);
+                            fuckYouSoundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FUCK_YOU_0{rand}.wav");
+                            fuckYouSoundPlayer.Play();
+
                             break;
                         }
                     }
