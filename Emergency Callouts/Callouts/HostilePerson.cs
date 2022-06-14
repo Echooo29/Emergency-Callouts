@@ -236,7 +236,7 @@ namespace EmergencyCallouts.Callouts
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region PlayerArrived
-                if (Suspect.Exists() && SearchArea.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
                 {
                     // Remove EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
