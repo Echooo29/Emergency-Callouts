@@ -5,11 +5,9 @@ using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
 using System.Reflection;
-using System.Windows.Forms;
 using static EmergencyCallouts.Essential.Color;
 using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
-using RAGENativeUI;
 using Rage.Native;
 using System.Media;
 
@@ -23,8 +21,6 @@ namespace EmergencyCallouts.Callouts
         bool PedDetained;
         bool NeedsRefreshing;
         bool CalloutActive;
-        bool DialogueStarted;
-        bool HasBottle;
 
         new Vector3 CalloutPosition;
 
