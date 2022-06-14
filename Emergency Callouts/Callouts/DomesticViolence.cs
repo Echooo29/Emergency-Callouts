@@ -385,59 +385,62 @@ namespace EmergencyCallouts.Callouts
                 Suspect.Position = Victim.GetOffsetPositionFront(1f);
             }
 
-            Log.Creation(Suspect, PedCategory.Suspect);
-            Log.Creation(Victim, PedCategory.Victim);
+            if (Suspect.Exists() && Victim.Exists())
+            {
+                Log.Creation(Suspect, PedCategory.Suspect);
+                Log.Creation(Victim, PedCategory.Victim);
+            }
             #endregion
         }
 
         private void Dialogue()
         {
             #region Dialogue
-            try
+            string[] dialogueArrested =
             {
-                string[] dialogueArrested =
-                {
-                    "~b~You~s~: Ma'am, are you injured?",
-                    "~o~Victim~s~: Yes, only a few bruises but that's nothing new.",
-                    "~b~You~s~: Okay, is this your property?",
-                    "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
-                    "~b~You~s~: I assume you want to press charges?",
-                    "~o~Victim~s~: Yes, and how do I get a restraining order?",
-                    "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
-                    "~o~Victim~s~: Thank you for helping me.",
-                    "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
-                    "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
-                    "~b~You~s~: I don't know exactly how long, but it's gonna be long.",
-                    "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
-                    "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
-                    "~m~dialogue ended",
-                };
+                "~b~You~s~: Ma'am, are you injured?",
+                "~o~Victim~s~: Yes, only a few bruises but that's nothing new.",
+                "~b~You~s~: Okay, is this your property?",
+                "~o~Victim~s~: Thankfully it is, otherwise I'd be homeless tonight",
+                "~b~You~s~: I assume you want to press charges?",
+                "~o~Victim~s~: Yes, and how do I get a restraining order?",
+                "~b~You~s~: You'll need to go to the courthouse and get the necessary forms.",
+                "~o~Victim~s~: Thank you for helping me.",
+                "~b~You~s~: No problem, here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks, one more thing, how long will he be in jail?",
+                "~b~You~s~: I don't know exactly how long, but it's gonna be long.",
+                "~o~Victim~s~: Good, he's an ex-convict so they'll be harder on him.",
+                "~b~You~s~: I'm gonna have to process him, other officers will help you further.",
+                "~m~dialogue ended",
+            };
 
-                string[] dialogueDeceased =
-                {
-                    "~b~You~s~: Ma'am, are you hurt?",
-                    "~o~Victim~s~: Uh, yes I think so...",
-                    "~b~You~s~: Okay, is this property yours?",
-                    "~o~Victim~s~: Yes it is.",
-                    "~b~You~s~: Okay, this is now a crime scene, it will take some time before you enter your house again.",
-                    "~o~Victim~s~: Oh, what about the blood?",
-                    "~b~You~s~: That will be taken care of by crime scene cleaners.",
-                    "~o~Victim~s~: Okay, that's good",
-                    "~b~You~s~: Here is my card if you have any questions or need any help.",
-                    "~o~Victim~s~: Thanks.",
-                    "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
-                    "~m~dialogue ended",
-                };
+            string[] dialogueDeceased =
+            {
+                "~b~You~s~: Ma'am, are you hurt?",
+                "~o~Victim~s~: Uh, yes I think so...",
+                "~b~You~s~: Okay, is this property yours?",
+                "~o~Victim~s~: Yes it is.",
+                "~b~You~s~: Okay, this is now a crime scene, it will take some time before you enter your house again.",
+                "~o~Victim~s~: Oh, what about the blood?",
+                "~b~You~s~: That will be taken care of by crime scene cleaners.",
+                "~o~Victim~s~: Okay, that's good",
+                "~b~You~s~: Here is my card if you have any questions or need any help.",
+                "~o~Victim~s~: Thanks.",
+                "~b~You~s~: No problem, I'm gonna have to do some more things, other officers will help you further.",
+                "~m~dialogue ended",
+            };
 
-                int line = 0;
+            int line = 0;
 
-                GameFiber.StartNew(delegate
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
                 {
-                    while (CalloutActive)
+                    try
                     {
                         GameFiber.Yield();
 
-                        if (Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                        if (Suspect.Exists() && Victim.Exists() && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                         {
                             if (!DialogueStarted && !FirstTime)
                             {
@@ -535,17 +538,18 @@ namespace EmergencyCallouts.Callouts
                                 }
                             }
                         }
-                        else if (Victim.IsDead) // Victim is dead
+                        else if (Victim.Exists() && Victim.IsDead) // Victim is dead
                         {
                             break;
                         }
+
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                }
+            });
             #endregion
         }
 
@@ -572,7 +576,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && Suspect.Exists() && PlayerArrived)
+                        if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10 && PlayerArrived)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
@@ -620,7 +624,7 @@ namespace EmergencyCallouts.Callouts
                     while (CalloutActive)
                     {
                         GameFiber.Yield();
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
                         {
                             Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
                             break;
@@ -631,7 +635,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             // Fight Player
                             Suspect.Tasks.FightAgainst(MainPlayer);
@@ -653,26 +657,26 @@ namespace EmergencyCallouts.Callouts
         private void Scenario3() // Suicide
         {
             #region Scenario 3
-            try
+            RetrieveFightPosition();
+
+            Suspect.Position = Victim.GetOffsetPositionFront(2f);
+
+            if (Victim.IsAlive) { Victim.Kill(); }
+
+            // Give Random Handgun
+            Suspect.GiveRandomHandgun(0, true);
+
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+            GameFiber.StartNew(delegate
             {
-                RetrieveFightPosition();
-
-                Suspect.Position = Victim.GetOffsetPositionFront(2f);
-
-                Victim.Kill();
-
-                // Give Random Handgun
-                Suspect.GiveRandomHandgun(0, true);
-
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
-
-                GameFiber.StartNew(delegate
+                while (CalloutActive)
                 {
-                    while (CalloutActive)
+                    try
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                         {
                             Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
                             GameFiber.Sleep(3000);
@@ -693,12 +697,13 @@ namespace EmergencyCallouts.Callouts
                             break;
                         }
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+
+                }
+            });
             #endregion
         }
 
@@ -713,7 +718,7 @@ namespace EmergencyCallouts.Callouts
                 if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region WithinRange
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
                 {
                     // Set WithinRange
                     WithinRange = true;
@@ -726,7 +731,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
@@ -767,7 +772,7 @@ namespace EmergencyCallouts.Callouts
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
 
-                if (MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived && Victim.Exists())
+                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived)
                 {
                     // Set Ped2Found
                     Ped2Found = true;
@@ -786,7 +791,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -830,6 +835,7 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
             CalloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
