@@ -41,8 +41,8 @@ namespace EmergencyCallouts.Callouts
         {
             int count = 0;
 
-            CalloutMessage = "Public Intoxication";
-            CalloutAdvisory = "Reports of a person under the influence of alcohol.";
+            CalloutMessage = "Hostile Person";
+            CalloutAdvisory = "Reports of a hostile person under the influence of alcohol.";
             CalloutScenario = random.Next(1, 4);
 
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
