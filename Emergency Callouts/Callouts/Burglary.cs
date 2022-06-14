@@ -594,7 +594,7 @@ namespace EmergencyCallouts.Callouts
 
                                     Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
 
-                                    DamageLine = "Anyway, you also left some dagage behind.";
+                                    DamageLine = "Anyway, you also left some damage behind.";
                                     DamageLine2 = "Bro that was already there when I came here!";
 
                                     CheckedForDamage = true;
