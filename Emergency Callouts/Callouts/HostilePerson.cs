@@ -15,8 +15,8 @@ using System.Media;
 
 namespace EmergencyCallouts.Callouts
 {
-    [CalloutInfo("[EC] Public Intoxication", CalloutProbability.Medium)]
-    public class PublicIntoxication : Callout
+    [CalloutInfo("[EC] Hostile Person", CalloutProbability.Medium)]
+    public class HostilePerson : Callout
     {
         bool PlayerArrived;
         bool PedFound;
@@ -141,7 +141,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -155,7 +155,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -173,19 +173,20 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsAlive)
                         {
-                            // Do backflip
-                            Suspect.Tasks.PlayAnimation(new AnimationDictionary(""), "", 5f, AnimationFlags.None);
+                            // Do crazy animation
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@arena@celeb@flat@solo@no_props@"), "angry_clap_a_player_a", 5f, AnimationFlags.None);
 
-                            // Scream Frantically
-                            soundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FRANTIC_SCREAM_01");
+                            // Scream Crazy
+                            soundPlayer = new SoundPlayer($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav");
                             soundPlayer.Play();
+                            break;
                         }
                     }
                 });
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -195,7 +196,7 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 3
             try
             {
-                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BASEBALL", 3, true); }
+                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("BALL", 3, true); }
 
                 GameFiber.StartNew(delegate
                 {
@@ -219,7 +220,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -335,7 +336,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
                 End();
             }
         }

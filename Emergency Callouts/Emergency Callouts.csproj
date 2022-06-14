@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Callouts\DomesticViolence.cs" />
-    <Compile Include="Callouts\PublicIntoxication.cs" />
+    <Compile Include="Callouts\HostilePerson.cs" />
     <Compile Include="Callouts\SuspiciousActivity.cs" />
     <Compile Include="Callouts\Trespassing.cs" />
     <Compile Include="Essential\Helper.cs" />

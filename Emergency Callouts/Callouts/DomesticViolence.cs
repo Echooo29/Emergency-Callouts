@@ -293,7 +293,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
 
             return base.OnCalloutAccepted();
@@ -322,7 +322,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -544,7 +544,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -589,7 +589,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -645,7 +645,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -697,7 +697,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -822,7 +822,7 @@ namespace EmergencyCallouts.Callouts
             }
             catch (Exception e)
             {
-                Log.Exception(e, Project.CurrentClass, Project.CurrentMethod);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
                 End();
             }
         }
