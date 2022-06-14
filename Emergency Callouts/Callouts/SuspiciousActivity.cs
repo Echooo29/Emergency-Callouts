@@ -513,7 +513,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) < 25f && PlayerArrived)
+                        if (Suspect.Exists() && Suspect2.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 25f && PlayerArrived)
                         {
                             if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
 
@@ -537,7 +537,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if ((Suspect.IsDead || Suspect.IsCuffed) && Suspect.Exists())
+                        if (Suspect.Exists() && (Suspect.IsDead || Suspect.IsCuffed))
                         {
                             // Delete Blips
                             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -585,28 +585,35 @@ namespace EmergencyCallouts.Callouts
                 // If player is close, Suspect kills Suspect2
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    try
                     {
-                        GameFiber.Yield();
-
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && PlayerArrived && Suspect.Exists())
+                        while (CalloutActive)
                         {
-                            // Start fight
-                            if (Suspect.IsAlive) { Suspect.Tasks.FightAgainst(Suspect2); }
-                            break;
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Suspect2.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && PlayerArrived)
+                            {
+                                // Start fight
+                                if (Suspect.IsAlive) { Suspect.Tasks.FightAgainst(Suspect2); }
+                                break;
+                            }
+                        }
+
+                        while (CalloutActive)
+                        {
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Suspect2.Exists() && Suspect.IsAlive && Suspect2.IsDead)
+                            {
+                                Suspect.Tasks.Clear();
+                                Suspect.Tasks.FightAgainst(MainPlayer);
+                                break;
+                            }
                         }
                     }
-
-                    while (CalloutActive)
+                    catch (Exception e)
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.IsAlive && Suspect2.IsDead && Suspect.Exists() && Suspect2.Exists())
-                        {
-                            Suspect.Tasks.Clear();
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-                            break;
-                        }
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
 
@@ -614,12 +621,19 @@ namespace EmergencyCallouts.Callouts
                 {
                     while (CalloutActive)
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                        try
                         {
-                            Suspect2.Tasks.PutHandsUp(-1, MainPlayer);
-                            break;
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Suspect2.Exists() && Suspect2.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
+                            {
+                                Suspect2.Tasks.PutHandsUp(-1, MainPlayer);
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                         }
                     }
                 });
@@ -634,42 +648,40 @@ namespace EmergencyCallouts.Callouts
         private void Scenario3() // Conversation
         {
             #region Scenario 3
-            try
+            // Retrieve Ped Positions
+            RetrieveFriendlyPosition();
+
+            SuspectBlip.SetColorYellow();
+
+            // Delete Suspect2 Things
+            if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
+            if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
+
+            // Carry Box
+            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
+
+            // Attach Box
+            int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.Spine);
+            NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, Suspect, BoneIndex, 0f, 0.45f, 0f, 180f, 270f, 180f, true, true, false, false, 2, 1);
+
+            // Get suspect gender
+            string gender = string.Empty;
+
+            if (SuspectPersona.Gender == LSPD_First_Response.Gender.Male)
             {
-                // Retrieve Ped Positions
-                RetrieveFriendlyPosition();
+                gender = "Sir";
+            }
+            else
+            {
+                gender = "Ma'am";
+            }
 
-                SuspectBlip.SetColorYellow();
+            // Get random box contents
+            string[] boxContents = { "a dozen magazines", "a pair of shoes", "printer ink cartridges", "PC hardware" };
+            int randomContent = random.Next(boxContents.Length);
 
-                // Delete Suspect2 Things
-                if (Suspect2Blip.Exists()) { Suspect2Blip.Delete(); }
-                if (Suspect2Vehicle.Exists()) { Suspect2Vehicle.Delete(); }
-
-                // Carry Box
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@heists@box_carry@"), "idle", 4f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask | AnimationFlags.Loop);
-
-                // Attach Box
-                int BoneIndex = NativeFunction.Natives.GET_PED_BONE_INDEX<int>(Suspect, (int)PedBoneId.Spine);
-                NativeFunction.Natives.ATTACH_ENTITY_TO_ENTITY(Box, Suspect, BoneIndex, 0f, 0.45f, 0f, 180f, 270f, 180f, true, true, false, false, 2, 1);
-
-                // Get suspect gender
-                string gender = string.Empty;
-
-                if (SuspectPersona.Gender == LSPD_First_Response.Gender.Male)
-                {
-                    gender = "Sir";
-                }
-                else
-                {
-                    gender = "Ma'am";
-                }
-
-                // Get random box contents
-                string[] boxContents = { "a dozen magazines", "a pair of shoes", "printer ink cartridges", "PC hardware" };
-                int randomContent = random.Next(boxContents.Length);
-
-                string[] dialogueSuspect =
-                {
+            string[] dialogueSuspect =
+            {
                     $"~b~You~s~: Hello {gender}, how are you doing today?",
                     "~y~Suspect~s~: I'm doing okay, I just bought something from Craigslist, did I do something wrong?",
                     "~b~You~s~: We got a call that a person is acting suspicious, you matched the description.",
@@ -682,15 +694,17 @@ namespace EmergencyCallouts.Callouts
                     "~y~Suspect~s~: Okay.",
                 };
 
-                int line = 0;
+            int line = 0;
 
-                GameFiber.StartNew(delegate
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
                 {
-                    while (CalloutActive)
+                    try
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsAlive && Suspect.Exists())
+                        if (Suspect.Exists() && Suspect.IsAlive)
                         {
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 3f && MainPlayer.IsOnFoot && Suspect.IsAlive)
                             {
@@ -748,31 +762,32 @@ namespace EmergencyCallouts.Callouts
                                 }
                             }
                         }
-                        else if (Suspect.IsDead) // Suspect is dead
+                        else if (Suspect.Exists() && Suspect.IsDead) // Suspect is dead
                         {
                             break;
                         }
                     }
-                });
-
-                GameFiber.StartNew(delegate
-                {
-                    while (CalloutActive)
+                    catch (Exception e)
                     {
-                        GameFiber.Yield();
-                        if (Suspect.IsCuffed || Suspect.IsDead)
-                        {
-                            Suspect.Tasks.Clear();
-                            if (Box.Exists()) { Box.Delete(); }
-                            break;
-                        }
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
-                });
-            }
-            catch (Exception e)
+
+                }
+            });
+
+            GameFiber.StartNew(delegate
             {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                while (CalloutActive)
+                {
+                    GameFiber.Yield();
+                    if (Suspect.IsCuffed || Suspect.IsDead)
+                    {
+                        Suspect.Tasks.Clear();
+                        if (Box.Exists()) { Box.Delete(); }
+                        break;
+                    }
+                }
+            });
             #endregion
         }
 
@@ -785,7 +800,7 @@ namespace EmergencyCallouts.Callouts
                 Handle.PreventPickupCrash(Suspect, Suspect2);
 
                 #region WithinRange
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                if (Suspect.Exists() && Suspect2.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
                 {
                     // Set WithinRange
                     WithinRange = true;
@@ -801,7 +816,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
+                if (Suspect.Exists() && Suspect2.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
@@ -825,7 +840,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
                 {
                     // Set PedFound
                     PedFound = true;
@@ -839,7 +854,7 @@ namespace EmergencyCallouts.Callouts
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
 
-                if (MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && !Ped2Found && PlayerArrived && Suspect2.Exists())
+                if (Suspect2.Exists() && MainPlayer.Position.DistanceTo(Suspect2.Position) < 5f && !Ped2Found && PlayerArrived)
                 {
                     // Set PedFound
                     Ped2Found = true;
@@ -858,7 +873,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -871,7 +886,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
+                if (EntranceBlip.Exists() && SuspectBlip.Exists() && SearchArea.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
@@ -902,10 +917,12 @@ namespace EmergencyCallouts.Callouts
         public override void End()
         {
             base.End();
+
             CalloutActive = false;
 
             Suspect.Tasks.Clear();
             Functions.SetPedCantBeArrestedByPlayer(Suspect, false);
+
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Suspect2.Exists()) { Suspect2.Dismiss(); }
             if (SuspectVehicle.Exists()) { SuspectVehicle.Dismiss(); }
