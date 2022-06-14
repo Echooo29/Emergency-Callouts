@@ -204,7 +204,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsOnFoot && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsOnFoot && PlayerArrived)
                         {
                             Suspect.Tasks.FightAgainst(MainPlayer);
 
@@ -236,7 +236,7 @@ namespace EmergencyCallouts.Callouts
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
+                if (Suspect.Exists() && SearchArea.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize && !PlayerArrived)
                 {
                     // Remove EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
@@ -256,7 +256,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -274,7 +274,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
                 {
                     // Remove SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -286,7 +286,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived && !PedFound)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived && !PedFound)
                 {
                     // Set OnScene
                     PlayerArrived = false;
@@ -308,7 +308,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region RefreshSearchArea
-                if (!PedFound)
+                if (Suspect.Exists() && !PedFound)
                 {
                     if (Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
                     {
@@ -320,7 +320,7 @@ namespace EmergencyCallouts.Callouts
                     }
                 }
 
-                if (Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
+                if (Suspect.Exists() && Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
                 {
                     CalloutPosition = Suspect.Position;
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
