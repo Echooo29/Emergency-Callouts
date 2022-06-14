@@ -399,41 +399,42 @@ namespace EmergencyCallouts.Callouts
                 DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
             }
 
-            // Lockpick Animation
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
+            if (Suspect.Exists()) 
+            {
+                // Lockpick Animation
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
 
-            // Log Creation
-            Log.Creation(Suspect, PedCategory.Suspect);
+                // Log Creation
+                Log.Creation(Suspect, PedCategory.Suspect);
+            }
             #endregion
         }
 
         private void Dialogue()
         {
             #region Dialogue
-            try
+            int line = 0;
+
+            string[] line1 = { "So, why did you do it?", "Why would you do this?", "Why are you stealing from other people", "So... what's your reason?" };
+            string[] line2 = { "For the money!", "Easy cash!", "My family man, we're broke!", "Child alimony sucks dude!", "Getting evicted tomorrow if I don't pay them right now.", "Hospital bills!" };
+            string[] line3 = { "So you don't have a job?", "I'm assuming you don't have a job then?", "So no work for you?" };
+            string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me as an employee.", "Correct.", "That's right." };
+            string[] line7 = { "You expect me to believe that?", "I don't believe a word of it.", "I don't buy it." };
+            string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep.", "Maybe.", "Your choice.", "No.", "Not up to me isn't it?" };
+            string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I want my attorney ASAP.", "I'm going to use my right to remain silent." };
+            string[] line10 = { "No problem.", "Works for me.", "Perfect.", "Sure.", "Copy that...", "Okay.", "Great.", "Win-win situation." };
+
+            int line1Random = random.Next(0, line1.Length);
+            int line2Random = random.Next(0, line2.Length);
+            int line3Random = random.Next(0, line3.Length);
+            int line4Random = random.Next(0, line4.Length);
+            int line7Random = random.Next(0, line7.Length);
+            int line8Random = random.Next(0, line8.Length);
+            int line9Random = random.Next(0, line9.Length);
+            int line10Random = random.Next(0, line10.Length);
+
+            string[] dialogue =
             {
-                int line = 0;
-
-                string[] line1 = { "So, why did you do it?", "Why would you do this?", "Why are you stealing from other people", "So... what's your reason?" };
-                string[] line2 = { "For the money!", "Easy cash!", "My family man, we're broke!", "Child alimony sucks dude!", "Getting evicted tomorrow if I don't pay them right now.", "Hospital bills!" };
-                string[] line3 = { "So you don't have a job?", "I'm assuming you don't have a job then?", "So no work for you?" };
-                string[] line4 = { "Yeah... I don't", "Nope, nada!", "Nah, nobody wants me as an employee.", "Correct.", "That's right." };
-                string[] line7 = { "You expect me to believe that?", "I don't believe a word of it.", "I don't buy it." };
-                string[] line8 = { "Cops only want to hear what they want to hear right?", "Ofcourse not I'm messing with you.", "Yes sir.", "Yep.", "Maybe.", "Your choice.", "No.", "Not up to me isn't it?" };
-                string[] line9 = { "I'm staying silent until I can speak to my lawyer.", "I want my attorney ASAP.", "I'm going to use my right to remain silent." };
-                string[] line10 = { "No problem.", "Works for me.", "Perfect.", "Sure.", "Copy that...", "Okay.", "Great.", "Win-win situation." };
-
-                int line1Random = random.Next(0, line1.Length);
-                int line2Random = random.Next(0, line2.Length);
-                int line3Random = random.Next(0, line3.Length);
-                int line4Random = random.Next(0, line4.Length);
-                int line7Random = random.Next(0, line7.Length);
-                int line8Random = random.Next(0, line8.Length);
-                int line9Random = random.Next(0, line9.Length);
-                int line10Random = random.Next(0, line10.Length);
-
-                string[] dialogue =
-                {
                     "~b~You~s~: " + line1[line1Random],
                     "~r~Suspect~s~: " + line2[line2Random],
                     "~b~You~s~: " + line3[line3Random],
@@ -447,13 +448,15 @@ namespace EmergencyCallouts.Callouts
                     "~m~dialogue ended",
                 };
 
-                GameFiber.StartNew(delegate
+            GameFiber.StartNew(delegate
+            {
+                while (CalloutActive)
                 {
-                    while (CalloutActive)
+                    try
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
+                        if (Suspect.Exists() && Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
                         {
                             if (!DialogueStarted && !FirstTime)
                             {
@@ -502,12 +505,12 @@ namespace EmergencyCallouts.Callouts
                             }
                         }
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                }
+            });
             #endregion
         }
 
@@ -522,7 +525,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f && Suspect.Exists())
+                        if (Suspect.Exists() && Suspect.IsCuffed && Suspect.IsAlive && MainPlayer.Position.DistanceTo(CalloutPosition) <= 300f)
                         {
                             GameFiber.Sleep(7500);
 
@@ -544,7 +547,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed && Suspect.Exists())
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
                         {
                             if (Settings.AllowController && UIMenu.IsUsingController)
                             {
@@ -655,7 +658,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && Suspect.Exists() && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && PlayerArrived)
                         {
                             StopChecking = true;
 
@@ -704,7 +707,7 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
                         {
                             // Clipping Through Wall Fix
                             Suspect.Tasks.ClearImmediately();
@@ -739,7 +742,7 @@ namespace EmergencyCallouts.Callouts
                 {
                     GameFiber.Yield();
 
-                    if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && Suspect.Exists() && PlayerArrived)
+                    if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
                     {
                         Suspect.Tasks.ClearImmediately();
                         Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
@@ -766,7 +769,7 @@ namespace EmergencyCallouts.Callouts
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region WithinRange
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
                 {
                     // Set WithinRange
                     WithinRange = true;
@@ -803,7 +806,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived && Suspect.Exists())
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
                 {
                     // Set PedFound
                     PedFound = true;
@@ -822,7 +825,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained && Suspect.Exists())
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
                 {
                     // Set PedDetained
                     PedDetained = true;
@@ -835,7 +838,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
                 {
                     // Set PlayerArrived
                     PlayerArrived = false;
