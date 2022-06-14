@@ -785,7 +785,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerArrived
-                if (MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
                 {
                     // Set PlayerArrived
                     PlayerArrived = true;
