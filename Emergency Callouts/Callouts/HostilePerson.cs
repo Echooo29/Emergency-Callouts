@@ -10,6 +10,7 @@ using static EmergencyCallouts.Essential.Helper;
 using Entity = EmergencyCallouts.Essential.Helper.Entity;
 using Rage.Native;
 using System.Media;
+using System.IO;
 
 namespace EmergencyCallouts.Callouts
 {
@@ -99,7 +100,6 @@ namespace EmergencyCallouts.Callouts
             SuspectPersona = Functions.GetPersonaForPed(Suspect);
             Suspect.IsPersistent = true;
             Suspect.BlockPermanentEvents = true;
-            Suspect.SetIntoxicated();
             Log.Creation(Suspect, PedCategory.Suspect);
 
             SuspectBlip = Suspect.AttachBlip();
@@ -122,7 +122,7 @@ namespace EmergencyCallouts.Callouts
                 CalloutActive = true;
 
                 // Scenario Deciding
-                switch (CalloutScenario)
+                switch (CalloutScenario) // RIGGED
                 {
                     case 1:
                         Scenario1();
@@ -142,12 +142,26 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1() // Standard
+        private void Scenario1() // Middle Finger
         {
             #region Scenario 1
             try
             {
-                // Already handled
+                GameFiber.StartNew(delegate
+                {
+                    while (true)
+                    {
+                        GameFiber.Yield();
+
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && MainPlayer.IsOnFoot && Suspect.IsAlive && MainPlayer.IsAlive)
+                        {
+                            Suspect.Face(MainPlayer);
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_player_int_upperfinger"), "mp_player_int_finger_02", -1, 2f, -2f, 0f, AnimationFlags.None);
+
+                            break;
+                        }
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -170,11 +184,16 @@ namespace EmergencyCallouts.Callouts
                         if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsAlive)
                         {
                             // Do crazy animation
-                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@arena@celeb@flat@solo@no_props@"), "angry_clap_a_player_a", 5f, AnimationFlags.None);
+                            Suspect.Face(MainPlayer);
+                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@arena@celeb@flat@solo@no_props@"), "angry_clap_a_player_a", -1, 5f, 1f, 0f, AnimationFlags.None);
 
-                            // Scream Crazy
-                            soundPlayer = new SoundPlayer($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav");
-                            soundPlayer.Play();
+                            if (File.Exists($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav"))
+                            {
+                                // Scream Crazy
+                                soundPlayer = new SoundPlayer($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav");
+                                soundPlayer.Play();
+                            }
+
                             break;
                         }
                     }
@@ -192,7 +211,7 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 3
             try
             {
-                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("BALL", 3, true); }
+                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BALL", 3, true); }
 
                 GameFiber.StartNew(delegate
                 {
@@ -200,14 +219,25 @@ namespace EmergencyCallouts.Callouts
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsOnFoot && PlayerArrived)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && MainPlayer.IsOnFoot && Suspect.IsAlive && PlayerArrived)
                         {
-                            Suspect.Tasks.FightAgainst(MainPlayer);
+                            Suspect.Tasks.GoToWhileAiming(MainPlayer, 5f, 30f);
 
                             // Play FUCK_YOU audio file
-                            int rand = new Random().Next(1, 3);
-                            soundPlayer = new SoundPlayer($@"Emergency Callouts Audio\FUCK_YOU_0{rand}.wav");
-                            soundPlayer.Play();
+                            if (File.Exists(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav"))
+                            {
+                                soundPlayer = new SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav");
+                                soundPlayer.Play();
+                            }
+
+                            if (Suspect.Position.DistanceTo(MainPlayer.Position) <= 10f)
+                            {
+                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                                GameFiber.Sleep(2000);
+                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                                GameFiber.Sleep(2000);
+                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                            }
 
                             break;
                         }
@@ -243,7 +273,7 @@ namespace EmergencyCallouts.Callouts
                     SearchArea.Alpha = 0.5f;
 
                     // Display Subtitle
-                    Game.DisplaySubtitle("Find the ~y~drunk person~s~ in the ~y~area~s~.", 10000);
+                    Game.DisplaySubtitle("Find the ~r~hostile person~s~ in the ~y~area~s~.", 10000);
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
