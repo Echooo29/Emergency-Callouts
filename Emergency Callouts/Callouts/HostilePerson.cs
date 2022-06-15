@@ -107,8 +107,6 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Scale = (float)Settings.PedBlipScale;
             SuspectBlip.Alpha = 0f;
 
-            Suspect.Tasks.Wander();
-
             CalloutHandler();
 
             return base.OnCalloutAccepted();
@@ -122,7 +120,7 @@ namespace EmergencyCallouts.Callouts
                 CalloutActive = true;
 
                 // Scenario Deciding
-                switch (CalloutScenario) // RIGGED
+                switch (CalloutScenario)
                 {
                     case 1:
                         Scenario1();
@@ -155,7 +153,6 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && MainPlayer.IsOnFoot && Suspect.IsAlive && MainPlayer.IsAlive)
                         {
-                            Suspect.Face(MainPlayer);
                             Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_player_int_upperfinger"), "mp_player_int_finger_02", -1, 2f, -2f, 0f, AnimationFlags.None);
 
                             break;
@@ -170,29 +167,23 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2() // Crazy
+        private void Scenario2() // Damage Player's Vehicle
         {
             #region Scenario 2
             try
             {
+                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BAT", -1, true); }
+
                 GameFiber.StartNew(delegate
                 {
                     while (true)
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 7f && Suspect.IsAlive && MainPlayer.IsAlive)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 20f && MainPlayer.IsOnFoot && Suspect.IsAlive && MainPlayer.IsAlive)
                         {
-                            // Do crazy animation
-                            Suspect.Face(MainPlayer);
-                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("anim@arena@celeb@flat@solo@no_props@"), "angry_clap_a_player_a", -1, 5f, 1f, 0f, AnimationFlags.None);
-
-                            if (File.Exists($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav"))
-                            {
-                                // Scream Crazy
-                                soundPlayer = new SoundPlayer($@"lspdfr\audio\scanner\Emergency Callouts Audio\CRAZY_SCREAM_01.wav");
-                                soundPlayer.Play();
-                            }
+                            // Damage Player's Vehicle
+                            Suspect.Tasks.FireWeaponAt(MainPlayer.LastVehicle, -1, FiringPattern.SingleShot);
 
                             break;
                         }
