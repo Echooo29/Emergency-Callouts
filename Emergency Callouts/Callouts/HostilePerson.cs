@@ -84,30 +84,37 @@ namespace EmergencyCallouts.Callouts
 
         public override bool OnCalloutAccepted()
         {
-            // Callout Accepted
-            Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
+            try
+            {
+                // Callout Accepted
+                Log.OnCalloutAccepted(CalloutMessage, CalloutScenario);
 
-            // Accept Messages
-            Display.AcceptSubtitle(CalloutMessage, CalloutArea);
-            Display.OutdatedReminder();
+                // Accept Messages
+                Display.AcceptSubtitle(CalloutMessage, CalloutArea);
+                Display.OutdatedReminder();
 
-            // EntranceBlip
-            EntranceBlip = new Blip(CalloutPosition);
-            if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
+                // EntranceBlip
+                EntranceBlip = new Blip(CalloutPosition);
+                if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
-            // Suspect
-            Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
-            SuspectPersona = Functions.GetPersonaForPed(Suspect);
-            Suspect.IsPersistent = true;
-            Suspect.BlockPermanentEvents = true;
-            Log.Creation(Suspect, PedCategory.Suspect);
+                // Suspect
+                Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+                SuspectPersona = Functions.GetPersonaForPed(Suspect);
+                Suspect.IsPersistent = true;
+                Suspect.BlockPermanentEvents = true;
+                Log.Creation(Suspect, PedCategory.Suspect);
 
-            SuspectBlip = Suspect.AttachBlip();
-            SuspectBlip.SetColorYellow();
-            SuspectBlip.Scale = (float)Settings.PedBlipScale;
-            SuspectBlip.Alpha = 0f;
+                SuspectBlip = Suspect.AttachBlip();
+                SuspectBlip.SetColorYellow();
+                SuspectBlip.Scale = (float)Settings.PedBlipScale;
+                SuspectBlip.Alpha = 0f;
 
-            CalloutHandler();
+                CalloutHandler();
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
 
             return base.OnCalloutAccepted();
         }
@@ -143,9 +150,9 @@ namespace EmergencyCallouts.Callouts
         private void Scenario1() // Middle Finger
         {
             #region Scenario 1
-            try
+            GameFiber.StartNew(delegate
             {
-                GameFiber.StartNew(delegate
+                try
                 {
                     while (true)
                     {
@@ -158,23 +165,24 @@ namespace EmergencyCallouts.Callouts
                             break;
                         }
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                }
+                catch (Exception e)
+                {
+                    Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                }
+
+            });
             #endregion
         }
 
         private void Scenario2() // Damage Player's Vehicle
         {
             #region Scenario 2
-            try
-            {
-                if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BAT", -1, true); }
+            if (Suspect.Exists()) { Suspect.Inventory.GiveNewWeapon("WEAPON_BAT", -1, true); }
 
-                GameFiber.StartNew(delegate
+            GameFiber.StartNew(delegate
+            {
+                try
                 {
                     while (true)
                     {
@@ -188,12 +196,12 @@ namespace EmergencyCallouts.Callouts
                             break;
                         }
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                }
+                catch (Exception e)
+                {
+                    Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                }
+            });
             #endregion
         }
 
@@ -206,32 +214,39 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    try
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && MainPlayer.IsOnFoot && Suspect.IsAlive && PlayerArrived)
+                        while (CalloutActive)
                         {
-                            Suspect.Tasks.GoToWhileAiming(MainPlayer, 5f, 30f);
+                            GameFiber.Yield();
 
-                            // Play FUCK_YOU audio file
-                            if (File.Exists(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav"))
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 30f && MainPlayer.IsOnFoot && Suspect.IsAlive && PlayerArrived)
                             {
-                                soundPlayer = new SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav");
-                                soundPlayer.Play();
-                            }
+                                Suspect.Tasks.GoToWhileAiming(MainPlayer, 5f, 30f);
 
-                            if (Suspect.Position.DistanceTo(MainPlayer.Position) <= 10f)
-                            {
-                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
-                                GameFiber.Sleep(2000);
-                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
-                                GameFiber.Sleep(2000);
-                                Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
-                            }
+                                // Play FUCK_YOU audio file
+                                if (File.Exists(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav"))
+                                {
+                                    soundPlayer = new SoundPlayer(@"lspdfr\audio\scanner\Emergency Callouts Audio\FUCK_YOU_01.wav");
+                                    soundPlayer.Play();
+                                }
 
-                            break;
+                                if (Suspect.Position.DistanceTo(MainPlayer.Position) <= 10f)
+                                {
+                                    Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                                    GameFiber.Sleep(2000);
+                                    Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                                    GameFiber.Sleep(2000);
+                                    Suspect.Tasks.FireWeaponAt(MainPlayer.Position, 5000, FiringPattern.SingleShot);
+                                }
+
+                                break;
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
             }

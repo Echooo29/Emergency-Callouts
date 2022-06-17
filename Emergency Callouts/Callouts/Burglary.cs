@@ -342,70 +342,77 @@ namespace EmergencyCallouts.Callouts
         private void RetrievePedPositions()
         {
             #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // Mirror Park
+            try
             {
-                int num = random.Next(MirrorParkBreakInPositions.Length);
-                Suspect.Position = MirrorParkBreakInPositions[num];
-                Suspect.Heading = MirrorParkBreakInHeadings[num];
-                DamagedProperty = MirrorParkBreakInPositions[num];
-                DamagedPropertyHeading = MirrorParkBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // La Puerta
-            {
-                int num = random.Next(LaPuertaBreakInPositions.Length);
-                Suspect.Position = LaPuertaBreakInPositions[num];
-                Suspect.Heading = LaPuertaBreakInHeadings[num];
-                DamagedProperty = LaPuertaBreakInPositions[num];
-                DamagedPropertyHeading = LaPuertaBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // El Burro
-            {
-                int num = random.Next(ElBurroBreakInPositions.Length);
-                Suspect.Position = ElBurroBreakInPositions[num];
-                Suspect.Heading = ElBurroBreakInHeadings[num];
-                DamagedProperty = ElBurroBreakInPositions[num];
-                DamagedPropertyHeading = ElBurroBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // County
-            {
-                int num = random.Next(CountyBreakInPositions.Length);
-                Suspect.Position = CountyBreakInPositions[num];
-                Suspect.Heading = CountyBreakInHeadings[num];
-                DamagedProperty = CountyBreakInPositions[num];
-                DamagedPropertyHeading = CountyBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
-            {
-                int num = random.Next(GrapeseedBreakInPositions.Length);
-                Suspect.Position = GrapeseedBreakInPositions[num];
-                Suspect.Heading = GrapeseedBreakInHeadings[num];
-                DamagedProperty = GrapeseedBreakInPositions[num];
-                DamagedPropertyHeading = GrapeseedBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Harmony
-            {
-                int num = random.Next(HarmonyBreakInPositions.Length);
-                Suspect.Position = HarmonyBreakInPositions[num];
-                Suspect.Heading = HarmonyBreakInHeadings[num];
-                DamagedProperty = HarmonyBreakInPositions[num];
-                DamagedPropertyHeading = HarmonyBreakInHeadings[num];
-            }
-            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
-            {
-                int num = random.Next(PaletoBayBreakInPositions.Length);
-                Suspect.Position = PaletoBayBreakInPositions[num];
-                Suspect.Heading = PaletoBayBreakInHeadings[num];
-                DamagedProperty = PaletoBayBreakInPositions[num];
-                DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
-            }
+                if (CalloutPosition == CalloutPositions[0]) // Mirror Park
+                {
+                    int num = random.Next(MirrorParkBreakInPositions.Length);
+                    Suspect.Position = MirrorParkBreakInPositions[num];
+                    Suspect.Heading = MirrorParkBreakInHeadings[num];
+                    DamagedProperty = MirrorParkBreakInPositions[num];
+                    DamagedPropertyHeading = MirrorParkBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[1]) // La Puerta
+                {
+                    int num = random.Next(LaPuertaBreakInPositions.Length);
+                    Suspect.Position = LaPuertaBreakInPositions[num];
+                    Suspect.Heading = LaPuertaBreakInHeadings[num];
+                    DamagedProperty = LaPuertaBreakInPositions[num];
+                    DamagedPropertyHeading = LaPuertaBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[2]) // El Burro
+                {
+                    int num = random.Next(ElBurroBreakInPositions.Length);
+                    Suspect.Position = ElBurroBreakInPositions[num];
+                    Suspect.Heading = ElBurroBreakInHeadings[num];
+                    DamagedProperty = ElBurroBreakInPositions[num];
+                    DamagedPropertyHeading = ElBurroBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // County
+                {
+                    int num = random.Next(CountyBreakInPositions.Length);
+                    Suspect.Position = CountyBreakInPositions[num];
+                    Suspect.Heading = CountyBreakInHeadings[num];
+                    DamagedProperty = CountyBreakInPositions[num];
+                    DamagedPropertyHeading = CountyBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
+                {
+                    int num = random.Next(GrapeseedBreakInPositions.Length);
+                    Suspect.Position = GrapeseedBreakInPositions[num];
+                    Suspect.Heading = GrapeseedBreakInHeadings[num];
+                    DamagedProperty = GrapeseedBreakInPositions[num];
+                    DamagedPropertyHeading = GrapeseedBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // Harmony
+                {
+                    int num = random.Next(HarmonyBreakInPositions.Length);
+                    Suspect.Position = HarmonyBreakInPositions[num];
+                    Suspect.Heading = HarmonyBreakInHeadings[num];
+                    DamagedProperty = HarmonyBreakInPositions[num];
+                    DamagedPropertyHeading = HarmonyBreakInHeadings[num];
+                }
+                else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
+                {
+                    int num = random.Next(PaletoBayBreakInPositions.Length);
+                    Suspect.Position = PaletoBayBreakInPositions[num];
+                    Suspect.Heading = PaletoBayBreakInHeadings[num];
+                    DamagedProperty = PaletoBayBreakInPositions[num];
+                    DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
+                }
 
-            if (Suspect.Exists()) 
-            {
-                // Lockpick Animation
-                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
+                if (Suspect.Exists())
+                {
+                    // Lockpick Animation
+                    Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_common_heist"), "pick_door", 5f, AnimationFlags.Loop);
 
-                // Log Creation
-                Log.Creation(Suspect, PedCategory.Suspect);
+                    // Log Creation
+                    Log.Creation(Suspect, PedCategory.Suspect);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -450,9 +457,9 @@ namespace EmergencyCallouts.Callouts
 
             GameFiber.StartNew(delegate
             {
-                while (CalloutActive)
+                try
                 {
-                    try
+                    while (CalloutActive)
                     {
                         GameFiber.Yield();
 
@@ -505,10 +512,10 @@ namespace EmergencyCallouts.Callouts
                             }
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                 }
             });
             #endregion
@@ -517,9 +524,9 @@ namespace EmergencyCallouts.Callouts
         private void CheckForDamage()
         {
             #region CheckForDamage
-            try
+            GameFiber.StartNew(delegate
             {
-                GameFiber.StartNew(delegate
+                try
                 {
                     while (CalloutActive)
                     {
@@ -632,12 +639,12 @@ namespace EmergencyCallouts.Callouts
                             break;
                         }
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name,  MethodBase.GetCurrentMethod().Name);
-            }
+                }
+                catch (Exception e)
+                {
+                    Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                }
+            });
             #endregion
         }
 
@@ -654,33 +661,40 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    try
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && PlayerArrived)
+                        while (CalloutActive)
                         {
-                            StopChecking = true;
+                            GameFiber.Yield();
 
-                            // Delete Blips
-                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                            if (SearchArea.Exists()) { SearchArea.Delete(); }
-                            if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && PlayerArrived)
+                            {
+                                StopChecking = true;
 
-                            // Create Pursuit
-                            LHandle pursuit = Functions.CreatePursuit();
+                                // Delete Blips
+                                if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                                if (SearchArea.Exists()) { SearchArea.Delete(); }
+                                if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
-                            // Add Suspect To Pursuit
-                            Functions.AddPedToPursuit(pursuit, Suspect);
+                                // Create Pursuit
+                                LHandle pursuit = Functions.CreatePursuit();
 
-                            // Set Pursuit Active
-                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                                // Add Suspect To Pursuit
+                                Functions.AddPedToPursuit(pursuit, Suspect);
 
-                            // Play Pursuit Audio
-                            Play.PursuitAudio();
+                                // Set Pursuit Active
+                                Functions.SetPursuitIsActiveForPlayer(pursuit, true);
 
-                            break;
+                                // Play Pursuit Audio
+                                Play.PursuitAudio();
+
+                                break;
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
             }
@@ -703,22 +717,29 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    try
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                        while (CalloutActive)
                         {
-                            // Clipping Through Wall Fix
-                            Suspect.Tasks.ClearImmediately();
-                            Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
-                            GameFiber.Sleep(30);
+                            GameFiber.Yield();
 
-                            // Put Suspect's Hands up
-                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                            {
+                                // Clipping Through Wall Fix
+                                Suspect.Tasks.ClearImmediately();
+                                Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
+                                GameFiber.Sleep(30);
 
-                            break;
+                                // Put Suspect's Hands up
+                                Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+
+                                break;
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
             }
@@ -732,30 +753,45 @@ namespace EmergencyCallouts.Callouts
         private void Scenario3() // Cower with a gun
         {
             #region Scenario 3
-            RetrievePedPositions();
-
-            CheckForDamage();
-
-            GameFiber.StartNew(delegate
+            try
             {
-                while (CalloutActive)
+                RetrievePedPositions();
+
+                CheckForDamage();
+
+                GameFiber.StartNew(delegate
                 {
-                    GameFiber.Yield();
-
-                    if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                    try
                     {
-                        Suspect.Tasks.ClearImmediately();
-                        Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
+                        while (CalloutActive)
+                        {
+                            GameFiber.Yield();
 
-                        Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
-                        GameFiber.Sleep(1000);
-                        Suspect.GiveRandomHandgun(-1, true);
-                        Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                            {
+                                Suspect.Tasks.ClearImmediately();
+                                Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
 
-                        break;
+                                Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f);
+                                GameFiber.Sleep(1000);
+                                Suspect.GiveRandomHandgun(-1, true);
+                                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+                                break;
+                            }
+                        }
                     }
-                }
-            });
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 

@@ -330,65 +330,72 @@ namespace EmergencyCallouts.Callouts
         private void RetrieveFightPosition()
         {
             #region Positions
-            if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
+            try
             {
-                int num = random.Next(VinewoodHillsFightPositions.Length);
+                if (CalloutPosition == CalloutPositions[0]) // Vinewood Hills
+                {
+                    int num = random.Next(VinewoodHillsFightPositions.Length);
 
-                Victim.Position = VinewoodHillsFightPositions[num];
-                Victim.Heading = VinewoodHillsFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[1]) // Davis
-            {
-                int num = random.Next(DavisFightPositions.Length);
+                    Victim.Position = VinewoodHillsFightPositions[num];
+                    Victim.Heading = VinewoodHillsFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[1]) // Davis
+                {
+                    int num = random.Next(DavisFightPositions.Length);
 
-                Victim.Position = DavisFightPositions[num];
-                Victim.Heading = DavisFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[2]) // Vespucci
-            {
-                Victim.Position = VespucciFightPosition;
-                Victim.Heading = VespucciFightHeading;
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[3]) // County
-            {
-                int num = random.Next(CountyFightPositions.Length);
+                    Victim.Position = DavisFightPositions[num];
+                    Victim.Heading = DavisFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[2]) // Vespucci
+                {
+                    Victim.Position = VespucciFightPosition;
+                    Victim.Heading = VespucciFightHeading;
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[3]) // County
+                {
+                    int num = random.Next(CountyFightPositions.Length);
 
-                Victim.Position = CountyFightPositions[num];
-                Victim.Heading = CountyFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[4]) // Sandy Shores
-            {
-                int num = random.Next(SandyShoresFightPositions.Length);
+                    Victim.Position = CountyFightPositions[num];
+                    Victim.Heading = CountyFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[4]) // Sandy Shores
+                {
+                    int num = random.Next(SandyShoresFightPositions.Length);
 
-                Victim.Position = SandyShoresFightPositions[num];
-                Victim.Heading = SandyShoresFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[5]) // Grapeseed
-            {
-                int num = random.Next(GrapeseedFightPositions.Length);
+                    Victim.Position = SandyShoresFightPositions[num];
+                    Victim.Heading = SandyShoresFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[5]) // Grapeseed
+                {
+                    int num = random.Next(GrapeseedFightPositions.Length);
 
-                Victim.Position = GrapeseedFightPositions[num];
-                Victim.Heading = GrapeseedFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
-            else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
-            {
-                int num = random.Next(PaletoBayFightPositions.Length);
+                    Victim.Position = GrapeseedFightPositions[num];
+                    Victim.Heading = GrapeseedFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
+                else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
+                {
+                    int num = random.Next(PaletoBayFightPositions.Length);
 
-                Victim.Position = PaletoBayFightPositions[num];
-                Victim.Heading = PaletoBayFightHeadings[num];
-                Suspect.Position = Victim.GetOffsetPositionFront(1f);
-            }
+                    Victim.Position = PaletoBayFightPositions[num];
+                    Victim.Heading = PaletoBayFightHeadings[num];
+                    Suspect.Position = Victim.GetOffsetPositionFront(1f);
+                }
 
-            if (Suspect.Exists() && Victim.Exists())
+                if (Suspect.Exists() && Victim.Exists())
+                {
+                    Log.Creation(Suspect, PedCategory.Suspect);
+                    Log.Creation(Victim, PedCategory.Victim);
+                }
+            }
+            catch (Exception e)
             {
-                Log.Creation(Suspect, PedCategory.Suspect);
-                Log.Creation(Victim, PedCategory.Victim);
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             #endregion
         }
@@ -621,27 +628,34 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    try
                     {
-                        GameFiber.Yield();
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                        while (CalloutActive)
                         {
-                            Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
-                            break;
+                            GameFiber.Yield();
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                            {
+                                Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
+                                break;
+                            }
+                        }
+
+                        while (CalloutActive)
+                        {
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                            {
+                                // Fight Player
+                                Suspect.Tasks.FightAgainst(MainPlayer);
+
+                                break;
+                            }
                         }
                     }
-
-                    while (CalloutActive)
+                    catch (Exception e)
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
-                        {
-                            // Fight Player
-                            Suspect.Tasks.FightAgainst(MainPlayer);
-
-                            break;
-                        }
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
 
@@ -657,53 +671,60 @@ namespace EmergencyCallouts.Callouts
         private void Scenario3() // Suicide
         {
             #region Scenario 3
-            RetrieveFightPosition();
-
-            Suspect.Position = Victim.GetOffsetPositionFront(2f);
-
-            if (Victim.IsAlive) { Victim.Kill(); }
-
-            // Give Random Handgun
-            Suspect.GiveRandomHandgun(0, true);
-
-            Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
-
-            GameFiber.StartNew(delegate
+            try
             {
-                while (CalloutActive)
+                RetrieveFightPosition();
+
+                Suspect.Position = Victim.GetOffsetPositionFront(2f);
+
+                if (Victim.IsAlive) { Victim.Kill(); }
+
+                // Give Random Handgun
+                Suspect.GiveRandomHandgun(0, true);
+
+                Suspect.Tasks.PlayAnimation(new AnimationDictionary("amb@code_human_cower@male@base"), "base", -1, 3.20f, -3f, 0, AnimationFlags.Loop);
+
+                GameFiber.StartNew(delegate
                 {
-                    try
+                    while (CalloutActive)
                     {
-                        GameFiber.Yield();
-
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                        try
                         {
-                            Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
-                            GameFiber.Sleep(3000);
+                            GameFiber.Yield();
 
-                            // Fight Player
-                            Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
-                            GameFiber.Sleep(700);
-                            if (Suspect.Exists() && Suspect.IsAlive) { Suspect.Kill(); }
-
-                            // Play gun shot
-                            string path = @"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav";
-                            System.Media.SoundPlayer player = new System.Media.SoundPlayer(path);
-                            if (System.IO.File.Exists(path))
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
                             {
-                                player.Load();
-                                player.Play();
-                            }
-                            break;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-                    }
+                                Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
+                                GameFiber.Sleep(3000);
 
-                }
-            });
+                                // Fight Player
+                                Suspect.Tasks.PlayAnimation(new AnimationDictionary("mp_suicide"), "pistol", 4f, AnimationFlags.None);
+                                GameFiber.Sleep(700);
+                                if (Suspect.Exists() && Suspect.IsAlive) { Suspect.Kill(); }
+
+                                // Play gun shot
+                                string path = @"lspdfr\audio\scanner\Emergency Callouts Audio\GUNSHOT.wav";
+                                System.Media.SoundPlayer player = new System.Media.SoundPlayer(path);
+                                if (System.IO.File.Exists(path))
+                                {
+                                    player.Load();
+                                    player.Play();
+                                }
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                        }
+
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             #endregion
         }
 
