@@ -19,10 +19,11 @@ namespace EmergencyCallouts.Essential
             {
                 OnlineVersion = webClient.DownloadString(OnlineVersionURI).Trim();
             }
-            catch (WebException)
+            catch (WebException ex)
             {
                 Game.DisplayNotification("commonmenu", "mp_alerttriangle", "Emergency Callouts", "~r~Error", "Failed to check for updates, ~y~Possible network error.");
                 Game.LogTrivial("[Emergency Callouts]: Failed to check for updates");
+                Game.LogTrivial(ex.Message);
                 ExceptionOccured = true;
             }
 
