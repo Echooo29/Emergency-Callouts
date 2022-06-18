@@ -11,6 +11,7 @@ namespace EmergencyCallouts.Essential
 
         internal static bool UpdateAvailable()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             WebClient webClient = new WebClient();
             Uri OnlineVersionURI = new Uri("https://www.lcpdfr.com/applications/downloadsng/interface/api.php?do=checkForUpdates&fileId=37760&textOnly=1");
 
