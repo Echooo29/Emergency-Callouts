@@ -107,7 +107,7 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Alpha = 0f;
 
             // Victim
-            Victim = new Ped(Suspect.Position.Around2D(10f));
+            Victim = new Ped(World.GetNextPositionOnStreet(Suspect.Position.Around2D(10f)));
             VictimPersona = Functions.GetPersonaForPed(Victim);
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
@@ -244,7 +244,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Yield();
 
-                            if (pedFound)
+                            if (Suspect.Exists() && pedFound)
                             {
                                 Suspect.Tasks.Clear();
                                 Suspect.Tasks.PutHandsUp(-1, MainPlayer);
