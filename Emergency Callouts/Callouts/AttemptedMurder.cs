@@ -304,7 +304,7 @@ namespace EmergencyCallouts.Callouts
                     Victim.IsInvincible = false;
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 2);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 1.5f);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
