@@ -259,6 +259,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (Suspect.Exists() && Victim.Exists() && Victim.IsDead && Suspect.IsAlive)
                             {
+                                Suspect.Tasks.Clear();
                                 Suspect.Tasks.FightAgainst(MainPlayer);
                                 break;
                             }
