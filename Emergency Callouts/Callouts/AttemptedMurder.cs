@@ -42,7 +42,7 @@ namespace EmergencyCallouts.Callouts
 
             CalloutMessage = "Attempted Murder";
             CalloutAdvisory = "";
-            CalloutScenario = random.Next(1, 4);
+            CalloutScenario = random.Next(1, 3);
 
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
@@ -146,9 +146,6 @@ namespace EmergencyCallouts.Callouts
                     case 2:
                         Scenario2();
                         break;
-                    case 3:
-                        Scenario3();
-                        break;
                 }
             }
             catch (Exception e)
@@ -230,59 +227,6 @@ namespace EmergencyCallouts.Callouts
                         Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            #endregion
-        }
-
-        private void Scenario3() // Shoot at victim and player
-        {
-            #region Scenario 3
-            try
-            {
-                GameFiber.StartNew(delegate
-                {
-                    try
-                    {
-                        while (true)
-                        {
-                            GameFiber.Yield();
-
-                            if (Suspect.Exists() && Victim.Exists() && pedFound)
-                            {
-                                Suspect.GiveRandomHandgun(-1, true);
-                                break;
-                            }
-                        }
-
-                        while (true)
-                        {
-                            GameFiber.Yield();
-
-                            if (Suspect.Exists() && Victim.Exists() && Victim.IsDead && Suspect.IsAlive)
-                            {
-                                Suspect.Tasks.Clear();
-                                Suspect.Tasks.FightAgainst(MainPlayer);
-                                break;
-                            }
-                        }
-                    }
-                    catch (System.Threading.ThreadAbortException)
-                    {
-                        // Ignore
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-                    }
-                });
-            }
-            catch (System.Threading.ThreadAbortException)
-            {
-                // Ignore
             }
             catch (Exception e)
             {
