@@ -347,7 +347,6 @@ namespace EmergencyCallouts.Callouts
                     if (SearchArea.Exists() && ped2Found) { SearchArea.Delete(); }
 
                     // Make Ped Fall
-                    //NativeFunction.Natives.SET_PED_TO_RAGDOLL_WITH_FALL(Victim, 5000, 0, 1, Victim.Position.X, Victim.Position.Y, Victim.Position.Z, 0, 0, 0, 0, 0, 0, 0);
                     Victim.IsRagdoll = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
