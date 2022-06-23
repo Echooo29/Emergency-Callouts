@@ -305,7 +305,7 @@ namespace EmergencyCallouts.Callouts
                     Victim.IsInvincible = false;
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 1.5f);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 1.25f);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
@@ -393,7 +393,7 @@ namespace EmergencyCallouts.Callouts
                     CalloutPosition = Suspect.Position;
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
 
-                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 1.25f);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
                     Game.LogTrivial("[Emergency Callouts]: Refreshed SearchArea");
