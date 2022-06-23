@@ -92,6 +92,18 @@ namespace EmergencyCallouts.Callouts
             EntranceBlip = new Blip(CalloutPosition);
             if (EntranceBlip.Exists()) { EntranceBlip.IsRouteEnabled = true; }
 
+            // Suspect
+            Suspect = new Ped(Entity.GetRandomMaleModel(), CalloutPosition, 0f);
+            SuspectPersona = Functions.GetPersonaForPed(Suspect);
+            Suspect.IsPersistent = true;
+            Suspect.BlockPermanentEvents = true;
+            Log.Creation(Suspect, PedCategory.Suspect);
+
+            SuspectBlip = Suspect.AttachBlip();
+            SuspectBlip.SetColorRed();
+            SuspectBlip.Scale = (float)Settings.PedBlipScale;
+            SuspectBlip.Alpha = 0f;
+
             // Victim
             Victim = new Ped(CalloutPosition);
             VictimPersona = Functions.GetPersonaForPed(Victim);
@@ -103,18 +115,6 @@ namespace EmergencyCallouts.Callouts
             VictimBlip.SetColorOrange();
             VictimBlip.Scale = (float)Settings.PedBlipScale;
             VictimBlip.Alpha = 0f;
-
-            // Suspect
-            Suspect = new Ped(Entity.GetRandomMaleModel(), Victim.Position.Around2D(5f), 0f);
-            SuspectPersona = Functions.GetPersonaForPed(Suspect);
-            Suspect.IsPersistent = true;
-            Suspect.BlockPermanentEvents = true;
-            Log.Creation(Suspect, PedCategory.Suspect);
-
-            SuspectBlip = Suspect.AttachBlip();
-            SuspectBlip.SetColorRed();
-            SuspectBlip.Scale = (float)Settings.PedBlipScale;
-            SuspectBlip.Alpha = 0f;
 
             Victim.Tasks.ReactAndFlee(Suspect);
 
