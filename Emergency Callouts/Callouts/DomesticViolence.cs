@@ -551,6 +551,10 @@ namespace EmergencyCallouts.Callouts
                         }
 
                     }
+                    catch (System.Threading.ThreadAbortException)
+                    {
+                        // Ignore
+                    }
                     catch (Exception e)
                     {
                         Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
@@ -653,6 +657,10 @@ namespace EmergencyCallouts.Callouts
                             }
                         }
                     }
+                    catch (System.Threading.ThreadAbortException)
+                    {
+                        // Ignore
+                    }
                     catch (Exception e)
                     {
                         Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
@@ -686,9 +694,9 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (calloutActive)
+                    try
                     {
-                        try
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
 
@@ -713,11 +721,18 @@ namespace EmergencyCallouts.Callouts
                                 break;
                             }
                         }
-                        catch (Exception e)
-                        {
-                            Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-                        }
-
+                    }
+                    catch (System.Threading.ThreadAbortException)
+                    {
+                        // Ignore
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                    while (calloutActive)
+                    {
+                        
                     }
                 });
             }

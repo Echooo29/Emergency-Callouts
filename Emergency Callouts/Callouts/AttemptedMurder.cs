@@ -220,6 +220,10 @@ namespace EmergencyCallouts.Callouts
                             }
                         }
                     }
+                    catch (System.Threading.ThreadAbortException)
+                    {
+                        // Ignore
+                    }
                     catch (Exception e)
                     {
                         Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
@@ -264,6 +268,10 @@ namespace EmergencyCallouts.Callouts
                                 break;
                             }
                         }
+                    }
+                    catch (System.Threading.ThreadAbortException)
+                    {
+                        // Ignore
                     }
                     catch (Exception e)
                     {
@@ -401,6 +409,10 @@ namespace EmergencyCallouts.Callouts
                     Functions.PlayScannerAudioUsingPosition("SUSPECT_LAST_SEEN IN_OR_ON_POSITION", Suspect.Position);
                 }
                 #endregion
+            }
+            catch (System.Threading.ThreadAbortException)
+            {
+                // Ignore
             }
             catch (Exception e)
             {
