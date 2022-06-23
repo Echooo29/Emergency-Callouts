@@ -22,6 +22,7 @@ namespace EmergencyCallouts.Callouts
         bool Ped2Found;
         bool NeedsRefreshing;
         bool CalloutActive;
+        bool pursuitActive;
 
         new Vector3 CalloutPosition;
 
@@ -206,10 +207,10 @@ namespace EmergencyCallouts.Callouts
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
 
-                if (Suspect.Exists() && Suspect.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.3f); }
+                if (Suspect.Exists() && Suspect.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.6f); }
 
                 // Start pursuit if viuctim is dead
-                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && PlayerArrived)
+                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && PlayerArrived && !pursuitActive)
                 {
                     LHandle pursuit = Functions.CreatePursuit();
                     Functions.SetPursuitIsActiveForPlayer(pursuit, true);
@@ -217,6 +218,8 @@ namespace EmergencyCallouts.Callouts
                     Play.PursuitAudio();
 
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+
+                    pursuitActive = true;
                 }
 
                 #region PlayerArrived
