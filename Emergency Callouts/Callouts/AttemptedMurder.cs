@@ -292,7 +292,7 @@ namespace EmergencyCallouts.Callouts
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
 
-                if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.4f); }
+                if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.5f); }
                 if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.75f); }
 
                 #region PlayerArrived
