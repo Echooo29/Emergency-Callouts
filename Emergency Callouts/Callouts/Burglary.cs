@@ -634,7 +634,7 @@ namespace EmergencyCallouts.Callouts
                                 break;
                             }
                         }
-                        else if (Suspect.IsDead)
+                        else if (Suspect.Exists() && Suspect.IsDead)
                         {
                             break;
                         }
