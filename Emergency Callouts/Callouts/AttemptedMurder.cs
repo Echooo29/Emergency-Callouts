@@ -210,7 +210,7 @@ namespace EmergencyCallouts.Callouts
                 if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.3f); }
                 if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.75f); }
 
-                // Start pursuit if viuctim is dead
+                // Start pursuit if victim is dead
                 if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
                 {
                     LHandle pursuit = Functions.CreatePursuit();
