@@ -37,13 +37,13 @@ namespace EmergencyCallouts
 
         private static void RegisterCallouts()
         {
-            if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.PublicIntoxication)); }
+            if (Settings.HostageSituation) { Functions.RegisterCallout(typeof(Callouts.HostageSituation)); }
             if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
             if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
             if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
             if (Settings.SuspiciousActivity) { Functions.RegisterCallout(typeof(Callouts.SuspiciousActivity)); }
 
-            Game.LogTrivial("[Emergency Callouts]: Registered 5 callouts");
+            Game.LogTrivial("[Emergency Callouts]: Registered 4 callouts");
         }
     }
 }
