@@ -317,7 +317,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && !pedFound && playerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && !pedFound && playerArrived)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
