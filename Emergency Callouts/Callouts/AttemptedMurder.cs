@@ -111,7 +111,7 @@ namespace EmergencyCallouts.Callouts
             VictimPersona = Functions.GetPersonaForPed(Victim);
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
-            Victim.Health = 175;
+            Victim.Health = 150;
             Victim.IsInvincible = true;
             Log.Creation(Victim, PedCategory.Victim);
 
@@ -251,7 +251,7 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && Victim.Exists() && playerArrived)
+                            if (Suspect.Exists() && Victim.Exists() && pedFound)
                             {
                                 Suspect.GiveRandomHandgun(-1, true);
                                 break;
@@ -280,6 +280,10 @@ namespace EmergencyCallouts.Callouts
                     }
                 });
             }
+            catch (System.Threading.ThreadAbortException)
+            {
+                // Ignore
+            }
             catch (Exception e)
             {
                 Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
@@ -301,8 +305,8 @@ namespace EmergencyCallouts.Callouts
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
 
-                if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.5f); }
-                if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.75f); }
+                if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.4f); }
+                if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.6f); }
 
                 #region PlayerArrived
                 if (EntranceBlip.Exists() && MainPlayer.Position.DistanceTo(EntranceBlip.Position) < Settings.SearchAreaSize && !playerArrived)
