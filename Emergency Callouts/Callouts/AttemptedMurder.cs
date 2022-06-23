@@ -287,7 +287,7 @@ namespace EmergencyCallouts.Callouts
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
 
                     // Create SearchArea
-                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize);
+                    SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 2);
                     SearchArea.SetColorYellow();
                     SearchArea.Alpha = 0.5f;
 
