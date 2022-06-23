@@ -17,11 +17,11 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("[EC] Attempted Murder", CalloutProbability.Medium)]
     public class AttemptedMurder : Callout
     {
-        bool PlayerArrived;
-        bool PedFound;
-        bool Ped2Found;
-        bool NeedsRefreshing;
-        bool CalloutActive;
+        bool playerArrived;
+        bool pedFound;
+        bool ped2Found;
+        bool needsRefreshing;
+        bool calloutActive;
         bool pursuitActive;
 
         new Vector3 CalloutPosition;
@@ -133,7 +133,7 @@ namespace EmergencyCallouts.Callouts
             #region CalloutHandler
             try
             {
-                CalloutActive = true;
+                calloutActive = true;
 
                 // Scenario Deciding
                 switch (CalloutScenario)
@@ -210,7 +210,7 @@ namespace EmergencyCallouts.Callouts
                 if (Suspect.Exists() && Suspect.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.6f); }
 
                 // Start pursuit if viuctim is dead
-                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && PlayerArrived && !pursuitActive)
+                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
                 {
                     LHandle pursuit = Functions.CreatePursuit();
                     Functions.SetPursuitIsActiveForPlayer(pursuit, true);
@@ -223,7 +223,7 @@ namespace EmergencyCallouts.Callouts
                 }
 
                 #region PlayerArrived
-                if (EntranceBlip.Exists() && MainPlayer.Position.DistanceTo(EntranceBlip.Position) < Settings.SearchAreaSize && !PlayerArrived)
+                if (EntranceBlip.Exists() && MainPlayer.Position.DistanceTo(EntranceBlip.Position) < Settings.SearchAreaSize && !playerArrived)
                 {
                     // Remove EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
@@ -235,15 +235,15 @@ namespace EmergencyCallouts.Callouts
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has arrived on scene");
 
-                    PlayerArrived = true;
+                    playerArrived = true;
                 }
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && PlayerArrived && !PedFound)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3f && playerArrived && !pedFound)
                 {
                     // Set OnScene
-                    PlayerArrived = false;
+                    playerArrived = false;
 
                     // Delete SearchArea
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -259,7 +259,7 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && !PedFound && PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && !pedFound && playerArrived)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -268,17 +268,17 @@ namespace EmergencyCallouts.Callouts
                     if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
 
                     // Remove SearchArea
-                    if (SearchArea.Exists() && Ped2Found) { SearchArea.Delete(); }
+                    if (SearchArea.Exists() && ped2Found) { SearchArea.Delete(); }
 
                     // Make Ped Fall
                     //NativeFunction.Natives.SET_PED_TO_RAGDOLL_WITH_FALL(Victim, 5000, 0, 1, Victim.Position.X, Victim.Position.Y, Victim.Position.Z, 0, 0, 0, 0, 0, 0, 0);
                     Victim.IsRagdoll = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
-                    PedFound = true;
+                    pedFound = true;
                 }
 
-                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 15f && !Ped2Found && PlayerArrived)
+                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 15f && !ped2Found && playerArrived)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -287,7 +287,7 @@ namespace EmergencyCallouts.Callouts
                     if (VictimBlip.Exists()) { VictimBlip.Alpha = 1f; }
 
                     // Remove SearchArea
-                    if (SearchArea.Exists() && PedFound) { SearchArea.Delete(); }
+                    if (SearchArea.Exists() && pedFound) { SearchArea.Delete(); }
 
                     // Make Ped Fall
                     Victim.IsRagdoll = true;
@@ -296,24 +296,24 @@ namespace EmergencyCallouts.Callouts
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {VictimPersona.FullName} (Victim)");
 
-                    Ped2Found = true;
+                    ped2Found = true;
                 }
                 #endregion
 
                 #region RefreshSearchArea
-                if (!PedFound)
+                if (!pedFound)
                 {
                     if (Suspect.Exists() && Suspect.Position.DistanceTo(CalloutPosition) < Settings.SearchAreaSize)
                     {
-                        NeedsRefreshing = false;
+                        needsRefreshing = false;
                     }
                     else
                     {
-                        NeedsRefreshing = true;
+                        needsRefreshing = true;
                     }
                 }
 
-                if (Suspect.Exists() && Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && NeedsRefreshing)
+                if (Suspect.Exists() && Suspect.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize && needsRefreshing)
                 {
                     CalloutPosition = Suspect.Position;
                     if (SearchArea.Exists()) { SearchArea.Delete(); }
@@ -338,7 +338,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
 
-            CalloutActive = false;
+            calloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Victim.Exists()) { Victim.Dismiss(); }

@@ -18,14 +18,14 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("[EC] Domestic Violence", CalloutProbability.Medium)]
     public class DomesticViolence : Callout
     {
-        bool CalloutActive;
-        bool PlayerArrived;
-        bool PedFound;
-        bool Ped2Found;
-        bool PedDetained;
-        bool DialogueStarted;
-        bool FirstTime;
-        bool WithinRange;
+        bool calloutActive;
+        bool playerArrived;
+        bool pedFound;
+        bool ped2Found;
+        bool pedDetained;
+        bool dialogueStarted;
+        bool firstTime;
+        bool withinRange;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -304,7 +304,7 @@ namespace EmergencyCallouts.Callouts
             #region CalloutHandler
             try
             {
-                CalloutActive = true;
+                calloutActive = true;
 
                 // Scenario Deciding
                 switch (CalloutScenario)
@@ -441,7 +441,7 @@ namespace EmergencyCallouts.Callouts
 
             GameFiber.StartNew(delegate
             {
-                while (CalloutActive)
+                while (calloutActive)
                 {
                     try
                     {
@@ -449,24 +449,24 @@ namespace EmergencyCallouts.Callouts
 
                         if (Suspect.Exists() && Victim.Exists() && Victim.IsAlive && (Suspect.IsDead || Suspect.IsCuffed))
                         {
-                            if (!DialogueStarted && !FirstTime)
+                            if (!dialogueStarted && !firstTime)
                             {
                                 GameFiber.Sleep(5000);
                                 Game.DisplaySubtitle("Speak to the ~o~victim", 10000);
-                                FirstTime = true;
+                                firstTime = true;
                             }
 
-                            if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && FirstTime)
+                            if (MainPlayer.Position.DistanceTo(Victim.Position) < 3f && firstTime)
                             {
                                 if (Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController))
                                 {
-                                    if (!DialogueStarted)
+                                    if (!dialogueStarted)
                                     {
                                         if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.Clear(); }
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + VictimPersona.FullName);
                                     }
 
-                                    DialogueStarted = true;
+                                    dialogueStarted = true;
 
                                     // Face the player
                                     if (!Functions.IsPedKneelingTaskActive(Victim)) { Victim.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
@@ -532,7 +532,7 @@ namespace EmergencyCallouts.Callouts
                                         MainPlayer.Tasks.PlayAnimation(new AnimationDictionary("mp_common"), "givetake1_b", 5f, AnimationFlags.UpperBodyOnly | AnimationFlags.SecondaryTask);
                                     }
                                 }
-                                else if (!DialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
+                                else if (!dialogueStarted && MainPlayer.Position.DistanceTo(Victim.Position) <= 2f)
                                 {
                                     if (Settings.AllowController && UIMenu.IsUsingController)
                                     {
@@ -579,11 +579,11 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    while (calloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10 && PlayerArrived)
+                        if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10 && playerArrived)
                         {
                             // Victim Invincible
                             Victim.IsInvincible = false;
@@ -630,21 +630,21 @@ namespace EmergencyCallouts.Callouts
                 {
                     try
                     {
-                        while (CalloutActive)
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 15f && playerArrived)
                             {
                                 Game.DisplaySubtitle("~r~Suspect~s~: YOU SHOULD HAVE NEVER DONE THIS!", 5000);
                                 break;
                             }
                         }
 
-                        while (CalloutActive)
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && playerArrived)
                             {
                                 // Fight Player
                                 Suspect.Tasks.FightAgainst(MainPlayer);
@@ -686,13 +686,13 @@ namespace EmergencyCallouts.Callouts
 
                 GameFiber.StartNew(delegate
                 {
-                    while (CalloutActive)
+                    while (calloutActive)
                     {
                         try
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 10f && playerArrived)
                             {
                                 Game.DisplaySubtitle("~r~Suspect~s~: WHAT THE HELL DID I DO!?");
                                 GameFiber.Sleep(3000);
@@ -734,15 +734,15 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.PreventDistanceCrash(CalloutPosition, PlayerArrived, PedFound);
+                Handle.PreventDistanceCrash(CalloutPosition, playerArrived, pedFound);
                 Handle.PreventPickupCrash(Suspect, Victim);
                 if (Settings.AllowController) { NativeFunction.Natives.xFE99B66D079CF6BC(0, 27, true); }
 
                 #region WithinRange
-                if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                if (Suspect.Exists() && Victim.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !withinRange)
                 {
                     // Set WithinRange
-                    WithinRange = true;
+                    withinRange = true;
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect, Victim, 40f);
@@ -752,10 +752,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerArrived
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !playerArrived)
                 {
                     // Set PlayerArrived
-                    PlayerArrived = true;
+                    playerArrived = true;
 
                     // Gang Attack Fix
                     Handle.BlockPermanentEventsRadius(Center, 200f);
@@ -776,10 +776,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !pedFound && playerArrived)
                 {
                     // Set PedFound
-                    PedFound = true;
+                    pedFound = true;
 
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -793,10 +793,10 @@ namespace EmergencyCallouts.Callouts
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
                 }
 
-                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !Ped2Found && PlayerArrived)
+                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 5f && !ped2Found && playerArrived)
                 {
                     // Set Ped2Found
-                    Ped2Found = true;
+                    ped2Found = true;
 
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -812,10 +812,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !pedDetained)
                 {
                     // Set PedDetained
-                    PedDetained = true;
+                    pedDetained = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
                     // Delete SuspectBlip
@@ -825,10 +825,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
+                if (MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && playerArrived && !pedFound)
                 {
                     // Set PlayerArrived
-                    PlayerArrived = false;
+                    playerArrived = false;
 
                     // Disable SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
@@ -857,7 +857,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
 
-            CalloutActive = false;
+            calloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (Victim.Exists()) { Victim.Dismiss(); }

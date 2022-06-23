@@ -15,22 +15,22 @@ namespace EmergencyCallouts.Callouts
     [CalloutInfo("[EC] Burglary", CalloutProbability.Medium)]
     public class Burglary : Callout
     {
-        bool CalloutActive;
-        bool PlayerArrived;
-        bool PedFound;
-        bool PedDetained;
-        bool StopChecking;
-        bool WithinRange;
-        bool FirstTime;
-        bool DialogueStarted;
-        bool DialogueEnded;
-        bool CheckedForDamage;
-        bool CopWalkStyle;
+        bool calloutActive;
+        bool playerArrived;
+        bool pedFound;
+        bool pedDetained;
+        bool stopChecking;
+        bool withinRange;
+        bool firstTime;
+        bool dialogueStarted;
+        bool dialogueEnded;
+        bool checkedForDamage;
+        bool hasCopWalkStyle;
 
-        string DamageLine;
-        string DamageLine2;
+        string damageLine;
+        string damageLine2;
 
-        float DamagedPropertyHeading;
+        float damagedPropertyHeading;
 
         Vector3 Entrance;
         Vector3 Center;
@@ -316,7 +316,7 @@ namespace EmergencyCallouts.Callouts
             #region CalloutHandler
             try
             {
-                CalloutActive = true;
+                calloutActive = true;
 
                 // Scenario Deciding
                 switch (CalloutScenario)
@@ -350,7 +350,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = MirrorParkBreakInPositions[num];
                     Suspect.Heading = MirrorParkBreakInHeadings[num];
                     DamagedProperty = MirrorParkBreakInPositions[num];
-                    DamagedPropertyHeading = MirrorParkBreakInHeadings[num];
+                    damagedPropertyHeading = MirrorParkBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[1]) // La Puerta
                 {
@@ -358,7 +358,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = LaPuertaBreakInPositions[num];
                     Suspect.Heading = LaPuertaBreakInHeadings[num];
                     DamagedProperty = LaPuertaBreakInPositions[num];
-                    DamagedPropertyHeading = LaPuertaBreakInHeadings[num];
+                    damagedPropertyHeading = LaPuertaBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[2]) // El Burro
                 {
@@ -366,7 +366,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = ElBurroBreakInPositions[num];
                     Suspect.Heading = ElBurroBreakInHeadings[num];
                     DamagedProperty = ElBurroBreakInPositions[num];
-                    DamagedPropertyHeading = ElBurroBreakInHeadings[num];
+                    damagedPropertyHeading = ElBurroBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[3]) // County
                 {
@@ -374,7 +374,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = CountyBreakInPositions[num];
                     Suspect.Heading = CountyBreakInHeadings[num];
                     DamagedProperty = CountyBreakInPositions[num];
-                    DamagedPropertyHeading = CountyBreakInHeadings[num];
+                    damagedPropertyHeading = CountyBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[4]) // Grapeseed
                 {
@@ -382,7 +382,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = GrapeseedBreakInPositions[num];
                     Suspect.Heading = GrapeseedBreakInHeadings[num];
                     DamagedProperty = GrapeseedBreakInPositions[num];
-                    DamagedPropertyHeading = GrapeseedBreakInHeadings[num];
+                    damagedPropertyHeading = GrapeseedBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[5]) // Harmony
                 {
@@ -390,7 +390,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = HarmonyBreakInPositions[num];
                     Suspect.Heading = HarmonyBreakInHeadings[num];
                     DamagedProperty = HarmonyBreakInPositions[num];
-                    DamagedPropertyHeading = HarmonyBreakInHeadings[num];
+                    damagedPropertyHeading = HarmonyBreakInHeadings[num];
                 }
                 else if (CalloutPosition == CalloutPositions[6]) // Paleto Bay
                 {
@@ -398,7 +398,7 @@ namespace EmergencyCallouts.Callouts
                     Suspect.Position = PaletoBayBreakInPositions[num];
                     Suspect.Heading = PaletoBayBreakInHeadings[num];
                     DamagedProperty = PaletoBayBreakInPositions[num];
-                    DamagedPropertyHeading = PaletoBayBreakInHeadings[num];
+                    damagedPropertyHeading = PaletoBayBreakInHeadings[num];
                 }
 
                 if (Suspect.Exists())
@@ -446,8 +446,8 @@ namespace EmergencyCallouts.Callouts
                     "~r~Suspect~s~: " + line2[line2Random],
                     "~b~You~s~: " + line3[line3Random],
                     "~r~Suspect~s~: " + line4[line4Random],
-                    "~b~You~s~: " + DamageLine,
-                    "~r~Suspect~s~: " + DamageLine2,
+                    "~b~You~s~: " + damageLine,
+                    "~r~Suspect~s~: " + damageLine2,
                     "~b~You~s~: " + line7[line7Random],
                     "~r~Suspect~s~: " + line8[line8Random],
                     "~r~Suspect~s~: " + line9[line9Random],
@@ -459,31 +459,31 @@ namespace EmergencyCallouts.Callouts
             {
                 try
                 {
-                    while (CalloutActive)
+                    while (calloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.Exists() && Suspect.IsCuffed && Suspect.IsAlive && CheckedForDamage)
+                        if (Suspect.Exists() && Suspect.IsCuffed && Suspect.IsAlive && checkedForDamage)
                         {
-                            if (!DialogueStarted && !FirstTime)
+                            if (!dialogueStarted && !firstTime)
                             {
                                 GameFiber.Sleep(3000);
                                 Game.DisplaySubtitle("Speak to the ~r~suspect", 10000);
-                                FirstTime = true;
+                                firstTime = true;
                             }
 
                             if (MainPlayer.Position.DistanceTo(Suspect.Position) <= 2f)
                             {
-                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController)) && FirstTime)
+                                if ((Game.IsKeyDown(Settings.InteractKey) || (Game.IsControllerButtonDown(Settings.ControllerInteractKey) && Settings.AllowController && UIMenu.IsUsingController)) && firstTime)
                                 {
-                                    if (!DialogueStarted)
+                                    if (!dialogueStarted)
                                     {
                                         if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.Clear(); }
 
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue started with " + SuspectPersona.FullName);
                                     }
 
-                                    DialogueStarted = true;
+                                    dialogueStarted = true;
                                     if (!Functions.IsPedKneelingTaskActive(Suspect)) { Suspect.Tasks.AchieveHeading(MainPlayer.Heading - 180f); }
 
                                     Game.DisplaySubtitle(dialogue[line], 15000);
@@ -494,11 +494,11 @@ namespace EmergencyCallouts.Callouts
                                     {
                                         Game.LogTrivial("[Emergency Callouts]: Dialogue Ended");
                                         Handle.AdvancedEndingSequence();
-                                        DialogueEnded = true;
+                                        dialogueEnded = true;
                                         break;
                                     }
                                 }
-                                else if (!DialogueStarted)
+                                else if (!dialogueStarted)
                                 {
                                     if (Settings.AllowController && UIMenu.IsUsingController)
                                     {
@@ -528,7 +528,7 @@ namespace EmergencyCallouts.Callouts
             {
                 try
                 {
-                    while (CalloutActive)
+                    while (calloutActive)
                     {
                         GameFiber.Yield();
 
@@ -550,11 +550,11 @@ namespace EmergencyCallouts.Callouts
                         }
                     }
 
-                    while (CalloutActive)
+                    while (calloutActive)
                     {
                         GameFiber.Yield();
 
-                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !CheckedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
+                        if (Suspect.Exists() && MainPlayer.Position.DistanceTo(DamagedProperty) <= 3f && !checkedForDamage && Suspect.IsAlive && Suspect.IsCuffed)
                         {
                             if (Settings.AllowController && UIMenu.IsUsingController)
                             {
@@ -570,7 +570,7 @@ namespace EmergencyCallouts.Callouts
 
                                 if (Functions.GetPlayerWalkStyle() == LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop)
                                 {
-                                    CopWalkStyle = true;
+                                    hasCopWalkStyle = true;
                                     Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
                                 }
 
@@ -601,10 +601,10 @@ namespace EmergencyCallouts.Callouts
 
                                     Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Normal);
 
-                                    DamageLine = "Anyway, you also left some damage behind.";
-                                    DamageLine2 = "Bro that was already there when I came here!";
+                                    damageLine = "Anyway, you also left some damage behind.";
+                                    damageLine2 = "Bro that was already there when I came here!";
 
-                                    CheckedForDamage = true;
+                                    checkedForDamage = true;
                                 }
                                 else // No Damage
                                 {
@@ -619,15 +619,15 @@ namespace EmergencyCallouts.Callouts
                                     if (Pencil.Exists()) { Pencil.Delete(); }
                                     if (DamagedPropertyBlip.Exists()) { DamagedPropertyBlip.Delete(); }
 
-                                    if (CopWalkStyle)
+                                    if (hasCopWalkStyle)
                                     {
                                         Functions.SetPlayerWalkStyle(LSPD_First_Response.Mod.Menus.EPlayerWalkStyle.Cop);
                                     }
 
-                                    DamageLine = "Luckily for you I didn't find any damage.";
-                                    DamageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
+                                    damageLine = "Luckily for you I didn't find any damage.";
+                                    damageLine2 = "Nah man I'm a pro, I don't leave anything behind.";
 
-                                    CheckedForDamage = true;
+                                    checkedForDamage = true;
                                 }
 
                                 Dialogue();
@@ -663,13 +663,13 @@ namespace EmergencyCallouts.Callouts
                 {
                     try
                     {
-                        while (CalloutActive)
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 5f && playerArrived)
                             {
-                                StopChecking = true;
+                                stopChecking = true;
 
                                 // Delete Blips
                                 if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
@@ -719,11 +719,11 @@ namespace EmergencyCallouts.Callouts
                 {
                     try
                     {
-                        while (CalloutActive)
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && playerArrived)
                             {
                                 // Clipping Through Wall Fix
                                 Suspect.Tasks.ClearImmediately();
@@ -763,11 +763,11 @@ namespace EmergencyCallouts.Callouts
                 {
                     try
                     {
-                        while (CalloutActive)
+                        while (calloutActive)
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && PlayerArrived)
+                            if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) <= 10f && playerArrived)
                             {
                                 Suspect.Tasks.ClearImmediately();
                                 Suspect.Tasks.GoStraightToPosition(MainPlayer.Position, 1f, MainPlayer.Heading - 180, 0f, 30);
@@ -805,10 +805,10 @@ namespace EmergencyCallouts.Callouts
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 #region WithinRange
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !WithinRange)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) <= 200f && !withinRange)
                 {
                     // Set WithinRange
-                    WithinRange = true;
+                    withinRange = true;
 
                     // Delete Nearby Peds
                     Handle.DeleteNearbyPeds(Suspect, 40f);
@@ -821,10 +821,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerArrived
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Entrance) < 15f && !playerArrived)
                 {
                     // Set PlayerArrived
-                    PlayerArrived = true;
+                    playerArrived = true;
 
                     // Display Arriving Subtitle
                     Game.DisplaySubtitle("Find the ~r~burglar~s~ in the ~y~area~s~.", 10000);
@@ -842,10 +842,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !PedFound && PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 5f && !pedFound && playerArrived)
                 {
                     // Set PedFound
-                    PedFound = true;
+                    pedFound = true;
 
                     // Hide Subtitle
                     Display.HideSubtitle();
@@ -861,10 +861,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedDetained
-                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !PedDetained)
+                if (Suspect.Exists() && Functions.IsPedStoppedByPlayer(Suspect) && !pedDetained)
                 {
                     // Set PedDetained
-                    PedDetained = true;
+                    pedDetained = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has detained {SuspectPersona.FullName} (Suspect)");
 
                     // Delete SuspectBlip
@@ -874,10 +874,10 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PlayerLeft
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && PlayerArrived && !PedFound)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(CalloutPosition) > Settings.SearchAreaSize * 3.5f && playerArrived && !pedFound)
                 {
                     // Set PlayerArrived
-                    PlayerArrived = false;
+                    playerArrived = false;
 
                     // Disable SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 0f; }
@@ -906,7 +906,7 @@ namespace EmergencyCallouts.Callouts
         {
             base.End();
 
-            CalloutActive = false;
+            calloutActive = false;
 
             if (Suspect.Exists()) { Suspect.Dismiss(); }
             if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
