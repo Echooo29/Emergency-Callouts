@@ -216,7 +216,6 @@ namespace EmergencyCallouts.Callouts
                             {
                                 Suspect.Tasks.Clear();
                                 Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                                //Suspect.Inventory.EquippedWeapon.Drop();
                                 break;
                             }
                         }
@@ -251,7 +250,6 @@ namespace EmergencyCallouts.Callouts
                             {
                                 Suspect.Tasks.Clear();
                                 Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                                //Suspect.Inventory.EquippedWeapon.Drop();
                                 break;
                             }
                         }
