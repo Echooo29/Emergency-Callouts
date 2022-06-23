@@ -111,7 +111,7 @@ namespace EmergencyCallouts.Callouts
             VictimPersona = Functions.GetPersonaForPed(Victim);
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
-            Victim.Health = 150;
+            Victim.Health = 175;
             Log.Creation(Victim, PedCategory.Victim);
 
             VictimBlip = Victim.AttachBlip();
