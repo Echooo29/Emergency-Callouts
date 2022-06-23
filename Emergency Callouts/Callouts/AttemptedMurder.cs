@@ -352,7 +352,7 @@ namespace EmergencyCallouts.Callouts
 
                     // Make Ped Fall
                     Victim.IsRagdoll = true;
-                    GameFiber.Sleep(2000);
+                    GameFiber.Sleep(1000);
                     Victim.IsRagdoll = false;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {VictimPersona.FullName} (Victim)");
