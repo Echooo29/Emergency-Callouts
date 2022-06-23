@@ -233,7 +233,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3() // Surrender if suspect is found
+        private void Scenario3() // Shoot at victim and player
         {
             #region Scenario 3
             try
@@ -246,10 +246,20 @@ namespace EmergencyCallouts.Callouts
                         {
                             GameFiber.Yield();
 
-                            if (Suspect.Exists() && pedFound)
+                            if (Suspect.Exists() && Victim.Exists() && playerArrived)
                             {
-                                Suspect.Tasks.Clear();
-                                Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                                Suspect.GiveRandomHandgun(-1, true);
+                                break;
+                            }
+                        }
+
+                        while (true)
+                        {
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Victim.Exists() && Victim.IsDead && Suspect.IsAlive)
+                            {
+                                Suspect.Tasks.FightAgainst(MainPlayer);
                                 break;
                             }
                         }
