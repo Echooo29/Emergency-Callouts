@@ -112,6 +112,7 @@ namespace EmergencyCallouts.Callouts
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
             Victim.Health = 175;
+            Victim.IsInvincible = true;
             Log.Creation(Victim, PedCategory.Victim);
 
             VictimBlip = Victim.AttachBlip();
@@ -290,6 +291,9 @@ namespace EmergencyCallouts.Callouts
                 {
                     // Remove EntranceBlip
                     if (EntranceBlip.Exists()) { EntranceBlip.Delete(); }
+
+                    // Make victim vulnerable
+                    Victim.IsInvincible = false;
 
                     // Create SearchArea
                     SearchArea = new Blip(Suspect.Position.Around2D(30f), Settings.SearchAreaSize * 2);
