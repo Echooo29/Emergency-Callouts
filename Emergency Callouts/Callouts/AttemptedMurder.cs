@@ -19,6 +19,7 @@ namespace EmergencyCallouts.Callouts
     {
         bool PlayerArrived;
         bool PedFound;
+        bool Ped2Found;
         bool NeedsRefreshing;
         bool CalloutActive;
 
@@ -105,7 +106,7 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Alpha = 0f;
 
             // Victim
-            Victim = new Ped(CalloutPosition);
+            Victim = new Ped(Suspect.Position.Around2D(10f));
             VictimPersona = Functions.GetPersonaForPed(Victim);
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
@@ -118,7 +119,7 @@ namespace EmergencyCallouts.Callouts
 
             Victim.Tasks.ReactAndFlee(Suspect);
 
-            Suspect.GiveRandomMeleeWeapon(-1, true);
+            Suspect.Inventory.GiveNewWeapon("WEAPON_KNIFE", -1, true);
             Suspect.Tasks.FightAgainst(Victim);
 
             CalloutHandler();
@@ -205,6 +206,19 @@ namespace EmergencyCallouts.Callouts
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
 
+                if (Suspect.Exists() && Suspect.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.3f); }
+
+                // Start pursuit if viuctim is dead
+                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && PlayerArrived)
+                {
+                    LHandle pursuit = Functions.CreatePursuit();
+                    Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                    Functions.AddPedToPursuit(pursuit, Suspect);
+                    Play.PursuitAudio();
+
+                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                }
+
                 #region PlayerArrived
                 if (EntranceBlip.Exists() && MainPlayer.Position.DistanceTo(EntranceBlip.Position) < Settings.SearchAreaSize && !PlayerArrived)
                 {
@@ -242,24 +256,44 @@ namespace EmergencyCallouts.Callouts
                 #endregion
 
                 #region PedFound
-                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 20f && !PedFound && PlayerArrived)
+                if (Suspect.Exists() && MainPlayer.Position.DistanceTo(Suspect.Position) < 15f && !PedFound && PlayerArrived)
                 {
                     // Hide Subtitle
                     Display.HideSubtitle();
 
                     // Enable SuspectBlip
                     if (SuspectBlip.Exists()) { SuspectBlip.Alpha = 1f; }
-                    if (VictimBlip.Exists()) { VictimBlip.Alpha = 1f; }
 
                     // Remove SearchArea
-                    if (SearchArea.Exists()) { SearchArea.Delete(); }
+                    if (SearchArea.Exists() && Ped2Found) { SearchArea.Delete(); }
 
                     // Make Ped Fall
-                    NativeFunction.Natives.SET_PED_TO_RAGDOLL_WITH_FALL(Victim, 5000, 0, 1, Victim.Position.X, Victim.Position.Y, Victim.Position.Z, 0, 0, 0, 0, 0, 0, 0);
-
+                    //NativeFunction.Natives.SET_PED_TO_RAGDOLL_WITH_FALL(Victim, 5000, 0, 1, Victim.Position.X, Victim.Position.Y, Victim.Position.Z, 0, 0, 0, 0, 0, 0, 0);
+                    Victim.IsRagdoll = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
                     PedFound = true;
+                }
+
+                if (Victim.Exists() && MainPlayer.Position.DistanceTo(Victim.Position) < 15f && !Ped2Found && PlayerArrived)
+                {
+                    // Hide Subtitle
+                    Display.HideSubtitle();
+
+                    // Enable VictimBlip
+                    if (VictimBlip.Exists()) { VictimBlip.Alpha = 1f; }
+
+                    // Remove SearchArea
+                    if (SearchArea.Exists() && PedFound) { SearchArea.Delete(); }
+
+                    // Make Ped Fall
+                    Victim.IsRagdoll = true;
+                    GameFiber.Sleep(2000);
+                    Victim.IsRagdoll = false;
+
+                    Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {VictimPersona.FullName} (Victim)");
+
+                    Ped2Found = true;
                 }
                 #endregion
 
