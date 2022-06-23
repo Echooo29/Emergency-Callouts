@@ -107,7 +107,7 @@ namespace EmergencyCallouts.Callouts
             SuspectBlip.Alpha = 0f;
 
             // Victim
-            Victim = new Ped(World.GetNextPositionOnStreet(Suspect.Position.Around2D(10f)));
+            Victim = new Ped(CalloutPosition);
             VictimPersona = Functions.GetPersonaForPed(Victim);
             Victim.IsPersistent = true;
             Victim.BlockPermanentEvents = true;
@@ -173,6 +173,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
                             {
+                                Suspect.Tasks.Clear();
                                 LHandle pursuit = Functions.CreatePursuit();
                                 Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                                 Functions.AddPedToPursuit(pursuit, Suspect);
