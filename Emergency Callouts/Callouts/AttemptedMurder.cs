@@ -199,7 +199,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario2()
+        private void Scenario2() // Surrender if victim is dead
         {
             #region Scenario 2
             try
@@ -233,7 +233,7 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario3()
+        private void Scenario3() // Surrender if suspect is found
         {
             #region Scenario 3
             try
