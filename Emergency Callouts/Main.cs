@@ -37,7 +37,7 @@ namespace EmergencyCallouts
 
         private static void RegisterCallouts()
         {
-            if (Settings.PublicIntoxication) { Functions.RegisterCallout(typeof(Callouts.HostilePerson)); }
+            if (Settings.HostageSituation) { Functions.RegisterCallout(typeof(Callouts.HostageSituation)); }
             if (Settings.Trespassing) { Functions.RegisterCallout(typeof(Callouts.Trespassing)); }
             if (Settings.DomesticViolence) { Functions.RegisterCallout(typeof(Callouts.DomesticViolence)); }
             if (Settings.Burglary) { Functions.RegisterCallout(typeof(Callouts.Burglary)); }
