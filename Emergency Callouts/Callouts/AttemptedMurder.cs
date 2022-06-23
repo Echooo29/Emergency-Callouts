@@ -355,8 +355,6 @@ namespace EmergencyCallouts.Callouts
                     // Remove SearchArea
                     if (SearchArea.Exists() && ped2Found) { SearchArea.Delete(); }
 
-                    // Make Ped Fall
-                    Victim.IsRagdoll = true;
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {SuspectPersona.FullName} (Suspect)");
 
                     pedFound = true;
@@ -372,11 +370,6 @@ namespace EmergencyCallouts.Callouts
 
                     // Remove SearchArea
                     if (SearchArea.Exists() && pedFound) { SearchArea.Delete(); }
-
-                    // Make Ped Fall
-                    Victim.IsRagdoll = true;
-                    GameFiber.Sleep(3000);
-                    Victim.IsRagdoll = false;
 
                     Game.LogTrivial($"[Emergency Callouts]: {PlayerPersona.FullName} has found {VictimPersona.FullName} (Victim)");
 
