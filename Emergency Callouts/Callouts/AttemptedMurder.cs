@@ -207,7 +207,8 @@ namespace EmergencyCallouts.Callouts
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
 
-                if (Suspect.Exists() && Suspect.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.6f); }
+                if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.3f); }
+                if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.75f); }
 
                 // Start pursuit if viuctim is dead
                 if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
