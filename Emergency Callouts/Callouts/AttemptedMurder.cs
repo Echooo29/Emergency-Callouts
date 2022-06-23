@@ -219,6 +219,7 @@ namespace EmergencyCallouts.Callouts
                     Play.PursuitAudio();
 
                     if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                    if (VictimBlip.Exists()) { VictimBlip.Delete(); }
 
                     pursuitActive = true;
                 }
