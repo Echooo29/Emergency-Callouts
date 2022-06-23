@@ -277,7 +277,7 @@ namespace EmergencyCallouts.Callouts
             {
                 Handle.ManualEnding();
                 
-                if (Suspect.Exists() && (Suspect.IsDead || Suspect.IsCuffed)) { Handle.AdvancedEndingSequence(); }
+                if (Suspect.Exists() && (Suspect.IsDead || Suspect.IsCuffed) && !MainPlayer.IsAiming) { Handle.AdvancedEndingSequence(); }
 
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
