@@ -157,11 +157,38 @@ namespace EmergencyCallouts.Callouts
             #endregion
         }
 
-        private void Scenario1()
+        private void Scenario1() // Start pursuit if victim is dead
         {
             #region Scenario 1
             try
             {
+                GameFiber.StartNew(delegate
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
+                            {
+                                LHandle pursuit = Functions.CreatePursuit();
+                                Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                                Functions.AddPedToPursuit(pursuit, Suspect);
+                                Play.PursuitAudio();
+
+                                if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                                if (VictimBlip.Exists()) { VictimBlip.Delete(); }
+
+                                pursuitActive = true;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -175,6 +202,27 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 2
             try
             {
+                GameFiber.StartNew(delegate
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            GameFiber.Yield();
+
+                            if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived)
+                            {
+                                Suspect.Tasks.Clear();
+                                Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                                //Suspect.Inventory.EquippedWeapon.Drop();
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -188,6 +236,27 @@ namespace EmergencyCallouts.Callouts
             #region Scenario 3
             try
             {
+                GameFiber.StartNew(delegate
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            GameFiber.Yield();
+
+                            if (pedFound)
+                            {
+                                Suspect.Tasks.Clear();
+                                Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                                //Suspect.Inventory.EquippedWeapon.Drop();
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -210,20 +279,6 @@ namespace EmergencyCallouts.Callouts
 
                 if (Suspect.Exists() && Suspect.IsAlive && !pursuitActive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Suspect, 1.3f); }
                 if (Victim.Exists() && Victim.IsAlive) { NativeFunction.Natives.SET_PED_MOVE_RATE_OVERRIDE(Victim, 0.75f); }
-
-                // Start pursuit if victim is dead
-                if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
-                {
-                    LHandle pursuit = Functions.CreatePursuit();
-                    Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                    Functions.AddPedToPursuit(pursuit, Suspect);
-                    Play.PursuitAudio();
-
-                    if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                    if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-
-                    pursuitActive = true;
-                }
 
                 #region PlayerArrived
                 if (EntranceBlip.Exists() && MainPlayer.Position.DistanceTo(EntranceBlip.Position) < Settings.SearchAreaSize && !playerArrived)
