@@ -6,7 +6,7 @@ namespace EmergencyCallouts.Essential
     internal static class Settings
     {
         // Callouts
-        internal static bool HostageSituation = true;
+        internal static bool AttemptedMurder = true;
         internal static bool Trespassing = true;
         internal static bool DomesticViolence = true;
         internal static bool Burglary = true;
@@ -38,7 +38,7 @@ namespace EmergencyCallouts.Essential
             iniFile.Create();
 
             // Callouts
-            HostageSituation = iniFile.ReadBoolean("Callouts", "HostageSituation", HostageSituation);
+            AttemptedMurder = iniFile.ReadBoolean("Callouts", "AttemptedMurder", AttemptedMurder);
             Trespassing = iniFile.ReadBoolean("Callouts", "Trespassing", Trespassing);
             DomesticViolence = iniFile.ReadBoolean("Callouts", "DomesticViolence", DomesticViolence);
             Burglary = iniFile.ReadBoolean("Callouts", "Burglary", Burglary);

@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Callouts\AttemptedMurder.cs" />
     <Compile Include="Callouts\Burglary.cs" />
     <Compile Include="Callouts\DomesticViolence.cs" />
     <Compile Include="Callouts\SuspiciousActivity.cs" />
