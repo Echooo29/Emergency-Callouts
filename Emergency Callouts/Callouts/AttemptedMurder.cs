@@ -275,7 +275,9 @@ namespace EmergencyCallouts.Callouts
             try
             {
                 Handle.ManualEnding();
-                Handle.PreventPickupCrash(Suspect);
+                
+                if (Suspect.Exists() && (Suspect.IsDead || Suspect.IsCuffed)) { Handle.AdvancedEndingSequence(); }
+
                 if (Settings.AllowController) { NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 27, true); }
 
                 if (EntranceBlip.Exists()) { EntranceBlip.Position = Suspect.Position; }
