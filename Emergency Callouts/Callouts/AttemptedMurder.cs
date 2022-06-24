@@ -40,18 +40,18 @@ namespace EmergencyCallouts.Callouts
         {
             int count = 0;
 
-            CalloutMessage = "Attempted Murder";
-            CalloutAdvisory = "";
-            CalloutScenario = random.Next(1, 3);
-
             while (!World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around2D(200f, Settings.MaxCalloutDistance)).GetSafePositionForPed(out CalloutPosition))
             {
                 GameFiber.Yield();
 
                 count++;
-                if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
+                if (count >= 100) { return false; }
             }
-            CalloutArea = World.GetStreetName(CalloutPosition);
+
+            CalloutMessage = "Attempted Murder";
+            CalloutAdvisory = "";
+            CalloutScenario = random.Next(1, 3);
+
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
 
@@ -161,31 +161,24 @@ namespace EmergencyCallouts.Callouts
             {
                 GameFiber.StartNew(delegate
                 {
-                    try
+                    while (true)
                     {
-                        while (true)
+                        GameFiber.Yield();
+
+                        if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
                         {
-                            GameFiber.Yield();
+                            Suspect.Tasks.ClearImmediately();
+                            LHandle pursuit = Functions.CreatePursuit();
+                            Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                            Functions.AddPedToPursuit(pursuit, Suspect);
+                            Play.PursuitAudio();
 
-                            if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
-                            {
-                                Suspect.Tasks.ClearImmediately();
-                                LHandle pursuit = Functions.CreatePursuit();
-                                Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                                Functions.AddPedToPursuit(pursuit, Suspect);
-                                Play.PursuitAudio();
+                            if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
+                            if (VictimBlip.Exists()) { VictimBlip.Delete(); }
 
-                                if (SuspectBlip.Exists()) { SuspectBlip.Delete(); }
-                                if (VictimBlip.Exists()) { VictimBlip.Delete(); }
-
-                                pursuitActive = true;
-                                break;
-                            }
+                            pursuitActive = true;
+                            break;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
             }
@@ -203,27 +196,16 @@ namespace EmergencyCallouts.Callouts
             {
                 GameFiber.StartNew(delegate
                 {
-                    try
+                    while (true)
                     {
-                        while (true)
-                        {
-                            GameFiber.Yield();
+                        GameFiber.Yield();
 
-                            if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived)
-                            {
-                                Suspect.Tasks.Clear();
-                                Suspect.Tasks.PutHandsUp(-1, MainPlayer);
-                                break;
-                            }
+                        if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived)
+                        {
+                            Suspect.Tasks.Clear();
+                            Suspect.Tasks.PutHandsUp(-1, MainPlayer);
+                            break;
                         }
-                    }
-                    catch (System.Threading.ThreadAbortException)
-                    {
-                        // Ignore
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Exception(e, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                     }
                 });
             }
