@@ -50,13 +50,12 @@ namespace EmergencyCallouts.Callouts
 
                 count++;
                 if (count >= 10) { CalloutPosition = World.GetNextPositionOnStreet(MainPlayer.Position.Around2D(200f, Settings.MaxCalloutDistance)); }
-                CalloutArea = World.GetStreetName(CalloutPosition);
             }
-
+            CalloutArea = World.GetStreetName(CalloutPosition);
             ShowCalloutAreaBlipBeforeAccepting(CalloutPosition, Settings.SearchAreaSize / 2.5f);
             AddMinimumDistanceCheck(30f, CalloutPosition);
 
-            //Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_PUBLIC_INTOXICATION IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
+            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_ASSAULT_WITH_A_DEADLY_WEAPON IN_OR_ON_POSITION UNITS_RESPOND_CODE_02", CalloutPosition);
 
             return base.OnBeforeCalloutDisplayed();
         }
@@ -170,7 +169,7 @@ namespace EmergencyCallouts.Callouts
 
                             if (Suspect.Exists() && Suspect.IsAlive && Victim.Exists() && Victim.IsDead && playerArrived && !pursuitActive)
                             {
-                                Suspect.Tasks.Clear();
+                                Suspect.Tasks.ClearImmediately();
                                 LHandle pursuit = Functions.CreatePursuit();
                                 Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                                 Functions.AddPedToPursuit(pursuit, Suspect);
